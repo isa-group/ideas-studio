@@ -50,7 +50,7 @@ public class IdeasRepo implements Serializable {
 
 		try {
 			// Lo lee de {tomcat]/bin/, porque lo inicio desde ahí
-			String propFile = "RepoLab.properties";
+			String propFile = "IdeasRepo.properties";
 
 			if (basePathToConfigFile == null || "".equals(basePathToConfigFile))
 				propFile = SEPARATOR + propFile;
@@ -70,12 +70,12 @@ public class IdeasRepo implements Serializable {
 				System.out.println("Fallo en input repo");
 				this.setRepoBaseUri("./ideas-repo/");
 				this.repoImpl = "FSRepo";
-				this.repoPackage = "es.us.isa.ideas.utils.repolab.impl.fs.";
+				this.repoPackage = "es.us.isa.ideas.repo.impl.fs.";
 			}
 			createRepo();
 		} catch (IOException ex) {
 			System.out.println("No existe: " + basePathToConfigFile
-					+ "RepoLab.properties\n");
+					+ "IdeasRepo.properties\n");
 			ex.printStackTrace();
 		} finally {
 			if (input != null) {

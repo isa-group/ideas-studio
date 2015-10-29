@@ -48,7 +48,7 @@
 		<maven.test.acceptance.skip>false</maven.test.acceptance.skip>
 
 		<!--- VERSIONING -->
-		<java.version>1.6</java.version>
+		<java.version>1.7</java.version>
 		<spring.version>4.0.1.RELEASE</spring.version>
 		<spring.security.version>3.2.0.RELEASE</spring.security.version>
 		<spring.data.version>1.4.3.RELEASE</spring.data.version>
@@ -1160,4 +1160,5 @@
 			</build>
 		</profile>
 	</profiles>
+	<packaging>war</packaging>
 </project> 

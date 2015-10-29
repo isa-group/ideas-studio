@@ -9,7 +9,7 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd		        
 	">
         
-    <bean id="studioConfiguration" class="es.us.isa.ideas.module.model.StudioConfiguration" 
+    <bean id="studioConfiguration" class="es.us.isa.ideas.app.configuration.StudioConfiguration" 
           factory-method="load">
         <constructor-arg value="#{servletContext.getRealPath('')}/WEB-INF/config/studio-configuration.json"/>            
     </bean>
