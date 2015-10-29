@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+ * data.xml
+ *
+ * Copyright (C) 2012 Universidad de Sevilla
+ * 
+ * The use of this project is hereby constrained to the conditions of the 
+ * TDG Licence, a copy of which you may download from 
+ * http://www.tdg-seville.info/License.html
+ -->
+ 
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd                           
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+	">
+
+	<!-- Repository packages -->
+
+	<jpa:repositories base-package="es.us.isa.ideas.app.repositories" />
+	<jpa:repositories base-package="es.us.isa.ideas.app.security" />
+
+	<!-- Data source -->
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/${application.mysqlDB}" />
+		<property name="user" value="${application.mysqlUser}" />
+		<property name="password" value="${application.mysqlPass}" />
+                <!-- C3P0 properties -->
+                <property name="acquireIncrement" value="5" />
+                <property name="minPoolSize" value="5" />
+                <property name="maxPoolSize" value="600" />
+                <property name="maxIdleTime" value="1800" />
+	</bean>
+
+	<!-- JPA -->
+
+	<bean id="persistenceUnit" class="java.lang.String">
+		<constructor-arg value="persistenceUnit" />
+	</bean>
+
+	<bean id="sqlDialect" class="java.lang.String">
+		<constructor-arg value="org.hibernate.dialect.MySQLDialect" />
+	</bean>
+
+	<util:properties id="jpaProperties">
+		<prop key="hibernate.format_sql">true</prop>
+		<prop key="hibernate.show_sql">false</prop>
+		<prop key="hibernate.hbm2ddl.auto">verify</prop>
+		<prop key="hibernate.cglib.use_reflection_optimizer">true</prop>
+	</util:properties>
+
+</beans>
