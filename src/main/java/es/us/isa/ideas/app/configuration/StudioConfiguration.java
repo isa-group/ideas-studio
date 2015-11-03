@@ -1,10 +1,12 @@
 package es.us.isa.ideas.app.configuration;
 
-import com.google.gson.Gson;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
+
 import org.apache.commons.io.FileUtils;
+
+import com.google.gson.Gson;
 
 public class StudioConfiguration implements Serializable {
 
