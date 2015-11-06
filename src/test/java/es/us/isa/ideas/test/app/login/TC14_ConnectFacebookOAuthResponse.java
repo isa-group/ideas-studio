@@ -19,7 +19,7 @@ import es.us.isa.ideas.test.utils.TestCase;
 
 /**
  * This test will fail when the application base URL is different from
- * 'https://localhost:8181/ideas-app/'.
+ * 'https://localhost:8181/ideas-studio/'.
  * 
  * @author feserafim
  *

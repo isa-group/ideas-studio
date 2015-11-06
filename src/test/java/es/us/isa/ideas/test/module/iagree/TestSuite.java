@@ -126,10 +126,10 @@ public class TestSuite {
 		LOG.log(Level.INFO, "testing iAgree Template file load");
 		// createIAgreeWorkspaceToTest();
 
-		// sendPost("https://localhost:8181/ideas-app/",)
-		// URL url = new URL("https://localhost:8181/ideas-app/getWorkspaces/");
+		// sendPost("https://localhost:8181/ideas-studio/",)
+		// URL url = new URL("https://localhost:8181/ideas-studio/getWorkspaces/");
 		InputStream response = new URL(
-				"https://localhost:8181/ideas-app/getWorkspaces/").openStream();
+				"https://localhost:8181/ideas-studio/getWorkspaces/").openStream();
 
 		System.out.println(response.toString());
 
