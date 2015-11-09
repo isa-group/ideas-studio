@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
 <!-- Not setting the context here allows for context param in CI deployment -->
 <!-- <Context antiJARLocking="true" path="/"/> -->
 <Context antiJarLocking="true" path="/IDEAS"/>

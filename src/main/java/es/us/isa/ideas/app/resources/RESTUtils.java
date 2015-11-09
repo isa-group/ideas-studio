@@ -24,64 +24,58 @@ import com.google.common.base.Function;
  * @author japarejo
  */
 public class RESTUtils {
-    
-    public static final String SEDL_VERSION="1";
-    public static final String SEDL_NAMESPACE="http://moses.us.es/schemas/sedl/v"+SEDL_VERSION+"/utils";
-    public static final String SEDL_PREFIX="sedlUtils";
-    
-    
-    public void signRequest(Request req)
-    {
-        
-    }
-    
-    public static <T> String [] buildURLArray(Collection<T> items, Function<T,String> getID, UriInfo uriInfo)
-    {
-        String [] uriArray=new String[items.size()];
-        int index=0;
-        for (T item : items) {
-            UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-            URI userUri = ub.
-                    path(getID.apply(item)).
-                    build();
-            uriArray[index]=userUri.toASCIIString();
-            index++;
-        }
-        return uriArray;
-    }
-    
-    
-    public static <T> List<String> buildListOfURIs(Collection<T> items, Function<T,String> getID, UriInfo uriInfo)
-    {
-        List<String> uriList=new JAXBList<String>();
-        
-        URI userUri=null;
-        for (T item : items) {
-            UriBuilder ub = uriInfo.getAbsolutePathBuilder();
-             userUri= ub.
-                    path(getID.apply(item)).
-                    build();
-             uriList.add(userUri.toASCIIString());
-        }
-        return uriList;
-    }
-    
-    @XmlRootElement(name="List")
-    private static final class JAXBList<T> extends ArrayList<T>{  
-        @XmlElement(name="item")
-        @JsonIgnore
-        public List<T> getList(){
-            return this;
-        }
-        
-        @JsonIgnore
-        public void setList(List<T> value){
-            this.clear();
-            this.addAll(value);
-        }
-                
-    }
-    
 
-        
+	public static final String SEDL_VERSION = "1";
+	public static final String SEDL_NAMESPACE = "http://moses.us.es/schemas/sedl/v"
+			+ SEDL_VERSION + "/utils";
+	public static final String SEDL_PREFIX = "sedlUtils";
+
+	public void signRequest(Request req) {
+
+	}
+
+	public static <T> String[] buildURLArray(Collection<T> items,
+			Function<T, String> getID, UriInfo uriInfo) {
+		String[] uriArray = new String[items.size()];
+		int index = 0;
+		for (T item : items) {
+			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+			URI userUri = ub.path(getID.apply(item)).build();
+			uriArray[index] = userUri.toASCIIString();
+			index++;
+		}
+		return uriArray;
+	}
+
+	public static <T> List<String> buildListOfURIs(Collection<T> items,
+			Function<T, String> getID, UriInfo uriInfo) {
+		List<String> uriList = new JAXBList<String>();
+
+		URI userUri = null;
+		for (T item : items) {
+			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
+			userUri = ub.path(getID.apply(item)).build();
+			uriList.add(userUri.toASCIIString());
+		}
+		return uriList;
+	}
+
+	@XmlRootElement(name = "List")
+	private static final class JAXBList<T> extends ArrayList<T> {
+		private static final long serialVersionUID = 3146500278790741263L;
+
+		@XmlElement(name = "item")
+		@JsonIgnore
+		public List<T> getList() {
+			return this;
+		}
+
+		@JsonIgnore
+		public void setList(List<T> value) {
+			this.clear();
+			this.addAll(value);
+		}
+
+	}
+
 }

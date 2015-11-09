@@ -18,7 +18,6 @@ import es.us.isa.ideas.app.entities.Researcher;
 import es.us.isa.ideas.app.mail.CustomMailer;
 import es.us.isa.ideas.app.mail.TemplateMail;
 import es.us.isa.ideas.app.repositories.ConfirmationRepository;
-import es.us.isa.ideas.app.security.UserAccount;
 import es.us.isa.ideas.app.security.UserAccountService;
 
 /**
@@ -117,7 +116,6 @@ public class ConfirmationService extends BusinessService<Confirmation> {
 
 	private void sendRegistrationConfirmationMail(Confirmation result,
 			Map<String, String> customization) {
-		Researcher researcher = result.getResearcher();
 		Object[] templateCustomizers = { result.getResearcher(), result };
 		Map<String, String> finalCustomizations = mailer
 				.extractCustomizations(templateCustomizers);

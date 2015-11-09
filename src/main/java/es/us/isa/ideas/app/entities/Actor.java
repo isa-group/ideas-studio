@@ -33,6 +33,8 @@ import es.us.isa.ideas.app.security.UserAccount;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Actor extends DomainEntity implements Serializable {
 
+	private static final long serialVersionUID = 2855736734155494409L;
+
 	// Constructors -----------------------------------------------------------
 
 	public Actor() {
@@ -85,10 +87,9 @@ public abstract class Actor extends DomainEntity implements Serializable {
 	}
 
 	// Relationships ----------------------------------------------------------
-	
-	
+
 	private UserAccount userAccount;
-	
+
 	@Valid
 	@OneToOne(cascade = CascadeType.ALL, optional = true)
 	public UserAccount getUserAccount() {
@@ -98,6 +99,5 @@ public abstract class Actor extends DomainEntity implements Serializable {
 	public void setUserAccount(UserAccount userAccount) {
 		this.userAccount = userAccount;
 	}
-                       
 
 }

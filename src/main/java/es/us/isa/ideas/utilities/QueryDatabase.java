@@ -23,6 +23,7 @@ import javax.persistence.Query;
 
 public class QueryDatabase {
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
 
 		EntityManagerFactory emf;

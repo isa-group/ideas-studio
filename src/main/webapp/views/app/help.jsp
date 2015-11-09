@@ -12,6 +12,6 @@
 <div id='help'>
 <!-- 	<iframe src="https://labs.isa.us.es/IDEAS-help/" scrolling="auto" id='iframeHelp'></iframe>  -->
 	
-<iframe src="${studioConfiguration.helpURI}" scrolling="auto" id='iframeHelp'></iframe> 
+<iframe src="${studioConfiguration.helpURI}" id='iframeHelp'></iframe> 
 		
 </div>

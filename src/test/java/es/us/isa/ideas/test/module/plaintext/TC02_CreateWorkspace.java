@@ -24,7 +24,8 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
 	private static String workspaceName = "Workspace";
 
 	private static boolean testResult = true;
-	private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
+	private static final Logger LOG = Logger
+			.getLogger(TestCase.class.getName());
 
 	@BeforeClass
 	public static void setUp() throws InterruptedException {
@@ -49,29 +50,39 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
 
 	@Test
 	public void step02_createWorkspace() {
-		
+
 		ExpectedActions action = TestCase.getExpectedActions();
-		
-		action.getWait()
-				.until(ExpectedConditions.visibilityOfElementLocated(By.id("menuToggler")));
+
+		action.getWait().until(
+				ExpectedConditions.visibilityOfElementLocated(By
+						.id("menuToggler")));
 
 		LOG.info("testCreateWorkspace :: Creating a workspace...");
 
 		action.click(By.id("menuToggler"));
+
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			LOG.log(Level.SEVERE, e.getMessage());
+		}
+
 		action.click(By.className("addWorkspace"));
 
-		LOG.info("\t :: Inserting name \"" + workspaceName + "\" for workspace.");
+		LOG.info("\t :: Inserting name \"" + workspaceName
+				+ "\" for workspace.");
 
-		action.sendKeys(By.cssSelector("input.form-control.focusedInput"), workspaceName);
+		action.sendKeys(By.cssSelector("input.form-control.focusedInput"),
+				workspaceName);
 		action.click(By.linkText("Create"));
 
-//		Thread.sleep(500);
-		
 		waitForVisibleSelector("#appMainContentBlocker");
 		action.click(By.cssSelector("#appMainContentBlocker"));
 
-		LOG.info("\t :: Workspace \"" + workspaceName + "\" was successfully created.");
-		echoCommandApi("Workspace \"" + workspaceName + "\" was successfully created.");
+		LOG.info("\t :: Workspace \"" + workspaceName
+				+ "\" was successfully created.");
+		echoCommandApi("Workspace \"" + workspaceName
+				+ "\" was successfully created.");
 	}
 
 }

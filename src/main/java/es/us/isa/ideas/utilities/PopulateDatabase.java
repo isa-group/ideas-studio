@@ -30,10 +30,11 @@ public class PopulateDatabase {
 		EntityManager em;
 		EntityTransaction et;
 
-		ctx = new ClassPathXmlApplicationContext("utilities/PopulateDatabase.xml");
+		ctx = new ClassPathXmlApplicationContext(
+				"utilities/PopulateDatabase.xml");
 
-		emf = Persistence.createEntityManagerFactory("persistenceUnit");		
-		em = emf.createEntityManager();		
+		emf = Persistence.createEntityManagerFactory("persistenceUnit");
+		em = emf.createEntityManager();
 		et = em.getTransaction();
 
 		et.begin();
@@ -55,6 +56,7 @@ public class PopulateDatabase {
 				em.close();
 			if (emf.isOpen())
 				emf.close();
+			((ClassPathXmlApplicationContext) ctx).close();
 		}
 	}
 }

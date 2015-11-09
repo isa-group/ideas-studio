@@ -5,8 +5,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import es.us.isa.ideas.app.controllers.AbstractController;
-import es.us.isa.ideas.app.mail.CustomMailer;
 
 @Controller
 @Transactional
@@ -27,9 +24,7 @@ public class LoginController extends AbstractController {
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	LoginService service;
-
-	private RequestCache requestCache = new HttpSessionRequestCache();
+	LoginService service;	
 
 	// Constructors -----------------------------------------------------------
 

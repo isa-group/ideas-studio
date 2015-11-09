@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ import es.us.isa.ideas.app.repositories.ResearcherRepository;
 import es.us.isa.ideas.app.security.Authority;
 import es.us.isa.ideas.app.security.LoginService;
 import es.us.isa.ideas.app.security.UserAccount;
-import es.us.isa.ideas.app.security.UserAccountService;
 
 /**
  *
@@ -30,9 +28,6 @@ public class ResearcherService extends BusinessService<Researcher>{
 
     @Inject
     private ResearcherRepository researcherRepository;
-    
-    @Inject
-    private UserAccountService userAccountService;
     
     @Inject
     private ConfirmationService registrationConfirmationService;
