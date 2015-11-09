@@ -17,8 +17,7 @@ import es.us.isa.ideas.test.utils.TestCase;
  */
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ 
-	es.us.isa.ideas.test.module.iagree.TestSuite.class,
+@Suite.SuiteClasses({
 	es.us.isa.ideas.test.module.plaintext.TestSuite.class
 })
 public class TestSuite {
