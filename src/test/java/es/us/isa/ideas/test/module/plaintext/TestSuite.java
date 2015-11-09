@@ -1,4 +1,4 @@
-package es.us.isa.ideas.test.module.iagree;
+package es.us.isa.ideas.test.module.plaintext;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,18 +8,13 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * iAgree languages module TestSuite
- * 
- * @author feserafim
- */
-
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 	TC01_Login.class,
-	TC02_IAgreeAgreementTestModule.class,
-	TC03_IAgreeOfferTestModule.class,
-	TC04_IAgreeTemplateTestModule.class
+	TC02_CreateWorkspace.class,
+	TC03_CreateProject.class,
+	TC04_CreateFile.class,
+	TC05_EditFile.class
 })
 public class TestSuite extends es.us.isa.ideas.test.utils.TestCase {
 
@@ -28,7 +23,7 @@ public class TestSuite extends es.us.isa.ideas.test.utils.TestCase {
 
 	@BeforeClass
 	public static void setUp() {
-		LOG.log(Level.INFO, "Starting iAgree languages module TestSuite...");
+		LOG.log(Level.INFO, "Starting PlainText language module TestSuite...");
 	}
 
 	@AfterClass
@@ -37,10 +32,10 @@ public class TestSuite extends es.us.isa.ideas.test.utils.TestCase {
 		logout();
 		getWebDriver().close();
 		
-		LOG.log(Level.INFO, "Login iAgree languages module finished");
+		LOG.log(Level.INFO, "Login PlainText language module finished");
 		
 	}
 	
+	
+
 }
-	
-	

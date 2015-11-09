@@ -18,9 +18,8 @@ import es.us.isa.ideas.test.utils.TestCase;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
-	es.us.isa.ideas.test.module.iagree.TestSuite.class
-//	es.us.isa.ideas.test.module.html.TestSuite.class,
-//	es.us.isa.ideas.test.module.lusdl.TestSuite.class
+	es.us.isa.ideas.test.module.iagree.TestSuite.class,
+	es.us.isa.ideas.test.module.plaintext.TestSuite.class
 })
 public class TestSuite {
 
@@ -30,7 +29,7 @@ public class TestSuite {
 	@BeforeClass
 	public static void setUp() throws InterruptedException {
 
-		LOG.log(Level.INFO, "Starting TestSuiteModule...");
+		LOG.log(Level.INFO, "Starting modules TestSuite...");
 
 		TestCase.logout();
 		TestCase.login();
@@ -39,7 +38,7 @@ public class TestSuite {
 
 	@AfterClass
 	public static void tearDown() {
-		LOG.log(Level.INFO, "TestSuiteModule finished");
+		LOG.log(Level.INFO, "Modules TestSuite finished");
 	}
 
 }

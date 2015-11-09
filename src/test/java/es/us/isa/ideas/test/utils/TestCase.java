@@ -21,16 +21,14 @@ public class TestCase {
 
 	private static String seleniumPropFile = "selenium.properties";
 	private static String applicationPropFile = "application.properties";
-	private static final Logger LOG = Logger
-			.getLogger(TestCase.class.getName());
+	private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
 	public static Properties getApplicationProperties() {
 		Properties prop = null;
 
 		try {
 			prop = new Properties();
-			InputStream input = TestCase.class.getResourceAsStream("/"
-					+ applicationPropFile);
+			InputStream input = TestCase.class.getResourceAsStream("/" + applicationPropFile);
 			prop.load(input);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -72,14 +70,12 @@ public class TestCase {
 
 		boolean ret = false;
 
-		if (!IdeasAppActions.isAnyUserLogged() && IdeasAppActions.goLoginPage()) {
+		if (!IdeasStudioActions.isAnyUserLogged() && IdeasStudioActions.goLoginPage()) {
 
 			waitForVisibleSelector("#username");
 
-			SeleniumBuilder.getExpectedActions().sendKeys(By.id("username"),
-					getSeleniumAutotesterUser());
-			SeleniumBuilder.getExpectedActions().sendKeys(By.id("password"),
-					getSeleniumAutotesterPassword());
+			SeleniumBuilder.getExpectedActions().sendKeys(By.id("username"), getSeleniumAutotesterUser());
+			SeleniumBuilder.getExpectedActions().sendKeys(By.id("password"), getSeleniumAutotesterPassword());
 			SeleniumBuilder.getExpectedActions().click(By.id("loginButton"));
 
 			Thread.sleep(2000);
@@ -101,19 +97,22 @@ public class TestCase {
 	 * @return true if user was redirect to editor page 'app/editor'
 	 * @throws InterruptedException
 	 */
-	public static boolean loginWithParams(String username, String password)
-			throws InterruptedException {
+	public static boolean loginWithParams(String username, String password) throws InterruptedException {
 
 		boolean ret = false;
 
-		if (TestCase.logout() && IdeasAppActions.goLoginPage()) {
+		System.out.println("fuera");
+
+		TestCase.logout();
+
+		if (IdeasStudioActions.goLoginPage()) {
+
+			System.out.println("dentro del if");
 
 			waitForVisibleSelector("#username");
 
-			SeleniumBuilder.getExpectedActions().sendKeys(By.id("username"),
-					username);
-			SeleniumBuilder.getExpectedActions().sendKeys(By.id("password"),
-					password);
+			SeleniumBuilder.getExpectedActions().sendKeys(By.id("username"), username);
+			SeleniumBuilder.getExpectedActions().sendKeys(By.id("password"), password);
 			SeleniumBuilder.getExpectedActions().click(By.id("loginButton"));
 
 			Thread.sleep(2000);
@@ -134,7 +133,7 @@ public class TestCase {
 	 */
 	public static boolean logout() throws InterruptedException {
 
-		boolean ret = IdeasAppActions.goLogoutPage();
+		boolean ret = IdeasStudioActions.goLogoutPage();
 		// TODO: make sure user really logout by calling isAnyUserLogger()
 		Thread.sleep(2000);
 
@@ -149,8 +148,7 @@ public class TestCase {
 
 		try {
 			String propFile = getSeleniumPropFile();
-			input = TestCase.class.getResourceAsStream(System
-					.getProperty("file.separator") + propFile);
+			input = TestCase.class.getResourceAsStream(System.getProperty("file.separator") + propFile);
 			if (input != null) {
 				prop.load(input);
 			}
@@ -219,13 +217,9 @@ public class TestCase {
 
 		if (loadSeleniumJQuery()) {
 
-			Object statusCode = (Object) getJs()
-					.executeScript(
-							"var res=null;" + "jQuery.ajax({" + "url: '" + url
-									+ "'," + "data: {}," + "async: false,"
-									+ "complete: function(xhr, statusText){"
-									+ "res = xhr.status;" + "}" + "});"
-									+ "return res;");
+			Object statusCode = (Object) getJs().executeScript("var res=null;" + "jQuery.ajax({" + "url: '" + url + "',"
+					+ "data: {}," + "async: false," + "complete: function(xhr, statusText){" + "res = xhr.status;" + "}"
+					+ "});" + "return res;");
 
 			if (statusCode != null)
 				ret += statusCode.toString();
@@ -236,8 +230,7 @@ public class TestCase {
 
 	}
 
-	public static String getCurrentPageStatusCode() throws IOException,
-			InterruptedException {
+	public static String getCurrentPageStatusCode() throws IOException, InterruptedException {
 		return getStatusCode(getCurrentUrl());
 	}
 
@@ -252,15 +245,12 @@ public class TestCase {
 		boolean ret = false;
 
 		// load jquery.js
-		getJs().executeScript(
-				"var s=window.document.createElement('script');" + "s.src='"
-						+ getUrlAbsolute("js/vendor/jquery.js") + "';"
-						+ "window.document.head.appendChild(s);");
+		getJs().executeScript("var s=window.document.createElement('script');" + "s.src='"
+				+ getUrlAbsolute("js/vendor/jquery.js") + "';" + "window.document.head.appendChild(s);");
 
 		Thread.sleep(150); // time necessary to reload DOM
 
-		Object o = (Object) SeleniumBuilder.getJs().executeScript(
-				"$ ? true:false;");
+		Object o = (Object) SeleniumBuilder.getJs().executeScript("$ ? true:false;");
 
 		if (o != null) {
 			ret = (Boolean) o;
@@ -293,13 +283,11 @@ public class TestCase {
 	}
 
 	public static String getTextSelector(String cssSelector) {
-		return SeleniumBuilder.getWebDriver()
-				.findElement(By.cssSelector(cssSelector)).getText();
+		return SeleniumBuilder.getWebDriver().findElement(By.cssSelector(cssSelector)).getText();
 	}
 
 	public static String getInputValueSelector(String cssSelector) {
-		return getWebDriver().findElement(By.cssSelector(cssSelector))
-				.getAttribute("value");
+		return getWebDriver().findElement(By.cssSelector(cssSelector)).getAttribute("value");
 	}
 
 	public static String getBaseUrl() {
@@ -319,9 +307,7 @@ public class TestCase {
 	}
 
 	public static ExpectedActions waitForVisibleSelector(String selector) {
-		SeleniumBuilder.getWait().until(
-				ExpectedConditions.elementToBeClickable(By
-						.cssSelector(selector)));
+		SeleniumBuilder.getWait().until(ExpectedConditions.elementToBeClickable(By.cssSelector(selector)));
 
 		return getExpectedActions();
 	}
@@ -337,10 +323,43 @@ public class TestCase {
 
 		return ret;
 	}
-	
+
 	public static boolean isCurrentUrlContains(String s) throws InterruptedException {
 		Thread.sleep(1000);
 		return getCurrentUrl().contains(s);
+	}
+
+	public static void echoCommandApi(String msg) {
+
+		try {
+			TestCase.getJs().executeScript(
+					"" + "if (CommandApi.echo) {" + "CommandApi.echo('IDT-console: " + msg + "');" + "}");
+
+			Thread.sleep(3000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static int getSelectorLength(String selector) {
+
+		Integer ret = 0;
+
+		try {
+
+			Object jsObj = TestCase.getJs().executeScript("return jQuery('" + selector + "').length;");
+			String content = "";
+			if (jsObj != null) {
+				content = (String) jsObj;
+				ret = Integer.parseInt(content);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return ret;
 	}
 
 }

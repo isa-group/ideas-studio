@@ -1027,7 +1027,7 @@
 								<configuration>
 									<includes>
 										<include>**/TestSuiteFull.java</include>
-										<include>**/module/TestSuite.java</include>
+										<!-- <include>**/module/TestSuite.java</include> -->
 									</includes>
 								</configuration>
 							</execution>
@@ -1078,7 +1078,8 @@
 								</goals>
 								<configuration>
 									<includes>
-										<include>**/TestSuiteCore.java</include>
+										<include>**/TestSuiteFull.java</include>
+										<!-- <include>**/TestSuiteCore.java</include> -->
 									</includes>
 								</configuration>
 							</execution>
@@ -1130,8 +1131,9 @@
 								</goals>
 								<configuration>
 									<includes>
-										<include>**/*TestSuiteCore.java</include>
-										<include>**/*TestSuiteModule.java</include>
+										<include>**/TestSuiteFull.java</include>
+										<!-- <include>**/*TestSuiteCore.java</include> -->
+										<!-- <include>**/*TestSuiteModule.java</include> -->
 									</includes>
 								</configuration>
 							</execution>

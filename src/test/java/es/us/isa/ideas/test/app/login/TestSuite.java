@@ -10,17 +10,10 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	TC01_Register.class,
-	TC02_RegisterMaxLengthFormField.class,
-	TC03_RegisterGoogleOAuthResponse.class,
-	TC04_RegisterTwitter.class,
-	TC05_RegisterImageTwitter.class,
-	TC06_RegisterImageFacebook.class,
-	TC07_SignUpImages.class,
-	TC08_Login.class,
-	TC09_TwitterLogin.class,
-	TC11_RenameUsernameFromLoginInformationTab.class,
-	TC12_ResetPassword.class
+	TC01_RegisterMaxLengthFormField.class,
+	TC02_RegisterTwitter.class,
+	TC03_Login.class,
+	TC04_TwitterLogin.class
 })
 public class TestSuite extends es.us.isa.ideas.test.utils.TestCase {
 

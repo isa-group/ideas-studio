@@ -12,18 +12,18 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import es.us.isa.ideas.test.utils.IdeasAppActions;
+import es.us.isa.ideas.test.utils.IdeasStudioActions;
+import es.us.isa.ideas.test.utils.TestCase;
 
 /**
- * This test uses 'selenium.properties' to specify the Twitter user name and password.
  * 
  * @author feserafim
  *
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC09_TwitterLogin extends es.us.isa.ideas.test.utils.TestCase {
-
-	private static final Logger LOG = Logger.getLogger(TC09_TwitterLogin.class
+public class TC02_RegisterTwitter extends es.us.isa.ideas.test.utils.TestCase {
+	
+	private static final Logger LOG = Logger.getLogger(TC02_RegisterTwitter.class
 			.getName());
 	private static boolean testResult = true;
 	private static String tw_user = "";
@@ -31,40 +31,34 @@ public class TC09_TwitterLogin extends es.us.isa.ideas.test.utils.TestCase {
 
 	@BeforeClass
 	public static void setUp() throws InterruptedException {
-		LOG.log(Level.INFO, "Init TC09_TwitterLogin...");
+		LOG.log(Level.INFO, "Init TC04_RegisterTwitter...");
 		logout();
 	}
 
 	@AfterClass
 	public static void tearDown() {
-		LOG.log(Level.INFO, "TC09_TwitterLogin finished");
+		LOG.log(Level.INFO, "TC04_RegisterTwitter finished");
 	}
-
-	@Test
-	public void step01_goHomePage() {
-		testResult = IdeasAppActions.goHomePage();
-		assertTrue(testResult);
-	}
-
+	
 	@After
 	public void tearDownTest() {
 		LOG.info("testResult value: " + testResult);
 	}
-
+	
 	@Test
-	public void step02_loadTwitterSeleniumUserProperties() {
-		tw_user = getSeleniumTwitterUser();
-		tw_pass = getSeleniumTwitterPasswd();
-
+	public void step01_loadSeleniumTwitterProperties() {
+		
+		tw_user = TestCase.getSeleniumTwitterUser();
+		tw_pass = TestCase.getSeleniumTwitterPasswd();
+		
 		testResult = validatePropertyValues(tw_user, tw_pass);
-
 		assertTrue(testResult);
+		
 	}
-
+	
 	@Test
-	public void step03_loginWithTwitterSeleniumProperties() {
-		testResult = IdeasAppActions
-				.setUpFormDataTwitterLogin(tw_user, tw_pass);
+	public void step02_loginWithTwitterSeleniumProperties() {
+		testResult = IdeasStudioActions.registerTwitterUser(tw_user, tw_pass);
 		assertTrue(testResult);
 	}
 

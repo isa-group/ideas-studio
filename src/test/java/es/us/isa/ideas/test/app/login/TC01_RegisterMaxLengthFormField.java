@@ -14,7 +14,7 @@ import org.junit.runners.MethodSorters;
 import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.ExpectedActions;
-import es.us.isa.ideas.test.utils.IdeasAppActions;
+import es.us.isa.ideas.test.utils.IdeasStudioActions;
 
 /**
  * 
@@ -22,11 +22,11 @@ import es.us.isa.ideas.test.utils.IdeasAppActions;
  *
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC02_RegisterMaxLengthFormField extends
+public class TC01_RegisterMaxLengthFormField extends
 		es.us.isa.ideas.test.utils.TestCase {
 
 	private static final Logger LOG = Logger
-			.getLogger(TC02_RegisterMaxLengthFormField.class.getName());
+			.getLogger(TC01_RegisterMaxLengthFormField.class.getName());
 	private static boolean testResult = true;
 
 	@BeforeClass
@@ -47,7 +47,7 @@ public class TC02_RegisterMaxLengthFormField extends
 
 	@Test
 	public void step01_goToSignUpPage() {
-		testResult = IdeasAppActions.goSignUpPage();
+		testResult = IdeasStudioActions.goSignUpPage();
 		assertTrue(testResult);
 	}
 

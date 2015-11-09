@@ -1,4 +1,4 @@
-package es.us.isa.ideas.test.app.login;
+package es.us.isa.ideas.test.module.plaintext;
 
 import static org.junit.Assert.assertTrue;
 
@@ -12,30 +12,27 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import es.us.isa.ideas.test.utils.IdeasAppActions;
+import es.us.isa.ideas.test.utils.IdeasStudioActions;
+import es.us.isa.ideas.test.utils.TestCase;
 
-/**
- * This test uses 'selenium.properties' to specify the user name and password.
- * 
- * @author feserafim
- *
- */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC08_Login extends es.us.isa.ideas.test.utils.TestCase {
+public class TC01_Login extends es.us.isa.ideas.test.utils.TestCase {
 
-	private static final Logger LOG = Logger.getLogger(TC08_Login.class
-			.getName());
+	private static String user = "";
+	private static String pass = "";
+
 	private static boolean testResult = true;
+	private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
 	@BeforeClass
 	public static void setUp() throws InterruptedException {
-		LOG.log(Level.INFO, "Init TC08_Login...");
+		LOG.log(Level.INFO, "Init TC01_Login...");
 		logout();
 	}
 
 	@AfterClass
 	public static void tearDown() {
-		LOG.log(Level.INFO, "TC08_Login finished");
+		LOG.log(Level.INFO, "TC01_Login finished");
 	}
 
 	@After
@@ -45,14 +42,14 @@ public class TC08_Login extends es.us.isa.ideas.test.utils.TestCase {
 
 	@Test
 	public void step01_goHomePage() {
-		testResult = IdeasAppActions.goHomePage();
+		testResult = IdeasStudioActions.goHomePage();
 		assertTrue(testResult);
 	}
 
 	@Test
 	public void step02_loadSeleniumUserProperties() {
-		String user = getSeleniumAutotesterUser();
-		String pass = getSeleniumAutotesterPassword();
+		user = getSeleniumAutotesterUser();
+		pass = getSeleniumAutotesterPassword();
 
 		testResult = validatePropertyValues(user, pass);
 
@@ -61,18 +58,17 @@ public class TC08_Login extends es.us.isa.ideas.test.utils.TestCase {
 
 	@Test
 	public void step03_loginWithSeleniumProperties() throws InterruptedException {
-		String user = getSeleniumAutotesterUser();
-		String pass = getSeleniumAutotesterPassword();
 
-		testResult = false;
+		System.out.println(user);
+		System.out.println(pass);
 
 		if (validatePropertyValues(user, pass)) {
 			testResult = loginWithParams(user, pass);
 		} else {
-			LOG.info("Selenium user properties couldn\'t be loaded from "
-					+ getSeleniumPropFile());
+			LOG.info("Selenium user properties couldn\'t be loaded from " + getSeleniumPropFile());
 		}
 
 		assertTrue(testResult);
 	}
+
 }

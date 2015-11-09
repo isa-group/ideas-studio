@@ -12,9 +12,8 @@ import es.us.isa.ideas.test.utils.TestCase;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-//	TestSuiteCore.class,
-	TestCaseLogin.class
-//	TestCaseWS.class
+	es.us.isa.ideas.test.app.login.TestSuite.class,
+	es.us.isa.ideas.test.module.TestSuite.class
 })
 public class TestSuiteFull {
 	

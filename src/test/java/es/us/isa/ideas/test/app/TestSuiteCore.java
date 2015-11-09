@@ -12,7 +12,7 @@ import es.us.isa.ideas.test.utils.TestCase;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
-	TestCaseDefault.class
+	//empty
 })
 public class TestSuiteCore {
 	

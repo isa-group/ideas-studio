@@ -17,10 +17,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * @author feserafim
  */
 
-public class IdeasAppActions {
+public class IdeasStudioActions {
 
-	private static final Logger LOG = Logger.getLogger(IdeasAppActions.class
-			.getName());
+	private static final Logger LOG = Logger.getLogger(IdeasStudioActions.class.getName());
 
 	/**
 	 * Register an user giving all profile information. Return true if
@@ -32,15 +31,14 @@ public class IdeasAppActions {
 	 * @param address
 	 * @return true if the has actually registered
 	 */
-	public static boolean registerUser(String name, String email, String phone,
-			String address) {
+	public static boolean registerUser(String name, String email, String phone, String address) {
 
 		boolean ret = false;
 
 		try {
 
 			TestCase.logout();
-			IdeasAppActions.goSignUpPage();
+			IdeasStudioActions.goSignUpPage();
 			ExpectedActions action = TestCase.getExpectedActions();
 
 			action.sendKeys(By.cssSelector("#name"), name);
@@ -51,26 +49,20 @@ public class IdeasAppActions {
 
 			Thread.sleep(1000); // modal animation
 
-			String modalHeader = TestCase
-					.getWebDriver()
-					.findElement(
-							By.cssSelector("#loginOKPanel > div > div > div.modal-header > h4"))
-					.getText();
+			String modalHeader = TestCase.getWebDriver()
+					.findElement(By.cssSelector("#loginOKPanel > div > div > div.modal-header > h4")).getText();
 
-			String msgEmailAlreadyTaken = TestCase.getWebDriver()
-					.findElement(By.cssSelector("#statusPanel")).getText();
+			String msgEmailAlreadyTaken = TestCase.getWebDriver().findElement(By.cssSelector("#statusPanel")).getText();
 
 			boolean ret1 = "Account created successfully".equals(modalHeader);
-			boolean ret2 = "The email address you entered is already in use"
-					.equals(msgEmailAlreadyTaken);
+			boolean ret2 = "The email address you entered is already in use".equals(msgEmailAlreadyTaken);
 
 			if (!ret1)
 				LOG.log(Level.INFO,
 						"It appears that no successful modal window has been showed. Quitting register test.");
 
 			if (ret2)
-				LOG.log(Level.INFO, msgEmailAlreadyTaken
-						+ ". Quitting register test");
+				LOG.log(Level.INFO, msgEmailAlreadyTaken + ". Quitting register test");
 
 			ret = ret1 && !ret2;
 
@@ -84,25 +76,20 @@ public class IdeasAppActions {
 
 	}
 
-	public static boolean setUpFormDataTwitterLogin(String tw_user,
-			String tw_pass) {
+	public static boolean setUpFormDataTwitterLogin(String tw_user, String tw_pass) {
 
 		boolean ret = false;
 
 		try {
 
 			TestCase.logout();
-			IdeasAppActions.goLoginPage();
+			IdeasStudioActions.goLoginPage();
 
 			ExpectedActions action = TestCase.getExpectedActions();
 
 			action.click(By.cssSelector("#tw_signin > button"));
-			action.sendKeys(
-					By.cssSelector("#oauth_form > fieldset.sign-in > div.row.user > label"),
-					tw_user);
-			action.sendKeys(
-					By.cssSelector("#oauth_form > fieldset.sign-in > div.row.password > label"),
-					tw_pass);
+			action.sendKeys(By.cssSelector("#oauth_form > fieldset.sign-in > div.row.user > label"), tw_user);
+			action.sendKeys(By.cssSelector("#oauth_form > fieldset.sign-in > div.row.password > label"), tw_pass);
 			action.click(By.cssSelector("#allow"));
 
 			Thread.sleep(2000);
@@ -112,12 +99,9 @@ public class IdeasAppActions {
 
 				String selectorMsgHeader = "#pagesContent > h3:nth-child(2)";
 				TestCase.waitForVisibleSelector(selectorMsgHeader);
-				String msgHeader = TestCase.getWebDriver()
-						.findElement(By.cssSelector(selectorMsgHeader))
-						.getText();
+				String msgHeader = TestCase.getWebDriver().findElement(By.cssSelector(selectorMsgHeader)).getText();
 
-				boolean ret_connectedTwitter = msgHeader.toLowerCase()
-						.contains("connected to twitter");
+				boolean ret_connectedTwitter = msgHeader.toLowerCase().contains("connected to twitter");
 
 				// ret = !ret_en || !ret_es || ret_connectedTwitter;
 				ret = ret_connectedTwitter;
@@ -125,7 +109,8 @@ public class IdeasAppActions {
 			}
 
 		} catch (NoSuchElementException e) {
-			LOG.info("Test may not be well performed because a element from DOM wasn\'t found. Please, contact realease manager to review test code execution.");
+			LOG.info(
+					"Test may not be well performed because a element from DOM wasn\'t found. Please, contact realease manager to review test code execution.");
 			e.printStackTrace();
 		} catch (Exception e) {
 			ret = false;
@@ -136,8 +121,7 @@ public class IdeasAppActions {
 
 	}
 
-	public static boolean setUpFormDataGoogleLogin(String go_user,
-			String go_pass) {
+	public static boolean setUpFormDataGoogleLogin(String go_user, String go_pass) {
 
 		boolean ret = false;
 
@@ -151,11 +135,8 @@ public class IdeasAppActions {
 
 			Thread.sleep(1000);
 
-			String msgStatusCode = TestCase
-					.getWebDriver()
-					.findElement(
-							By.cssSelector("#af-error-container > p:nth-child(2) > b"))
-					.getText();
+			String msgStatusCode = TestCase.getWebDriver()
+					.findElement(By.cssSelector("#af-error-container > p:nth-child(2) > b")).getText();
 
 			ret = !"400.".equals(msgStatusCode);
 
@@ -163,7 +144,8 @@ public class IdeasAppActions {
 				LOG.info("Test will fail because webdriver received a Google 400 error page");
 
 		} catch (NoSuchElementException e) {
-			LOG.info("Test may not be well performed because a element from DOM wasn\'t found. Please, contact realease manager to review test code execution.");
+			LOG.info(
+					"Test may not be well performed because a element from DOM wasn\'t found. Please, contact realease manager to review test code execution.");
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -187,23 +169,18 @@ public class IdeasAppActions {
 
 		try {
 
-			if (IdeasAppActions.setUpFormDataTwitterLogin(tw_user, tw_pass)) {
+			if (IdeasStudioActions.setUpFormDataTwitterLogin(tw_user, tw_pass)) {
 
 				String currentUrl = TestCase.getWebDriver().getCurrentUrl();
 				boolean ret1 = false;
 				boolean ret2 = currentUrl.contains("app/editor");
 
 				if (ret2)
-					LOG.log(Level.INFO,
-							"It seems \'"
-									+ tw_user
-									+ "\' user was already registered to IDEAS. So this test will fail because it does not fulfill its purpose");
+					LOG.log(Level.INFO, "It seems \'" + tw_user
+							+ "\' user was already registered to IDEAS. So this test will fail because it does not fulfill its purpose");
 				else {
-					String msgConnectedToTwitter = TestCase
-							.getWebDriver()
-							.findElement(
-									By.cssSelector("#pagesContent > h3:nth-child(2)"))
-							.getText();
+					String msgConnectedToTwitter = TestCase.getWebDriver()
+							.findElement(By.cssSelector("#pagesContent > h3:nth-child(2)")).getText();
 
 					ret1 = "Connected to Twitter".equals(msgConnectedToTwitter);
 				}
@@ -227,8 +204,7 @@ public class IdeasAppActions {
 	 * @param go_pass
 	 * @return
 	 */
-	public static boolean checkGoogleRegisterOAuth(String go_user,
-			String go_pass) {
+	public static boolean checkGoogleRegisterOAuth(String go_user, String go_pass) {
 
 		boolean ret = false;
 
@@ -236,8 +212,7 @@ public class IdeasAppActions {
 
 			ExpectedActions action = TestCase.getExpectedActions();
 
-			LOG.info("Logging google oauth with \'" + go_user + "\' and \'"
-					+ go_pass + "\'");
+			LOG.info("Logging google oauth with \'" + go_user + "\' and \'" + go_pass + "\'");
 
 			action.click(By.cssSelector("#go_signin > button"));
 
@@ -249,11 +224,8 @@ public class IdeasAppActions {
 
 			Thread.sleep(1000);
 
-			String msgStatusCode = TestCase
-					.getWebDriver()
-					.findElement(
-							By.cssSelector("#af-error-container > p:nth-child(2) > b"))
-					.getText();
+			String msgStatusCode = TestCase.getWebDriver()
+					.findElement(By.cssSelector("#af-error-container > p:nth-child(2) > b")).getText();
 
 			ret = !"400.".equals(msgStatusCode);
 
@@ -279,8 +251,7 @@ public class IdeasAppActions {
 	 * @param workspaceName
 	 * @throws InterruptedException
 	 */
-	public static void selectWorkspace(String workspaceName)
-			throws InterruptedException {
+	public static void selectWorkspace(String workspaceName) throws InterruptedException {
 
 		ExpectedActions action = TestCase.getExpectedActions();
 
@@ -306,8 +277,7 @@ public class IdeasAppActions {
 	 */
 	public static boolean containsCurrentPage(String path) {
 
-		return TestCase.getWebDriver().getCurrentUrl().toLowerCase()
-				.contains(path.toLowerCase());
+		return TestCase.getWebDriver().getCurrentUrl().toLowerCase().contains(path.toLowerCase());
 
 	}
 
@@ -323,7 +293,7 @@ public class IdeasAppActions {
 
 		if (!TestCase.getCurrentUrl().contains(path)) {
 
-			IdeasAppActions.goEditorPage();
+			IdeasStudioActions.goEditorPage();
 
 			ExpectedActions action = TestCase.getExpectedActions();
 
@@ -361,19 +331,19 @@ public class IdeasAppActions {
 				relativePath = "";
 			}
 
-			System.out.println("accessing: "+TestCase.getBaseUrl() + relativePath);
+			System.out.println("accessing: " + TestCase.getBaseUrl() + relativePath);
 			TestCase.getWebDriver().get(TestCase.getBaseUrl() + relativePath);
 			try {
-				
-				//TODO: better solution waiting for a URL modification
+
+				// TODO: better solution waiting for a URL modification
 				Thread.sleep(1000); // changing url
-				
-				System.out.println("currentUrl: "+TestCase.getCurrentUrl());
+
+				System.out.println("currentUrl: " + TestCase.getCurrentUrl());
 				boolean ret1 = TestCase.getCurrentUrl().contains(relativePath);
 				// boolean ret2 = "200".equals(TestCase.getStatusCode(TestCase
 				// .getUrlAbsolute(relativePath)));
 				ret = ret1;
-				
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				ret = false;
@@ -392,7 +362,7 @@ public class IdeasAppActions {
 	 */
 	public static boolean goSignUpPage() {
 		LOG.info("Loading sign up page...");
-		return IdeasAppActions.goRelativePath("/settings/user");
+		return IdeasStudioActions.goRelativePath("/settings/user");
 	}
 
 	/**
@@ -400,7 +370,7 @@ public class IdeasAppActions {
 	 */
 	public static boolean goHomePage() {
 		LOG.info("Loading home page...");
-		return IdeasAppActions.goRelativePath("/");
+		return IdeasStudioActions.goRelativePath("/");
 	}
 
 	/**
@@ -408,7 +378,7 @@ public class IdeasAppActions {
 	 */
 	public static boolean goEditorPage() {
 		LOG.info("Loading editor page...");
-		return IdeasAppActions.goRelativePath("/app/editor");
+		return IdeasStudioActions.goRelativePath("/app/editor");
 	}
 
 	/**
@@ -416,7 +386,7 @@ public class IdeasAppActions {
 	 */
 	public static boolean goLoginPage() {
 		LOG.info("Loading login page...");
-		return IdeasAppActions.goRelativePath("/security/login");
+		return IdeasStudioActions.goRelativePath("/security/login");
 	}
 
 	/**
@@ -424,7 +394,7 @@ public class IdeasAppActions {
 	 */
 	public static boolean goLogoutPage() {
 		LOG.info("Loading logout page...");
-		return IdeasAppActions.goRelativePath("/j_spring_security_logout");
+		return IdeasStudioActions.goRelativePath("/j_spring_security_logout");
 	}
 
 	/**
@@ -434,7 +404,7 @@ public class IdeasAppActions {
 	 */
 	public static boolean goSocialPage() {
 		LOG.info("Loading social page...");
-		return IdeasAppActions.goRelativePath("/settings/user#social");
+		return IdeasStudioActions.goRelativePath("/settings/user#social");
 	}
 
 	/**
@@ -445,14 +415,12 @@ public class IdeasAppActions {
 	 * @param msg
 	 * @throws InterruptedException
 	 */
-	public static void echoCommand(WebDriver driver, String msg)
-			throws InterruptedException {
+	public static void echoCommand(WebDriver driver, String msg) throws InterruptedException {
 
 		goEditorPage();
 
-		((JavascriptExecutor) driver).executeScript(""
-				+ "if (CommandApi.echo) {" + "CommandApi.echo('IDT-console: "
-				+ msg + "');" + "}");
+		((JavascriptExecutor) driver)
+				.executeScript("" + "if (CommandApi.echo) {" + "CommandApi.echo('IDT-console: " + msg + "');" + "}");
 
 	}
 
@@ -464,17 +432,20 @@ public class IdeasAppActions {
 	 * @param cmd
 	 * @throws InterruptedException
 	 */
-	public void executeCommands(WebDriver driver, String... cmds)
-			throws InterruptedException {
+	public static boolean executeCommands(String... cmds) throws InterruptedException {
 
-		goEditorPage();
+		boolean ret = false;
 
-		for (String cmd : cmds) {
-			new ExpectedActions().sendKeys(
-					By.cssSelector("input.gcli-in-input"), cmd, Keys.RETURN);
+		if (goEditorPage()) {
+			ret = true;
+			for (String cmd : cmds) {
+				TestCase.getExpectedActions().sendKeys(By.cssSelector("input.gcli-in-input"), cmd, Keys.RETURN);
 
-			Thread.sleep(500);
+				Thread.sleep(500);
+			}
 		}
+
+		return ret;
 
 	}
 
@@ -486,8 +457,7 @@ public class IdeasAppActions {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	public static boolean checkTestModuleOkResult(final WebDriver driver)
-			throws InterruptedException {
+	public static boolean checkTestModuleOkResult(final WebDriver driver) throws InterruptedException {
 
 		goEditorPage();
 
@@ -498,21 +468,18 @@ public class IdeasAppActions {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(new ExpectedCondition<Boolean>() {
 			public Boolean apply(WebDriver arg0) {
-				return driver.findElements(
-						By.cssSelector("#gcli-root div.gcli-row-out")).size() > 1; // original
-																					// size
-																					// is
-																					// 1
-																					// on
-																					// page
-																					// load
+				return driver.findElements(By.cssSelector("#gcli-root div.gcli-row-out")).size() > 1; // original
+																										// size
+																										// is
+																										// 1
+																										// on
+																										// page
+																										// load
 			}
 		});
 
-		Object result = (Object) TestCase
-				.getJs()
-				.executeScript(
-						"return document.getElementById('gcli-root').textContent.search(/false/i);");
+		Object result = (Object) TestCase.getJs()
+				.executeScript("return document.getElementById('gcli-root').textContent.search(/false/i);");
 
 		if (result != null && result instanceof Long) {
 			result = (Long) result;
@@ -534,6 +501,30 @@ public class IdeasAppActions {
 		boolean ret = false;
 		String url = TestCase.getUrlAbsolute("researcher/principaluser/");
 		ret = "200".equals(TestCase.getStatusCode(url));
+
+		return ret;
+
+	}
+
+	/**
+	 * Check if the current content of IDEAS editor is empty.
+	 * 
+	 * @return true if editor exists and it is empty.
+	 * @throws InterruptedException
+	 */
+	public static boolean isEditorContentEmpty() throws InterruptedException {
+
+		boolean ret = false;
+
+		if (TestCase.isCurrentUrlContains("app/editor")) {
+			Object jsObj = TestCase.getJs()
+					.executeScript("return document.editor ? document.editor.getValue() : null;");
+			String editorContent = "";
+			if (jsObj != null) {
+				editorContent = (String) jsObj;
+				ret = editorContent.equals("");
+			}
+		}
 
 		return ret;
 
