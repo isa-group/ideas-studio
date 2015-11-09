@@ -1,4 +1,4 @@
-ideas-app v0.0.1, 2015-09-24
+ideas-studio v0.0.1, 2015-09-24
 ----------------------------
 - Integration tests with embedded Tomcat and selenium.
 - DescriptionFormatView available for every language.

@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
- * Resume some of the normal actions you can do with ideas-app.
+ * Resume some of the normal actions you can do with ideas-studio.
  * 
  * @author feserafim
  */
@@ -408,7 +408,7 @@ public class IdeasStudioActions {
 	}
 
 	/**
-	 * Ejecuta el comando echo de la línea de comandos de ideas-app indicando el
+	 * Ejecuta el comando echo de la línea de comandos de ideas-studio indicando el
 	 * mensaje a escribirse en la consola.
 	 * 
 	 * @param driver
