@@ -101,13 +101,9 @@ public class TestCase {
 
 		boolean ret = false;
 
-		System.out.println("fuera");
-
 		TestCase.logout();
 
 		if (IdeasStudioActions.goLoginPage()) {
-
-			System.out.println("dentro del if");
 
 			waitForVisibleSelector("#username");
 
@@ -148,7 +144,7 @@ public class TestCase {
 
 		try {
 			String propFile = getSeleniumPropFile();
-			input = TestCase.class.getResourceAsStream(System.getProperty("file.separator") + propFile);
+			input = TestCase.class.getResourceAsStream("/" + propFile);
 			if (input != null) {
 				prop.load(input);
 			}
@@ -349,10 +345,10 @@ public class TestCase {
 		try {
 
 			Object jsObj = TestCase.getJs().executeScript("return jQuery('" + selector + "').length;");
-			String content = "";
+			Long content = 0L;
 			if (jsObj != null) {
-				content = (String) jsObj;
-				ret = Integer.parseInt(content);
+				content = (Long) jsObj;
+				ret = content.intValue();
 			}
 
 		} catch (Exception e) {

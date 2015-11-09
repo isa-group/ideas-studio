@@ -8,8 +8,6 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import es.us.isa.ideas.test.utils.TestCase;
-
 /**
  * TestModule group class
  * 
@@ -17,22 +15,14 @@ import es.us.isa.ideas.test.utils.TestCase;
  */
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-	es.us.isa.ideas.test.module.plaintext.TestSuite.class
-})
+@Suite.SuiteClasses({ es.us.isa.ideas.test.module.plaintext.TestSuite.class })
 public class TestSuite {
 
-	private static final Logger LOG = Logger.getLogger(TestSuite.class
-			.getName());
+	private static final Logger LOG = Logger.getLogger(TestSuite.class.getName());
 
 	@BeforeClass
 	public static void setUp() throws InterruptedException {
-
 		LOG.log(Level.INFO, "Starting modules TestSuite...");
-
-		TestCase.logout();
-		TestCase.login();
-
 	}
 
 	@AfterClass

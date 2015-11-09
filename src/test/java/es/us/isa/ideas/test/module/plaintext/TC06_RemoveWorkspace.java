@@ -27,7 +27,6 @@ public class TC06_RemoveWorkspace extends es.us.isa.ideas.test.utils.TestCase {
 	@BeforeClass
 	public static void setUp() throws InterruptedException {
 		LOG.log(Level.INFO, "Init TC06_RemoveWorkspace...");
-		logout();
 	}
 
 	@AfterClass
@@ -59,25 +58,22 @@ public class TC06_RemoveWorkspace extends es.us.isa.ideas.test.utils.TestCase {
 
 		if (IdeasStudioActions.executeCommands("deleteCurrentWorkspace")) {
 
-			TestCase.getWebDriver()
-					.get(TestCase.getWebDriver().getCurrentUrl()); // refreshing
-	
+			TestCase.getWebDriver().get(TestCase.getWebDriver().getCurrentUrl()); // refreshing
+
 			TestCase.getExpectedActions().click(By.id("menuToggler"));
-			
-			testResult = getSelectorLength("#workspacesNavContainer li") > 0;
-		
+
+			testResult = getSelectorLength("#workspacesNavContainer li") == 0;
+
 		}
-		
+
 		if (testResult) {
-			LOG.info("\t :: Workspace \"" + workspaceName
-					+ "\" was successfully removed.");
-			echoCommandApi("Workspace \"" + workspaceName
-					+ "\" was successfully removed.");
+			LOG.info("\t :: Workspace \"" + workspaceName + "\" was successfully removed.");
+			echoCommandApi("Workspace \"" + workspaceName + "\" was successfully removed.");
 		}
-		
+
 		assertTrue(testResult);
 		LOG.info("TC06_RemoveWorkspace :: step02_removeWorkspace finished");
-		
+
 	}
 
 }

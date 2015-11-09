@@ -9,17 +9,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-	TC01_Login.class,
-	TC02_CreateWorkspace.class,
-	TC03_CreateProject.class,
-	TC04_CreateFile.class,
-	TC05_EditFile.class
-})
+@Suite.SuiteClasses({ TC01_Login.class, TC02_CreateWorkspace.class, TC03_CreateProject.class, TC04_CreateFile.class,
+		TC05_EditFile.class, TC06_RemoveWorkspace.class })
 public class TestSuite extends es.us.isa.ideas.test.utils.TestCase {
 
-	private static final Logger LOG = Logger.getLogger(TestSuite.class
-			.getName());
+	private static final Logger LOG = Logger.getLogger(TestSuite.class.getName());
 
 	@BeforeClass
 	public static void setUp() {
@@ -28,14 +22,7 @@ public class TestSuite extends es.us.isa.ideas.test.utils.TestCase {
 
 	@AfterClass
 	public static void tearDown() throws InterruptedException {
-		
-		logout();
-		getWebDriver().close();
-		
 		LOG.log(Level.INFO, "Login PlainText language module finished");
-		
 	}
-	
-	
 
 }

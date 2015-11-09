@@ -57,7 +57,7 @@ public class TC02_RegisterTwitter extends es.us.isa.ideas.test.utils.TestCase {
 	}
 	
 	@Test
-	public void step02_loginWithTwitterSeleniumProperties() {
+	public void step02_loginWithTwitterSeleniumProperties() throws InterruptedException {
 		testResult = IdeasStudioActions.registerTwitterUser(tw_user, tw_pass);
 		assertTrue(testResult);
 	}

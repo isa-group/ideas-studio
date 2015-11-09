@@ -88,8 +88,8 @@ public class IdeasStudioActions {
 			ExpectedActions action = TestCase.getExpectedActions();
 
 			action.click(By.cssSelector("#tw_signin > button"));
-			action.sendKeys(By.cssSelector("#oauth_form > fieldset.sign-in > div.row.user > label"), tw_user);
-			action.sendKeys(By.cssSelector("#oauth_form > fieldset.sign-in > div.row.password > label"), tw_pass);
+			action.sendKeys(By.cssSelector("#username_or_email"), tw_user);
+			action.sendKeys(By.cssSelector("#password"), tw_pass);
 			action.click(By.cssSelector("#allow"));
 
 			Thread.sleep(2000);
@@ -162,14 +162,17 @@ public class IdeasStudioActions {
 	 * @param tw_user
 	 * @param tw_pass
 	 * @return
+	 * @throws InterruptedException 
 	 */
-	public static boolean registerTwitterUser(String tw_user, String tw_pass) {
+	public static boolean registerTwitterUser(String tw_user, String tw_pass) throws InterruptedException {
 
 		boolean ret = false;
 
 		try {
 
 			if (IdeasStudioActions.setUpFormDataTwitterLogin(tw_user, tw_pass)) {
+				
+				Thread.sleep(2000);
 
 				String currentUrl = TestCase.getWebDriver().getCurrentUrl();
 				boolean ret1 = false;
@@ -184,7 +187,7 @@ public class IdeasStudioActions {
 
 					ret1 = "Connected to Twitter".equals(msgConnectedToTwitter);
 				}
-				ret = ret1 && !ret2;
+				ret = ret1 || ret2;
 
 			}
 

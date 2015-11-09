@@ -57,37 +57,26 @@ public class TC05_EditFile extends es.us.isa.ideas.test.utils.TestCase {
 		Thread.sleep(2000);
 
 		TestCase.getJs()
-				.executeScript("document.editor.session.setValue('" + "Template EC2 version 1.0\\n"
-						+ "\\tProvider \"Amazon\" as Responder;\\n" + "\\n" + "\\tMetrics:\\n"
-						+ "\\t\\tpercent: integer[0..100]; \\n" + "\\t\\tfloatPercent: float[0..100]; \\n"
-						+ "\\t\\tsize: integer[0..500];\\n" + "\\n" + "AgreementTerms\\n" + "\\n"
-						+ "\\tService AWS-S3PremiumSupport availableAt \"http://aws.amazon.com/s3/\"\\n"
-						+ "\\t\\tGlobalDescription\\n" + "\\t\\t\\tRegionUnits: size;\\n" + "\\t\\t\\tSCP: percent;\\n"
-						+ "\\n" + "\\tMonitorableProperties\\n" + "\\t\\tglobal:\\n" + "\\t\\t\\tMUP: floatPercent;\\n"
-						+ "\\n" + "\\tGuaranteeTerms\\n" + "\\t\\tG1: Provider guarantees MUP >= 99.95; \\n"
-						+ "\\t\\t\\tonlyIf (RegionUnits > 2); \\n" + "\\t\\t\\twith monthly penalty \\n"
-						+ "\\t\\t\\t\\tof SCP = 10 if MUP <= 99.0 AND MUP < 99.95; \\n"
-						+ "\\t\\t\\t\\tof SCP = 30 if MUP < 99.0;\\n" + "\\t\\t\\tend\\n" + "\\n"
-						+ "CreationConstraints\\n" + "\\tC1: none;\\n" + "\\n" + "EndTemplate');");
+				.executeScript("document.editor.session.setValue('Hola Mundo');");
 
 		Thread.sleep(1000);
 		
 		// Check if file was modified
 
-		boolean ret = !IdeasStudioActions.isEditorContentEmpty();
+		testResult = !IdeasStudioActions.isEditorContentEmpty();
 
 		String msg = "";
-		if (ret) {
+		if (testResult) {
 			msg = "File \"" + fileName + ".txt\" was successfully edited.";
 			LOG.info("\t :: File \"" + fileName + ".txt\" was successfully edited.");
 			echoCommandApi("File \"" + fileName + ".txt\" was successfully edited.");
 		} else {
 			msg += "Unable to change file";
 		}
+		
 		LOG.info(msg);
 		echoCommandApi(msg);
-
-		assertTrue(ret);
+		assertTrue(testResult);
 
 	}
 
