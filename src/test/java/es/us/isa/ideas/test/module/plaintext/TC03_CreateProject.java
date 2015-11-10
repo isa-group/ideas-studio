@@ -48,6 +48,12 @@ public class TC03_CreateProject extends es.us.isa.ideas.test.utils.TestCase {
 	@Test
 	public void step02_createProject() {
 		LOG.info("testCreateProject :: Creating a project...");
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			LOG.severe(e.getMessage());
+		}
 
 		TestCase.getExpectedActions().click(By.cssSelector("div#editorSidePanelHeaderAddProject div.dropdown-toggle"));
 		TestCase.getExpectedActions().click(By.linkText("Create Project"));

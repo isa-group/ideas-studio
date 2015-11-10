@@ -68,8 +68,6 @@ public class TC05_EditFile extends es.us.isa.ideas.test.utils.TestCase {
 		String msg = "";
 		if (testResult) {
 			msg = "File \"" + fileName + ".txt\" was successfully edited.";
-			LOG.info("\t :: File \"" + fileName + ".txt\" was successfully edited.");
-			echoCommandApi("File \"" + fileName + ".txt\" was successfully edited.");
 		} else {
 			msg += "Unable to change file";
 		}

@@ -9,7 +9,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
- * TestModule group class
+ * Before executing this TestSuite, be sure the user specified in
+ * selenium.propeties has no workspace created.
  * 
  * @author feserafim
  */
