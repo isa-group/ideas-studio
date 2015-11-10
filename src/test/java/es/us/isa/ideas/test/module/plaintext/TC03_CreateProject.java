@@ -56,26 +56,59 @@ public class TC03_CreateProject extends es.us.isa.ideas.test.utils.TestCase {
 		}
 
 		TestCase.getExpectedActions().click(By.cssSelector("div#editorSidePanelHeaderAddProject div.dropdown-toggle"));
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			LOG.severe(e.getMessage());
+		}
+		
 		TestCase.getExpectedActions().click(By.linkText("Create Project"));
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			LOG.severe(e.getMessage());
+		}
 
 		LOG.info("\t :: Inserting \"" + projectName + "\" as name project.");
 
 		TestCase.getExpectedActions().sendKeys(By.cssSelector("input.form-control.focusedInput"), projectName);
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			LOG.severe(e.getMessage());
+		}
+		
 		TestCase.getExpectedActions().click(By.linkText("Create"));
 		
-		boolean ret = false;
-		Object jsObj = TestCase.getJs().executeScript("return jQuery('#projectsTree > ul > li > span > a').text();");
-		String content = "";
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			LOG.severe(e.getMessage());
+		}
+		
+		// Refreshing browser
+		getWebDriver().navigate().refresh();
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			LOG.severe(e.getMessage());
+		}
+		
+		waitForVisibleSelector("#projectsTree > ul > li:nth-child(1) > span > a");
+		testResult = projectName.equals(getTextSelector("#projectsTree > ul > li:nth-child(1) > span > a"));
+		
 		String msg = "";
-		if (jsObj != null) {
-			content += (String) jsObj;
-			ret = content.equals(projectName);
+		if (testResult) {
 			msg += "\t :: Project \"" + projectName + "\" was successfully created.";
 		}
+		
 		LOG.info(msg);
 		echoCommandApi(msg);
-		
-		assertTrue(ret);
+		assertTrue(testResult);
 		
 	}
 

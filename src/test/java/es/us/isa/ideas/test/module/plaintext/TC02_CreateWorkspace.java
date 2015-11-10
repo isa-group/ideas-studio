@@ -92,9 +92,13 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
 		}
 		
 		testResult = workspaceName.equals(getTextSelector("#editorSidePanelHeaderWorkspaceInfo"));
-
-		LOG.info("\t :: Workspace \"" + workspaceName + "\" was successfully created.");
-		echoCommandApi("Workspace \"" + workspaceName + "\" was successfully created.");
+		
+		if (testResult) {
+			LOG.info("\t :: Workspace \"" + workspaceName + "\" was successfully created.");
+			echoCommandApi("Workspace \"" + workspaceName + "\" was successfully created.");
+		}
+		
+		assertTrue(testResult);
 	}
 
 }
