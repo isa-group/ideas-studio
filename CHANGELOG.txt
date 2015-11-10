@@ -1,0 +1,10 @@
+ideas-studio v0.7, 2015-11-09
+----------------------------
+- Migrate ideas-studio clinker doc to github enhancement
+- Restructure ideas-studio enhancement
+- Update development policy enhancement
+
+ideas-studio v0.0.1, 2015-09-24
+----------------------------
+- Integration tests with embedded Tomcat and selenium.
+- DescriptionFormatView available for every language.
