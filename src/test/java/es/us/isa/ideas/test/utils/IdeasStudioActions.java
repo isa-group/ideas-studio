@@ -343,8 +343,6 @@ public class IdeasStudioActions {
 
 				System.out.println("currentUrl: " + TestCase.getCurrentUrl());
 				boolean ret1 = TestCase.getCurrentUrl().contains(relativePath);
-				// boolean ret2 = "200".equals(TestCase.getStatusCode(TestCase
-				// .getUrlAbsolute(relativePath)));
 				ret = ret1;
 
 			} catch (InterruptedException e) {

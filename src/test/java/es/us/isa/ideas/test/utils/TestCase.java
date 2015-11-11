@@ -19,7 +19,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class TestCase {
 
-	private static String seleniumPropFile = "selenium.properties";
 	private static String applicationPropFile = "application.properties";
 	private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
@@ -38,7 +37,7 @@ public class TestCase {
 	}
 
 	public static String getSeleniumPropFile() {
-		return seleniumPropFile;
+		return SeleniumBuilder.getInstance().getSeleniumFileName();
 	}
 
 	/**
