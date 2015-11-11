@@ -1,5 +1,8 @@
 package es.us.isa.ideas.test.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -25,10 +28,10 @@ public class SeleniumBuilder {
 	private ExpectedActions expActions = null;
 	private JavascriptExecutor js = null;
 	private String baseURL = null;
-	
+	private String seleniumFileName = "";
+
 	private static SeleniumBuilder INSTANCE = null;
-	private static final Logger LOG = Logger.getLogger(SeleniumBuilder.class
-			.getName());
+	private static final Logger LOG = Logger.getLogger(SeleniumBuilder.class.getName());
 
 	@BeforeClass
 	public synchronized static void setUp() {
@@ -41,8 +44,7 @@ public class SeleniumBuilder {
 	@AfterClass
 	public static void tearDown() throws InterruptedException {
 
-		LOG.log(Level.INFO,
-				"logging out user " + TestCase.getSeleniumAutotesterUser());
+		LOG.log(Level.INFO, "logging out user " + TestCase.getSeleniumAutotesterUser());
 
 		TestCase.logout();
 
@@ -62,12 +64,12 @@ public class SeleniumBuilder {
 
 			INSTANCE = new SeleniumBuilder();
 
+			INSTANCE.seleniumFileName = askSeleniumFileName();
+
 			INSTANCE.driver = new FirefoxDriver();
 
-			INSTANCE.driver.manage().timeouts()
-					.pageLoadTimeout(2, TimeUnit.MINUTES);
-			INSTANCE.driver.manage().timeouts()
-					.implicitlyWait(30, TimeUnit.SECONDS);
+			INSTANCE.driver.manage().timeouts().pageLoadTimeout(2, TimeUnit.MINUTES);
+			INSTANCE.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
 			INSTANCE.driver.manage().window().maximize();
 
@@ -75,9 +77,8 @@ public class SeleniumBuilder {
 			INSTANCE.js = (JavascriptExecutor) getInstance().driver;
 
 			Properties prop = TestCase.getSeleniumProperties();
-			INSTANCE.baseURL = prop.getProperty("test.server.baseURL") + ":"
-					+ prop.getProperty("test.server.port") + "/"
-					+ prop.getProperty("test.app.name");
+			INSTANCE.baseURL = prop.getProperty("test.server.baseURL") + ":" + prop.getProperty("test.server.port")
+					+ "/" + prop.getProperty("test.app.name");
 
 		}
 	}
@@ -114,9 +115,55 @@ public class SeleniumBuilder {
 	public static JavascriptExecutor getJs() {
 		return getInstance().js;
 	}
-	
+
 	public static WebDriverWait getWait() {
 		return SeleniumBuilder.getExpectedActions().getWait();
+	}
+
+	public String getSeleniumFileName() {
+		return this.seleniumFileName;
+	}
+
+	public static String askSeleniumFileName() {
+
+		String ret = "";
+		String msgRepeat = "Invalid value. Please, insert 1 or 2 number values.\n";
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		if (INSTANCE == null || (INSTANCE != null && INSTANCE.getSeleniumFileName() == "")) {
+
+			while (ret == "") {
+
+				System.out.println("Indicate where do you want to run selenium tests for");
+				System.out.println("\t1 - Local");
+				System.out.println("\t2 - Remote");
+
+				try {
+
+					int i = Integer.parseInt(br.readLine());
+
+					if (i == 1) { // Local
+						ret += SeleniumTargetType.LOCAL_FILE.toString();
+					} else if (i == 2) { // Remote
+						ret += SeleniumTargetType.REMOTE_FILE.toString();
+					} else {
+						System.out.println(msgRepeat);
+					}
+
+				} catch (NumberFormatException e) {
+					System.out.println(msgRepeat);
+				} catch (IOException e) {
+					LOG.severe(e.getMessage());
+				}
+
+			}
+			
+			System.out.println("Using " + ret);
+			
+		}
+
+		return ret;
+
 	}
 
 }
