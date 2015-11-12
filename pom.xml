@@ -15,18 +15,18 @@
 	<properties>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- <repo_base_uri>/var/local/apache-tomcat-7.0.57/ideas-repo/</repo_base_uri> -->
-		<repo_base_uri>./ideas-repo/</repo_base_uri>
+		<application.finalName>IDEAS</application.finalName>
+		<repo_base_uri>${settings.repo_base_uri}</repo_base_uri>
 
 		<!-- MySQL properties -->
-		<application.mysqlDB>ideas</application.mysqlDB>
-		<application.mysqlUser>ideasAdmin</application.mysqlUser>
-		<application.mysqlPass>1d3454dm1n</application.mysqlPass>
+		<application.mysqlDB>${settings.mysqlDB}</application.mysqlDB>
+		<application.mysqlUser>${settings.mysqlUser}</application.mysqlUser>
+		<application.mysqlPass>${settings.mysqlPass}</application.mysqlPass>
 
 		<!-- Email properties -->
-		<mail.link.baseURI>https://labs.isa.us.es</mail.link.baseURI>
-		<mail.link.port>8181</mail.link.port>
-		<mail.link.app>IDEAS</mail.link.app>
+		<mail.link.baseURI>${settings.mail.link.baseURI}</mail.link.baseURI>
+		<mail.link.port>${settings.mail.link.port}</mail.link.port>
+		<mail.link.app>${settings.mail.link.app}</mail.link.app>
 
 		<!-- Integration Tests Execution configuration <test.rest.basePath>/${project.artifactId}-${project.version}/resources</test.rest.basePath> 
 			<test.rest.port>8880</test.rest.port> -->
@@ -686,6 +686,7 @@
 
 	<!-- BUILD CONFIGURATION -->
 	<build>
+	<finalName>${application.finalName}</finalName>
 		<resources>
 			<resource>
 				<filtering>true</filtering>
