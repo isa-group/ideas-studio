@@ -686,7 +686,7 @@
 
 	<!-- BUILD CONFIGURATION -->
 	<build>
-	<finalName>${application.finalName}</finalName>
+		<finalName>${application.finalName}</finalName>
 		<resources>
 			<resource>
 				<filtering>true</filtering>
@@ -719,6 +719,9 @@
 						<resource>
 							<directory>src/main/webapp</directory>
 							<filtering>true</filtering>
+							<includes>
+								<include>**/*.jsp</include>
+							</includes>
 						</resource>
 						<resource>
 							<directory>${basedir}</directory>
