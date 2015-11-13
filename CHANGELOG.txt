@@ -1,8 +1,15 @@
+ideas-studio v0.7.1, 13/11/2015
+----------------------------------------------
+- Script bash for IDEAS automated deploy
+- Update display version
+- Deploy stable version of IDEAS
+- No need to change selenium.properties
+
 ideas-studio v0.7 "Bumblebee", 09/11/2015
 ----------------------------------------------
-- Migrate ideas-studio clinker doc to github enhancement
-- Restructure ideas-studio enhancement
-- Update development policy enhancement
+- Migrate ideas-studio clinker doc to github
+- Restructure ideas-studio
+- Update development policy
 
 ideas-studio v0.6, 24/09/2015
 ----------------------------------------------

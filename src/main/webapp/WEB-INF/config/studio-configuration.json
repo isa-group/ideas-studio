@@ -1,0 +1,18 @@
+{
+	"configurationFiles": {
+		"application": "classpath*:application.properties",
+		"security": "classpath*:security.properties",
+		"social": "classpath*:social.properties",
+		"email": "classpath*:email.properties"
+	},
+	"workbenchName": "IDEAS",
+	"helpURI": "https://labs.isa.us.es/IDEAS-help/",
+	"googleAnalyticsID": "UA-68297022-1",
+	"languages": {
+		"ideas-plaintext-language": "/ideas-plaintext-language"
+	},
+	"images": {
+		"logo": "ideas/appLogoBig.png",
+		"search": "ideas/Search.png"
+	}
+}
