@@ -1,10 +1,67 @@
-ideas-studio v0.7, 2015-11-09
-----------------------------
-- Migrate ideas-studio clinker doc to github enhancement
-- Restructure ideas-studio enhancement
-- Update development policy enhancement
+ideas-studio v0.7.1, 13/11/2015
+----------------------------------------------
+- Script bash for IDEAS automated deploy
+- Update display version
+- Deploy stable version of IDEAS
+- No need to change selenium.properties
 
-ideas-studio v0.0.1, 2015-09-24
-----------------------------
+ideas-studio v0.7 "Bumblebee", 09/11/2015
+----------------------------------------------
+- Migrate ideas-studio clinker doc to github
+- Restructure ideas-studio
+- Update development policy
+
+ideas-studio v0.6, 24/09/2015
+----------------------------------------------
 - Integration tests with embedded Tomcat and selenium.
 - DescriptionFormatView available for every language.
+
+ideas-studio v0.5, 11/12/2014
+----------------------------------------------
+- Demo users service
+- Run sychronous operations
+- Report result fixed to show operation results
+- Bugs fron lost session fixed
+- Project explored fixed
+- Result operation modal fixed
+- Refactor command deleteCurrentWorkspace
+- Bugs deleting workspaces fixed
+- Refactor settings view
+
+ideas-studio v0.4 "Heisenberg", 24/10/2014
+----------------------------------------------
+- File name repeat bug fixed
+- Analysis report drop button
+- Report result fixed to show operation results
+- Fix logout and user menu settings in new window
+- Fix create files with .fm extension
+- Fix create files with enter key
+- Create csv module
+- Fix context menu z-index
+- Fix console css
+- Fix create and delete workspaces bugs
+- Create IDEAS help
+
+ideas-studio v0.3 "Lovelace", 01/09/2014
+----------------------------------------------
+- Handler press "intro" to login and modal views
+- Analysis report
+- Download reports
+- Default file name bug repair
+- Create file bugs fixed
+
+ideas-studio v0.2 "Dijkstra", 28/07/2014
+----------------------------------------------
+- Code refactoring
+- Contex Menu
+- File upload
+- Default file name bug repair
+- Projects templates
+
+ideas-studio v0.1, 26/06/2014
+----------------------------------------------
+- Lost session fails repair
+- Console text is selectable
+- Create directories bug repair
+- Special characters on files names bug repair
+- Css fails repair
