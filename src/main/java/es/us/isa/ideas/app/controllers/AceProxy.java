@@ -41,7 +41,7 @@ import es.us.isa.ideas.app.configuration.StudioConfiguration;
 @Controller
 @RequestMapping("/js")
 public class AceProxy extends AbstractController {
-	
+
 	private static final Logger LOGGER = Logger.getLogger(AceProxy.class
 			.getName());
 
@@ -174,12 +174,14 @@ public class AceProxy extends AbstractController {
 	private String getRemoteAceContent(String fileName,
 			HttpServletRequest request) {
 
+		String result = "";
+
 		if (modeUriCache.containsKey(fileName)) {
 			LOGGER.log(Level.INFO, "Getting from cache for '" + fileName
 					+ "' (uri=" + modeUriCache.get(fileName) + ")");
 			return requestContent(modeUriCache.get(fileName), request);
 		} else {
-			String result = "";
+
 			StudioConfiguration studioConfiguration = moduleController
 					.getConfiguration(request);
 
@@ -195,41 +197,50 @@ public class AceProxy extends AbstractController {
 				for (int i = 0; i < formats.length(); i++) {
 					JSONObject format = formats.getJSONObject(i);
 					String formatId = format.getString("format");
-					String editorModeURI = format.getString("_editorModeURI");
-					String editorThemeURI = format.getString("_editorThemeURI");
 
-					if (fileName.startsWith(MODE_PREFIX)) {
-						if (editorModeURI != null
-								&& editorModeURI.equals(fileName + JS_EXT)) {
+					if (!format.isNull("_editorModeURI")) {
+						String editorModeURI = format
+								.getString("_editorModeURI");
 
-							String uri = languageModuleUri + LANGUAGE_ENDPOINT
-									+ FORMAT_ENDPOINT + "/" + formatId
-									+ "/mode";
-							LOGGER.log(Level.INFO, "Loading mode from: " + uri);
-							result = requestContent(uri, request);
-							modeUriCache.put(fileName, uri);
-							break;
+						if (fileName.startsWith(MODE_PREFIX)) {
+							if (editorModeURI != null
+									&& editorModeURI.equals(fileName + JS_EXT)) {
+								String uri = languageModuleUri
+										+ LANGUAGE_ENDPOINT + FORMAT_ENDPOINT
+										+ "/" + formatId + "/mode";
+								LOGGER.log(Level.INFO, "Loading mode from: "
+										+ uri);
+								result = requestContent(uri, request);
+								modeUriCache.put(fileName, uri);
+								return result;
+							}
 						}
-					} else if (fileName.startsWith(THEME_PREFIX)) {
-						LOGGER.log(Level.INFO, "Is " + editorThemeURI
-								+ " equal to " + fileName + JS_EXT + "?");
-						if (editorThemeURI != null
-								&& editorThemeURI.equals(fileName + JS_EXT)) {
+					} 
+					
+					if (!format.isNull("_editorThemeURI")) {
+						String editorThemeURI = format
+								.getString("_editorThemeURI");
 
-							String uri = languageModuleUri + LANGUAGE_ENDPOINT
-									+ FORMAT_ENDPOINT + "/" + formatId
-									+ "/theme";
-							LOGGER.log(Level.INFO, "Loading theme from: " + uri);
-							result = requestContent(uri, request);
-							modeUriCache.put(fileName, uri);
-							break;
+						if (fileName.startsWith(THEME_PREFIX)) {
+							LOGGER.log(Level.INFO, "Is " + editorThemeURI
+									+ " equal to " + fileName + JS_EXT + "?");
+							if (editorThemeURI != null
+									&& editorThemeURI.equals(fileName + JS_EXT)) {
+								String uri = languageModuleUri
+										+ LANGUAGE_ENDPOINT + FORMAT_ENDPOINT
+										+ "/" + formatId + "/theme";
+								LOGGER.log(Level.INFO, "Loading theme from: "
+										+ uri);
+								result = requestContent(uri, request);
+								modeUriCache.put(fileName, uri);
+								return result;
+							}
 						}
 					}
 				}
 			}
-
-			return result;
 		}
 
+		return result;
 	}
 }
