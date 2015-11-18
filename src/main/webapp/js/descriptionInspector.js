@@ -788,8 +788,8 @@ var DescriptionInspector = {
 					'<div class="container-fluid"><div class="row" style="margin-bottom:5px;">'+
 						'<div class="col-xs-2"><label class="selectedFragment" for="">'+ labelName +'</label></div>'+
 						'<div class="col-xs-10"><div class="dropdown" style="float:right;">'+
-							'<button style="height: 21px;line-height: 0;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">'+
-								'<span class="caret"></span>'+
+							'<button style="height: 21px;line-height: 0;padding-bottom: 13px;margin-left: 4px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">'+
+								'<span>...</span>'+
 							'</button>'+
 							'<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="overflow-x: auto;width:'+ $("#descriptionInspectorHeaderAdd .progressContent").width() +'px;padding: 5px;">'+
 								'<li role="presentation"><pre role="menuitem" tabindex="-1" style="pointer-events: none; cursor: default;border:0;background-color:white;color:#6C6C6C;/*word-break: normal;*/word-wrap: normal;font-size:11px;width:100%;">'+ fragmentText +'</pre></li>'+
@@ -1345,9 +1345,8 @@ var DescriptionInspector = {
 			setStepDefaultContent : function () {
 				//console.log("Setting step 3 default content and style");
 
-//				if (window.getSelection) window.getSelection().empty();
+				//if (window.getSelection) window.getSelection().empty();
 				window.getSelection().removeAllRanges();	// works with all browsers
-				
 				DescriptionInspector.ace.getSelection().clearSelection();
 				
 				// Style
@@ -1375,27 +1374,240 @@ var DescriptionInspector = {
 					.addClass("prevFragment");
 				
 				// Functionality
-				var progress = DescriptionInspector.progressBar;
+				var progressBar = DescriptionInspector.progressBar,
+					descContent = progressBar.getDescriptionSelector().html();
 
-//				progress.setTitle("Define binding note and type");
-				progress.setDescription(progress.getDescriptionSelector().html() +
-					'<div style="margin-bottom:5px;">'+
-						'<label for="selectBindingType">Type:</label>'+
-						'<select id="selectBindingType" class="selectedFragment">'+
-						  '<option value="span">span</option>'+
-						  '<option value="div">div</option>'+
-						  '<option value="href">href</option>'+
-						  '<option value="button">button</option>'+
-						'</select>'+
+				descContent +=
+					'<hr style="'+
+						'margin: 15px 0;'+
+						'">'+
+					// RDFa yes/no
+					'<div style="margin-bottom:5px;" id="rdfa-property">'+
+						'<label for="selectBindingRDFa">RDFa:</label>'+
+						'<div style="float: right;">'+
+							'<input type="radio" name="rdfa" id="rdfaYes" style="'+
+								'margin: 0 5px 0 15px;" checked />'+
+							'<label for="rdfaYes">yes</label>'+
+							'<input type="radio" name="rdfa" id="rdfaNo" style="'+
+								'margin: 0 5px 0 15px;" />'+
+							'<label for="rdfaNo">no</label>'+
+						'</div>'+
 					'</div>'+
-					'<div style="margin-bottom:5px;">'+
+					// Element
+					'<div class="rdfaContent" style="margin-bottom:5px;" id="element-property">'+
+						'<label for="selectBindingElement">Element:</label>'+
+						// New/current element
+						'<div style="float: right;">'+
+							'<input type="radio" name="rdfaElement" id="newElement" style="'+
+								'margin: 0 5px 0 15px;" checked />'+
+							'<label for="newElement">new</label>'+
+							'<input type="radio" name="rdfaElement" id="currentElement" style="'+
+								'margin: 0 5px 0 15px;" />'+
+							'<label for="currentElement">current</label>'+
+						'</div>'+
+					'</div>'+
+					'<div style="margin-left: 25px;">'+
+						'<label for="selectBindingType" style="float: left; font-size: 12px;">'+
+							'Type:'+
+						'</label>'+
+						'<div style="margin-left: 25px;">'+
+							'<select id="selectBindingType" class="selectedFragment" style="'+
+								'float: right;">'+
+								'<option value="span">span</option>'+
+								'<option value="div">div</option>'+
+								'<option value="a">a</option>'+
+								'<option value="button">button</option>'+
+							'</select>'+
+						'</div>'+
+					'</div>'+
+					'<hr class="rdfaContent rdfaElementContent" style="'+
+						'margin: 35px 0 10px 0;'+
+						'">';
+
+				// Add attribute field
+				descContent +=
+					'<div class="rdfaContent" style="margin-bottom:5px;" id="attribute-property">'+
+						'<label for="selectBindingAttributeType" style="font-size:12px;">Attribute:</label>'+
+						'<div style="float: right;margin-top: -20px;">'+
+							'<select id="selectBindingAttributeType" class="selectedFragment" style="'+
+								'float: right;">'+
+								'<option value="vocab">vocab</option>'+
+								'<option value="typeof">typeof</option>'+
+								'<option value="property">property</option>'+
+							'</select>'+
+							'<input id="attributeTypeValue" style="float: right;width: 65%;margin-top: 5px;font-size: 12px;" type="text" value="">'+
+						'</div>'+
+					'</div>'+
+					'<hr class="rdfaContent" class="rdfaContent" style="'+
+						'margin: 40px 0 15px 0;'+
+						'">';
+
+				// Add note field
+				descContent +=
+					'<div id="typeContainer" style="margin-bottom:5px;">'+
 						'<label for="bindingNote">Note:</label>'+
-						'<input id="bindingNote" class="" style="float:right;" type="text" value="" />'+
-					'</div>'
-				);
+						'<input id="bindingNote" class="" style="float:right;" type="text" value="">'+
+					'</div>';
 
-				progress.compressFragmentTexts();
+				progressBar.setDescription(descContent);
+				progressBar.compressFragmentTexts();
 
+				this.loadRadioButtonClickManager();
+
+			},
+
+			loadRadioButtonClickManager : function () {
+
+				var _this = this;
+
+				$("input:radio[name=rdfa]").change(function () {
+					var value = $(this).context.id;
+					if (value === "rdfaYes") {
+						if ($(".rdfaContent").is(":hidden")) {
+							$(".rdfaContent").slideDown(function () {
+								$("#typeContainer").css("margin-top","");	// reverse of slideUp
+								$("#newElement").click();
+							});
+						}
+						console.log("yes");
+					} else {
+						// simple binding
+						if (!$(".rdfaContent").is(":hidden")) {
+							$(".rdfaContent").slideUp(function () {
+								$("#typeContainer").css("margin-top","40px");
+
+								// Enable all select options
+								$("#selectBindingType").prop("disabled", false);
+								$("#selectBindingType option:disabled").each(function () {$(this).prop("disabled", false);});
+								$("#selectBindingAttributeType").prop("disabled", false);
+								$("#selectBindingAttributeType option:disabled").each(function () {$(this).prop("disabled", false);});
+							});
+						}
+						console.log("no");
+					}
+				});
+				$("input:radio[name=rdfaElement]").change(function () {
+					var value = $(this).context.id;
+					if (value === "newElement") {
+						// new element case
+						
+						// Enable all select options
+						$("#selectBindingType").prop("disabled", false);
+						$("#selectBindingType option:disabled").each(function () {$(this).prop("disabled", false);});
+						$("#selectBindingAttributeType").prop("disabled", false);
+						$("#selectBindingAttributeType option:disabled").each(function () {$(this).prop("disabled", false);});
+						
+						if ($(".rdfaElementContent").is(":hidden")) {
+							//$(".rdfaElementContent").slideDown();
+						}
+						console.log("new");
+					} else {
+						// current element case
+						var $ancestorBinding = _this.getStep2AncestorBinding();
+
+						if ($ancestorBinding != null) {
+							$("#selectBindingType").val("div");	// watch out if "div" exists
+							$("#selectBindingType").prop("disabled", true); // disabling select element
+							_this.disableListOfOptions($("#selectBindingAttributeType"), _this.getRDFaDeclaredElements($ancestorBinding));
+						} else {
+							alert("no parent found");
+							$("#newElement").click();
+						}
+
+						if (!$(".rdfaElementContent").is(":hidden")) {
+							//$(".rdfaElementContent").slideUp();
+						}
+						console.log("current");
+					}
+				});
+
+			},
+
+			disableListOfOptions : function ($select, listOfOptions) {
+
+				console.log("listOfOptions", listOfOptions);
+				
+				if ($select.prop("tagName").toLowerCase() === "select") {
+					
+					var disabledItems_i = 0;
+					for (var i=0; i < listOfOptions.length; i++) {
+						var option_i = "option[value="+ listOfOptions[i] +"]";
+						if ($select.find(option_i) && $select.find(option_i).length > 0) {
+							$select.find(option_i).prop("disabled",true);
+							console.log("disabling option",listOfOptions[i]);
+						}
+					}
+					// Disables select element if necessary
+					if (disabledItems_i == $select.find("option").length) {
+						$select.prop("disabled",true);
+					} else {
+						// Auto-select the first available select option
+						$("#selectBindingAttributeType").val($("#selectBindingAttributeType option:enabled").first().val())
+					}
+				} else {
+					console.log("Unexpected html select param");
+				}
+
+			},
+			/**
+			 * Get which RDFa attributes are declared in the param.
+			 */
+			getRDFaDeclaredElements : function ($HTMLObject) {
+				
+				var ret = [];
+
+				// vocab
+				var value = $HTMLObject.attr("vocab");
+				if (value && value != "") {
+					ret.push("vocab");
+				}
+
+				// typeof
+				var value = $HTMLObject.attr("typeof");
+				if (value && value != "") {
+					ret.push("typeof");
+				}
+
+				// property
+				var value = $HTMLObject.attr("property");
+				if (value && value != "") {
+					ret.push("property");
+				}
+
+				return ret;
+
+			},
+			/**
+			 * Get the first "div.ideas-binding" ancestor from the selected text on step2.
+			 */
+			getStep2AncestorBinding : function () {
+				
+				var binding = DescriptionInspector.vars.progressBar.step2,
+					ancestorElement = binding.commonAncestorContainer.parentElement,
+					ret = null;
+
+				if (ancestorElement != null) {
+					var $ancestor = $(ancestorElement);
+					if (!$ancestor.hasClass("ideas-binding") || $ancestor.prop("tagName").toLowerCase() != "div") {
+						if ($ancestor.parents("div.ideas-binding").length > 0) {
+							$ancestor = $ancestor.parents("div.ideas-binding");
+						} else {
+							$ancestor = $ancestor.find(".ideas-binding");
+						}
+					}
+					if ($ancestor.length > 0) {
+						ret = $ancestor.first();
+					}
+				}
+
+				return ret;
+
+			},
+			isRDFa : function () {
+				return $("input:radio[name=rdfa]:checked").attr("id") === "rdfaYes";
+			},
+			isRDFaNewElement : function () {
+				return this.isRDFa() && $("input:radio[name=rdfaElement]:checked").attr("id") === "newElement";
 			},
 
 			/**
@@ -1403,37 +1615,68 @@ var DescriptionInspector = {
 			 * @memberof DescriptionInspector.progressBar.step3
 			 */			
 			stepForwardManager : function () {
-				
-				try {
-					var binding = DescriptionInspector.vars.progressBar.step1
-						, contentToBind = this.getSelectedHtml(DescriptionInspector.vars.progressBar.step2)
-						, regex = /(<([^>]+)>)/ig
-						, typeOfBinding = $("#selectBindingType").val()
-						, textNote = $("#bindingNote").val();
 
-					if (typeOfBinding == "href") {
-						typeOfBinding = "a";
-					} else if (typeOfBinding != "span" && typeOfBinding != "div" && typeOfBinding != "button") {
-						//console.log(typeOfBinding, "no valid binding type. Defining automatic <span> type.");
-						typeOfBinding = "span";
+				var binding = DescriptionInspector.vars.progressBar.step1,
+					contentToBind = this.getSelectedHtml(DescriptionInspector.vars.progressBar.step2),
+					regex = /(<([^>]+)>)/ig,
+					typeOfBinding = $("#selectBindingType").val(),
+					textNote = $("#bindingNote").val();
+
+				if (typeOfBinding != "span" && typeOfBinding != "a" && typeOfBinding != "div" && typeOfBinding != "button") {
+					typeOfBinding = "span";
+				}
+
+				// Build binding html element
+				var el = document.createElement(typeOfBinding);
+				el.innerHTML = contentToBind;
+
+				$(el)
+					.addClass("ideas-binding highlighted-fragment")
+					.attr({
+						"id": "ideasBinding_"+ binding.id,
+						"data-start-row": binding.startRows[0],
+						"data-end-row": binding.endRows[0],
+						"data-start-column": binding.startColumns[0],
+						"data-end-column": binding.endColumns[0]
+					});
+
+				if (textNote != "") $(el).attr("data-text", textNote);
+
+				// RDFa properties
+				if (this.isRDFa()) {
+					var rdfaElementType = $("#selectBindingType"),
+						rdfaElementValue = $("#typeValue"),
+						rdfaAttributeType = $("#selectBindingAttributeType"),
+						rdfaAttributeValue = $("#attributeTypeValue");
+
+
+					if (this.isRDFaNewElement()) {
+						// Create a new binding
+						if (rdfaAttributeValue.val() != "") {
+							$(el).attr(rdfaAttributeType.val(), rdfaAttributeValue.val());
+						}
+						var frag = document.createDocumentFragment(), node, lastNode;
+						$(el).wrap("<div/>"); $(el).html( $(el).parent().html() );
+						while ( (node = el.firstChild) ) {
+							lastNode = frag.appendChild(node);
+						}
+
+						DescriptionInspector.vars.progressBar.step2.deleteContents();
+						DescriptionInspector.vars.progressBar.step2.insertNode(frag);
+
+						console.log("created a new rdfa binding");
+					} else {
+						// Updated RDFa current binding
+						var $ancestor = this.getStep2AncestorBinding();
+						if (rdfaAttributeValue.val() != "") {
+							$ancestor.attr(rdfaAttributeType.val(), rdfaAttributeValue.val());
+						}
+						if (textNote != "") $ancestor.attr("data-text", textNote);
+
+						console.log("update current rdfa binding");
 					}
-
-					// Build binding html element
-					var el = document.createElement(typeOfBinding);
-					el.innerHTML = contentToBind;
-
-					$(el)
-						.addClass("ideas-binding highlighted-fragment")
-						.attr({
-							"id": "ideasBinding_"+ binding.id,
-							"data-start-row": binding.startRows[0],
-							"data-end-row": binding.endRows[0],
-							"data-start-column": binding.startColumns[0],
-							"data-end-column": binding.endColumns[0]
-						})
-
-					if (textNote != "") $(el).attr("data-text", textNote);
-
+				} else {
+					// create simple binding
 					var frag = document.createDocumentFragment(), node, lastNode;
 					$(el).wrap("<div/>"); $(el).html( $(el).parent().html() );
 					while ( (node = el.firstChild) ) {
@@ -1443,11 +1686,11 @@ var DescriptionInspector = {
 					DescriptionInspector.vars.progressBar.step2.deleteContents();
 					DescriptionInspector.vars.progressBar.step2.insertNode(frag);
 
-					DescriptionInspector.progressBar.finish();
-
-				} catch (err) {
-					DescriptionInspector.progressBar.cancel();
+					console.log("created a simple binding");
 				}
+
+				DescriptionInspector.progressBar.finish();
+				DescriptionInspector.progressBar.cancel();
 
 			}
 
@@ -1927,8 +2170,8 @@ var DescriptionInspector = {
 												 'title="Please specify a new value to bind"'+
 												 'style="width:100%;" /></div></div>'+
 										  '<!-- Use it to show any validation message --><div type="ideasBindingValidation"></div>'+
-									  '</div>'
-							, _this = this;
+									  '</div>',
+							_this = this;
 
 						showModal(
 							"Please specify a new value to bind", content, "OK", 
@@ -2676,13 +2919,14 @@ var DescriptionInspector = {
 		 * @param {jQuery} inspectorLoader - Contenedor del inspector de descripción.
 		 */		
 		bindings : function (inspectorLoader) {
-			//console.log("Loading onclick bindings...");
 				
 			$("#editorInspector .ideas-binding")
 				.unbind("click")
 				.click(function () {
 
-					if (DescriptionInspector.vars.mode == "editor" && DescriptionInspector.isFirstEditorFormatSelected()) {
+					if ($(this).find(".ideas-binding").length == 0 &&
+						DescriptionInspector.vars.mode == "editor" && 
+						DescriptionInspector.isFirstEditorFormatSelected()) {
 
 						console.log("Binding activated");
 
