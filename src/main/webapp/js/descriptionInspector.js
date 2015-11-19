@@ -859,6 +859,7 @@ var DescriptionInspector = {
 			ace.getSelection().clearSelection();
 
 			DescriptionInspector.highlightAllBindings();
+			this.disableStepFowardBtn();
 		},
 
 		/**
@@ -907,6 +908,18 @@ var DescriptionInspector = {
 	    	DescriptionInspector.progressBar.setDefaultContent();
 
 	    	console.log("Binding created");
+	    },
+
+	    disableStepFowardBtn : function () {
+	    	var btnSelector = $("#editorInspector .expanded footer .btn-primary");
+			btnSelector.prop("disabled", true)
+	    	return btnSelector.addClass("inactive");
+	    },
+
+	    enableStepFowardBtn : function () {
+	    	var btnSelector = $("#editorInspector .expanded footer .btn-primary");
+			btnSelector.prop("disabled", false)
+	    	return btnSelector.removeClass("inactive");
 	    },
 		
 		
@@ -1017,8 +1030,8 @@ var DescriptionInspector = {
 					.removeClass("active")
 					.html('3');
 				
-				$("#editorInspector .expanded footer .btn-primary")
-					.addClass("inactive")
+				DescriptionInspector.progressBar
+					.disableStepFowardBtn()
 					.text("Next");
 				
 				// Contenido de Texto
@@ -1058,11 +1071,10 @@ var DescriptionInspector = {
 			 */
 			stepFowardManager : function (event, $obj) {
 				//console.log("Waiting to go to step 2...");
-				
+				DescriptionInspector.progressBar.enableStepFowardBtn();
 				this._saveSelectedContent();
 
 				$("#editorInspector .expanded footer .btn-primary")
-					.removeClass("inactive")
 					.unbind("click")
 					.click(function() {
 						var targetStep = DescriptionInspector.progressBar.getProgressStep('2');
@@ -1073,6 +1085,8 @@ var DescriptionInspector = {
 						//$obj.unbind("click keyup");
 						$("div.ace_content").unbind("click");
 						$(document).unbind("keyup");
+
+						DescriptionInspector.progressBar.disableStepFowardBtn();
 					});
 			}
 			
@@ -1190,8 +1204,8 @@ var DescriptionInspector = {
 					.removeClass("active")
 					.html('3');
 				
-				expandedMenu.find("footer .btn-primary")
-					.addClass("inactive")
+				DescriptionInspector.progressBar
+					.disableStepFowardBtn()
 					.text("Next");
 				
 				// Functionality
@@ -1242,8 +1256,9 @@ var DescriptionInspector = {
 					if (step2.getSelectedText() != "") {
 						step2._saveSelectedContent();
 
+						DescriptionInspector.progressBar.enableStepFowardBtn();
+
 						$("#editorInspector .expanded footer .btn-primary")
-							.removeClass("inactive")
 							.unbind("click")
 							.click(function() {
 								var step3 = DescriptionInspector.progressBar.getProgressStep(3);
@@ -1304,7 +1319,7 @@ var DescriptionInspector = {
 			 */			
 			_isActive : function () {
 				return ( $(".progress-number.active").length == 1 &&
-						 $(".three.active").length == 1 ? true : false)
+						 $(".three.active").length == 1 ? true : false );
 			},
 
 			/**
@@ -1366,94 +1381,66 @@ var DescriptionInspector = {
 					.addClass("active")
 					.html('<span style="color:#F5F5F5;">3</span>');
 				
-				$("#editorInspector .expanded footer .btn-primary")
-					.removeClass("inactive")
-					.text("Done");
-				
 				$("#editorInspector .selectedFragment")
 					.addClass("prevFragment");
+
+				$("#editorInspector .expanded footer .btn-primary")
+					.addClass("inactive")
+					.text("Done")
 				
 				// Functionality
 				var progressBar = DescriptionInspector.progressBar,
 					descContent = progressBar.getDescriptionSelector().html();
+
+				progressBar.disableStepFowardBtn();
 
 				descContent +=
 					'<hr style="'+
 						'margin: 15px 0;'+
 						'">'+
 					// RDFa yes/no
-					'<div style="margin-bottom:5px;" id="rdfa-property">'+
-						'<label for="selectBindingRDFa">RDFa:</label>'+
-						'<div style="float: right;">'+
-							'<input type="radio" name="rdfa" id="rdfaYes" style="'+
-								'margin: 0 5px 0 15px;" checked />'+
-							'<label for="rdfaYes">yes</label>'+
-							'<input type="radio" name="rdfa" id="rdfaNo" style="'+
-								'margin: 0 5px 0 15px;" />'+
-							'<label for="rdfaNo">no</label>'+
-						'</div>'+
-					'</div>'+
+					'<div style="margin-bottom:5px;" id="rdfa-property"><label for="selectBindingRDFa">RDFa:</label><div style="float: right;"><input type="radio" name="rdfa" id="rdfaYes" style="margin: 0 5px 0 15px;" checked=""><label for="rdfaYes" style="margin-right: 6px;">yes</label><input type="radio" name="rdfa" id="rdfaNo" style="margin: 0 5px 0 15px;"><label for="rdfaNo" style="margin-right: 31px;">no</label></div></div>'+
 					// Element
-					'<div class="rdfaContent" style="margin-bottom:5px;" id="element-property">'+
-						'<label for="selectBindingElement">Element:</label>'+
-						// New/current element
-						'<div style="float: right;">'+
-							'<input type="radio" name="rdfaElement" id="newElement" style="'+
-								'margin: 0 5px 0 15px;" checked />'+
-							'<label for="newElement">new</label>'+
-							'<input type="radio" name="rdfaElement" id="currentElement" style="'+
-								'margin: 0 5px 0 15px;" />'+
-							'<label for="currentElement">current</label>'+
-						'</div>'+
-					'</div>'+
-					'<div style="margin-left: 25px;">'+
-						'<label for="selectBindingType" style="float: left; font-size: 12px;">'+
-							'Type:'+
-						'</label>'+
-						'<div style="margin-left: 25px;">'+
-							'<select id="selectBindingType" class="selectedFragment" style="'+
-								'float: right;">'+
-								'<option value="span">span</option>'+
-								'<option value="div">div</option>'+
-								'<option value="a">a</option>'+
-								'<option value="button">button</option>'+
-							'</select>'+
-						'</div>'+
-					'</div>'+
-					'<hr class="rdfaContent rdfaElementContent" style="'+
-						'margin: 35px 0 10px 0;'+
-						'">';
+					'<div class="rdfaContent" style="margin-bottom: 5px; position: relative; display: block;" id="element-property"><label for="selectBindingElement">Element:</label><div style="/* float: right; */position: absolute;right: 0;top: 0;"><input type="radio" name="rdfaElement" id="newElement" style="margin: 0 5px 0 15px;" checked=""><label for="newElement">new</label><input type="radio" name="rdfaElement" id="currentElement" style="margin: 0 5px 0 15px;"><label for="currentElement">current</label></div></div>'+
+					// Type
+					'<div style="margin-left: 25px;margin-bottom: 10px;position: relative;"><label for="selectBindingType" style="/* float: left; */ font-size: 12px;">Type:</label><div style="margin-left: 25px;position: absolute;right: 0;top: 0;"><select id="selectBindingType" class="selectedFragment" style="float: right;"><option value="span">span</option><option value="div">div</option><option value="a">a</option><option value="button">button</option></select></div></div>';
 
-				// Add attribute field
-				descContent +=
-					'<div class="rdfaContent" style="margin-bottom:5px;" id="attribute-property">'+
-						'<label for="selectBindingAttributeType" style="font-size:12px;">Attribute:</label>'+
-						'<div style="float: right;margin-top: -20px;">'+
-							'<select id="selectBindingAttributeType" class="selectedFragment" style="'+
-								'float: right;">'+
-								'<option value="vocab">vocab</option>'+
-								'<option value="typeof">typeof</option>'+
-								'<option value="property">property</option>'+
-							'</select>'+
-							'<input id="attributeTypeValue" style="float: right;width: 65%;margin-top: 5px;font-size: 12px;" type="text" value="">'+
-						'</div>'+
-					'</div>'+
-					'<hr class="rdfaContent" class="rdfaContent" style="'+
-						'margin: 40px 0 15px 0;'+
-						'">';
+				// Attribute
+				descContent += '<div class="rdfaContent" style="position: relative; margin-bottom: 10px; margin-left: 25px; display: block;" id="attribute-property"><label for="selectBindingAttributeType" style="font-size:12px;float: left;position: relative;">Attribute:</label><div style="position: relative;right: 0;margin-bottom: 15px;"><select id="selectBindingAttributeType" class="selectedFragment" style="margin-bottom: 5px;"><option value="vocab">vocab</option><option value="typeof">typeof</option><option value="property">property</option></select><input id="attributeTypeValue" style="font-size: 12px;width: 100%;position: relative;" type="text" value=""></div></div>';
 
-				// Add note field
-				descContent +=
-					'<div id="typeContainer" style="margin-bottom:5px;">'+
-						'<label for="bindingNote">Note:</label>'+
-						'<input id="bindingNote" class="" style="float:right;" type="text" value="">'+
-					'</div>';
+				// Note
+				descContent += '<div id="typeContainer" style="margin-bottom: 5px; position: relative; margin-left: 25px;"><label for="bindingNote" style="font-size: 12px;/* margin-left: 25px; */">Note:</label><input id="bindingNote" class="" style="right: 0;width: 60%;font-size: 12px;position: absolute;" type="text" value=""></div>';
 
 				progressBar.setDescription(descContent);
 				progressBar.compressFragmentTexts();
 
 				this.loadRadioButtonClickManager();
 
+			},
+
+			/**
+			 * Valida el contenido actual y activa o desactiva el botón "Done" en función de los valores.
+			 */ 
+			validateDoneBtn : function () {
+				var ret = false;
+
+				if (this.isValid() ) {
+					if (this.isRDFa()) {
+						// is attribute value set?
+						ret = ret || $("#attributeTypeValue").val() != "" ? true : false;
+					} else {
+						ret = true;
+					}
+				}
+
+				if (ret) {
+					DescriptionInspector.progressBar.enableStepFowardBtn();
+				} else {
+					DescriptionInspector.progressBar.disableStepFowardBtn();
+				}
+
+				console.log("validating done button", ret);
+				return ret;
 			},
 
 			loadRadioButtonClickManager : function () {
@@ -1485,6 +1472,7 @@ var DescriptionInspector = {
 						}
 						console.log("no");
 					}
+					_this.validateDoneBtn();
 				});
 				$("input:radio[name=rdfaElement]").change(function () {
 					var value = $(this).context.id;
@@ -1510,7 +1498,7 @@ var DescriptionInspector = {
 							$("#selectBindingType").prop("disabled", true); // disabling select element
 							_this.disableListOfOptions($("#selectBindingAttributeType"), _this.getRDFaDeclaredElements($ancestorBinding));
 						} else {
-							alert("no parent found");
+							alert("No vocabulary found");
 							$("#newElement").click();
 						}
 
@@ -1519,7 +1507,10 @@ var DescriptionInspector = {
 						}
 						console.log("current");
 					}
+					_this.validateDoneBtn();
 				});
+
+				$("#attributeTypeValue").keyup(function () {_this.validateDoneBtn()});
 
 			},
 
