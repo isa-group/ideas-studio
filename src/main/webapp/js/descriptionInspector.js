@@ -1406,7 +1406,7 @@ var DescriptionInspector = {
 					'<div style="margin-left: 25px;margin-bottom: 10px;position: relative;"><label for="selectBindingType" style="/* float: left; */ font-size: 12px;">Type:</label><div style="margin-left: 25px;position: absolute;right: 0;top: 0;"><select id="selectBindingType" class="selectedFragment" style="float: right;"><option value="span">span</option><option value="div">div</option><option value="a">a</option><option value="button">button</option></select></div></div>';
 
 				// Attribute
-				descContent += '<div class="rdfaContent" style="position: relative; margin-bottom: 10px; margin-left: 25px; display: block;" id="attribute-property"><label for="selectBindingAttributeType" style="font-size:12px;float: left;position: relative;">Attribute:</label><div style="position: relative;right: 0;margin-bottom: 15px;"><select id="selectBindingAttributeType" class="selectedFragment" style="margin-bottom: 5px;"><option value="vocab">vocab</option><option value="typeof">typeof</option><option value="property">property</option></select><input id="attributeTypeValue" style="font-size: 12px;width: 100%;position: relative;" type="text" value=""></div></div>';
+				descContent += '<div class="rdfaContent" style="position: relative; margin-bottom: 15px; margin-left: 25px; display: block;" id="attribute-property"><label for="selectBindingAttributeType" style="font-size:12px;float: left;position: relative;">Attribute:</label><div style="position: relative;right: 0;"><select id="selectBindingAttributeType" class="selectedFragment" style="margin-bottom: 5px;"><option value="vocab">vocab</option><option value="typeof">typeof</option><option value="property">property</option></select><input id="attributeTypeValue" style="font-size: 12px;width: 100%;position: relative;" type="text" value=""></div></div>';
 
 				// Note
 				descContent += '<div id="typeContainer" style="margin-bottom: 5px; position: relative; margin-left: 25px;"><label for="bindingNote" style="font-size: 12px;/* margin-left: 25px; */">Note:</label><input id="bindingNote" class="" style="right: 0;width: 60%;font-size: 12px;position: absolute;" type="text" value=""></div>';
@@ -1452,7 +1452,6 @@ var DescriptionInspector = {
 					if (value === "rdfaYes") {
 						if ($(".rdfaContent").is(":hidden")) {
 							$(".rdfaContent").slideDown(function () {
-								$("#typeContainer").css("margin-top","");	// reverse of slideUp
 								$("#newElement").click();
 							});
 						}
@@ -1461,8 +1460,6 @@ var DescriptionInspector = {
 						// simple binding
 						if (!$(".rdfaContent").is(":hidden")) {
 							$(".rdfaContent").slideUp(function () {
-								$("#typeContainer").css("margin-top","40px");
-
 								// Enable all select options
 								$("#selectBindingType").prop("disabled", false);
 								$("#selectBindingType option:disabled").each(function () {$(this).prop("disabled", false);});
