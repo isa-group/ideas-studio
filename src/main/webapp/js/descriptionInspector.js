@@ -1580,11 +1580,7 @@ var DescriptionInspector = {
 				if (ancestorElement != null) {
 					var $ancestor = $(ancestorElement);
 					if (!$ancestor.hasClass("ideas-binding") || $ancestor.prop("tagName").toLowerCase() != "div") {
-						if ($ancestor.parents("div.ideas-binding").length > 0) {
-							$ancestor = $ancestor.parents("div.ideas-binding");
-						} else {
-							$ancestor = $ancestor.find(".ideas-binding");
-						}
+						$ancestor = $ancestor.parents("div.ideas-binding");
 					}
 					if ($ancestor.length > 0) {
 						ret = $ancestor.first();
