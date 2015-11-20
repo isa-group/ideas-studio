@@ -1,5 +1,8 @@
 package es.us.isa.ideas.app.security;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -21,10 +24,13 @@ import es.us.isa.ideas.app.controllers.AbstractController;
 @RequestMapping("/security")
 public class LoginController extends AbstractController {
 
+	private static final Logger LOGGER = Logger.getLogger(LoginController.class
+			.getName());
+
 	// Supporting services ----------------------------------------------------
 
 	@Autowired
-	LoginService service;	
+	LoginService service;
 
 	// Constructors -----------------------------------------------------------
 
@@ -47,17 +53,21 @@ public class LoginController extends AbstractController {
 
 		DefaultSavedRequest originalRequest = (DefaultSavedRequest) request
 				.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
-		
+
+		LOGGER.log(Level.INFO, "Login - originalRequest: " + originalRequest);
+
 		String originalUrl = null;
-		try{
+
+		try {
 			originalUrl = originalRequest.getRedirectUrl();
-			System.out.println(originalUrl.toString());
-			System.out.println("https://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/security/login");
-		}catch(Exception e){
-			System.out.println("[ERROR] class: LoginController.login - redirecting to login ");
-			originalUrl = "https://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/security/login";
+		} catch (Exception e) {
+			originalUrl = "https://" + request.getServerName() + ":"
+					+ request.getServerPort() + request.getContextPath()
+					+ "/app/editor";
 		}
-		
+
+		LOGGER.log(Level.SEVERE, "Login - redirecting to: " + originalUrl);
+
 		result = new ModelAndView("security/login");
 
 		result.addObject("credentials", credentials);
@@ -67,27 +77,6 @@ public class LoginController extends AbstractController {
 		return result;
 	}
 
-	// @RequestMapping("/login_inview")
-	// public ModelAndView loginInview(
-	// @Valid @ModelAttribute Credentials credentials,
-	// BindingResult bindingResult,
-	// @RequestParam(required = false) boolean showError,
-	// String originalUrl) {
-	// Assert.notNull(credentials);
-	// Assert.notNull(bindingResult);
-	//
-	// ModelAndView result;
-	//
-	// result = new ModelAndView("security/login_inview");
-	// result.addObject("credentials", credentials);
-	// result.addObject("showError", showError);
-	// result.addObject("originalRequestUrl", originalUrl);
-	//
-	//
-	//
-	// return result;
-	// }
-
 	// LoginFailure -----------------------------------------------------------
 
 	@RequestMapping("/loginFailure")
@@ -95,7 +84,7 @@ public class LoginController extends AbstractController {
 			BindingResult bindingResult, String originalUrl) {
 		Assert.notNull(credentials);
 		Assert.notNull(bindingResult);
-		
+
 		ModelAndView result;
 
 		result = new ModelAndView("security/login_inview");
