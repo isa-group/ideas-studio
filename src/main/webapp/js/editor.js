@@ -79,15 +79,7 @@ var intializeEditorWindow = function() {
 		}
 	}
 	
-    AppPresenter.setCurrentSection("editor");   
-    // Show the version info content		
-    $("#versions").hide();
-    $("#version").click(function() {
-        $("#versions").show();
-    });
-    $("#vClose").click(function() {
-        $("#versions").hide();
-    });
+    AppPresenter.setCurrentSection("editor");
     
     // Hide the editor during loading:
     $("editor").css("visibility", "hidden");

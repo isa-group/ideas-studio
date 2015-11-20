@@ -6,19 +6,29 @@
 <%@ page import="java.io.*"%>
 <%@ page import="java.util.*"%>
 
+<script type="text/javascript">
+	//Show the version info content
+	$(document).ready(function() {
+		$("#version").click(function() {
+			$("#versions").show();
+		});
+		$("#vClose").click(function() {
+			$("#versions").hide();
+		});
+	});
+</script>
+
 <div id="appFooter">
-	<div id="version">v${project.version}</div> 
-	<span id="appFooterCopyright"> 
-		<spring:message code="app.footer.copyright" />
-	</span> 
-	<span id="isaLogoSmall"> 
-		<a href="http://www.isa.us.es/" target="_blank"> 
-			<img src="img/ideas/isaLogoSmall.png" alt="ISA">
-		</a>
+	<div id="version">v${project.version}</div>
+	<span id="appFooterCopyright"> <spring:message
+			code="app.footer.copyright" />
+	</span> <span id="isaLogoSmall"> <a href="http://www.isa.us.es/"
+		target="_blank"> <img src="img/ideas/isaLogoSmall.png" alt="ISA">
+	</a>
 	</span>
 </div>
 
-<div id="versions">
+<div id="versions" style="display: none;">
 	<img id="vClose" alt="" src="img/ideas/basic-icon-x.png">
 	<div id="vers-info">
 		<%
