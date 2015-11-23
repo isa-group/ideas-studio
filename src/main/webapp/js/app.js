@@ -47,6 +47,14 @@ jQuery(function() {
 
 	});
 
+	// Show the version info content
+	$("#version").click(function() {
+		$("#versions").show();
+	});
+	$("#vClose").click(function() {
+		$("#versions").hide();
+	});
+
 });
 
 // Modal:

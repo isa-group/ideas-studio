@@ -6,18 +6,6 @@
 <%@ page import="java.io.*"%>
 <%@ page import="java.util.*"%>
 
-<script type="text/javascript">
-	//Show the version info content
-	$(document).ready(function() {
-		$("#version").click(function() {
-			$("#versions").show();
-		});
-		$("#vClose").click(function() {
-			$("#versions").hide();
-		});
-	});
-</script>
-
 <div id="appFooter">
 	<div id="version">v${project.version}</div>
 	<span id="appFooterCopyright"> <spring:message
