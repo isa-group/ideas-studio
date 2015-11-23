@@ -177,7 +177,8 @@ public class FileController extends AbstractController {
 			res = FSFacade.createProject(projectUri, LoginService
 					.getPrincipal().getUsername());
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
+			LOGGER.log(Level.SEVERE, "Error creating project: "
+					+ projectUri);
 		}
 		return String.valueOf(res);
 	}

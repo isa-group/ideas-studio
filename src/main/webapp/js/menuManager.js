@@ -14,8 +14,8 @@ var newDirItem={
                 var nodeUri = FileApi.calculateNodeUri (currentSelectedNode);
                 var folderUri = WorkspaceManager.getSelectedWorkspace() + "/" + nodeUri + "/" + folderName;
                 FileApi.createDirectory(folderUri, function (ts) {
-                    console.log("Directory created: " + ts);
                     if (ts == true || ts == "true") {
+                    	console.log("Directory created: " + ts);
                         var keyPath = nodeUri + "/" + folderName;
                         var newChild = buildChild (folderName, true, "folder_icon", keyPath);
                         hideModal();
@@ -24,7 +24,8 @@ var newDirItem={
                         //currentSelectedNode.data.keyPath =  nodeUri + "/" + fileName + languageExtension;
                    } else {
                         hideModal();
-                        showError ( "Error creating new directory.", "...", function() { hideError();});
+                        showError ( "There was an error", "Error creating new directory.<br>" +
+                        		"Please, check if a directory with that name already exists in the workspace.", function() { hideError();});
                    }
                 });
      },
@@ -61,7 +62,8 @@ var newProjectItem={
 		        hideModal();                       
 		    }else{
 		        hideModal();
-		        showError ( "Error creating new project.", "...", function() { hideError();});
+		        showError ( "There was an error", "Error creating new project.<br>" +
+                		"Please, check if a project with that name already exists in the workspace.", function() { hideError();});
 		    }
 		        
 		});
