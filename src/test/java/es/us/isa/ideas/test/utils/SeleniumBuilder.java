@@ -127,36 +127,15 @@ public class SeleniumBuilder {
 	public static String askSeleniumFileName() {
 
 		String ret = "";
-		String msgRepeat = "Invalid value. Please, insert 1 or 2 number values.\n";
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		if (INSTANCE == null || (INSTANCE != null && INSTANCE.getSeleniumFileName() == "")) {
 
-			while (ret == "") {
-
-				System.out.println("Indicate where do you want to run selenium tests for");
-				System.out.println("\t1 - Local");
-				System.out.println("\t2 - Remote");
-
-				try {
-
-					int i = Integer.parseInt(br.readLine());
-
-					if (i == 1) { // Local
-						ret += SeleniumTargetType.LOCAL_FILE.toString();
-					} else if (i == 2) { // Remote
-						ret += SeleniumTargetType.REMOTE_FILE.toString();
-					} else {
-						System.out.println(msgRepeat);
-					}
-
-				} catch (NumberFormatException e) {
-					System.out.println(msgRepeat);
-				} catch (IOException e) {
-					LOG.severe(e.getMessage());
-				}
-
-			}
+			if (TestCase.getSeleniumGeneralProperties() != null && 
+                    TestCase.getSeleniumGeneralProperties().equals("REMOTE")) { // Local
+                ret += SeleniumTargetType.REMOTE_FILE.toString();
+            } else { // Remote
+                ret += SeleniumTargetType.LOCAL_FILE.toString();
+            }
 			
 			System.out.println("Using " + ret);
 			

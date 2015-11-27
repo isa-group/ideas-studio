@@ -153,6 +153,24 @@ public class TestCase {
 
 		return prop;
 	}
+    
+    public static Properties getSeleniumGeneralProperties() {
+
+		Properties prop = new Properties();
+		InputStream input = null;
+
+		try {
+			String propFile = getSeleniumPropFile();
+			input = TestCase.class.getResourceAsStream("/selenium-general.properties");
+			if (input != null) {
+				prop.load(input);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return prop;
+	}
 
 	public static String getSeleniumAutotesterUser() {
 		return getSeleniumProperties().getProperty("test.autotester.user");
