@@ -166,7 +166,9 @@ public class AceProxy extends AbstractController {
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
-		}
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
 
 		return result;
 	}
@@ -191,8 +193,10 @@ public class AceProxy extends AbstractController {
 						.get(languageKey);
 				String languageString = requestContent(languageModuleUri
 						+ LANGUAGE_ENDPOINT, request);
-
-				JSONObject json = new JSONObject(languageString);
+                
+                languageString = languageString.replace("\n", "").replace("\t", "");
+                
+                JSONObject json = new JSONObject(languageString);
 				JSONArray formats = json.getJSONArray("formats");
 				for (int i = 0; i < formats.length(); i++) {
 					JSONObject format = formats.getJSONObject(i);
