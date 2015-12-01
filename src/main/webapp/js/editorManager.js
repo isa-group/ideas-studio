@@ -189,10 +189,12 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 		count++;
 	}
 
-	if (count <= 1)
-		$("#editorItself").removeClass("multiformat");
-	else
+	if (count <= 1) {
+		if (!DescriptionInspector.existCurrentDescriptionFile())
+			$("#editorItself").removeClass("multiformat");
+	} else {
 		$("#editorItself").addClass("multiformat");
+	}
 
 	currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
 			.getCurrentFormat();
