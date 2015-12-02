@@ -138,6 +138,16 @@ var DescriptionInspector = {
 	},
 
 	/**
+	 * Check if current opened file is a description file.
+	 * 
+	 * @memberof DescriptionInspector
+	 * @returns {boolean}
+	 */
+	isCurrentDescriptionFile : function () {
+		return DescriptionInspector.getCurrentDescriptionFileUri() === EditorManager.getCurrentUri();
+	},
+
+	/**
 	 * Comprueba si DescriptionInspector se encuentra en modo edición.
 	 * 
 	 * @memberof DescriptionInspector
