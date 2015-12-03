@@ -292,9 +292,9 @@ var DescriptionInspector = {
 				EditorManager.sessionsMap[fileUri].getBaseSession().setValue(
 						content);
 
-			console.log("Content saved on description file.");
+			//console.log("Content saved on description file.");
 		} else {
-			console.log("Unable to save content into description file");
+			//console.log("Unable to save content into description file");
 		}
 
 	},
@@ -2675,10 +2675,10 @@ var DescriptionInspector = {
 							"change",
 							function(e) {
 
-								if (DescriptionInspector.vars.mode === "editor"
-										&& DescriptionInspector
-												.isFirstEditorFormatSelected()
-										&& DescriptionInspector.vars.modificationFlag === 0) {
+								if (DescriptionInspector.existCurrentDescriptionFile() && 
+										DescriptionInspector.vars.mode === "editor" &&
+										DescriptionInspector.isFirstEditorFormatSelected() && 
+										DescriptionInspector.vars.modificationFlag === 0) {
 
 									if (!$("#appGenericModal").is(":visible")) { // TODO:
 										// check
