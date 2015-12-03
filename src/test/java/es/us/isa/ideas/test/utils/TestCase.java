@@ -160,13 +160,12 @@ public class TestCase {
 		InputStream input = null;
 
 		try {
-			String propFile = getSeleniumPropFile();
 			input = TestCase.class.getResourceAsStream("/selenium-general.properties");
 			if (input != null) {
 				prop.load(input);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.severe(e.getMessage());
 		}
 
 		return prop;

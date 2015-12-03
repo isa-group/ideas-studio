@@ -129,9 +129,11 @@ public class SeleniumBuilder {
 		String ret = "";
 
 		if (INSTANCE == null || (INSTANCE != null && INSTANCE.getSeleniumFileName() == "")) {
+            
+            Properties prop = TestCase.getSeleniumGeneralProperties();
 
-			if (TestCase.getSeleniumGeneralProperties() != null && 
-                    TestCase.getSeleniumGeneralProperties().equals("REMOTE")) { // Local
+			if (prop != null && 
+                    TestCase.getSeleniumGeneralProperties().getProperty("test.environment").equals("REMOTE")) { // Local
                 ret += SeleniumTargetType.REMOTE_FILE.toString();
             } else { // Remote
                 ret += SeleniumTargetType.LOCAL_FILE.toString();
