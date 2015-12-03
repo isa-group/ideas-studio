@@ -47,6 +47,14 @@ jQuery(function() {
 
 	});
 
+	// Show the version info content
+	$("#version").click(function() {
+		$("#versions").show();
+	});
+	$("#vClose").click(function() {
+		$("#versions").hide();
+	});
+
 });
 
 // Modal:
@@ -112,7 +120,7 @@ var showError = function(title, content, primaryHandler) {
 			.append(
 					'<!-- Modal for all app --><div class="modal" id="appGenericError"><div class="modal-dialog">  <div class="modal-content"><div class="modal-header">  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>  <h4 class="modal-title">Modal title</h4></div><div class="modal-body"> </div><div class="modal-footer">   <a class="btn btn-primary continue"></a></div>  </div></div></div>');
 	$('#appGenericError .modal-title').text(title);
-	$('#appGenericError .modal-body').text(content);
+	$('#appGenericError .modal-body').html(content);
 	$('#appGenericError .continue').text("OK");
 
 	$('#appGenericError .continue').click(primaryHandler);

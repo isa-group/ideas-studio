@@ -27,8 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,199 +35,219 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.us.isa.ideas.app.configuration.StudioConfiguration;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @Controller
 @RequestMapping("/js")
 public class AceProxy extends AbstractController {
-	
-	private static final Logger LOGGER = Logger.getLogger(AceProxy.class
-			.getName());
 
-	private final String PARENT_PATH = "/js/ace/";
-	private final String ACE_LIB = "ace";
-	private final String JS_EXT = ".js";
-	private final String MODE_PREFIX = "mode-";
-	private final String THEME_PREFIX = "theme-";
-	private final String LANGUAGE_ENDPOINT = "/language";
-	private final String FORMAT_ENDPOINT = "/format";
+    private static final Logger LOGGER = Logger.getLogger(AceProxy.class
+            .getName());
 
-	@Autowired
-	private ServletContext servletContext;
+    private final String PARENT_PATH = "/js/ace/";
+    private final String ACE_LIB = "ace";
+    private final String JS_EXT = ".js";
+    private final String MODE_PREFIX = "mode-";
+    private final String THEME_PREFIX = "theme-";
+    private final String LANGUAGE_ENDPOINT = "/language";
+    private final String FORMAT_ENDPOINT = "/format";
 
-	@Autowired
-	private ConfigurationController moduleController;
+    @Autowired
+    private ServletContext servletContext;
 
-	private Map<String, String> modeUriCache = new HashMap<String, String>();
+    @Autowired
+    private ConfigurationController moduleController;
 
-	@RequestMapping(value = "/ace/{file}", method = RequestMethod.GET)
-	@ResponseBody
-	public String getAceproxyContent(@PathVariable String file,
-			HttpServletRequest request, HttpServletResponse response) {
+    private Map<String, String> modeUriCache = new HashMap<String, String>();
 
-		response.setContentType("text/javascript");
-		response.setCharacterEncoding("UTF-8");
+    @RequestMapping(value = "/ace/{file}", method = RequestMethod.GET)
+    @ResponseBody
+    public String getAceproxyContent(@PathVariable String file,
+            HttpServletRequest request, HttpServletResponse response) {
 
-		if (file.equals(ACE_LIB)) {
-			return getAceFile();
-		} else if (file.startsWith(MODE_PREFIX)) {
-			return getRemoteAceContent(file, request);
-		} else if (file.startsWith(THEME_PREFIX)) {
-			return getRemoteAceContent(file, request);
-		} else {
-			return "Unexpected file: " + file;
-		}
+        response.setContentType("text/javascript");
+        response.setCharacterEncoding("UTF-8");
 
-	}
+        if (file.equals(ACE_LIB)) {
+            return getAceFile();
+        } else if (file.startsWith(MODE_PREFIX)) {
+            return getRemoteAceContent(file, request);
+        } else if (file.startsWith(THEME_PREFIX)) {
+            return getRemoteAceContent(file, request);
+        } else {
+            return "Unexpected file: " + file;
+        }
 
-	private String getAceFile() {
-		String content = "";
+    }
 
-		try {
+    private String getAceFile() {
+        String content = "";
 
-			InputStream input = servletContext.getResourceAsStream(PARENT_PATH
-					+ ACE_LIB + JS_EXT);
+        try {
 
-			StringWriter writer = new StringWriter();
-			IOUtils.copy(input, writer);
+            InputStream input = servletContext.getResourceAsStream(PARENT_PATH
+                    + ACE_LIB + JS_EXT);
 
-			content = writer.toString();
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(input, writer);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            content = writer.toString();
 
-		return content;
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	private String requestContent(String uri, HttpServletRequest request) {
+        return content;
+    }
 
-		String result = "";
+    private String requestContent(String uri, HttpServletRequest request) {
 
-		try {
-			String baseRequestUrl = null;
-			if (!"".equals(request.getContextPath()))
-				baseRequestUrl = (request.getRequestURL().toString())
-						.split(request.getContextPath())[0];
-			else {
-				String[] parts = (request.getRequestURL().toString())
-						.split("/");
-				baseRequestUrl = parts[0] + "//" + parts[2] + "/";
-			}
+        String result = "";
 
-			if (baseRequestUrl.endsWith("/"))
-				baseRequestUrl = baseRequestUrl.substring(0,
-						baseRequestUrl.length() - 1);
-			URL url = new URL(baseRequestUrl + uri);
+        try {
+            String baseRequestUrl = null;
+            if (!"".equals(request.getContextPath())) {
+                baseRequestUrl = (request.getRequestURL().toString())
+                        .split(request.getContextPath())[0];
+            } else {
+                String[] parts = (request.getRequestURL().toString())
+                        .split("/");
+                baseRequestUrl = parts[0] + "//" + parts[2] + "/";
+            }
 
-			// Workaround for SSL problem doing the module servlets requests
-			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-				public X509Certificate[] getAcceptedIssuers() {
-					return null;
-				}
+            if (baseRequestUrl.endsWith("/")) {
+                baseRequestUrl = baseRequestUrl.substring(0,
+                        baseRequestUrl.length() - 1);
+            }
+            URL url = new URL(baseRequestUrl + uri);
 
-				public void checkClientTrusted(X509Certificate[] certs,
-						String authType) {
-				}
+            // Workaround for SSL problem doing the module servlets requests
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
 
-				public void checkServerTrusted(X509Certificate[] certs,
-						String authType) {
-				}
-			} };
+                public void checkClientTrusted(X509Certificate[] certs,
+                        String authType) {
+                }
 
-			SSLContext sc = SSLContext.getInstance("TLS");
-			sc.init(null, trustAllCerts, new SecureRandom());
-			HttpsURLConnection
-					.setDefaultSSLSocketFactory(sc.getSocketFactory());
+                public void checkServerTrusted(X509Certificate[] certs,
+                        String authType) {
+                }
+            }};
 
-			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-			conn.setHostnameVerifier(new HostnameVerifier() {
-				public boolean verify(String hostname, SSLSession session) {
-					return true;
-				}
-			});
-			LOGGER.log(Level.INFO, "Getting content from: " + url);
-			conn.connect();
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            HttpsURLConnection
+                    .setDefaultSSLSocketFactory(sc.getSocketFactory());
 
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					conn.getInputStream()));
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+            conn.setHostnameVerifier(new HostnameVerifier() {
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+            LOGGER.log(Level.INFO, "Getting content from: " + url);
+            conn.connect();
 
-			String inputLine;
-			while ((inputLine = in.readLine()) != null)
-				result += inputLine + System.getProperty("line.separator");
-			in.close();
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    conn.getInputStream()));
 
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (KeyManagementException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                result += inputLine + System.getProperty("line.separator");
+            }
+            in.close();
 
-		return result;
-	}
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	private String getRemoteAceContent(String fileName,
-			HttpServletRequest request) {
+        return result;
+    }
 
-		if (modeUriCache.containsKey(fileName)) {
-			LOGGER.log(Level.INFO, "Getting from cache for '" + fileName
-					+ "' (uri=" + modeUriCache.get(fileName) + ")");
-			return requestContent(modeUriCache.get(fileName), request);
-		} else {
-			String result = "";
-			StudioConfiguration studioConfiguration = moduleController
-					.getConfiguration(request);
+    private String getRemoteAceContent(String fileName,
+            HttpServletRequest request) {
 
-			for (String languageKey : studioConfiguration.getLanguages()
-					.keySet()) {
-				String languageModuleUri = studioConfiguration.getLanguages()
-						.get(languageKey);
-				String languageString = requestContent(languageModuleUri
-						+ LANGUAGE_ENDPOINT, request);
+        String result = "";
 
-				JSONObject json = new JSONObject(languageString);
-				JSONArray formats = json.getJSONArray("formats");
-				for (int i = 0; i < formats.length(); i++) {
-					JSONObject format = formats.getJSONObject(i);
-					String formatId = format.getString("format");
-					String editorModeURI = format.getString("_editorModeURI");
-					String editorThemeURI = format.getString("_editorThemeURI");
+        if (modeUriCache.containsKey(fileName)) {
+            LOGGER.log(Level.INFO, "Getting from cache for '" + fileName
+                    + "' (uri=" + modeUriCache.get(fileName) + ")");
+            return requestContent(modeUriCache.get(fileName), request);
+        } else {
 
-					if (fileName.startsWith(MODE_PREFIX)) {
-						if (editorModeURI != null
-								&& editorModeURI.equals(fileName + JS_EXT)) {
+            StudioConfiguration studioConfiguration = moduleController
+                    .getConfiguration(request);
 
-							String uri = languageModuleUri + LANGUAGE_ENDPOINT
-									+ FORMAT_ENDPOINT + "/" + formatId
-									+ "/mode";
-							LOGGER.log(Level.INFO, "Loading mode from: " + uri);
-							result = requestContent(uri, request);
-							modeUriCache.put(fileName, uri);
-							break;
-						}
-					} else if (fileName.startsWith(THEME_PREFIX)) {
-						LOGGER.log(Level.INFO, "Is " + editorThemeURI
-								+ " equal to " + fileName + JS_EXT + "?");
-						if (editorThemeURI != null
-								&& editorThemeURI.equals(fileName + JS_EXT)) {
+            for (String languageKey : studioConfiguration.getLanguages()
+                    .keySet()) {
+                String languageModuleUri = studioConfiguration.getLanguages()
+                        .get(languageKey);
+                String languageString = requestContent(languageModuleUri
+                        + LANGUAGE_ENDPOINT, request);
+                
+                JSONObject json;
+                try {
+                    json = new JSONObject(languageString);
+                    JSONArray formats = json.getJSONArray("formats");
+                    for (int i = 0; i < formats.length(); i++) {
+                        JSONObject format = formats.getJSONObject(i);
+                        String formatId = format.getString("format");
 
-							String uri = languageModuleUri + LANGUAGE_ENDPOINT
-									+ FORMAT_ENDPOINT + "/" + formatId
-									+ "/theme";
-							LOGGER.log(Level.INFO, "Loading theme from: " + uri);
-							result = requestContent(uri, request);
-							modeUriCache.put(fileName, uri);
-							break;
-						}
-					}
-				}
-			}
+                        if (!format.isNull("_editorModeURI")) {
+                            String editorModeURI = format
+                                    .getString("_editorModeURI");
 
-			return result;
-		}
+                            if (fileName.startsWith(MODE_PREFIX) && editorModeURI != null && editorModeURI.equals(fileName + JS_EXT)) {
+                                String uri = languageModuleUri
+                                        + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT
+                                        + "/" + formatId + "/mode";
+                                LOGGER.log(Level.INFO, "Loading mode from: "
+                                        + uri);
+                                result = requestContent(uri, request);
+                                modeUriCache.put(fileName, uri);
+                                return result;
+                            }
+                        }
 
-	}
+                        if (!format.isNull("_editorThemeURI")) {
+                            String editorThemeURI = format
+                                    .getString("_editorThemeURI");
+
+                            if (fileName.startsWith(THEME_PREFIX)) {
+                                LOGGER.log(Level.INFO, "Is " + editorThemeURI
+                                        + " equal to " + fileName + JS_EXT + "?");
+                                if (editorThemeURI != null
+                                        && editorThemeURI.equals(fileName + JS_EXT)) {
+                                    String uri = languageModuleUri
+                                            + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT
+                                            + "/" + formatId + "/theme";
+                                    LOGGER.log(Level.INFO, "Loading theme from: "
+                                            + uri);
+                                    result = requestContent(uri, request);
+                                    modeUriCache.put(fileName, uri);
+                                    return result;
+                                }
+                            }
+                        }
+                    }
+                } catch (JSONException ex) {
+                    Logger.getLogger(AceProxy.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+        return result;
+    }
 }
