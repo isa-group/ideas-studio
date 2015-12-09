@@ -35,6 +35,7 @@ import es.us.isa.ideas.repo.exception.BadUriException;
 import es.us.isa.ideas.repo.exception.ObjectClassNotValidException;
 import es.us.isa.ideas.repo.impl.fs.FSFacade;
 import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
+import es.us.isa.ideas.utilities.AppResponse;
 
 @Controller
 @RequestMapping("/file")
@@ -393,10 +394,10 @@ public class FileController extends AbstractController {
 
 	@RequestMapping(value = "/importDemoWorkspace", method = RequestMethod.GET)
 	@ResponseBody
-	public String importDemoWorkspace(
+	public AppResponse importDemoWorkspace(
 			@RequestParam("demoWorkspaceName") String demoWorkspaceName,
 			@RequestParam("targetWorkspaceName") String targetWorkspaceName) {
-		String response = "";
+		AppResponse response = new AppResponse();
 
 		String username = LoginService.getPrincipal().getUsername();
 
@@ -429,18 +430,21 @@ public class FileController extends AbstractController {
 
 			try {
 				IdeasRepo.get().getRepo().move(demoWS, newWS, true);
-				response = "Demo workspace created with name: "
-						+ targetWorkspaceName;
+				response.setMessage("Demo workspace created with name: "
+						+ targetWorkspaceName);
+                response.setStatus(AppResponse.Status.OK);
 			} catch (AuthenticationException e) {
 				LOGGER.log(Level.SEVERE, "Error creating demo workspace for "
 						+ username);
-				response = e.getMessage();
+				response.setMessage(e.getMessage());
+                response.setStatus(AppResponse.Status.ERROR);
 			}
 
 		} else {
 			LOGGER.log(Level.WARNING, "There is no demo named \""
 					+ demoWorkspaceName + "\"");
-			response = "There is no Demo named " + demoWorkspaceName;
+			response.setMessage("There is no Demo named " + demoWorkspaceName);
+            response.setStatus(AppResponse.Status.OK_PROBLEMS);
 		}
 
 		return response;
