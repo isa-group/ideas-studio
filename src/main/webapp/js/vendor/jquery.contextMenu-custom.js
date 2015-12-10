@@ -53,6 +53,7 @@ if(jQuery)( function() {
 		 return browser;
 	}
 	var BROWSER = jQuery.browser || _checkBrowser();
+	var contextMenuTimeout;
 
 	$.extend($.fn, {
 
@@ -164,10 +165,34 @@ if(jQuery)( function() {
 								return false;
 							});
 
-							// Hide bindings
-							setTimeout( function() { // Delay for Mozilla								
+							// Activate dynatree node
+							var currentActivatedNode = $("#projectsTree").dynatree("getActiveNode");
+							var targetNode = $.ui.dynatree.getNode(e.target);
+							targetNode.activateSilently();
+
+							if (contextMenuTimeout && clearTimeout) { // Clear previous contextMenu timeouts
+								clearTimeout(contextMenuTimeout);
+								contextMenuTimeout = null;
+							}
+
+							contextMenuTimeout = setTimeout( function() { // Delay for Mozilla								
 									$(document).unbind('keypress');
-									$(menu).fadeOut(o.outSpeed);
+									$(menu).fadeOut(o.outSpeed, function () {	// Animation
+										// Managing node activation.
+										// TODO: the final node activated must be the current opened file.
+										var currentUri = EditorManager.getCurrentUri();
+										var targetNodeText = $(targetNode.span).text();
+										if (currentUri == "") { // No file opened in the editor
+											targetNode.deactivate();
+										} else {
+											if (targetNode != null && !(currentUri.indexOf(targetNodeText) != -1)) { //
+												if (currentActivatedNode != null)
+													currentActivatedNode.activateSilently();
+												else
+													targetNode.deactivate();
+											}
+										}
+									});
 									return false;
 								
 							}, 4000);
