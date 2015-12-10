@@ -5,6 +5,5 @@ For more information, take a look at [ideas-studio wiki](https://github.com/isa-
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/isa-group/ideas-studio?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![release](https://img.shields.io/badge/release-0.8.1-green.svg)](https://raw.githubusercontent.com/isa-group/ideas-studio/master/CHANGELOG.txt)
-[![Stories in Ready](https://badge.waffle.io/isa-group/ideas-studio.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/isa-group/ideas-studio)
 
 [![Throughput Graph](https://graphs.waffle.io/isa-group/ideas-studio/throughput.svg)](https://waffle.io/isa-group/ideas-studio/metrics)
