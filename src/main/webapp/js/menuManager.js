@@ -12,6 +12,14 @@ var newDirItem={
     onCreate:function() {
                 var folderName = $("#modalCreationField input").val();
                 var nodeUri = FileApi.calculateNodeUri (currentSelectedNode);
+                try {
+                	if (extractFileExtension(nodeUri)) {
+                		// Get node parent
+                		nodeUri = nodeUri.substring(0, nodeUri.lastIndexOf("/")).substring(0, nodeUri.lastIndexOf("/"));
+                	}
+                } catch (err) {
+                	// extractFileExtension fails if nodeUri doesn't include a fileUri
+                }
                 var folderUri = WorkspaceManager.getSelectedWorkspace() + "/" + nodeUri + "/" + folderName;
                 FileApi.createDirectory(folderUri, function (ts) {
                     if (ts == true || ts == "true") {
