@@ -53,7 +53,7 @@ if(jQuery)( function() {
 		 return browser;
 	}
 	var BROWSER = jQuery.browser || _checkBrowser();
-	var contextMenuTimeout;
+	var contextMenuTimeout, currentActivatedNode;
 
 	$.extend($.fn, {
 
@@ -165,11 +165,17 @@ if(jQuery)( function() {
 								return false;
 							});
 
+							
+							// Save current opened/activated file
+							if (!currentActivatedNode) {
+								currentActivatedNode = $("#projectsTree").dynatree("getActiveNode");
+							}
+
 							// Activate dynatree node
-							var currentActivatedNode = $("#projectsTree").dynatree("getActiveNode");
 							var targetNode = $.ui.dynatree.getNode(e.target);
 							targetNode.activateSilently();
 
+							// Manages multiple activations of contextMenu
 							if (contextMenuTimeout && clearTimeout) { // Clear previous contextMenu timeouts
 								clearTimeout(contextMenuTimeout);
 								contextMenuTimeout = null;
@@ -178,20 +184,30 @@ if(jQuery)( function() {
 							contextMenuTimeout = setTimeout( function() { // Delay for Mozilla								
 									$(document).unbind('keypress');
 									$(menu).fadeOut(o.outSpeed, function () {	// Animation
-										// Managing node activation.
+										
 										// TODO: the final node activated must be the current opened file.
 										var currentUri = EditorManager.getCurrentUri();
 										var targetNodeText = $(targetNode.span).text();
+
 										if (currentUri == "") { // No file opened in the editor
 											targetNode.deactivate();
 										} else {
-											if (targetNode != null && !(currentUri.indexOf(targetNodeText) != -1)) { //
-												if (currentActivatedNode != null)
+											//TODO: refactor
+											if (targetNode != null) {
+												if (!(currentUri.indexOf(targetNodeText) != -1)) {	//TODO: instead, build a method to find out which node corresponds to the current opened file
+													// Activate the current opened file
+													if (currentActivatedNode != null) {
+														currentActivatedNode.activateSilently();
+													} else {
+														targetNode.deactivate();
+													}
+												} else {
 													currentActivatedNode.activateSilently();
-												else
-													targetNode.deactivate();
-											}
+												}
+											} 
 										}
+
+										currentActivatedNode = null;
 									});
 									return false;
 								
