@@ -72,6 +72,18 @@ function bindContextMenu(span) {
 		  tree.$widget.unbind();
 		  // Replace node with <input>
 		  $(".dynatree-title", node.span).html("<input id='editNode' value='" + prevTitle + "'>");
+
+			// Avoid to reload page when you click in another node
+			$(".dynatree-node a").click(function(e) {
+				e.preventDefault();
+				console.log("dynatree-node click");
+
+				var isInput = $(this).find("input#editNode").length != 0;
+				if (!isInput) {
+					$("input#editNode").blur();
+				}
+			});
+
 		  // Focus <input> and bind keyboard handler
 		  $("input#editNode").focus().keydown(function(event){
 		      switch( event.which ) {
