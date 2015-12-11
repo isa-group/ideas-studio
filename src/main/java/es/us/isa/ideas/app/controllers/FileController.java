@@ -1,7 +1,23 @@
 package es.us.isa.ideas.app.controllers;
 
+import es.us.isa.ideas.app.entities.Workspace;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import es.us.isa.ideas.repo.AuthenticationManagerDelegate;
+import es.us.isa.ideas.repo.IdeasRepo;
+import es.us.isa.ideas.app.security.LoginService;
+import es.us.isa.ideas.app.security.UserAccount;
+import es.us.isa.ideas.app.services.WorkspaceService;
+import es.us.isa.ideas.app.util.FileMetadata;
+import es.us.isa.ideas.repo.exception.AuthenticationException;
+import es.us.isa.ideas.repo.impl.fs.FSFacade;
+import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
+import es.us.isa.ideas.utilities.AppResponse;
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -10,617 +26,548 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import es.us.isa.ideas.app.security.LoginService;
-import es.us.isa.ideas.app.security.UserAccount;
-import es.us.isa.ideas.app.util.FileMetadata;
-import es.us.isa.ideas.repo.AuthenticationManagerDelegate;
-import es.us.isa.ideas.repo.IdeasRepo;
-import es.us.isa.ideas.repo.exception.AuthenticationException;
-import es.us.isa.ideas.repo.exception.BadUriException;
-import es.us.isa.ideas.repo.exception.ObjectClassNotValidException;
-import es.us.isa.ideas.repo.impl.fs.FSFacade;
-import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
-import es.us.isa.ideas.utilities.AppResponse;
-
 @Controller
-@RequestMapping("/file")
+@RequestMapping("/files")
 public class FileController extends AbstractController {
 
-	private static final Logger LOGGER = Logger.getLogger(FileController.class
-			.getName());
+    @Autowired
+    WorkspaceService workspaceService;
+    
+    private static final String DEMO_MASTER="DemoMaster";
+    
+    private static final String FILE_TYPE_PROJECT="project";
+    private static final String FILE_TYPE_DIR="directory";
+    private static final String FILE_TYPE_FILE="file";
 
-	private static IdeasRepo ideasRepo = null;
+    private static IdeasRepo repoLab = null;
+    
+    private static final Logger logger = Logger.getLogger(FileController.class.getName());
 
-	// Cambiar por LoginService.getPrincipal().getUsername()
-	public static void initRepoLab() {
-		if (FileController.ideasRepo == null) {
-			IdeasRepo.init(new AuthenticationManagerDelegate() {
+    public static void initRepoLab() {
+        if (FileController.repoLab == null) {
+            IdeasRepo.init(new AuthenticationManagerDelegate() {
 
-				@Override
-				public boolean operationAllowed(String authenticatedUser,
-						String Owner, String workspace, String project,
-						String fileOrDirectoryUri, AuthOpType operationType) {
-					return true;
-				}
+                @Override
+                public boolean operationAllowed(String authenticatedUser, String Owner,
+                        String workspace, String project, String fileOrDirectoryUri,
+                        AuthOpType operationType) {
+                    return true;
+                }
 
-				@Override
-				public String getAuthenticatedUserId() {
-					// return LoginService.getPrincipal().getUsername();
-					if (SecurityContextHolder.getContext().getAuthentication() == null
-							|| !(SecurityContextHolder.getContext()
-									.getAuthentication().getPrincipal() instanceof UserAccount)) {
-						return "";
-					} else {
-						return LoginService.getPrincipal().getUsername();
-					}
-				}
-			});
+                @Override
+                public String getAuthenticatedUserId() {
+                    if (SecurityContextHolder.getContext().getAuthentication() == null || !(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserAccount)) {
+                        return "";
+                    } else {
+                        return LoginService.getPrincipal().getUsername();
+                    }
+                }
+            });
 
-			ideasRepo = IdeasRepo.get();
-		}
-	}
+            repoLab = IdeasRepo.get();
+        }
+    }
 
-	@RequestMapping(value = "/getWorkspace", method = RequestMethod.GET)
-	@ResponseBody
-	public String getWorkspace(
-			@RequestParam("workspaceName") String workaspaceName) {
-		LOGGER.log(Level.INFO, "Reading workspace: " + workaspaceName);
-		initRepoLab();
-		String wsJson = "";
-		try {
-			wsJson = FSFacade.getWorkspaceTree(workaspaceName, LoginService
-					.getPrincipal().getUsername());
-		} catch (AuthenticationException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return wsJson;
-	}
+    /* Files C-UD */
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean createFile(@RequestParam("fileUri") String fileUri,
+                              @RequestParam("fileType") String fileType) {
+        initRepoLab();
+        
+        boolean res = Boolean.FALSE;
+        boolean success = Boolean.TRUE;
+        
+        String username = LoginService.getPrincipal().getUsername();
+        
+        try {
+            if (fileType.equalsIgnoreCase(FILE_TYPE_PROJECT)) { //Project
+                res = FSFacade.createProject(fileUri, username);
+            } 
+            else if (fileType.equalsIgnoreCase(FILE_TYPE_DIR)) { //Directory
+                res = FSFacade.createDirectory(fileUri, username);
+            } 
+            else { //FILE
+                res = FSFacade.createFile(fileUri, username);
+            }
+        } 
+        catch (Exception e) {
+            logger.log(Level.SEVERE, "Error creating " + fileType + ": " + fileUri, e);
+            success = Boolean.FALSE;
+        }
+        if (success) {
+            workspaceService.updateTime(getSelectedWorkspace(), username);
+        }
+        return res;
+    }
 
-	@RequestMapping(value = "/getWorkspaces", method = RequestMethod.GET)
-	@ResponseBody
-	public String getWorkspaces() {
-		initRepoLab();
-		String ws = "";
-		try {
-			ws = FSFacade.getWorkspaces(LoginService.getPrincipal()
-					.getUsername());
-		} catch (AuthenticationException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return ws;
-	}
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    @ResponseBody
+    public boolean renameFile(@RequestParam("fileUri") String fileUri,
+                              @RequestParam("fileType") String fileType,
+                              @RequestParam("newName") String newName) {
+        initRepoLab();
+        
+        boolean res = Boolean.FALSE;
+        boolean success = Boolean.TRUE;
+        
+        String username = LoginService.getPrincipal().getUsername();
+        
+        try {
+            if (fileType.equalsIgnoreCase(FILE_TYPE_DIR)) { //Directory
+                res = FSFacade.renameDirectory(fileUri, username, newName);
+            } 
+            else { //FILE
+                res = FSFacade.renameFile(fileUri, username, newName);
+            }
+        } 
+        catch (Exception e) {
+            logger.log(Level.SEVERE, "Error updating " + fileType + ": " + fileUri, e);
+            success = Boolean.FALSE;
+        }
+        if (success) {
+            workspaceService.updateTime(getSelectedWorkspace(), username);
+        }
+        return res;
+    }
 
-	@RequestMapping(value = "/getFileContent", method = RequestMethod.GET)
-	@ResponseBody
-	public String getFileContent(@RequestParam("fileUri") String fileUri) {
-		initRepoLab();
-		String fileContent = "";
-		try {
-			fileContent = FSFacade.getFileContent(fileUri, LoginService
-					.getPrincipal().getUsername());
-		} catch (BadUriException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		} catch (AuthenticationException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return fileContent;
-	}
+    @RequestMapping(value = "/move", method = RequestMethod.PUT)
+    @ResponseBody
+    public boolean moveFile(@RequestParam("fileUri") String fileUri,
+                            @RequestParam("fileType") String fileType,
+                            @RequestParam("destUri") String destUri,
+                            @RequestParam("copy") boolean copy) {
+        initRepoLab();
+        
+        boolean res = Boolean.FALSE;
+        boolean success = Boolean.TRUE;
+        
+        String username = LoginService.getPrincipal().getUsername();
+        
+        try {
+            if (fileType.equalsIgnoreCase(FILE_TYPE_DIR)) { //Directory
+                res = FSFacade.moveDirectory(fileUri, username, destUri, copy);
+            } 
+            else { //FILE
+                res = FSFacade.moveFile(fileUri, username, destUri, copy);
+            }
+        } 
+        catch (Exception e) {
+            logger.log(Level.SEVERE, "Error moving " + fileType + ": " + fileUri, e);
+            success = Boolean.FALSE;
+        }
+        if (success) {
+            workspaceService.updateTime(getSelectedWorkspace(), username);
+        }
+        return res;
+    }
 
-	@RequestMapping(value = "/createWorkspace", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean createWorkspace(
-			@RequestParam("workspaceName") String workspaceName) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.createWorkspace(workspaceName, LoginService
-					.getPrincipal().getUsername());
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @ResponseBody
+    public boolean deleteFile(@RequestParam("fileUri") String fileUri,
+                              @RequestParam("fileType") String fileType) {
+        initRepoLab();
+        
+        boolean res = Boolean.FALSE;
+        boolean success = Boolean.TRUE;
+        
+        String username = LoginService.getPrincipal().getUsername();
+        
+        try {
+            if (fileType.equalsIgnoreCase(FILE_TYPE_PROJECT)) { //Project
+                res = FSFacade.deleteProject(fileUri, username);
+            } 
+            else if (fileType.equalsIgnoreCase(FILE_TYPE_DIR)) { //Directory
+                res = FSFacade.deleteDirectory(fileUri, username);
+            } 
+            else { //FILE
+                res = FSFacade.deleteFile(fileUri, username);
+            }
+        } 
+        catch (Exception e) {
+            logger.log(Level.SEVERE, "Error deleting " + fileType + ": " + fileUri, e);
+            success = Boolean.FALSE;
+        }
+        if (success) {
+            workspaceService.updateTime(getSelectedWorkspace(), username);
+        }
+        return res;
+    }
 
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
+    /* Content */
+    @RequestMapping(value = "/content", method = RequestMethod.GET)
+    @ResponseBody
+    public String getFileContent(@RequestParam("fileUri") String fileUri) {
+        
+        initRepoLab();
+        
+        String fileContent = "";
+            
+        try {
+            fileContent = FSFacade.getFileContent(fileUri, LoginService.getPrincipal().getUsername());
+        } 
+        catch (Exception e) {
+            logger.log(Level.SEVERE, null , e);
+        }
+        return fileContent;
+    }
 
-	@RequestMapping(value = "/createFile", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean createFile(@RequestParam("fileUri") String fileUri) {
-		initRepoLab();
+    @RequestMapping(value = "/content", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean setFileContent(@RequestParam("fileUri") String fileUri,
+                                  @RequestParam("fileContent") String fileContent) {
+        initRepoLab();
+        
+        boolean res = Boolean.FALSE;
+        boolean success = Boolean.TRUE;
+        
+        String username = LoginService.getPrincipal().getUsername();
+        
+        try {
+            res = FSFacade.setFileContent(fileUri, username, fileContent);
+        } 
+        catch (Exception e) {
+            success = Boolean.FALSE;
+            logger.log(Level.SEVERE, null, e);
+        }
+        if (success) {
+            workspaceService.updateTime(getSelectedWorkspace(), username);
+        }
+        return res;
+    }
 
-		boolean res = false;
-		try {
-			res = FSFacade.createFile(fileUri, LoginService.getPrincipal()
-					.getUsername());
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
+    /* Demo (¿¿move to --> DemoController /demo/{name}/import??) */
+    @RequestMapping(value = "/importDemo", method = RequestMethod.GET)
+    @ResponseBody
+    public AppResponse importDemoWorkspace(
+            @RequestParam("demoWorkspaceName") String demoWorkspaceName,
+            @RequestParam("targetWorkspaceName") String targetWorkspaceName) {
+        
+        AppResponse response = new AppResponse();
 
-	@RequestMapping(value = "/createDirectory", method = RequestMethod.GET)
-	@ResponseBody
-	// return bool? string?
-	public String createDirectory(
-			@RequestParam("directoryUri") String directoryUri) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.createDirectory(directoryUri, LoginService
-					.getPrincipal().getUsername());
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Error creating directory: "
-					+ directoryUri);
-		}
-		return String.valueOf(res);
-	}
+        String username = LoginService.getPrincipal().getUsername();
 
-	@RequestMapping(value = "/createProject", method = RequestMethod.GET)
-	@ResponseBody
-	public String createProject(@RequestParam("projectUri") String projectUri) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.createProject(projectUri, LoginService
-					.getPrincipal().getUsername());
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "Error creating project: "
-					+ projectUri);
-		}
-		return String.valueOf(res);
-	}
+        FSWorkspace demoWS = new FSWorkspace(demoWorkspaceName, DEMO_MASTER);
+        FSWorkspace newWS = new FSWorkspace(targetWorkspaceName, username);
 
-	@RequestMapping(value = "/deleteFile", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean deleteFile(@RequestParam("fileUri") String fileUri) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.deleteFile(fileUri, LoginService.getPrincipal()
-					.getUsername());
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
+        Workspace demo = workspaceService.findByNameAndOwner(targetWorkspaceName, username);
 
-	@RequestMapping(value = "/deleteDirectory", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean deleteDirectory(@RequestParam("directoryUri") String dirUri) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.deleteDirectory(dirUri, LoginService.getPrincipal()
-					.getUsername());
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
+        if (demo != null) {
+            int downloads = demo.getDownloads()+ 1;
+            demo.setDownloads(downloads);
+        }
 
-	@RequestMapping(value = "/deleteProject", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean deleteProject(@RequestParam("projectUri") String projectUri) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.deleteProject(projectUri, LoginService
-					.getPrincipal().getUsername());
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
+        initRepoLab();
 
-	@RequestMapping(value = "/deleteWorkspace", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean deleteWorkspace(
-			@RequestParam("workspaceUri") String workspaceUri) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.deleteWorkspace(workspaceUri, LoginService
-					.getPrincipal().getUsername());
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
+        boolean demoExists = true;
 
-	@RequestMapping(value = "/setFileContent", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean setFileContent(@RequestParam("fileUri") String fileUri,
-			@RequestParam("fileContent") String fileContent) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.setFileContent(fileUri, LoginService.getPrincipal()
-					.getUsername(), fileContent);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
+        // TODO: Cambiar comprobacion una vez este refactorizado. No se deberia trabajar a nivel de cadenas, sino de objetos serializables (para devolver JSON)	
+        try {
+            demoExists = FSFacade.getWorkspaces(DEMO_MASTER).contains("\"" + demoWorkspaceName + "\"");
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, null , e);
+            demoExists = false;
+        }
 
-	@RequestMapping(value = "/moveFile", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean moveFile(@RequestParam("fileUri") String fileUri,
-			@RequestParam("destUri") String destUri,
-			@RequestParam("copy") boolean copy) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.moveFile(fileUri, LoginService.getPrincipal()
-					.getUsername(), destUri, copy);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
+        if (demoExists) {
 
-	@RequestMapping(value = "/moveDirectory", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean moveDirectory(@RequestParam("directoryUri") String dirUri,
-			@RequestParam("destUri") String destUri,
-			@RequestParam("copy") boolean copy) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.moveDirectory(dirUri, LoginService.getPrincipal()
-					.getUsername(), destUri, copy);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
+            try {
+                IdeasRepo.get().getRepo().delete(newWS);
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Could not remove workspace before importing.", e);
+            }
 
-	@RequestMapping(value = "/renameFile", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean renameFile(@RequestParam("fileUri") String fileUri,
-			@RequestParam("newName") String newName) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.renameFile(fileUri, LoginService.getPrincipal()
-					.getUsername(), newName);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
-
-	@RequestMapping(value = "/renameDirectory", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean renameDirectory(@RequestParam("directoryUri") String dirUri,
-			@RequestParam("newName") String newName) {
-		initRepoLab();
-		boolean res = false;
-		try {
-			res = FSFacade.renameDirectory(dirUri, LoginService.getPrincipal()
-					.getUsername(), newName);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
-
-	@RequestMapping(value = "/saveSelectedWorkspace", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean saveSelectedWorkspace(
-			@RequestParam("workspaceName") String workspaceName) {
-		initRepoLab();
-		LOGGER.log(Level.INFO, "Persisting selected workspace:  "
-				+ workspaceName + ", username: "
-				+ LoginService.getPrincipal().getUsername());
-		boolean res = true;
-		try {
-			FSFacade.saveSelectedWorkspace(workspaceName, LoginService
-					.getPrincipal().getUsername());
-		} catch (Exception e) {
-			res = false;
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
-
-	@RequestMapping(value = "/getSelectedWorkspace", method = RequestMethod.GET)
-	@ResponseBody
-	public String getSelectedWorkspace() {
-		initRepoLab();
-		String res = "";
-		try {
-			res = FSFacade.getSelectedWorkspace(LoginService.getPrincipal()
-					.getUsername());
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return res;
-	}
-
-	@RequestMapping(value = "/cloneSelectedWorkspaceToDemo", method = RequestMethod.GET)
-	@ResponseBody
-	public String cloneSelectedWorkspaceToDemo(
-			@RequestParam("workspaceName") String wsName) {
-		initRepoLab();
-		String res = "";
-
-		String username = LoginService.getPrincipal().getUsername();
-		FSWorkspace userWS = new FSWorkspace(wsName, username);
-
-		FSWorkspace demoWS = new FSWorkspace(wsName, "DemoMaster");
-
-		boolean demoExists = true;
-		try {
-			demoExists = FSFacade.getWorkspaces("DemoMaster").contains(
-					"\"" + wsName + "\"");
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE,
-					"Error while checking if DemoMaster contains the workspace \""
-							+ wsName + "\"");
-			demoExists = false;
-		}
-		if (!demoExists) {
-			try {
-				IdeasRepo.get().getRepo().move(userWS, demoWS, true);
-			} catch (AuthenticationException e) {
-				LOGGER.log(Level.SEVERE,
-						"Error creating workspace for DemoMaster from "
-								+ username);
-				res = "[ERROR] Error creating WS for DemoMaster from "
-						+ username;
-			}
-		} else {
-			LOGGER.log(Level.WARNING, "The workspace \"" + wsName
-					+ "\" already exists");
-			res = "[INFO] The ws already exists.";
-		}
-
-		return res;
-	}
-
-	@RequestMapping(value = "/importDemoWorkspace", method = RequestMethod.GET)
-	@ResponseBody
-	public AppResponse importDemoWorkspace(
-			@RequestParam("demoWorkspaceName") String demoWorkspaceName,
-			@RequestParam("targetWorkspaceName") String targetWorkspaceName) {
-		AppResponse response = new AppResponse();
-
-		String username = LoginService.getPrincipal().getUsername();
-
-		FSWorkspace demoWS = new FSWorkspace(demoWorkspaceName, "DemoMaster");
-		FSWorkspace newWS = new FSWorkspace(targetWorkspaceName, username);
-
-		FileController.initRepoLab();
-
-		boolean demoExists = true;
-
-		// TODO: Cambiar comprobacion una vez este refactorizado. No se deberia
-		// trabajar a nivel de cadenas, sino de objetos serializables (para
-		// devolver JSON)
-		try {
-			demoExists = FSFacade.getWorkspaces("DemoMaster").contains(
-					"\"" + demoWorkspaceName + "\"");
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-			demoExists = false;
-		}
-
-		if (demoExists) {
-
-			try {
-				IdeasRepo.get().getRepo().delete(newWS);
-			} catch (Exception e) {
-				LOGGER.log(Level.SEVERE,
-						"Could not remove workspace before importing.");
-			}
-
-			try {
-				IdeasRepo.get().getRepo().move(demoWS, newWS, true);
-				response.setMessage("Demo workspace created with name: "
-						+ targetWorkspaceName);
+            try {
+                IdeasRepo.get().getRepo().move(demoWS, newWS, true);
                 response.setStatus(AppResponse.Status.OK);
-			} catch (AuthenticationException e) {
-				LOGGER.log(Level.SEVERE, "Error creating demo workspace for "
-						+ username);
-				response.setMessage(e.getMessage());
+                response.setMessage("Demo workspace created with name: " + targetWorkspaceName);
+                Workspace ws = workspaceService.findByNameAndOwner(demoWorkspaceName, DEMO_MASTER);
+                String originID = "";
+                if(ws!=null && ws.getOrigin()!=null)
+                    originID=String.valueOf(ws.getOrigin().getId());
+                workspaceService.createWorkspace(targetWorkspaceName, username, originID);
+
+            } catch (AuthenticationException e) {
+                logger.log(Level.SEVERE, "### Error creating demo WS for " + username, e);
                 response.setStatus(AppResponse.Status.ERROR);
-			}
+                response.setMessage(e.getMessage());
+            }
 
-		} else {
-			LOGGER.log(Level.WARNING, "There is no demo named \""
-					+ demoWorkspaceName + "\"");
-			response.setMessage("There is no Demo named " + demoWorkspaceName);
+        } else {
+            logger.log(Level.SEVERE, "Demo {0} do not exists!", demoWorkspaceName);
+            System.out.println();
             response.setStatus(AppResponse.Status.OK_PROBLEMS);
-		}
+            response.setMessage("There is no Demo named " + demoWorkspaceName);
+        }
 
-		return response;
+        return response;
 
-	}
+    }
 
-	@RequestMapping(value = "/upload/**", method = RequestMethod.POST)
-	public @ResponseBody Collection<FileMetadata> upload(
-			MultipartHttpServletRequest request, HttpServletResponse response) {
-		// 1. build an iterator
-		Iterator<String> itr = request.getFileNames();
-		String pathUrl = request.getRequestURI().substring(
-				request.getRequestURI().indexOf("file/upload/") + 12);
-		MultipartFile mpf = null;
-		FileMetadata fileMeta = null;
-		String fileUri = null;
-		List<FileMetadata> files = new ArrayList<FileMetadata>();
-		// 2. get each file
-		while (itr.hasNext()) {
+    /* CRUD Workspaces in RepoLab */
+    @RequestMapping(value = "/workspaces", method = RequestMethod.GET)
+    @ResponseBody
+    public String getWorkspacesString() {
+        initRepoLab();
+        String ws = "";
+        try {
+            ws = FSFacade.getWorkspaces(LoginService.getPrincipal().getUsername());
+        } catch (AuthenticationException e) {
+           logger.log(Level.SEVERE, null, e);
+        }
+        return ws;
+    }
 
-			// 2.1 get next MultipartFile
-			mpf = request.getFile(itr.next());
-			LOGGER.log(Level.INFO, "File " + mpf.getOriginalFilename()
-					+ " uploaded successfully");
+    @RequestMapping(value = "/workspaces", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean createWorkspace(@RequestParam("workspaceName") String workspaceName,
+                                   @RequestParam("description") String description,
+                                   @RequestParam("tags") String tags) {
+        initRepoLab();
+        boolean res = false;
+        boolean success = true;
+        String username = LoginService.getPrincipal().getUsername();
+        try {
+            res = FSFacade.createWorkspace(workspaceName, username);
 
-			// 2.3 create new fileMeta
-			fileMeta = new FileMetadata();
-			fileMeta.setFileName(mpf.getOriginalFilename());
-			fileMeta.setFileSize(mpf.getSize() / 1024 + " Kb");
-			fileMeta.setFileType(mpf.getContentType());
+        } catch (Exception e) {
+            success = false;
+            logger.log(Level.SEVERE, null, e);
+        }
+        if (success) {
+            workspaceService.createWorkspaceWithTags(workspaceName, description, username, null,tags);
+        }
+        return res;
+    }
 
-			try {
-				fileMeta.setBytes(mpf.getBytes());
-				fileUri = getSelectedWorkspace() + "/" + pathUrl + "/"
-						+ fileMeta.getFileName();
-				FSFacade.createFile(fileUri, LoginService.getPrincipal()
-						.getUsername());
-				FSFacade.setFileContent(fileUri, LoginService.getPrincipal()
-						.getUsername(), mpf.getBytes());
-				files.add(fileMeta);
+    @RequestMapping(value = "/workspaces", method = RequestMethod.PUT)
+    @ResponseBody
+    public void saveWorkspace(@RequestParam("workspaceName") String workspaceName) {
+        initRepoLab();
+        boolean success = true;
+        String username = LoginService.getPrincipal().getUsername();
 
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage());
-			} catch (BadUriException ex) {
-				LOGGER.log(Level.SEVERE, ex.getMessage());
-			} catch (AuthenticationException ex) {
-				LOGGER.log(Level.SEVERE, ex.getMessage());
-			}
+        try {
+            FSFacade.saveSelectedWorkspace(workspaceName, username);
+        } catch (Exception e) {
+            success = false;
+            logger.log(Level.SEVERE, null, e);
+        }
+        if (success) {
+            workspaceService.updateTime(workspaceName, username);
+        }
+    }
 
-		}
+    @RequestMapping(value = "/workspaces",method = RequestMethod.DELETE)
+    @ResponseBody
+    public boolean deleteWorkspace(@RequestParam("workspaceName") String workspaceName) {
+        
+        initRepoLab();
+        
+        boolean success = true;
+        
+        String username = LoginService.getPrincipal().getUsername();
+        
+        try {
+            FSFacade.deleteWorkspace(workspaceName, username);
+        } 
+        catch (Exception e) {
+            success = false;
+            logger.log(Level.SEVERE, null, e);
+        }
+        if (success) {
+            workspaceService.delete(workspaceName, username);
+        }
+        return success;
+    }
 
-		// result will be like this
-		// [{"fileName":"app_engine-85x77.png","fileSize":"8 Kb","fileType":"image/png"},...]
-		return files;
+    @RequestMapping(value = "/workspaces/selected", method = RequestMethod.GET)
+    @ResponseBody
+    public String getSelectedWorkspace() {
+        
+        initRepoLab();
+        
+        String res = "";
+        
+        try {
+            res = FSFacade.getSelectedWorkspace(LoginService.getPrincipal().getUsername());
+        } 
+        catch (Exception e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        return res;
+    }
 
-	}
+    /* Upload */
+    @RequestMapping(value = "/upload/**", method = RequestMethod.POST)
+    public @ResponseBody
+    Collection<FileMetadata> upload(MultipartHttpServletRequest request, HttpServletResponse response) {
+        //1. build an iterator
+        Iterator<String> itr = request.getFileNames();
+        String pathUrl = request.getRequestURI().substring(request.getRequestURI().indexOf("files/upload/") + 12);
+        MultipartFile mpf = null;
+        FileMetadata fileMeta = null;
+        String fileUri = null;
+        List<FileMetadata> files = new ArrayList<FileMetadata>();
+        String username = LoginService.getPrincipal().getUsername();
 
-	@RequestMapping(value = "/uploadAndExtract/**", method = RequestMethod.POST)
-	public ModelAndView uploadAndExtract(MultipartHttpServletRequest request,
-			HttpServletResponse response) {
-		Iterator<String> itr = request.getFileNames();
-		// String pathUrl = request.getRequestURI().substring(
-		// request.getRequestURI().indexOf("uploadAndExtract/")
-		// + "uploadAndExtract/".length());
-		MultipartFile mpf = null;
-		// FileMetadata fileMeta = null;
-		// String fileUri = null;
-		// List<FileMetadata> files = new ArrayList<FileMetadata>();
-		while (itr.hasNext()) {
+        //2. get each file
+        while (itr.hasNext()) {
 
-			mpf = request.getFile(itr.next());
+            //2.1 get next MultipartFile
+            mpf = request.getFile(itr.next());
+            System.out.println(mpf.getOriginalFilename() + " uploaded!");
 
-			try {
-				if (mpf.getOriginalFilename().endsWith(".zip")
-						|| mpf.getOriginalFilename().endsWith(".gz"))
-					extractInWorkspace(getSelectedWorkspace(), mpf);
-				else
-					saveFile(getSelectedWorkspace(), "defaultProject", mpf);
+            //2.3 create new fileMeta
+            fileMeta = new FileMetadata();
+            fileMeta.setFileName(mpf.getOriginalFilename());
+            fileMeta.setFileSize(mpf.getSize() / 1024 + " Kb");
+            fileMeta.setFileType(mpf.getContentType());
 
-			} catch (IOException e) {
-				LOGGER.log(Level.SEVERE, e.getMessage());
-			} catch (BadUriException ex) {
-				LOGGER.log(Level.SEVERE, ex.getMessage());
-			} catch (AuthenticationException ex) {
-				LOGGER.log(Level.SEVERE, ex.getMessage());
-			}
-		}
-		return new ModelAndView("app/editor");
+            try {
+                fileMeta.setBytes(mpf.getBytes());
+                fileUri = getSelectedWorkspace() + "/" + pathUrl + "/" + fileMeta.getFileName();
+                FSFacade.createFile(fileUri, username);
+                FSFacade.setFileContent(fileUri, username, mpf.getBytes());
+                files.add(fileMeta);
+                workspaceService.updateTime(getSelectedWorkspace(), username);
 
-	}
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, null, e);
+            }
+        }
 
-	public void extractInWorkspace(String workspace, MultipartFile mpf)
-			throws BadUriException, AuthenticationException, IOException {
-		int extensionIndex = mpf.getOriginalFilename().lastIndexOf('.');
-		if (extensionIndex == -1)
-			extensionIndex = mpf.getOriginalFilename().length() - 1;
-		String folderUri = workspace + "/"
-				+ mpf.getOriginalFilename().substring(0, extensionIndex);
-		File temp = File.createTempFile("uploadExtraction", "zipFiles");
-		try {
-			mpf.transferTo(temp);
-			FSFacade.extractIn(folderUri, LoginService.getPrincipal()
-					.getUsername(), temp);
-			temp.delete();
-		} catch (ObjectClassNotValidException ex) {
-			Logger.getLogger(FileController.class.getName()).log(Level.SEVERE,
-					null, ex);
-		}
-	}
+        // result will be like this
+        // [{"fileName":"app_engine-85x77.png","fileSize":"8 Kb","fileType":"image/png"},...]
+        return files;
 
-	public void saveFile(String workspace, String path, MultipartFile mpf)
-			throws BadUriException, AuthenticationException, IOException {
-		String fileUri = getSelectedWorkspace() + "/";
-		if (!"".equals(path) && path != null)
-			fileUri += path + "/";
-		fileUri += mpf.getOriginalFilename();
-		FSFacade.createFile(fileUri, LoginService.getPrincipal().getUsername());
-		FSFacade.setFileContent(fileUri, LoginService.getPrincipal()
-				.getUsername(), mpf.getBytes());
-	}
+    }
 
-	@RequestMapping(value = "/get/**", method = RequestMethod.GET)
-	public void get(HttpServletRequest request, HttpServletResponse response)
-			throws UnsupportedEncodingException {
-		String pathUrl = request.getRequestURI().substring(
-				request.getRequestURI().indexOf("file/get/") + 9);
-		String fileUri = java.net.URLDecoder.decode(pathUrl, "UTF-8");
-		try {
-			response.addHeader("Content-Type",
-					URLConnection.guessContentTypeFromName(pathUrl));
-			// response.setContentType(URLConnection.guessContentTypeFromName(pathUrl));
-			// response.setHeader("Content-disposition",
-			// "attachment; filename=\"" + getFileName(pathUrl) + "\"");
-			FileCopyUtils.copy(FSFacade.getFileContentAsBytes(fileUri,
-					LoginService.getPrincipal().getUsername()), response
-					.getOutputStream());
-			response.flushBuffer();
-		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		} catch (BadUriException ex) {
-			LOGGER.log(Level.SEVERE, ex.getMessage());
-		} catch (AuthenticationException ex) {
-			LOGGER.log(Level.SEVERE, ex.getMessage());
-		}
-	}
+    @RequestMapping(value = "/uploadAndExtract/**", method = RequestMethod.POST)
+    public ModelAndView uploadAndExtract(MultipartHttpServletRequest request, HttpServletResponse response) {
+        
+        Iterator<String> itr = request.getFileNames();
+        MultipartFile mpf = null;
+        
+        while (itr.hasNext()) {
 
-	@RequestMapping(value = "/getAsZip/**", method = RequestMethod.GET)
-	public void getAsZip(HttpServletRequest request,
-			HttpServletResponse response) throws UnsupportedEncodingException {
-		String pathUrl = request.getRequestURI().substring(
-				request.getRequestURI().indexOf("file/getAsZip")
-						+ "file/getAszip/".length());
-		String fileUri = java.net.URLDecoder.decode(pathUrl, "UTF-8");
-		try {
-			response.addHeader("Content-Type", "application/zip");
-			if (pathUrl.contains("/"))
-				FSFacade.saveDirectoryContentAsZip(fileUri, LoginService
-						.getPrincipal().getUsername(), response
-						.getOutputStream());
-			else
-				FSFacade.saveWorkspaceContentAsZip(fileUri, LoginService
-						.getPrincipal().getUsername(), response
-						.getOutputStream());
-			response.flushBuffer();
-		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		} catch (BadUriException ex) {
-			LOGGER.log(Level.SEVERE, ex.getMessage());
-		} catch (AuthenticationException ex) {
-			LOGGER.log(Level.SEVERE, ex.getMessage());
-		}
-	}
+            mpf = request.getFile(itr.next());
 
-	public String getFileName(String path) {
-		return path.contains("/") ? path.substring(path.indexOf("/") + 1)
-				: path;
-	}
+            try {
+                if (mpf.getOriginalFilename().endsWith(".zip") || mpf.getOriginalFilename().endsWith(".gz")) {
+                    extractInWorkspace(getSelectedWorkspace(), mpf);
+                } else {
+                    saveFile(getSelectedWorkspace(), "defaultProject", mpf);
+                }
+
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, null, e);
+            }
+        }
+        return new ModelAndView("app/editor");
+
+    }
+
+    public void extractInWorkspace(String workspace, MultipartFile mpf){
+        
+        String username = LoginService.getPrincipal().getUsername();
+        
+        int extensionIndex = mpf.getOriginalFilename().lastIndexOf('.');
+        
+        if (extensionIndex == -1) {
+            extensionIndex = mpf.getOriginalFilename().length() - 1;
+        }
+        
+        String folderUri = workspace + "/" + mpf.getOriginalFilename().substring(0, extensionIndex);
+        
+        try {
+            File temp = File.createTempFile("uploadExtraction", "zipFiles");
+            mpf.transferTo(temp);
+            FSFacade.extractInNew(folderUri, LoginService.getPrincipal().getUsername(), temp);
+            temp.delete();
+            workspaceService.updateTime(workspace, username);
+        } 
+        catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void saveFile(String workspace, String path, MultipartFile mpf) {
+       
+        String username = LoginService.getPrincipal().getUsername();
+        String fileUri = getSelectedWorkspace() + "/";
+        
+        if (!"".equals(path) && path != null) {
+            fileUri += path + "/";
+        }
+        
+        fileUri += mpf.getOriginalFilename();
+        try{
+            FSFacade.createFile(fileUri, username);
+            FSFacade.setFileContent(fileUri, username, mpf.getBytes());
+        }
+        catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        
+        
+        workspaceService.updateTime(workspace, username);
+    }
+
+    @RequestMapping(value = "/get/**", method = RequestMethod.GET)
+    public void get(HttpServletRequest request, HttpServletResponse response) {
+        
+        String username = LoginService.getPrincipal().getUsername();
+        String pathUrl = request.getRequestURI().substring(request.getRequestURI().indexOf("files/get/") + 9);
+        
+        try {
+            String fileUri = java.net.URLDecoder.decode(pathUrl, "UTF-8");
+            response.addHeader("Content-Type", URLConnection.guessContentTypeFromName(pathUrl));
+            FileCopyUtils.copy(FSFacade.getFileContentAsBytes(fileUri, username), response.getOutputStream());
+            response.flushBuffer();
+        } 
+        catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public String getFileName(String path) {
+        return path.contains("/") ? path.substring(path.indexOf("/") + 1) : path;
+    }
+
+    @RequestMapping(value = "/getAsZip/**", method = RequestMethod.GET)
+    public void getAsZip(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException 
+    {
+        String pathUrl = request.getRequestURI().substring(request.getRequestURI().indexOf("files/getAsZip") + "files/getAszip/".length());
+        String fileUri = java.net.URLDecoder.decode(pathUrl, "UTF-8");
+
+        boolean success = Boolean.FALSE;
+
+        String username = LoginService.getPrincipal().getUsername();
+
+        try {
+            response.addHeader("Content-Type", "application/zip");
+            if (pathUrl.contains("/")) {
+                FSFacade.saveDirectoryContentAsZip(fileUri, username, response.getOutputStream());
+            } else {
+                FSFacade.saveWorkspaceContentAsZip(fileUri, username, response.getOutputStream());
+                success = Boolean.TRUE;
+            }
+            response.flushBuffer();
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        if (success) {
+            workspaceService.updateDownloads(fileUri, username);
+        }
+    }
 
 }

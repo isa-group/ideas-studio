@@ -75,6 +75,8 @@
 			<div id="lastWorkspace"><div id="appNavigatorWorkspacesTools"><span class="addWorkspace">+<spring:message code="app.leftmenu.addworkspace" /></span></div></div>
 			
 			<ul class="nav nav-pills nav-stacked">
+                            <li><a class="apl_wsm" href="app/wsm"><spring:message code="app.leftmenu.wsm" /></a><span class="glyphicon glyphicon-folder-open"></span></li>
+			
 <%-- 			<li><a class="apl_social"><spring:message code="app.leftmenu.social" /></a><span class="glyphicon glyphicon-chevron-right"></span></li> --%>
 <%-- 			<li><a class="apl_settings"><spring:message code="app.leftmenu.settings" /></a><span class="glyphicon glyphicon-chevron-right"></span></li> --%>
 			<security:authorize access="hasRole('ADMIN')">
