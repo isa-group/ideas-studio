@@ -74,10 +74,11 @@ if(jQuery)( function() {
 				// Simulate a true right click
 				$(this).mousedown( function(e) {
 					var evt = e;
-//					evt.stopPropagation();
-					evt.preventDefault();
+					var editNodeExists = $("input#editNode").length != 0;
+					// Allow default text selection when editing a file name
+					if (!editNodeExists)
+						evt.preventDefault();
 					$(this).mouseup( function(e) {
-//						e.stopPropagation();
 						e.preventDefault();
 						var srcElement = $(this);
 						$(this).unbind('mouseup');
