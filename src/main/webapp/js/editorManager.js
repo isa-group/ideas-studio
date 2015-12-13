@@ -758,7 +758,7 @@ var moveNodeAux = function(originFileUri, targetFileUri, justRename,
 		EditorManager.currentUri = targetFileUri;
 
 	// Update references in maps (only for terminal nodes)
-	if (originFileUri in EditorManager.tabsMap && !originNode.data.isFolder) {
+	if (originFileUri != targetFileUri && originFileUri in EditorManager.tabsMap && !originNode.data.isFolder) {
 		EditorManager.sessionsMap[targetFileUri] = EditorManager.sessionsMap[originFileUri];
 		EditorManager.sessionsMap[originFileUri] = null;
 		delete EditorManager.sessionsMap[originFileUri];
