@@ -1,3 +1,13 @@
+ideas-studio v0.8.2, 15/12/2015
+----------------------------------------------
+- [new module] ideas-soup-module
+- Can't rename a project
+- Organize labels
+- "back" button redirects to login screen when focus is on description (right side panel)
+- Cannot recover password (IllegalArgumentException)
+- Unexpectedly page reload when editing a file
+- No node highlighted when opening a context menu from a dynatree node
+
 ideas-studio v0.8.1, 09/12/2015
 ----------------------------------------------
 - generateDemoWorkspace command returns unexpected message

@@ -745,7 +745,7 @@ var moveNodeAux = function(originFileUri, targetFileUri, justRename,
 
 	// Recurs. "move" childrens
 	for (potentialUri in EditorManager.tabsMap) {
-		if (potentialUri.indexOf(originFileUri) != -1
+		if (originNode && potentialUri.indexOf(originFileUri) != -1
 				&& potentialUri != originFileUri) {
 			var childName = calculateNodeNameFromUri(potentialUri);
 			moveNodeAux(potentialUri, targetFileUri + "/" + childName,
@@ -754,11 +754,11 @@ var moveNodeAux = function(originFileUri, targetFileUri, justRename,
 	}
 
 	// Replace currentUri if necessary
-	if (EditorManager.currentUri == originFileUri)
+	if (originNode && EditorManager.currentUri == originFileUri)
 		EditorManager.currentUri = targetFileUri;
 
 	// Update references in maps (only for terminal nodes)
-	if (originFileUri in EditorManager.tabsMap && !originNode.data.isFolder) {
+	if (originNode && originFileUri != targetFileUri && originFileUri in EditorManager.tabsMap && !originNode.data.isFolder) {
 		EditorManager.sessionsMap[targetFileUri] = EditorManager.sessionsMap[originFileUri];
 		EditorManager.sessionsMap[originFileUri] = null;
 		delete EditorManager.sessionsMap[originFileUri];
@@ -767,6 +767,23 @@ var moveNodeAux = function(originFileUri, targetFileUri, justRename,
 		EditorManager.tabsMap[originFileUri] = null;
 		delete EditorManager.tabsMap[originFileUri];
 	}
+
+	// Update keypath
+	function updateChildrenKeyPath(node, targetFileUriWithoutWS) {
+		node.data.keyPath = targetFileUriWithoutWS;
+		node.visit(function (childNode) { 
+			if (childNode.data.keyPath.indexOf(targetFileUriWithoutWS) == -1) {
+				// Update the physic node
+				var childNodeKey = childNode.data.key;
+				if (childNodeKey != null) {
+					childNode.data.keyPath = childNode.data.keyPath.replace(node.data.title, $("input#editNode").val());
+				}
+			}
+		});
+	}
+
+	// Update references in maps (only for children nodes)
+	updateChildrenKeyPath(originNode, targetFileUriWithoutWS);
 
 	// Handle tab if open
 	var tab = EditorManager.tabsMap[targetFileUri];
