@@ -40,7 +40,7 @@
 		  <div class="input-group ${status.error ? 'has-error' : ''}">
 			<span class="input-group-addon">Description</span>
 			
-				<form:input path="description" type="text" class="form-control" 
+				<form:textarea path="description" class="form-control" 
                                 id="description" placeholder="Description" />
 				<form:errors path="description" class="control-label" />
 			
