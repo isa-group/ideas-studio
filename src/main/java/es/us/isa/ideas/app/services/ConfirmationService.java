@@ -132,6 +132,7 @@ public class ConfirmationService extends BusinessService<Confirmation> {
 		Map<String, String> finalCustomizations = mailer
 				.extractCustomizations(templateCustomizers);
 		finalCustomizations.putAll(customization);
+        finalCustomizations.put("$code", confirmation.getConfirmationCode());
 		mailer.sendMail(researcher.getEmail(), finalCustomizations,
 				resetPasswordConfirmationTemplate);
 	}
