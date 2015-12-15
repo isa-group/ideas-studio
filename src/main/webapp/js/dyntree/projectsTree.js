@@ -133,11 +133,12 @@ function bindContextMenu(span) {
 		      if (node.data.isFolder) {
 				// editor page reload
 				window.location.reload();
-
 		      }
 		      // Activate current file node
 		      if (EditorManager.currentUri != "") {
 		      	getNodeByFileUri(EditorManager.currentUri).activate();
+		      } else {
+		      	node.deactivate();
 		      }
 		    });
 			break;
