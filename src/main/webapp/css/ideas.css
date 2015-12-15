@@ -2042,4 +2042,21 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 	height: 100%;
         background-color: #f8f8f8;
         overflow: auto;
+#wsactions{
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    display:block;
+    position: absolute;
+    bottom:0px;    
+    width:100%;
+    text-align: center;
+    vertical-align: middle;
+    
+}
+
+#wsactions .glyphicon{
+    color: #666666;
+    font-size: 2vw;   
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-bottom: 12px;
 }

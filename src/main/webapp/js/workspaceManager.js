@@ -81,7 +81,7 @@ var WorkspaceManager = {
         console.log("Loading WS " + workspaceName + " ...");
         FileApi.loadWorkspace(workspaceName, function (ts) {
             $(".wsactions").remove();
-            var wsLMC = $('#appLeftMenuContentHeader');
+            var wsactions = $('#wsActions');
             var wsLabel = $("#editorSidePanelHeaderWorkspaceInfo");
             wsLabel.empty(WorkspaceManager.getSelectedWorkspace());
             wsLabel.append(WorkspaceManager.getSelectedWorkspace());                        
@@ -92,7 +92,7 @@ var WorkspaceManager = {
                         + WorkspaceManager.getSelectedWorkspace())
                         .parent().addClass("active");
             
-            var wsActions = "<div class=\"wsactions\">";
+            var wsActions = "";
             
             var workspaceDownload =  "<a style=\"cursor: pointer\" id=\"download-ws\" ";
                 workspaceDownload += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Download workspace as a single zip file\">";
@@ -105,26 +105,27 @@ var WorkspaceManager = {
 
             var workspaceToDemo =  "<a style=\"cursor: pointer\" id=\"demo-ws\" ";
                 workspaceToDemo += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Publish as Demo\">";
-                workspaceToDemo += "<span class=\"glyphicon glyphicon-link\" aria-hidden=\"true\"> </span></a>";
+                workspaceToDemo += "<span class=\"glyphicon glyphicon-cloud-upload\" aria-hidden=\"true\"> </span></a>";
 
 
             var workspaceDelete =  "<a style=\"cursor: pointer\" id=\"delete-ws\"";
                 workspaceDelete += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete workspace\">";
                 workspaceDelete += "<span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"> </span></a>";
                 
-            var workspaceScreenshot =  "<a style=\"cursor: pointer\" id=\"screenshot-ws\"";
-                workspaceScreenshot += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Screenshot\">";
-                workspaceScreenshot += "<span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"> </span></a>";
+//            var workspaceScreenshot =  "<a style=\"cursor: pointer\" id=\"screenshot-ws\"";
+//                workspaceScreenshot += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Screenshot\">";
+//                workspaceScreenshot += "<span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"> </span></a>";
                            
                 wsActions+="<br>&nbsp;&nbsp;"+workspaceEdit+"";
                 wsActions+="&nbsp;&nbsp;"+workspaceDownload+"";
                 wsActions+="&nbsp;&nbsp;"+workspaceToDemo+"";
-                wsActions+="&nbsp;&nbsp;"+workspaceDelete+"";
-                wsActions+="&nbsp;&nbsp;"+workspaceScreenshot+"<br>";
-                wsActions+="</div>";
+                wsActions+="&nbsp;&nbsp;"+workspaceDelete+"<br>";
+//                wsActions+="&nbsp;&nbsp;"+workspaceScreenshot+"<br>";
+                wsActions+="";
                 
                 
-                wsLMC.append(wsActions);
+                $("#wsactions").append(wsActions);          
+            
             }
             $(".dynatree-expander").click();
             
