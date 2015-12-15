@@ -11,7 +11,10 @@
 
 
 <div id="appHeader">
-	<div id="menuToggler"></div>
+        <security:authorize access="hasRole('ADMIN')||hasRole('RESEARCHER')">
+            <div id="menuToggler"></div>
+        </security:authorize>
+        
 	<div id="appLogo" style="background-image: url('./img/${studioConfiguration.images['logo']}')">            
         </div>
         <security:authorize access="isAuthenticated()">

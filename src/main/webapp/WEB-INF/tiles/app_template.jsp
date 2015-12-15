@@ -1,5 +1,5 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -74,10 +74,11 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
         <div id="appWrapper">
-        
+		<security:authorize access="hasRole('ADMIN')||hasRole('RESEARCHER')">
 	        <div id="appLeftMenu" class="menuClose">
 	        	<tiles:insertAttribute name="left_menu" />
 	        </div>
+                </security:authorize>
 	        <div id="appMainContent">
 	        	<div id="appMainContentBlocker" class="hidden"></div>
 		        <tiles:insertAttribute name="header" />
