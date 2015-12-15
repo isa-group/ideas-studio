@@ -121,6 +121,8 @@ var DescriptionInspector = {
 			// _this.loaders.customEvents();
 			_this.showDescriptionTab();
 
+			_this.preventBackspaceKeyPress();
+
 		} else {
 			_this.loaders.descriptionFileCreator(inspectorLoader);
 		}
@@ -608,6 +610,29 @@ var DescriptionInspector = {
 
 		ace.getEditor().setHighlightSelectedWord(true);
 
+	},
+
+	/**
+	 * Prevent going to the previous page
+	 * @memberof DescriptionInspector
+	 */
+	preventBackspaceKeyPress : function () {
+		
+		var inspectorSelector = $("#editorInspectorLoader");
+		
+		inspectorSelector
+			.attr("tabindex", "-1")
+			.unbind("focus")
+			.focus(function () {
+				console.log("enfocado");
+				$(this).unbind("keydown").keydown(function (e) {
+					if(e.keyCode == 8) {
+						e.preventDefault();
+						console.log("presionado backspace");
+					}
+				});	
+			});
+			
 	},
 
 	/**
