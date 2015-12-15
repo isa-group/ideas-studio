@@ -128,15 +128,13 @@ function bindContextMenu(span) {
 		      // Re-enable mouse and keyboard handlling
 		      tree.$widget.bind();
 		      node.focus();
-		      // Prevent input still visible when renaming a project
-		      if (node.getLevel() <= 1) {
-		      	//$("#projectsTree").dynatree("getTree").redraw();
-		      	//node.render();
-		      	//node.setTitle(title);
-		      	//node.reloadChildren();
-		      }
 		      node.setTitle(title);
-		      //	node.reloadChildren();
+		      //TODO: avoid to reload page when renaming a folder
+		      if (node.data.isFolder) {
+				// editor page reload
+				window.location.reload();
+
+		      }
 		      // Activate current file node
 		      if (EditorManager.currentUri != "") {
 		      	getNodeByFileUri(EditorManager.currentUri).activate();
