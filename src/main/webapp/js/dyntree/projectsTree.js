@@ -81,7 +81,8 @@ function bindContextMenu(span) {
 			var prevTitle = node.data.title,
 		    tree = node.tree;
 			//get extension
-			var extension ="."+ node.data.title.split(".")[node.data.title.split(".").length-1];
+			var isFolder = $(el).hasClass("dynatree-folder");
+			var extension = !isFolder? "."+ node.data.title.split(".")[node.data.title.split(".").length-1] : "";
 			console.log(extension);
 		 	// Disable dynatree mouse- and key handling
 		  	tree.$widget.unbind();
@@ -127,8 +128,19 @@ function bindContextMenu(span) {
 		      // Re-enable mouse and keyboard handlling
 		      tree.$widget.bind();
 		      node.focus();
+		      // Prevent input still visible when renaming a project
+		      if (node.getLevel() <= 1) {
+		      	//$("#projectsTree").dynatree("getTree").redraw();
+		      	//node.render();
+		      	//node.setTitle(title);
+		      	//node.reloadChildren();
+		      }
+		      node.setTitle(title);
+		      //	node.reloadChildren();
 		      // Activate current file node
-		      if (EditorManager.currentUri != "") getNodeByFileUri(EditorManager.currentUri).activate();
+		      if (EditorManager.currentUri != "") {
+		      	getNodeByFileUri(EditorManager.currentUri).activate();
+		      }
 		    });
 			break;
 		case "delete":
