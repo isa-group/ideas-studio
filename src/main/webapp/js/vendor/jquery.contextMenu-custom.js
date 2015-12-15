@@ -185,13 +185,16 @@ if(jQuery)( function() {
 							contextMenuTimeout = setTimeout( function() { // Delay for Mozilla								
 									$(document).unbind('keypress');
 									$(menu).fadeOut(o.outSpeed, function () {	// Animation
-										var currentUri = EditorManager.getCurrentUri();
-										if (currentUri == "") { // No opened file
-											targetNode.deactivate();
+ 										var currentUri = EditorManager.getCurrentUri();
+										if ($("input#editNode").length == 0) {
+											if (currentUri == "") {
+ 												targetNode.deactivate();
 										} else if ($("input#editNode").length == 0) {
-											EditorManager.openFile(currentUri);
+											} else {
+ 												EditorManager.openFile(currentUri);
+ 											}
 										}
-										currentActivatedNode = null;
+ 										currentActivatedNode = null;
 									});
 									return false;
 								
