@@ -20,6 +20,21 @@ function getNodeByFileUri(fileUri) {
 	return res;
 }
 
+function getFileUriByNode(node) {
+	if (node) {
+		var workspaceName = WorkspaceManager.getSelectedWorkspace(),
+			parent = node.getParent(),
+			fileUri = "";
+		while(parent.data.title) {
+			fileUri = parent.data.title + "/" + fileUri;
+			parent = parent.getParent();
+		}
+		return workspaceName +"/"+ fileUri + node.data.title;
+	} else {
+		return;
+	}
+}
+
 // --- Implement Cut/Copy/Paste --------------------------------------------
 var originNode = null;
 var originKeyPath = "";
@@ -66,12 +81,30 @@ function bindContextMenu(span) {
 			var prevTitle = node.data.title,
 		    tree = node.tree;
 			//get extension
-			var extension ="."+ node.data.title.split(".")[node.data.title.split(".").length-1];
+			var isFolder = $(el).hasClass("dynatree-folder");
+			var extension = !isFolder? "."+ node.data.title.split(".")[node.data.title.split(".").length-1] : "";
 			console.log(extension);
-		  // Disable dynatree mouse- and key handling
-		  tree.$widget.unbind();
-		  // Replace node with <input>
-		  $(".dynatree-title", node.span).html("<input id='editNode' value='" + prevTitle + "'>");
+		 	// Disable dynatree mouse- and key handling
+		  	tree.$widget.unbind();
+		  	// Replace node with <input>
+		  	//$(".dynatree-title", node.span).html("<input type='text' tabindex='-1' id='editNode' value='" + prevTitle + "' />");
+			
+			$(".dynatree-title", node.span).replaceWith($("<span id='metaA'><input type='text' tabindex='-1' id='editNode' value='" + prevTitle + "' /></span>"));
+			
+			// Avoid to reload page when you click in another node
+			$(".dynatree-node a").click(function(e) {
+				e.preventDefault();
+				console.log("dynatree-node click");
+				var isInput = $(this).find("input#editNode").length != 0;
+				if (!isInput) {
+					$("input#editNode").blur();
+				}
+			});
+			$("input#editNode").click(function () {
+				console.log("click input");
+				$(this).focus();
+			});
+
 		  // Focus <input> and bind keyboard handler
 		  $("input#editNode").focus().keydown(function(event){
 		      switch( event.which ) {
@@ -95,6 +128,17 @@ function bindContextMenu(span) {
 		      // Re-enable mouse and keyboard handlling
 		      tree.$widget.bind();
 		      node.focus();
+		      node.setTitle(title);
+		      //TODO: avoid to reload page when renaming a folder
+		      if (node.data.isFolder) {
+				// editor page reload
+				window.location.reload();
+
+		      }
+		      // Activate current file node
+		      if (EditorManager.currentUri != "") {
+		      	getNodeByFileUri(EditorManager.currentUri).activate();
+		      }
 		    });
 			break;
 		case "delete":
