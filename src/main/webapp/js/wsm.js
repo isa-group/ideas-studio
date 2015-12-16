@@ -99,3 +99,87 @@ function refreshPage(){
     $(location).attr('href',"app/editor"); 
     location.reload();  
 };
+
+// external js: isotope.pkgd.js
+
+// init Isotope
+var $cards = $('.cards');
+    filters = [];
+  $cards.isotope({
+  itemSelector: '.wholeCard',
+  layoutMode: 'fitRows'
+});
+
+        
+$('.filterLink').click(function(){
+    var filterList = $( '.wsm-menu-members' );
+    filterList.find('.active_prot_menu').removeClass('active_prot_menu');
+    $( this ).parent().addClass('active_prot_menu');
+    
+    remove(filters, '.workspace');
+    remove(filters, '.demoworkspace');
+    remove(filters, '.publicdemo');
+
+    var filterValue = $( this ).attr('data-filter-ws');
+    
+    filters.push(filterValue);
+    
+    
+        var selector = filters.join('');
+        $cards.isotope({
+            filter: selector
+        });
+
+    
+     return false;
+});
+
+$('.tagFilterLink').click(function(){
+    
+    var filterValue = $( this ).attr('data-filter-tag');
+    
+    if($(this).parent().hasClass('active_prot_menu')){
+        $(this).parent().removeClass('active_prot_menu');
+        remove(filters, filterValue);
+    }
+    else{
+        $( this ).parent().addClass('active_prot_menu'); 
+        filters.push(filterValue);
+    }
+    
+    var selector = filters.join(',');
+    $cards.isotope({
+        filter: selector
+    });
+
+    return false;
+});
+
+//Collapsible project cards
+$(".card__article_collapse").click(function () {
+    if ($(this).children("article").text().toLowerCase().indexOf("Actions") >= 0) {
+        $(this).children("article").text("Collapse");
+    } else {
+        $(this).children("article").text("Actions");
+    }
+    $(this).parent().children(".card__content.card__padding.collapsible").slideToggle({
+        duration: 200,
+        easing: "easeInOutSine",
+        complete: function () {
+            var projectsIsotope = $(this).parent().parent().parent().parent();
+            projectsIsotope.isotope({
+                itemSelector: ".wholeCard",
+                layoutMode: "fitRows"
+            });
+            projectsIsotope.isotope('layout');
+        }
+    });
+});
+
+function remove(arr, item) {
+      for(var i = arr.length; i--;) {
+          if(arr[i] === item) {
+              arr.splice(i, 1);
+          }
+      }
+  }

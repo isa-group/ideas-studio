@@ -63,6 +63,7 @@
         <script type="text/javascript" src="js/plugins.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
         <script src='js/workspaceManager.js' type="text/javascript"></script>
+        <script src='js/vendor/isotope.pkgd.js' type="text/javascript"></script>
         <script type="text/javascript" src="js/appPresenter.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
                 
