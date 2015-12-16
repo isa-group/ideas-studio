@@ -64,6 +64,8 @@
         <script type="text/javascript" src="js/main.js"></script>
         <script src='js/workspaceManager.js' type="text/javascript"></script>
         <script src='js/vendor/isotope.pkgd.js' type="text/javascript"></script>
+        <script src='js/vendor/html2canvas.js' type="text/javascript"></script>
+        <script src='js/vendor/FileSaver.min.js' type="text/javascript"></script>
         <script type="text/javascript" src="js/appPresenter.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
                 
@@ -76,9 +78,9 @@
         <![endif]-->
         <div id="appWrapper">
 		<security:authorize access="hasRole('ADMIN')||hasRole('RESEARCHER')">
-	        <div id="appLeftMenu" class="menuClose">
-	        	<tiles:insertAttribute name="left_menu" />
-	        </div>
+                    <div id="appLeftMenu" class="menuClose">
+                            <tiles:insertAttribute name="left_menu" />
+                    </div>
                 </security:authorize>
 	        <div id="appMainContent">
 	        	<div id="appMainContentBlocker" class="hidden"></div>
