@@ -15,12 +15,12 @@
         <br>
     <div class="input-group" id="descriptionInput" >
         <span class="input-group-addon"><spring:message code="editor.actions.modal.create_workspace.description" /></span>
-        <input type="textarea" class="form-control">
+        <textarea type="text" class="form-control"></textarea>
     </div>
         <br>
     <div class="input-group" id="tagsInput" >
         <span class="input-group-addon"><spring:message code="editor.actions.modal.create_workspace.tags" /></span>
-        <input type="textarea" class="form-control">
+        <textarea type="text" class="form-control"></textarea>
     </div>
         
     <div class="input-group">     
