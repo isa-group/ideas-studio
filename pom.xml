@@ -161,29 +161,16 @@
             <id>central</id>
             <url>http://repo.maven.apache.org/maven2</url>
         </repository>
-
-        <!-- exemplar repository -->
-        <repository>
-            <id>exemplar</id>
-            <url>http://clinker.isagroup.es/nexus/content/repositories/exemplar</url>
-        </repository>
-
-        <!-- clinker repository -->
-        <repository>
-            <id>releases</id>
-            <url>http://clinker.isagroup.es/nexus/content/repositories/releases</url>
-        </repository>
-
-        <!-- IDEAS repository -->
-        <repository>
-            <id>ideas</id>
-            <url>http://clinker.isagroup.es/nexus/content/repositories/ideas</url>
-        </repository>
-
     </repositories>
 
     <!-- DEPENDENCIES MANAGEMENT -->
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-security</artifactId>
+            <version>1.1.0.RELEASE</version>
+        </dependency>
+        
         <!-- Small dependency patch to avoid error with JUnit -->
         <dependency>
             <groupId>org.hamcrest</groupId>
