@@ -46,11 +46,13 @@
                     <div class="col-md-4 col-sm-6 wholeCard workspace <jstl:forEach items="${workspace.workspaceTags}" var="tag"> tagged_${tag.name} </jstl:forEach>" type="workspace">
                         <div class="card radius shadowDepth1">
                             <div class="card__meta">
-                                <img class="card__meta-logo" src="#" alt="screenshot" title="${workspace.name}">
+                                
+                                <img class="card__meta-logo" src="./img/ideas/default_screenshot.png" alt="screenshot" title="${workspace.name}">
                                 <div class="card__meta-content">
+                                    <time class="date">${workspace.lastMod}</time>
                                     <p class="card__meta-content-title">${workspace.name}</p>
                                     <p class="card__meta-content-subtitle">${workspace.description}</p>
-                                    <time class="date">${workspace.lastMod}</time>
+                                   
                                     <p class="card__content-text">
                                          <jstl:forEach items="${workspace.workspaceTags}" var="wstag">
                                             <a href="#" id="tags_${wstag.id}" class="tagSearch btn-xs btn btn-info collapse-margin-bottom-0">${wstag.name}</a>       
@@ -58,23 +60,18 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="card__content card__padding collapsible collapse">
-                                <article class="card__article">
-                                    
-                                    
-                                    <p class="flex-center-right">
+                            
+                            <div class="card__content card__padding">
+                                <article class="actions_bar">    
+                                    <div class="actions_bar_title flex-center-left">Actions:</div>
+                                    <div class="actions_bar_buttons flex-center-right">                                    
                                         <a href="${workspace.name}" id="openWS" class="openWS btn btn-success  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Open workspace"><span class="glyphicon glyphicon-folder-open"></span></a>
                                       <jstl:url value="app/wsm/workspaces/${workspace.name}/edit" var="edit_url"/>
                                       <a href="${edit_url}" id="editWS" class="btn btn-primary  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Edit workspace"><span class="glyphicon glyphicon-pencil"></span></a>
                                       <a href="${workspace.name}" id="downloadWS" class="download-ws btn btn-info  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Download zip"><span class="glyphicon glyphicon-download"></span></a>
                                       <a href="${workspace.name}" id="publishWS" class="publish-demo btn btn-info  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Publish demo"><span class="glyphicon glyphicon-cloud-upload"></span></a>
                                       <a href="${workspace.name}" id="deleteWS" class="delete-ws btn btn-danger  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Delete workspace"><span class="glyphicon glyphicon-trash"></span></a>
-                                    </p>
-                                </article>
-                            </div>
-                            <div class="card__content card__padding card__article_collapse">
-                                <article>
-                                    Actions
+                                    </div>
                                 </article>
                             </div>
                             <div class="card__action">
@@ -103,11 +100,11 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="card__author-content">
+<!--                                    <div class="card__author-content">
                                         <div class="card__author-content_item">
                                             <a target="_blank" title="Author" href="#"><i class="material-icons">perm_identity</i></a>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -119,31 +116,28 @@
                     <div class="col-md-4 col-sm-6 wholeCard demoworkspace <jstl:forEach items="${demo.workspaceTags}" var="tag"> tagged_${tag.name} </jstl:forEach>" type="demoworkspace">
                         <div class="card radius shadowDepth1">
                             <div class="card__meta">
-                                <img class="card__meta-logo" src="#" alt="finantial organization logo" title="${demo.name}">
+                                <img class="card__meta-logo" src="./img/ideas/default_screenshot.png" alt="screenshot" title="${demo.name}">
                                 <div class="card__meta-content">
+                                    <time class="date">${demo.lastMod}</time>
                                     <p class="card__meta-content-title">${demo.name}</p>
                                     <p class="card__meta-content-subtitle">${demo.description}</p>
-                                    <time class="date">${demo.lastMod}</time>
+                                    
                                     <p class="card__content-text">
                                         <jstl:forEach items="${demo.workspaceTags}" var="demotag">
                                             <a href="#" id="tags_${demotag.id}" class="tagSearch btn-xs btn btn-info collapse-margin-bottom-0">${demotag.name}</a>       
                                         </jstl:forEach> 
                                     </p>
                                 </div>
-                            </div>
-                            <div class="card__content card__padding collapsible collapse">
-                                <article class="card__article">
-                                    <p class="flex-center-right">
+                            </div>                    
+                            <div class="card__content card__padding">
+                                <article class="actions_bar">    
+                                    <div class="actions_bar_title flex-center-left">Actions:</div>
+                                    <div class="actions_bar_buttons flex-center-right">  
                                         <jstl:url value="demo/${demo.name}" var="demo_url"/>
                                         <a href="${demo_url}" id="viewDemo" target="_blank" class="btn btn-success solid  nounderline collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="View demo"><span class="glyphicon glyphicon-eye-open"></span></a>
                                         <a href="${demo.name}" id="updateDemo" class="updateDemo btn btn-primary solid nounderline collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Update demo"><span class="glyphicon glyphicon-refresh"></span></a>            
                                         <a href="${demo.name}" id="deleteDemo" class="delete-demo btn btn-danger  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Depublish demo"><span class="glyphicon glyphicon-eject"></span></a>
-                                      </p>
-                                </article>
-                            </div>
-                            <div class="card__content card__padding card__article_collapse">
-                                <article>
-                                    Actions
+                                    </div>
                                 </article>
                             </div>
                             <div class="card__action">
@@ -172,11 +166,11 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="card__author-content">
+<!--                                    <div class="card__author-content">
                                         <div class="card__author-content_item">
                                             <a target="_blank" title="Author" href="#"><i class="material-icons">perm_identity</i></a>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -188,11 +182,13 @@
                     <div class="col-md-4 col-sm-6 wholeCard publicdemo <jstl:forEach items="${workspace.workspaceTags}" var="tag"> tagged_${otherdemo.name} </jstl:forEach>" type="publicdemo">
                         <div class="card radius shadowDepth1">
                             <div class="card__meta">
-                                <img class="card__meta-logo" src="#" alt="finantial organization logo" title="${otherdemo.name}">
+                                
+                                <img class="card__meta-logo" src="./img/ideas/default_screenshot.png" alt="${otherdemo.name} screenshot" title="${otherdemo.name}">
                                 <div class="card__meta-content">
+                                    <time class="date">${otherdemo.lastMod}</time>
                                     <p class="card__meta-content-title">${otherdemo.name}</p>
                                     <p class="card__meta-content-subtitle">${otherdemo.description}</p>
-                                    <time class="date">${otherdemo.lastMod}</time>
+                                    
                                     <p class="card__content-text">
                                         <jstl:forEach items="${otherdemo.workspaceTags}" var="otherdemotag">
                                             <a href="#" id="tags_${otherdemotag.id}" class="tagSearch btn-xs btn btn-info collapse-margin-bottom-0">${otherdemotag.name}</a>       
@@ -200,20 +196,15 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="card__content card__padding collapsible collapse">
-                                <article class="card__article">
-                                    
-                                    
-                                    <p class="flex-center-right">
+                            
+                           <div class="card__content card__padding">
+                                <article class="actions_bar">    
+                                    <div class="actions_bar_title flex-center-left">Actions:</div>
+                                    <div class="actions_bar_buttons flex-center-right">  
                                         <jstl:url value="demo/${otherdemo.name}" var="otherdemo_url"/>
                                         <a href="${otherdemo_url}" id="viewDemo" target="_blank" class="btn btn-success solid nounderline collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="View demo" ><span class="glyphicon glyphicon-eye-open"></span></a>
                                         <a href="${otherdemo.name}" id="cloneDemo" class="importDemo btn btn-primary solid nounderline collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Clone demo"><span class="glyphicon glyphicon-import"></span></a>
-                                    </p>
-                                </article>
-                            </div>
-                            <div class="card__content card__padding card__article_collapse">
-                                <article>
-                                    Actions
+                                    </div>
                                 </article>
                             </div>
                             <div class="card__action">
@@ -242,11 +233,11 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="card__author-content">
+<!--                                    <div class="card__author-content">
                                         <div class="card__author-content_item">
                                             <a target="_blank" title="Author" href="#"><i class="material-icons">perm_identity</i></a>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>

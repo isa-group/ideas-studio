@@ -1,4 +1,174 @@
 
+/**
+ * Flex align vertical-top, left
+ */
+.flex-top-left {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+      justify-content: flex-start;
+  -webkit-align-items: top;
+  -ms-flex-align: top;
+      align-items: top;
+}
+/**
+ * Flex align vertical-top, right
+ */
+.flex-top-right {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+      justify-content: flex-end;
+  -webkit-align-items: top;
+  -ms-flex-align: top;
+      align-items: top;
+}
+/**
+ * Flex align vertical-top, horizontal center
+ */
+.flex-top-center {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -webkit-align-items: top;
+  -ms-flex-align: top;
+      align-items: top;
+}
+/**
+ * Flex align vertical-top, left
+ */
+.flex-top-justify {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+  -webkit-align-items: top;
+  -ms-flex-align: top;
+      align-items: top;
+}
+/**
+ * Flex align vertical-center, left
+ */
+.flex-center-left {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+      justify-content: flex-start;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+      align-items: center;
+}
+/**
+ * Flex align vertical-center, right
+ */
+.flex-center-right {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+      justify-content: flex-end;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+      align-items: center;
+}
+/**
+ * Flex align vertical-center, horizontal-center
+ */
+.flex-center-center {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+      align-items: center;
+}
+.flex-center-justify {
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+      align-items: center;
+}
+.flex-columns-justified {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+  -webkit-align-content: space-around;
+      -ms-flex-line-pack: distribute;
+          align-content: space-around;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+}
+.flex-columns-justified > * {
+  margin: auto;
+}
+.flex-1 {
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+.flex-2 {
+  -webkit-flex: 2;
+      -ms-flex: 2;
+          flex: 2;
+}
+.flex-3 {
+  -webkit-flex: 3;
+      -ms-flex: 3;
+          flex: 3;
+}
+.flex-4 {
+  -webkit-flex: 4;
+      -ms-flex: 4;
+          flex: 4;
+}
 
 /*-ISOTOPE CARDS-*/
 
@@ -980,10 +1150,10 @@ div.style-div-resources-left {
     margin-bottom: 1.6rem;
 }
 .card__padding {
-    padding-left: 1.6rem;
-    padding-right: 1.6rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-left: 10px;
+    padding-right: 1px;
+    padding-top: 10px;
+    padding-bottom: 1px;
     transition: visibility 4s, cubic-bezier(0.4, 0, 1, 1);
     ;
 }
@@ -1038,7 +1208,7 @@ div.style-div-resources-left {
     font-size: 1.8vw;
     color: #363940;
     font-weight: bold;
-    ;
+    padding-top: 1.8vw;
 }
 .card__meta-content-subtitle {
     color: #65676B;
@@ -1050,7 +1220,7 @@ div.style-div-resources-left {
 .card__meta time {
     font-size: 1vw;
     color: #bbb;
-    ;
+    float: right;
 }
 .card__article a {
     text-decoration: none;
@@ -1070,7 +1240,7 @@ div.style-div-resources-left {
     ;
 }
 .card__author {
-    text-align: center;
+    text-align: left;
     ;
 }
 .card__author img {
@@ -1360,15 +1530,15 @@ li.contact_item a {
 }
 
 
-.workspace .card__article_collapse{
-    background-color: #aaa;
+.workspace .card__meta, .workspace .card__action{
+    background-color: #dfede8;
 }
 
-.demoworkspace .card__article_collapse{
-    background-color: #21c2f8;
+.demoworkspace .card__meta, .demoworkspace .card__action{
+    background-color: #e5dfed;
 }
-.publicdemo .card__article_collapse{
-    background-color: #398439;
+.publicdemo .card__meta, .publicdemo .card__action{
+    background-color: #dde8ee;
 }
 
 .card__content article{
@@ -1396,4 +1566,24 @@ li.contact_item a {
     font-size: 30px;
     font-weight: 700;
     font-family: Roboto,Helvetica,Arial,sans-serif;
+}
+
+
+
+
+.actions_bar_title{
+    font-size: 1.2vw;
+    float: left;
+    width:  3vw;
+}
+
+.actions_bar_buttons{
+     margin-left: 3vw;
+     margin-bottom: 6px;
+}
+
+.actions_bar_buttons a{
+    margin-left: 3px;
+    margin-right: 3px;
+    
 }
