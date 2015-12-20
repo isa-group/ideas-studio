@@ -80,9 +80,8 @@ function bindContextMenu(span) {
 		case "edit":
 			var prevTitle = node.data.title,
 		    tree = node.tree;
-			//get extension
-			var isFolder = $(el).hasClass("dynatree-folder");
-			var extension = !isFolder? "."+ node.data.title.split(".")[node.data.title.split(".").length-1] : "";
+			//get extension if it is not a folder
+			var extension = !node.data.isFolder? "."+ node.data.title.split(".")[node.data.title.split(".").length-1] : "";
 			console.log(extension);
 		 	// Disable dynatree mouse- and key handling
 		  	tree.$widget.unbind();
@@ -129,11 +128,6 @@ function bindContextMenu(span) {
 		      tree.$widget.bind();
 		      node.focus();
 		      node.setTitle(title);
-		      //TODO: avoid to reload page when renaming a folder
-		      if (node.data.isFolder) {
-				// editor page reload
-				window.location.reload();
-		      }
 		      // Activate current file node
 		      if (EditorManager.currentUri != "") {
 		      	getNodeByFileUri(EditorManager.currentUri).activate();
