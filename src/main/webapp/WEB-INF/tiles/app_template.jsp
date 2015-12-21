@@ -65,6 +65,7 @@
         <script src='js/workspaceManager.js' type="text/javascript"></script>
         <script src='js/vendor/isotope.pkgd.js' type="text/javascript"></script>
         <script src='js/vendor/html2canvas.js' type="text/javascript"></script>
+        <script src='js/vendor/canvas-toBlob.js' type="text/javascript"></script>
         <script src='js/vendor/FileSaver.min.js' type="text/javascript"></script>
         <script type="text/javascript" src="js/appPresenter.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
