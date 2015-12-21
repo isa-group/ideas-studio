@@ -20,7 +20,7 @@
         <div class="divider"></div>
         <div class="isotope_section wsm-menu-members" id="workspaceFilters">
             <ul>
-                <li class="active_prot_menu"><a class="filterLink" href="#" data-filter-ws=".workspace,.demoworkspace,.publicdemo">All</a></li>
+                <li class="active_prot_menu"><a class="filterLink" href="#" data-filter-ws="">All</a></li>
                 <li class=""><a class="filterLink" href="#" data-filter-ws=".workspace">Workspaces</a></li>
                 <li class=""><a class="filterLink" href="#" data-filter-ws=".demoworkspace">Demos</a></li>
                 <li class=""><a class="filterLink" href="#" data-filter-ws=".publicdemo">Public Demos</a></li>
@@ -113,7 +113,7 @@
                     </jstl:forEach>
                     <jstl:forEach items="${demos}" var="demo">	
                     <!--begin_ws-->
-                    <div class="col-md-4 col-sm-6 wholeCard demoworkspace <jstl:forEach items="${demo.workspaceTags}" var="tag"> tagged_${tag.name} </jstl:forEach>" type="demoworkspace">
+                    <div class="col-md-4 col-sm-6 wholeCard demoworkspace <jstl:forEach items="${demo.workspaceTags}" var="demotag"> tagged_${demotag.name} </jstl:forEach>" type="demoworkspace">
                         <div class="card radius shadowDepth1">
                             <div class="card__meta">
                                 <img class="card__meta-logo" src="./img/ideas/default_screenshot.png" alt="screenshot" title="${demo.name}">
@@ -179,7 +179,7 @@
                     </jstl:forEach>
                     <jstl:forEach items="${otherdemos}" var="otherdemo">	
                     <!--begin_ws-->
-                    <div class="col-md-4 col-sm-6 wholeCard publicdemo <jstl:forEach items="${workspace.workspaceTags}" var="tag"> tagged_${otherdemo.name} </jstl:forEach>" type="publicdemo">
+                    <div class="col-md-4 col-sm-6 wholeCard publicdemo <jstl:forEach items="${otherdemo.workspaceTags}" var="publictag"> tagged_${publictag.name} </jstl:forEach>" type="publicdemo">
                         <div class="card radius shadowDepth1">
                             <div class="card__meta">
                                 

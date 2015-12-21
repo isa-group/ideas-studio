@@ -104,8 +104,14 @@ function refreshPage(){
 
 // init Isotope
 var $cards = $('.cards');
-    filters = [];
-  $cards.isotope({
+var filters = [];
+var wsFilters = [];
+    wsFilters.push(".workspace");
+    wsFilters.push(".demoworkspace");
+    wsFilters.push(".publicdemo");
+var tagsFilters = [];
+
+$cards.isotope({
   itemSelector: '.wholeCard',
   layoutMode: 'fitRows'
 });
@@ -116,18 +122,31 @@ $('.filterLink').click(function(){
     filterList.find('.active_prot_menu').removeClass('active_prot_menu');
     $( this ).parent().addClass('active_prot_menu');
     
-    remove(filters, '.workspace');
-    remove(filters, '.demoworkspace');
-    remove(filters, '.publicdemo');
+    filters = [];
+    wsFilters = [];
+    tagsFilters = [];
 
     var filterValue = $( this ).attr('data-filter-ws');
     
-    filters.push(filterValue);
+    if(filterValue===""){
+        wsFilters.push(".workspace");
+        wsFilters.push(".demoworkspace");
+        wsFilters.push(".publicdemo");
+    }
+    else{
+        wsFilters.push(filterValue);
+    }
+    
+    $('.tagFilterLink').each(function(){
+        if($(this).parent().hasClass('active_prot_menu')){
+            $(this).parent().removeClass('active_prot_menu');
+        }
+    });
     
     
-        var selector = filters.join('');
+        var selectorws = wsFilters.join(', ');
         $cards.isotope({
-            filter: selector
+            filter: selectorws
         });
 
     
@@ -136,44 +155,38 @@ $('.filterLink').click(function(){
 
 $('.tagFilterLink').click(function(){
     
+    filters=[];
+    
     var filterValue = $( this ).attr('data-filter-tag');
     
     if($(this).parent().hasClass('active_prot_menu')){
         $(this).parent().removeClass('active_prot_menu');
-        remove(filters, filterValue);
+        remove(tagsFilters, filterValue);
     }
     else{
         $( this ).parent().addClass('active_prot_menu'); 
-        filters.push(filterValue);
+        tagsFilters.push(filterValue);
     }
     
-    var selector = filters.join(',');
+    //combine filters
+    for (var workspace_filter in wsFilters) {
+        var auxFilter=wsFilters[workspace_filter];
+        for (var tag_filter in tagsFilters) {
+            if(tag_filter!==""){
+                auxFilter+=tagsFilters[tag_filter];
+            }
+        }
+        filters.push(auxFilter);
+        auxFilter="";
+    }
+    
+    var selector = filters.join(', ');
+
     $cards.isotope({
         filter: selector
     });
 
     return false;
-});
-
-//Collapsible project cards
-$(".card__article_collapse").click(function () {
-    if ($(this).children("article").text().toLowerCase().indexOf("Actions") >= 0) {
-        $(this).children("article").text("Collapse");
-    } else {
-        $(this).children("article").text("Actions");
-    }
-    $(this).parent().children(".card__content.card__padding.collapsible").slideToggle({
-        duration: 200,
-        easing: "easeInOutSine",
-        complete: function () {
-            var projectsIsotope = $(this).parent().parent().parent().parent();
-            projectsIsotope.isotope({
-                itemSelector: ".wholeCard",
-                layoutMode: "fitRows"
-            });
-            projectsIsotope.isotope('layout');
-        }
-    });
 });
 
 function remove(arr, item) {
