@@ -1,6 +1,6 @@
-package es.us.isa.ideas.test.module.plaintext;
+package es.us.isa.ideas.test.app.dynatree;
 
-import static es.us.isa.ideas.test.module.plaintext.TestSuite.getWorkspace;
+import static es.us.isa.ideas.test.app.dynatree.TestSuite.getWorkspace;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

@@ -74,10 +74,11 @@ if(jQuery)( function() {
 				// Simulate a true right click
 				$(this).mousedown( function(e) {
 					var evt = e;
-//					evt.stopPropagation();
-					evt.preventDefault();
+					var editNodeExists = $("input#editNode").length != 0;
+					// Allow default text selection when editing a file name
+					if (!editNodeExists)
+						evt.preventDefault();
 					$(this).mouseup( function(e) {
-//						e.stopPropagation();
 						e.preventDefault();
 						var srcElement = $(this);
 						$(this).unbind('mouseup');
@@ -184,30 +185,16 @@ if(jQuery)( function() {
 							contextMenuTimeout = setTimeout( function() { // Delay for Mozilla								
 									$(document).unbind('keypress');
 									$(menu).fadeOut(o.outSpeed, function () {	// Animation
-										
-										// TODO: the final node activated must be the current opened file.
-										var currentUri = EditorManager.getCurrentUri();
-										var targetNodeText = $(targetNode.span).text();
-
-										if (currentUri == "") { // No file opened in the editor
-											targetNode.deactivate();
-										} else {
-											//TODO: refactor
-											if (targetNode != null) {
-												if (!(currentUri.indexOf(targetNodeText) != -1)) {	//TODO: instead, build a method to find out which node corresponds to the current opened file
-													// Activate the current opened file
-													if (currentActivatedNode != null) {
-														currentActivatedNode.activateSilently();
-													} else {
-														targetNode.deactivate();
-													}
-												} else {
-													currentActivatedNode.activateSilently();
-												}
-											} 
+ 										var currentUri = EditorManager.getCurrentUri();
+										if ($("input#editNode").length == 0) {
+											if (currentUri == "") {
+ 												targetNode.deactivate();
+										} else if ($("input#editNode").length == 0) {
+											} else {
+ 												EditorManager.openFile(currentUri);
+ 											}
 										}
-
-										currentActivatedNode = null;
+ 										currentActivatedNode = null;
 									});
 									return false;
 								

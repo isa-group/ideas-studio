@@ -327,6 +327,30 @@ var drawNewFormatLiElement = function(format, uri, editorFormatsElement) {
 	});
 };
 
+// FE
+var updateChildrenKeyPath = function (node, newName, prevName) {
+    node.visit(function (childNode) {
+        //TODO: replace only once
+        var originFileUri = WorkspaceManager.getSelectedWorkspace() + "/" + childNode.data.keyPath,
+            targetFileUri = WorkspaceManager.getSelectedWorkspace() + "/" + childNode.data.keyPath.replace(prevName, newName);
+        // Update child tabsMap
+        if (originFileUri in EditorManager.tabsMap) {
+            EditorManager.tabsMap[targetFileUri] = EditorManager.tabsMap[originFileUri];
+            EditorManager.tabsMap[originFileUri] = null;
+            delete EditorManager.tabsMap[originFileUri];
+
+            EditorManager.sessionsMap[targetFileUri] = EditorManager.sessionsMap[originFileUri];
+            EditorManager.sessionsMap[originFileUri] = null;
+            delete EditorManager.sessionsMap[originFileUri];
+
+            if (originFileUri == EditorManager.currentUri)
+                EditorManager.currentUri = targetFileUri;
+        }
+        // Update child keyPath
+        childNode.data.keyPath = trimFirstFromNodeUri(targetFileUri);
+    });
+};
+
 var EditorManager = {
 
 	sessionsMap : {},
@@ -743,22 +767,12 @@ var moveNodeAux = function(originFileUri, targetFileUri, justRename,
 	var targetDirForNode = trimLastFromNodeUri(targetFileUri);
 	var originNode = getNodeByFileUri(originFileUri);
 
-	// Recurs. "move" childrens
-	for (potentialUri in EditorManager.tabsMap) {
-		if (potentialUri.indexOf(originFileUri) != -1
-				&& potentialUri != originFileUri) {
-			var childName = calculateNodeNameFromUri(potentialUri);
-			moveNodeAux(potentialUri, targetFileUri + "/" + childName,
-					justRename, false, copy);
-		}
-	}
-
 	// Replace currentUri if necessary
-	if (EditorManager.currentUri == originFileUri)
+	if (originNode && EditorManager.currentUri == originFileUri)
 		EditorManager.currentUri = targetFileUri;
 
 	// Update references in maps (only for terminal nodes)
-	if (originFileUri in EditorManager.tabsMap && !originNode.data.isFolder) {
+	if (originNode && originFileUri != targetFileUri && originFileUri in EditorManager.tabsMap && !originNode.data.isFolder) {
 		EditorManager.sessionsMap[targetFileUri] = EditorManager.sessionsMap[originFileUri];
 		EditorManager.sessionsMap[originFileUri] = null;
 		delete EditorManager.sessionsMap[originFileUri];
@@ -793,6 +807,7 @@ var moveNodeAux = function(originFileUri, targetFileUri, justRename,
 
 	// Handle tree
 	var targetNode = getNodeByFileUri(targetDirForNode);
+	var prevName = originNode.data.title;
 	if (originNode != undefined && targetNode != undefined) {
 		originNode.data.keyPath = targetFileUriWithoutWS;
 		originNode.render(); // For dynatree bug! Node needs to be rendered
@@ -808,11 +823,20 @@ var moveNodeAux = function(originFileUri, targetFileUri, justRename,
 			} else {
 				originNode.move(targetNode);
 				originNode.setTitle(newName);
+
+                // Update children keypath
+				if (originNode.data.isFolder)
+					updateChildrenKeyPath(originNode, newName, prevName);
+
 				targetNode.sortChildren(); // TODO: Add depth limit for
 				// performance
 
 			}
 		}
+	} else if (originNode.getLevel() <= 1) { // it's  a project
+		originNode.data.keyPath = targetFileUriWithoutWS
+		originNode.render();
+		updateChildrenKeyPath(originNode, newName, prevName);
 	}
 
 	// TODO show confirmation with callbacks

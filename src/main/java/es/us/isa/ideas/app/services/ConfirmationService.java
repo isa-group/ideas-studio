@@ -96,8 +96,8 @@ public class ConfirmationService extends BusinessService<Confirmation> {
 
 	public void createPasswordResetConfirmation(Actor actor) {
 
-		Confirmation confirmation = repository
-				.getByUserAccountId(actor.getId());
+		Confirmation confirmation = repository.getByResearcherId(actor.getId());
+
 		confirmation.setConfirmationDate(null);
 		repository.save(confirmation);
 
@@ -134,6 +134,7 @@ public class ConfirmationService extends BusinessService<Confirmation> {
 		Map<String, String> finalCustomizations = mailer
 				.extractCustomizations(templateCustomizers);
 		finalCustomizations.putAll(customization);
+        finalCustomizations.put("$code", confirmation.getConfirmationCode());
 		mailer.sendMail(researcher.getEmail(), finalCustomizations,
 				resetPasswordConfirmationTemplate);
 	}

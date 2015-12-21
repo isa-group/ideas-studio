@@ -15,6 +15,7 @@ import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.ExpectedActions;
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
+import static org.junit.Assert.assertTrue;
 
 /**
  * 
@@ -75,9 +76,9 @@ public class TC01_RegisterMaxLengthFormField extends es.us.isa.ideas.test.utils.
 		String selectorModalHeader = "#loginFailPanel > div > div > div.modal-header > h4";
 		waitForVisibleSelector(selectorModalHeader);
 
-		String modalHeader = getTextSelector(selectorModalHeader);
-		String modalBody = getTextSelector("#loginFailPanel > div > div > div.modal-body > p");
-		String msgInvalidEmail = getTextSelector("#email\\.errors");
+		String modalHeader = getTextFromSelector(selectorModalHeader);
+		String modalBody = getTextFromSelector("#loginFailPanel > div > div > div.modal-body > p");
+		String msgInvalidEmail = getTextFromSelector("#email\\.errors");
 
 		boolean ret1 = modalHeader.equals("Sign up error");
 		boolean ret2 = modalBody.equals("Has not been able to make sign up due to errors in the fields");
