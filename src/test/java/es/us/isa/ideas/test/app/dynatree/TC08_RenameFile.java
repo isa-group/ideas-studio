@@ -15,8 +15,14 @@ import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import org.openqa.selenium.Keys;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
+/**
+ * Applied Software Engineering Research Group (ISA Group) University of
+ * Sevilla, Spain
+ *
+ * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @version 1.0
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC08_RenameFile extends es.us.isa.ideas.test.utils.TestCase {
 
