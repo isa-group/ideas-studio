@@ -194,19 +194,27 @@ public class TestCase {
     }
 
     public static String getSeleniumUserName() {
-        return getSeleniumProperties().getProperty("test.user.name");
+        return getSeleniumProperties().getProperty("test.register.user.name");
+    }
+    
+    public static String getSeleniumName() {
+        return getSeleniumProperties().getProperty("test.register.user.name");
     }
 
     public static String getSeleniumUserEmail() {
-        return getSeleniumProperties().getProperty("test.user.email");
+        return getSeleniumProperties().getProperty("test.register.user.email");
+    }
+    
+    public static String getSeleniumEmailPassword() {
+        return getSeleniumProperties().getProperty("test.register.user.email.pass");
     }
 
     public static String getSeleniumUserPhone() {
-        return getSeleniumProperties().getProperty("test.user.phone");
+        return getSeleniumProperties().getProperty("test.register.user.phone");
     }
 
     public static String getSeleniumUserAddress() {
-        return getSeleniumProperties().getProperty("test.user.address");
+        return getSeleniumProperties().getProperty("test.register.user.address");
     }
 
     public static String getSeleniumTwitterUser() {
