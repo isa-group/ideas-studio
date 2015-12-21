@@ -24,5 +24,25 @@ public class TestSuite extends es.us.isa.ideas.test.utils.TestCase {
 	public static void tearDown() throws InterruptedException {
 		LOG.log(Level.INFO, "Login PlainText language module finished");
 	}
+    
+    protected static String getTestProperty(String key) {
+        return getSeleniumGeneralProperties().getProperty(key);
+    }
+
+    protected static String getWorkspace() {
+        return getTestProperty("test.app.plaintext.workspace");
+    }
+
+    protected static String getProject() {
+        return getTestProperty("test.app.plaintext.project");
+    }
+    
+    protected static String getFileName1() {
+        return getTestProperty("test.app.plaintext.file1.name");
+    }
+    
+    protected static String getFileExt1() {
+        return getTestProperty("test.app.plaintext.file1.extension");
+    }
 
 }

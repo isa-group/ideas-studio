@@ -12,32 +12,23 @@ import org.junit.runners.MethodSorters;
 import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
-import static es.us.isa.ideas.test.utils.TestCase.getExpectedActions;
-import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC06_RemoveCurrentWorkspace extends es.us.isa.ideas.test.utils.TestCase {
 
     private static boolean testResult = true;
-    private static final String WORKSPACE_NAME = "Workspace";
+    private static final String WORKSPACE_NAME = TestSuite.getWorkspace();
     private static final Logger LOG = Logger.getLogger(TC06_RemoveCurrentWorkspace.class.getName());
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "Init TC06_RemoveCurrentWorkspace...");
+        LOG.log(Level.INFO, "## Init TC10_RemoveCurrentWorkspace...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "TC06_RemoveCurrentWorkspace finished");
+        LOG.log(Level.INFO, "## TC10_RemoveCurrentWorkspace finished");
     }
 
     @After
@@ -58,20 +49,28 @@ public class TC06_RemoveCurrentWorkspace extends es.us.isa.ideas.test.utils.Test
 
         try {
             Thread.sleep(2000); // explicity wait for command response
-            IdeasStudioActions.executeCommands(gcliCommand);    // executing this command will auto-refresh editor page
-
-            Thread.sleep(2000);
-            waitForVisibleSelector("#menuToggler");
-            getExpectedActions().click(By.id("menuToggler"));
-
-            Thread.sleep(2000);
-            testResult = !IdeasStudioActions.existWorkspaceByName(WORKSPACE_NAME);
-
-            Thread.sleep(2000);
-            assertTrue(testResult);
-        } catch (Exception ex) {
+        } catch (InterruptedException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
+
+        IdeasStudioActions.executeCommands(gcliCommand);    // executing this command will auto-refresh editor page
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+        }
+
+        waitForVisibleSelector(SELECTOR_WS_TOGGLER);
+        getExpectedActions().click(By.cssSelector(SELECTOR_WS_TOGGLER));
+
+        try {
+            Thread.sleep(2000); // menu toggle animation
+        } catch (InterruptedException ex) {
+            LOG.log(Level.SEVERE, ex.getMessage());
+        }
+        testResult = !IdeasStudioActions.existWorkspaceByName(WORKSPACE_NAME);
+        assertTrue(testResult);
     }
 
 }

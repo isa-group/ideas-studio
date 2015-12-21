@@ -1,7 +1,7 @@
 package es.us.isa.ideas.test.module.plaintext;
 
-import static org.junit.Assert.assertTrue;
-
+import static es.us.isa.ideas.test.module.plaintext.TestSuite.getFileExt1;
+import static es.us.isa.ideas.test.module.plaintext.TestSuite.getFileName1;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,73 +16,65 @@ import org.openqa.selenium.By;
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC05_EditFile extends es.us.isa.ideas.test.utils.TestCase {
 
-	private static String fileName = "file";
+    private static boolean testResult = true;
+    private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
-	private static boolean testResult = true;
-	private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
+    @BeforeClass
+    public static void setUp() throws InterruptedException {
+        LOG.log(Level.INFO, "Init TC09_OpenFile2L...");
+    }
 
-	@BeforeClass
-	public static void setUp() throws InterruptedException {
-		LOG.log(Level.INFO, "Init TC05_EditFile...");
-	}
+    @AfterClass
+    public static void tearDown() {
+        LOG.log(Level.INFO, "TC09_OpenFile2L finished");
+    }
 
-	@AfterClass
-	public static void tearDown() {
-		LOG.log(Level.INFO, "TC05_EditFile finished");
-	}
+    @After
+    public void tearDownTest() {
+        LOG.log(Level.INFO, "testResult value: {0}", testResult);
+    }
 
-	@After
-	public void tearDownTest() {
-		LOG.info("testResult value: " + testResult);
-	}
+    @Test
+    public void step01_goEditorPage() {
+        testResult = IdeasStudioActions.goEditorPage();
+        assertTrue(testResult);
+    }
 
-	@Test
-	public void step01_goEditorPage() {
-		testResult = IdeasStudioActions.goEditorPage();
-		assertTrue(testResult);
-	}
+    @Test
+    public void step02_editFile() {
 
-	@Test
-	public void step02_editFile() throws InterruptedException {
+        if (IdeasStudioActions.expandAllDynatreeNodes()) {
 
-		LOG.info("testEditFile :: Editing a file...");
+            TestCase.getExpectedActions().click(By.linkText(getFileName1() + getFileExt1()));
 
-		TestCase.getExpectedActions().click(By.cssSelector(".dynatree-ico-c"));
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TC05_EditFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-		LOG.info("\t :: Introduciendo contenido al fichero");
+            // Set editor content
+            IdeasStudioActions.setCurrentEditorContent("Contenido fichero " + getFileName1() + getFileExt1());
 
-		Thread.sleep(2000);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TC05_EditFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-		TestCase.getJs()
-				.executeScript("document.editor.session.setValue('Hola Mundo');");
+            // Check if file content is not empty
+            testResult = !IdeasStudioActions.isEditorContentEmpty();
+        }
 
-		Thread.sleep(1000);
-		
-		// Check if file was modified
+        if (testResult) {
+            echoCommandApi("File \"" + getFileName1() + getFileExt1() + "\" was successfully edited.");
+        }
+        assertTrue(testResult);
 
-		testResult = !IdeasStudioActions.isEditorContentEmpty();
-
-		String msg = "";
-		if (testResult) {
-			msg = "File \"" + fileName + ".txt\" was successfully edited.";
-		} else {
-			msg += "Unable to change file";
-		}
-		
-		LOG.info(msg);
-		echoCommandApi(msg);
-		assertTrue(testResult);
-
-	}
+    }
 
 }

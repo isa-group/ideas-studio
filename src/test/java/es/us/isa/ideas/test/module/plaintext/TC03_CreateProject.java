@@ -1,7 +1,6 @@
 package es.us.isa.ideas.test.module.plaintext;
 
-import static org.junit.Assert.assertTrue;
-
+import static es.us.isa.ideas.test.module.plaintext.TestSuite.getProject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,107 +15,62 @@ import org.openqa.selenium.By;
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC03_CreateProject extends es.us.isa.ideas.test.utils.TestCase {
 
-	private static String projectName = "Project";
+    private static boolean testResult = false;
+    private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
-	private static boolean testResult = true;
-	private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
+    @BeforeClass
+    public static void setUp() {
+        LOG.log(Level.INFO, "## Init TC03_CreateProject...");
+    }
 
-	@BeforeClass
-	public static void setUp() throws InterruptedException {
-		LOG.log(Level.INFO, "Init TC02_CreateWorkspace...");
-	}
+    @AfterClass
+    public static void tearDown() {
+        LOG.log(Level.INFO, "## TC03_CreateProject finished");
+    }
 
-	@AfterClass
-	public static void tearDown() {
-		LOG.log(Level.INFO, "TC02_CreateWorkspace finished");
-	}
+    @After
+    public void tearDownTest() {
+        LOG.log(Level.INFO, "testResult: {0}", testResult);
+        testResult = false;
+    }
 
-	@After
-	public void tearDownTest() {
-		LOG.info("testResult value: " + testResult);
-	}
+    @Test
+    public void step01_goEditorPage() {
+        testResult = IdeasStudioActions.goEditorPage();
+        assertTrue(testResult);
+    }
 
-	@Test
-	public void step01_goEditorPage() {
-		testResult = IdeasStudioActions.goEditorPage();
-		assertTrue(testResult);
-	}
-	
-	@Test
-	public void step02_createProject() {
-		LOG.info("testCreateProject :: Creating a project...");
-		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			LOG.severe(e.getMessage());
-		}
+    @Test
+    public void step02_createProject() {
 
-		TestCase.getExpectedActions().click(By.cssSelector("div#editorSidePanelHeaderAddProject div.dropdown-toggle"));
-		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			LOG.severe(e.getMessage());
-		}
-		
-		TestCase.getExpectedActions().click(By.linkText("Create Project"));
-		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			LOG.severe(e.getMessage());
-		}
+        if (IdeasStudioActions.expandAddMenu()) {
 
-		LOG.info("\t :: Inserting \"" + projectName + "\" as name project.");
+            TestCase.getExpectedActions().click(By.linkText("Create Project"));
 
-		TestCase.getExpectedActions().sendKeys(By.cssSelector("input.form-control.focusedInput"), projectName);
-		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			LOG.severe(e.getMessage());
-		}
-		
-		TestCase.getExpectedActions().click(By.linkText("Create"));
-		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			LOG.severe(e.getMessage());
-		}
-		
-		// Refreshing browser
-		getWebDriver().navigate().refresh();
-		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			LOG.severe(e.getMessage());
-		}
-		
-		waitForVisibleSelector("#projectsTree > ul > li:nth-child(1) > span > a");
-		testResult = projectName.equals(getTextFromSelector("#projectsTree > ul > li:nth-child(1) > span > a"));
-		
-		String msg = "";
-		if (testResult) {
-			msg += "\t :: Project \"" + projectName + "\" was successfully created.";
-		}
-		
-		LOG.info(msg);
-		echoCommandApi(msg);
-		assertTrue(testResult);
-		
-	}
+            try {
+                Thread.sleep(1000); // modal animation 
+            } catch (InterruptedException e) {
+                LOG.severe(e.getMessage());
+            }
 
+            // Modal window
+            TestCase.getExpectedActions().sendKeys(By.cssSelector(SELECTOR_MODAL_INPUT), getProject());
+            TestCase.getExpectedActions().click(By.linkText("Create")); // submit modal
+
+            waitForVisibleSelector(SELECTOR_PROJECT);
+            testResult = getProject().equals(getTextFromSelector(SELECTOR_PROJECT));
+        }
+
+        if (testResult) {
+            echoCommandApi("Project \"" + getProject() + "\" was successfully created.");
+        }
+        assertTrue(testResult);
+
+    }
+
+    //TODO: check if project has been created on ideas repository
 }
