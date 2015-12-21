@@ -10,6 +10,13 @@ import org.junit.runners.Suite;
 
 import es.us.isa.ideas.test.utils.TestCase;
 
+/**
+ * Applied Software Engineering Research Group (ISA Group) University of
+ * Sevilla, Spain
+ *
+ * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @version 1.0
+ */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
 	//empty

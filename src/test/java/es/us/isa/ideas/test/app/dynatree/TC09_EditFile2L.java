@@ -17,6 +17,13 @@ import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Applied Software Engineering Research Group (ISA Group) University of
+ * Sevilla, Spain
+ *
+ * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @version 1.0
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC09_EditFile2L extends es.us.isa.ideas.test.utils.TestCase {
 

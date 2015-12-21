@@ -7,6 +7,13 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+/**
+ * Applied Software Engineering Research Group (ISA Group) University of
+ * Sevilla, Spain
+ *
+ * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @version 1.0
+ */
 public class ExpectedActions {
 	
 	private WebDriver webDriver;

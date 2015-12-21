@@ -19,12 +19,16 @@ import static es.us.isa.ideas.test.utils.TestCase.echoCommandApi;
 import static es.us.isa.ideas.test.utils.TestCase.getExpectedActions;
 import static es.us.isa.ideas.test.utils.TestCase.getWebDriver;
 import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
-import static org.junit.Assert.assertTrue;
 import static es.us.isa.ideas.test.app.dynatree.TestSuite.getFileExt2;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
+/**
+ * Applied Software Engineering Research Group (ISA Group) University of
+ * Sevilla, Spain
+ *
+ * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @version 1.0
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC07_CreateFile extends es.us.isa.ideas.test.utils.TestCase {
 
