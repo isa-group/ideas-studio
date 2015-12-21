@@ -15,6 +15,13 @@ import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC03_CreateProject extends es.us.isa.ideas.test.utils.TestCase {
@@ -99,7 +106,7 @@ public class TC03_CreateProject extends es.us.isa.ideas.test.utils.TestCase {
 		}
 		
 		waitForVisibleSelector("#projectsTree > ul > li:nth-child(1) > span > a");
-		testResult = projectName.equals(getTextSelector("#projectsTree > ul > li:nth-child(1) > span > a"));
+		testResult = projectName.equals(getTextFromSelector("#projectsTree > ul > li:nth-child(1) > span > a"));
 		
 		String msg = "";
 		if (testResult) {

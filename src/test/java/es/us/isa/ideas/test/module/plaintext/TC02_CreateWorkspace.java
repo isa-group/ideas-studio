@@ -16,6 +16,13 @@ import org.openqa.selenium.WebElement;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
@@ -91,7 +98,7 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
 			LOG.severe(e.getMessage());
 		}
 		
-		testResult = workspaceName.equals(getTextSelector("#editorSidePanelHeaderWorkspaceInfo"));
+		testResult = workspaceName.equals(getTextFromSelector("#editorSidePanelHeaderWorkspaceInfo"));
 		
 		if (testResult) {
 			LOG.info("\t :: Workspace \"" + workspaceName + "\" was successfully created.");

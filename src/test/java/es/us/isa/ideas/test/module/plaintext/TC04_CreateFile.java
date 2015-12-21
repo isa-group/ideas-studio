@@ -16,6 +16,13 @@ import org.openqa.selenium.By;
 import es.us.isa.ideas.test.utils.ExpectedActions;
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC04_CreateFile extends es.us.isa.ideas.test.utils.TestCase {

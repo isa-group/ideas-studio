@@ -14,6 +14,13 @@ import org.junit.runners.MethodSorters;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC01_Login extends es.us.isa.ideas.test.utils.TestCase {
