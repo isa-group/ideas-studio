@@ -12,6 +12,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -66,7 +67,8 @@ public class SeleniumBuilder {
 
 			INSTANCE.seleniumFileName = askSeleniumFileName();
 
-			INSTANCE.driver = new FirefoxDriver();
+//			INSTANCE.driver = new FirefoxDriver();
+            INSTANCE.driver = new ChromeDriver();
 
 			INSTANCE.driver.manage().timeouts().pageLoadTimeout(2, TimeUnit.MINUTES);
 			INSTANCE.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);

@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
+import static org.junit.Assert.assertTrue;
 
 /**
  * This test uses 'selenium.properties' to specify the user name and password.

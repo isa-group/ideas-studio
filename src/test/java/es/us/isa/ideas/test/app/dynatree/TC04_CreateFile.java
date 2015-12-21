@@ -1,8 +1,7 @@
-package es.us.isa.ideas.test.module.plaintext;
+package es.us.isa.ideas.test.app.dynatree;
 
-import static es.us.isa.ideas.test.module.plaintext.TestSuite.getFileExt1;
-import static es.us.isa.ideas.test.module.plaintext.TestSuite.getFileName1;
-import static es.us.isa.ideas.test.module.plaintext.TestSuite.getProject;
+import static es.us.isa.ideas.test.app.dynatree.TestSuite.getFileName1;
+import static es.us.isa.ideas.test.app.dynatree.TestSuite.getProject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +15,7 @@ import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
+import static es.us.isa.ideas.test.app.dynatree.TestSuite.getFileExt1;
 import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
