@@ -96,7 +96,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">label</i>
-                                                <p>${workspace.wsVersion}</p>
+                                                <p>v.${workspace.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -162,7 +162,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">label</i>
-                                                <p>${demo.wsVersion}</p>
+                                                <p>v.${demo.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>
