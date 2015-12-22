@@ -293,7 +293,7 @@ var CommandsRegistry = {
                         testsSuccess++;
                 });
             }
-            CommandApi.echo("All modules tested: " + parseInt((testsSuccess / totalTests) * 100) + "% successful.");
+            CommandApi.echo("<span id='testModulesResult'>All modules tested: " + parseInt((testsSuccess / totalTests) * 100) + "% successful.</span>");
         }
     },
     convertCurrentWorkspacetoDemo: {
@@ -482,6 +482,7 @@ var auxTestModule = function (module, callback) {
 
             }).fail(function (jqxhr, textStatus, error) {
         CommandApi.echo("[" + textStatus + "] Module " + module + " failed: " + error);
+        callback(testsSuccess, totalTests);
     });
 
     jQuery.ajaxSetup({
