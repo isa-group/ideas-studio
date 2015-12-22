@@ -2141,7 +2141,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     margin: 4px;
     padding: 0px;
     text-decoration: none;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 .apl_wsm:hover{
     background: #3078B3 !important;
