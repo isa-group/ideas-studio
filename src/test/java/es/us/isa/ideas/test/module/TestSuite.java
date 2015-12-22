@@ -9,12 +9,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
- * Before executing this TestSuite, be sure the user specified in
- * selenium.propeties has no workspace created.
- * 
- * @author feserafim
+ * Applied Software Engineering Research Group (ISA Group) University of
+ * Sevilla, Spain
+ *
+ * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @version 1.0
  */
-
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ es.us.isa.ideas.test.module.plaintext.TestSuite.class })
 public class TestSuite {
