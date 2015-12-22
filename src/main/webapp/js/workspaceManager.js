@@ -112,15 +112,15 @@ var WorkspaceManager = {
                 workspaceDelete += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete workspace\">";
                 workspaceDelete += "<span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"> </span></a>";
                 
-//            var workspaceScreenshot =  "<a style=\"cursor: pointer\" id=\"screenshot-ws\"";
-//                workspaceScreenshot += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Screenshot\">";
-//                workspaceScreenshot += "<span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"> </span></a>";
+            var workspaceScreenshot =  "<a style=\"cursor: pointer\" id=\"screenshot-ws\"";
+                workspaceScreenshot += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Screenshot\">";
+                workspaceScreenshot += "<span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"> </span></a>";
                            
                 wsActions+="<br>&nbsp;&nbsp;"+workspaceEdit+"";
                 wsActions+="&nbsp;&nbsp;"+workspaceDownload+"";
                 wsActions+="&nbsp;&nbsp;"+workspaceToDemo+"";
-                wsActions+="&nbsp;&nbsp;"+workspaceDelete+"<br>";
-//                wsActions+="&nbsp;&nbsp;"+workspaceScreenshot+"<br>";
+                wsActions+="&nbsp;&nbsp;"+workspaceDelete+"";
+                wsActions+="&nbsp;&nbsp;"+workspaceScreenshot+"<br>";
                 wsActions+="";
                 
                 
@@ -149,22 +149,23 @@ var WorkspaceManager = {
                     var name = WorkspaceManager.getSelectedWorkspace();
                     WorkspaceManager.publishWorskspaceAsDemo(name);
             });
+            
             $("#screenshot-ws").click(function(e) {
-                    e.preventDefault();
-                    
-                    var name = WorkspaceManager.getSelectedWorkspace();
-                    html2canvas($("#editor"), {
-                        onrendered: function(canvas) {
-                            theCanvas = canvas;
-                            document.body.appendChild(canvas);
+                var uri=WorkspaceManager.getSelectedWorkspace();
+                var data = new FormData();
 
-                            canvas.toBlob(function(blob) {
-                                                    saveAs(blob, "Dashboard.png"); 
-                                            });
-                        }
-                    });
-            });
-                        
+                html2canvas($("#appBody"), {
+                    onrendered: function(canvas) {
+//                        canvas.toBlob(function(blob) {                          
+//                            saveAs(blob, "exported_image.png");
+//                        }, "image/png");
+                        var dataURL = canvas.toDataURL("image/png");
+                        data.append('file', dataURItoBlob(dataURL));
+                        var content = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+                        WorkspaceManager.uploadScreenshot(uri,dataURL);
+                    }
+                });
+            }); 
         });
     },
     createWorkspace: function (workspaceName,description,tags) {
@@ -294,6 +295,18 @@ var WorkspaceManager = {
                     <BR/><BR/><b>Do you want to clone the public demo ?</b><BR/></i>",
 						"Continue", continueHandler,
 						function(){}, function(){});
+    },
+    uploadScreenshot:function(workspaceName,data,callback) {
+        $.ajax("/workspaces/"+workspaceName+"/uploadScreenshot" , {
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function(result) {
+				callback(result);
+            }
+	});	
     }
 };
 
@@ -334,3 +347,24 @@ var deleteWSLine = function (wsName) {
     }
 
 };
+
+function dataURItoBlob(dataURI,callback) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {type:mimeString});
+    callback();
+}

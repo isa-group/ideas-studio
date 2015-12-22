@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/workspaces")
@@ -283,5 +284,28 @@ public class WorkspaceController extends AbstractController {
         }
         
         return res;
+    }
+    
+    
+    @RequestMapping(value = "/{workspaceName}/uploadScreenshot", method = RequestMethod.POST)
+    @ResponseBody
+    public void uploadScreenshot(@PathVariable("workspaceName") String workspaceName,
+                                 @RequestParam("file") MultipartFile file) 
+    {
+        logger.log(Level.INFO, "Creating screenshot for workspace: {0}", workspaceName);
+        initRepoLab();
+        String fileUri = workspaceName + "/screenshot.png";
+        String username = LoginService.getPrincipal().getUsername();
+        
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                FSFacade.createFile(fileUri, username);
+                FSFacade.setFileContent(fileUri, username, bytes);                    
+            } 
+            catch (Exception e) {
+                logger.log(Level.SEVERE, null, e);
+            }      
+        }
     }
 }
