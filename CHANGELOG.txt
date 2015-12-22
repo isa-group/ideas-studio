@@ -1,3 +1,9 @@
+ideas-studio v0.8.3, 22/12/2015
+----------------------------------------------
+- Cannot find nexus repositories
+- Page reload when renaming a project
+- Create command testModules
+
 ideas-studio v0.8.2, 15/12/2015
 ----------------------------------------------
 - [new module] ideas-soup-module
