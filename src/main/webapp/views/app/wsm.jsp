@@ -213,7 +213,7 @@
                                        <a class="tooltips">
                                             <div class="card__author-content_item">
                                                 <i class="material-icons">get_app</i>
-                                                <p>${workspace.downloads}</p>
+                                                <p>:${otherdemo.downloads}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -221,7 +221,7 @@
                                         <a class="tooltips">
                                             <div class="card__author-content_item">
                                                 <i class="material-icons">launch</i>
-                                                <p>${workspace.launches}</p>
+                                                <p>:${otherdemo.launches}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -229,7 +229,8 @@
                                         <a class="tooltips">
                                             <div class="card__author-content_item">
                                                 <i class="material-icons">label</i>
-                                                <p>${workspace.wsVersion}</p>
+                                                
+                                                <p> ${otherdemo.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>
