@@ -272,9 +272,28 @@ var CommandsRegistry = {
             }],
         exec: function (args, context) {
             var module = args.moduleID;
-            CommandApi.echo("Testing module: " + module);
-            auxTestModule(module);
+            CommandApi.echo("Testing module " + module + ", please wait...");
+            auxTestModule(module, function (testsSuccess, totalTests) {
+                CommandApi.echo("Module " + module + " tested: " + parseInt((testsSuccess / totalTests) * 100) + "% successful.");
+            });
 
+        }
+    },
+    testModules: {
+        name: 'testModules',
+        description: 'Test all available language modules.',
+        exec: function (args, context) {
+            var languages = ModeManager.idUriMap;
+            var testsSuccess = 0;
+            var totalTests = Object.keys(languages).length;
+            for (var languageId in languages) {
+                CommandApi.echo("Testing module " + languageId + ", please wait...");
+                auxTestModule(languageId, function (moduleTestsSuccess, moduleTotalTests) {
+                    if (moduleTestsSuccess === moduleTotalTests)
+                        testsSuccess++;
+                });
+            }
+            CommandApi.echo("All modules tested: " + parseInt((testsSuccess / totalTests) * 100) + "% successful.");
         }
     },
     convertCurrentWorkspacetoDemo: {
@@ -369,16 +388,20 @@ var auxDeleteWorkspace = function (fileUri) {
     });
 };
 
-var auxTestModule = function (module) {
-
-    operations = ModeManager.getOperations(module);
+var auxTestModule = function (module, callback) {
 
     var url = module;
     if (module.indexOf("ideas") === -1)
         url = "ideas-" + module;
 
+    var testsSuccess = 0;
+    var totalTests = 0;
+    jQuery.ajaxSetup({
+        async: false
+    });
     $.getJSON("/" + url + "/tests/tests.json").done(
             function (response) {
+                totalTests = response.length;
                 var _continue = true;
                 for (var i = 0; i < response.length; i++) {
                     if (_continue) {
@@ -395,13 +418,13 @@ var auxTestModule = function (module) {
                         $.get("/" + url + parameters.fileUri, function (
                                 content) {
 
-                            if (opMethod == "GET") {
+                            if (opMethod === "GET") {
                                 $.get(opUri, function (data) {
                                     // TODO
                                 });
-                            } else if (opMethod == "POST") {
+                            } else if (opMethod === "POST") {
                                 parameters.content = content;
-                                if (parameters.auxArg0 == undefined) {
+                                if (parameters.auxArg0 === undefined) {
                                     $.post(opUri, parameters, function (new_result) {
                                         for (var k = 0; k < resultList.length; k++) {
                                             result = eval(resultList[k]);
@@ -409,6 +432,7 @@ var auxTestModule = function (module) {
                                                     .stringify(new_result)) {
                                                 CommandApi.echo("- Operation " + opId
                                                         + ": OK");
+                                                testsSuccess++;
                                                 _continue = true;
                                                 break;
                                             } else {
@@ -433,6 +457,7 @@ var auxTestModule = function (module) {
                                                         .stringify(new_result)) {
                                                     CommandApi.echo("- Operation " + opId
                                                             + ": OK");
+                                                    testsSuccess++;
                                                     _continue = true;
                                                     break;
                                                 } else {
@@ -452,9 +477,11 @@ var auxTestModule = function (module) {
                         });
                     }
                 }
+
+                callback(testsSuccess, totalTests);
+
             }).fail(function (jqxhr, textStatus, error) {
-        var err = textStatus + ", " + error;
-        console.log("Request Failed: " + err);
+        CommandApi.echo("[" + textStatus + "] Module " + module + " failed: " + error);
     });
 
     jQuery.ajaxSetup({
