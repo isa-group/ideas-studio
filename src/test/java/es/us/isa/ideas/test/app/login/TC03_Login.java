@@ -13,12 +13,14 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
+import static org.junit.Assert.assertTrue;
 
 /**
- * This test uses 'selenium.properties' to specify the user name and password.
- * 
- * @author feserafim
+ * Applied Software Engineering Research Group (ISA Group) University of
+ * Sevilla, Spain
  *
+ * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC03_Login extends es.us.isa.ideas.test.utils.TestCase {

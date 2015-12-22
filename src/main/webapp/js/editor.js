@@ -48,6 +48,7 @@ var initializeCommandLine = function() {
         gcli.addCommand(CommandsRegistry.deleteCurrentWorkspace);
         gcli.addCommand(CommandsRegistry.deleteWorkspace);
         gcli.addCommand(CommandsRegistry.testModule);
+        gcli.addCommand(CommandsRegistry.testModules);
         gcli.addCommand(CommandsRegistry.convertCurrentWorkspacetoDemo);
         gcli.addCommand(CommandsRegistry.clearConsole);
     });

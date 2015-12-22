@@ -1,7 +1,7 @@
-package es.us.isa.ideas.test.module.plaintext;
+package es.us.isa.ideas.test.app.dynatree;
 
-import static es.us.isa.ideas.test.module.plaintext.TestSuite.getFileExt1;
-import static es.us.isa.ideas.test.module.plaintext.TestSuite.getFileName1;
+import static es.us.isa.ideas.test.app.dynatree.TestSuite.getFileExt2;
+import static es.us.isa.ideas.test.app.dynatree.TestSuite.getFileName2;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC05_EditFile extends es.us.isa.ideas.test.utils.TestCase {
+public class TC09_EditFile2L extends es.us.isa.ideas.test.utils.TestCase {
 
     private static boolean testResult = true;
     private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
@@ -56,21 +56,21 @@ public class TC05_EditFile extends es.us.isa.ideas.test.utils.TestCase {
 
         if (IdeasStudioActions.expandAllDynatreeNodes()) {
 
-            TestCase.getExpectedActions().click(By.linkText(getFileName1() + getFileExt1()));
+            TestCase.getExpectedActions().click(By.linkText(getFileName2() + getFileExt2()));
 
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(TC05_EditFile.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TC09_EditFile2L.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             // Set editor content
-            IdeasStudioActions.setCurrentEditorContent("Contenido fichero " + getFileName1() + getFileExt1());
+            IdeasStudioActions.setCurrentEditorContent("Contenido fichero " + getFileName2() + getFileExt2());
 
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(TC05_EditFile.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TC09_EditFile2L.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             // Check if file content is not empty
@@ -78,7 +78,7 @@ public class TC05_EditFile extends es.us.isa.ideas.test.utils.TestCase {
         }
 
         if (testResult) {
-            echoCommandApi("File \"" + getFileName1() + getFileExt1() + "\" was successfully edited.");
+            echoCommandApi("File \"" + getFileName2() + getFileExt2() + "\" was successfully edited.");
         }
         assertTrue(testResult);
 

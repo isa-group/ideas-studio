@@ -1,8 +1,5 @@
 package es.us.isa.ideas.test.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -12,15 +9,15 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
- * This class should be used when implementing new tests. It uses the
- * configuration values defined on selenium.properties.
- * 
- * @author feserafim
+ * Applied Software Engineering Research Group (ISA Group) University of
+ * Sevilla, Spain
  *
+ * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @version 1.0
  */
 public class SeleniumBuilder {
 
@@ -66,7 +63,8 @@ public class SeleniumBuilder {
 
 			INSTANCE.seleniumFileName = askSeleniumFileName();
 
-			INSTANCE.driver = new FirefoxDriver();
+//			INSTANCE.driver = new FirefoxDriver();
+            INSTANCE.driver = new ChromeDriver();
 
 			INSTANCE.driver.manage().timeouts().pageLoadTimeout(2, TimeUnit.MINUTES);
 			INSTANCE.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);

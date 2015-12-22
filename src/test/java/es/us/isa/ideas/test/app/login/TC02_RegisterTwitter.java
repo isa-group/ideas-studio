@@ -1,7 +1,5 @@
 package es.us.isa.ideas.test.app.login;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,11 +12,14 @@ import org.junit.runners.MethodSorters;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
+import static org.junit.Assert.assertTrue;
 
 /**
- * 
- * @author feserafim
+ * Applied Software Engineering Research Group (ISA Group) University of
+ * Sevilla, Spain
  *
+ * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC02_RegisterTwitter extends es.us.isa.ideas.test.utils.TestCase {
