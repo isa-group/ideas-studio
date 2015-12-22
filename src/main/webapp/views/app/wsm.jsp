@@ -2,7 +2,7 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<link rel="stylesheet" type="text/css" href="css/wsm.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/wsm.css"/>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <script>
@@ -43,7 +43,7 @@
                     <jstl:forEach items="${workspaces}" var="workspace">
                                                                
                     <!--begin_ws-->
-                    <div class="col-md-4 col-sm-6 wholeCard workspace <jstl:forEach items="${workspace.workspaceTags}" var="tag"> tagged_${tag.name} </jstl:forEach>" type="workspace">
+                    <div class="col-md-4 col-sm-5 col-xs-6 wholeCard workspace <jstl:forEach items="${workspace.workspaceTags}" var="tag"> tagged_${tag.name} </jstl:forEach>" type="workspace">
                         <div class="card radius shadowDepth1">
                             <div class="card__meta">
                                 
@@ -55,7 +55,7 @@
                                    
                                     <p class="card__content-text">
                                          <jstl:forEach items="${workspace.workspaceTags}" var="wstag">
-                                            <a href="#" id="tags_${wstag.id}" class="tagSearch btn-xs btn btn-info collapse-margin-bottom-0">${wstag.name}</a>       
+                                            <p class="btn-xs btn btn-tag disabled collapse-margin-bottom-0">${wstag.name}</p>       
                                         </jstl:forEach>
                                     </p>
                                 </div>
@@ -75,33 +75,33 @@
                                 </article>
                             </div>
                             <div class="card__action">
-                                <div class="card__author">
-                                    <div class="card__author-content">
+                                <div class="card__counters">
+                                    <div class="card__counters-content">
                                        <a class="tooltips">
-                                            <div class="card__author-content_item">
+                                            <div class="card__counters-content_item">
                                                 <i class="material-icons">get_app</i>
                                                 <p>${workspace.downloads}</p>
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="card__author-content">
+                                    <div class="card__counters-content">
                                         <a class="tooltips">
-                                            <div class="card__author-content_item">
+                                            <div class="card__counters-content_item">
                                                 <i class="material-icons">launch</i>
                                                 <p>${workspace.launches}</p>
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="card__author-content">
+                                    <div class="card__counters-content">
                                         <a class="tooltips">
-                                            <div class="card__author-content_item">
+                                            <div class="card__counters-content_item">
                                                 <i class="material-icons">label</i>
                                                 <p>${workspace.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>
-<!--                                    <div class="card__author-content">
-                                        <div class="card__author-content_item">
+<!--                                    <div class="card__counters-content">
+                                        <div class="card__counters-content_item">
                                             <a target="_blank" title="Author" href="#"><i class="material-icons">perm_identity</i></a>
                                         </div>
                                     </div>-->
@@ -113,7 +113,7 @@
                     </jstl:forEach>
                     <jstl:forEach items="${demos}" var="demo">	
                     <!--begin_ws-->
-                    <div class="col-md-4 col-sm-6 wholeCard demoworkspace <jstl:forEach items="${demo.workspaceTags}" var="demotag"> tagged_${demotag.name} </jstl:forEach>" type="demoworkspace">
+                    <div class="col-md-4 col-sm-5 col-xs-6 wholeCard demoworkspace <jstl:forEach items="${demo.workspaceTags}" var="demotag"> tagged_${demotag.name} </jstl:forEach>" type="demoworkspace">
                         <div class="card radius shadowDepth1">
                             <div class="card__meta">
                                 <img class="card__meta-logo" src="./img/ideas/default_screenshot.png" alt="screenshot" title="${demo.name}">
@@ -124,7 +124,7 @@
                                     
                                     <p class="card__content-text">
                                         <jstl:forEach items="${demo.workspaceTags}" var="demotag">
-                                            <a href="#" id="tags_${demotag.id}" class="tagSearch btn-xs btn btn-info collapse-margin-bottom-0">${demotag.name}</a>       
+                                            <p id="tags_${demotag.id}" class="btn-xs btn disabled btn-tag collapse-margin-bottom-0">${demotag.name}</p>       
                                         </jstl:forEach> 
                                     </p>
                                 </div>
@@ -141,33 +141,33 @@
                                 </article>
                             </div>
                             <div class="card__action">
-                                <div class="card__author">
-                                    <div class="card__author-content">
+                                <div class="card__counters">
+                                    <div class="card__counters-content">
                                        <a class="tooltips">
-                                            <div class="card__author-content_item">
+                                            <div class="card__counters-content_item">
                                                 <i class="material-icons">get_app</i>
                                                 <p>${demo.downloads}</p>
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="card__author-content">
+                                    <div class="card__counters-content">
                                         <a class="tooltips">
-                                            <div class="card__author-content_item">
+                                            <div class="card__counters-content_item">
                                                 <i class="material-icons">launch</i>
                                                 <p>${demo.launches}</p>
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="card__author-content">
+                                    <div class="card__counters-content">
                                         <a class="tooltips">
-                                            <div class="card__author-content_item">
+                                            <div class="card__counters-content_item">
                                                 <i class="material-icons">label</i>
                                                 <p>${demo.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>
-<!--                                    <div class="card__author-content">
-                                        <div class="card__author-content_item">
+<!--                                    <div class="card__counters-content">
+                                        <div class="card__counters-content_item">
                                             <a target="_blank" title="Author" href="#"><i class="material-icons">perm_identity</i></a>
                                         </div>
                                     </div>-->
@@ -179,7 +179,7 @@
                     </jstl:forEach>
                     <jstl:forEach items="${otherdemos}" var="otherdemo">	
                     <!--begin_ws-->
-                    <div class="col-md-4 col-sm-6 wholeCard publicdemo <jstl:forEach items="${otherdemo.workspaceTags}" var="publictag"> tagged_${publictag.name} </jstl:forEach>" type="publicdemo">
+                    <div class="col-md-4 col-sm-5 col-xs-6 wholeCard publicdemo <jstl:forEach items="${otherdemo.workspaceTags}" var="publictag"> tagged_${publictag.name} </jstl:forEach>" type="publicdemo">
                         <div class="card radius shadowDepth1">
                             <div class="card__meta">
                                 
@@ -191,7 +191,7 @@
                                     
                                     <p class="card__content-text">
                                         <jstl:forEach items="${otherdemo.workspaceTags}" var="otherdemotag">
-                                            <a href="#" id="tags_${otherdemotag.id}" class="tagSearch btn-xs btn btn-info collapse-margin-bottom-0">${otherdemotag.name}</a>       
+                                            <p id="tags_${otherdemotag.id}" class="btn-xs btn disabled btn-tag collapse-margin-bottom-0">${otherdemotag.name}</p>       
                                         </jstl:forEach> 
                                     </p>
                                 </div>
@@ -208,34 +208,34 @@
                                 </article>
                             </div>
                             <div class="card__action">
-                                <div class="card__author">
-                                    <div class="card__author-content">
+                                <div class="card__counters">
+                                    <div class="card__counters-content">
                                        <a class="tooltips">
-                                            <div class="card__author-content_item">
-                                                <i class="material-icons">get_app</i>
-                                                <p>:${otherdemo.downloads}</p>
+                                            <div class="card__counters-content_item">
+                                                <i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Downloads">get_app</i>
+                                                <p>${otherdemo.downloads}</p>
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="card__author-content">
+                                    <div class="card__counters-content">
                                         <a class="tooltips">
-                                            <div class="card__author-content_item">
-                                                <i class="material-icons">launch</i>
-                                                <p>:${otherdemo.launches}</p>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="card__author-content">
-                                        <a class="tooltips">
-                                            <div class="card__author-content_item">
-                                                <i class="material-icons">label</i>
+                                            <div class="card__counters-content_item">
                                                 
-                                                <p> ${otherdemo.wsVersion}</p>
+                                                <i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Launches">launch</i>
+                                                <p>${otherdemo.launches}</p>
                                             </div>
                                         </a>
                                     </div>
-<!--                                    <div class="card__author-content">
-                                        <div class="card__author-content_item">
+                                    <div class="card__counters-content">
+                                        <a class="tooltips">
+                                            <div class="card__counters-content_item">
+                                                <i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Version">label</i>                                             
+                                                <p>v.${otherdemo.wsVersion}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+<!--                                    <div class="card__counters-content">
+                                        <div class="card__counters-content_item">
                                             <a target="_blank" title="Author" href="#"><i class="material-icons">perm_identity</i></a>
                                         </div>
                                     </div>-->
