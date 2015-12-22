@@ -9,7 +9,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ TC01_RegisterMaxLengthFormField.class, TC02_RegisterTwitter.class, TC03_Login.class })
+@Suite.SuiteClasses({
+    TC01_RegisterMaxLengthFormField.class, 
+    TC02_RegisterTwitter.class, 
+    TC03_Login.class 
+})
 public class TestSuite extends es.us.isa.ideas.test.utils.TestCase {
 
 	private static final Logger LOG = Logger.getLogger(TestSuite.class.getName());
