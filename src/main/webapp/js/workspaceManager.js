@@ -296,17 +296,21 @@ var WorkspaceManager = {
 						"Continue", continueHandler,
 						function(){}, function(){});
     },
-    uploadScreenshot:function(workspaceName,data,callback) {
-        $.ajax("/workspaces/"+workspaceName+"/uploadScreenshot" , {
-            data: data,
-            cache: false,
-            contentType: false,
-            processData: false,
-            type: 'POST',
-            success: function(result) {
-				callback(result);
-            }
-	});	
+    uploadScreenshot:function (workspaceName,data, callback) {
+        var continueHandler = function() {
+                FileApi.uploadScreenshot(workspaceName,data, callback);
+                hideModal();
+                $(location).attr('href',"app/wsm");             
+        };
+        var captureHandler = function() {
+                FileApi.uploadScreenshot(workspaceName,data, callback);
+                hideModal();
+                $(location).attr('href',"app/wsm");             
+        };
+        showModal("Screenshot", "Current image for the workspace <b>'" + workspaceName +"'</b> will be overwritten\n\
+                    <BR/><BR/><b>Are you sure?</b><BR/></i>",
+                    "Continue", continueHandler,
+                    function(){}, function(){});
     }
 };
 

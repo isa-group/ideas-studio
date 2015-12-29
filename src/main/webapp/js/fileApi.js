@@ -346,7 +346,18 @@ var FileApi = {
 			"async" : true,
 		});
 	},
-	
+        uploadScreenshot : function (workspaceName, data, callback ) {
+            $.ajax("/workspaces/"+workspaceName+"/uploadScreenshot" , {
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function(result) {
+                                    callback(result);
+                }
+            });
+        },
 	// Utils
 
 	calculateNodeUri : function(node) {
