@@ -17,9 +17,10 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-//    es.us.isa.ideas.test.app.dynatree.TestSuite.class,
-	es.us.isa.ideas.test.app.login.TestSuite.class
-//	es.us.isa.ideas.test.module.TestSuite.class
+    es.us.isa.ideas.test.app.dynatree.TestSuite.class,
+	es.us.isa.ideas.test.app.login.TestSuite.class,
+	es.us.isa.ideas.test.module.TestSuite.class,
+    es.us.isa.ideas.test.modules.TestSuite.class
 })
 public class TestSuiteFull {
 
@@ -28,12 +29,12 @@ public class TestSuiteFull {
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "Starting TestSuiteFull...");
+        LOG.log(Level.INFO, "#### Starting TestSuiteFull...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "TestSuiteFull finished");
+        LOG.log(Level.INFO, "#### TestSuiteFull finished");
 		TestCase.getWebDriver().close();
     }
 
