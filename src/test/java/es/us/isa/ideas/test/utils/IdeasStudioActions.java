@@ -383,6 +383,14 @@ public class IdeasStudioActions {
         LOG.info("Loading editor page...");
         return IdeasStudioActions.goRelativePath("/app/editor");
     }
+    
+    /**
+     * Go to IDEAS workspace manager.
+     */
+    public static boolean goWSMPage() {
+        LOG.info("Loading wsm page...");
+        return IdeasStudioActions.goRelativePath("/app/wsm");
+    }
 
     /**
      * Go to IDEAS login webpage.
