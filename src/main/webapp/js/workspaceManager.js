@@ -151,18 +151,14 @@ var WorkspaceManager = {
             });
             
             $("#screenshot-ws").click(function(e) {
-                var uri=WorkspaceManager.getSelectedWorkspace();
-                var data = new FormData();
+                var name=WorkspaceManager.getSelectedWorkspace();
+                var formData = new FormData();
 
                 html2canvas($("#appBody"), {
                     onrendered: function(canvas) {
-//                        canvas.toBlob(function(blob) {                          
-//                            saveAs(blob, "exported_image.png");
-//                        }, "image/png");
                         var dataURL = canvas.toDataURL("image/png");
-                        data.append('file', dataURItoBlob(dataURL));
-                        var content = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-                        WorkspaceManager.uploadScreenshot(uri,dataURL);
+                        formData.append('.screenshot.png', dataURItoBlob(dataURL));
+                        WorkspaceManager.uploadScreenshot(name,formData);
                     }
                 });
             }); 
@@ -296,16 +292,16 @@ var WorkspaceManager = {
 						"Continue", continueHandler,
 						function(){}, function(){});
     },
-    uploadScreenshot:function (workspaceName,data, callback) {
+    uploadScreenshot:function (workspaceName,formData, callback) {
         var continueHandler = function() {
-                FileApi.uploadScreenshot(workspaceName,data, callback);
+                FileApi.uploadScreenshot(workspaceName,formData, callback);
                 hideModal();
-                $(location).attr('href',"app/wsm");             
+                $(location).attr('href',"app/editor");             
         };
         var captureHandler = function() {
-                FileApi.uploadScreenshot(workspaceName,data, callback);
+                FileApi.uploadScreenshot(workspaceName,formData, callback);
                 hideModal();
-                $(location).attr('href',"app/wsm");             
+                $(location).attr('href',"app/editor");             
         };
         showModal("Screenshot", "Current image for the workspace <b>'" + workspaceName +"'</b> will be overwritten\n\
                     <BR/><BR/><b>Are you sure?</b><BR/></i>",
@@ -352,23 +348,22 @@ var deleteWSLine = function (wsName) {
 
 };
 
-function dataURItoBlob(dataURI,callback) {
-    // convert base64/URLEncoded data component to raw binary data held in a string
-    var byteString;
-    if (dataURI.split(',')[0].indexOf('base64') >= 0)
-        byteString = atob(dataURI.split(',')[1]);
-    else
-        byteString = unescape(dataURI.split(',')[1]);
+function dataURItoBlob(dataURI) {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    var byteString = atob(dataURI.split(',')[1]);
 
     // separate out the mime component
     var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
 
-    // write the bytes of the string to a typed array
-    var ia = new Uint8Array(byteString.length);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
+    // write the bytes of the string to an ArrayBuffer
+    var ab = new ArrayBuffer(byteString.length);
+    var dw = new DataView(ab);
+    for(var i = 0; i < byteString.length; i++) {
+        dw.setUint8(i, byteString.charCodeAt(i));
     }
 
-    return new Blob([ia], {type:mimeString});
-    callback();
+    // write the ArrayBuffer to a blob, and you're done
+    return new Blob([ab], {type: mimeString});
 }
+

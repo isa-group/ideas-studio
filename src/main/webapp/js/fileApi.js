@@ -346,16 +346,21 @@ var FileApi = {
 			"async" : true,
 		});
 	},
-        uploadScreenshot : function (workspaceName, data, callback ) {
+        uploadScreenshot : function (workspaceName, formData, callback ) {
             $.ajax("/workspaces/"+workspaceName+"/uploadScreenshot" , {
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                type: 'POST',
-                success: function(result) {
+                    "type" : "POST",
+                    "data": formData,
+                    "processData": false,
+                    "contentType": false,
+                    "success" : function(result) {
+                                console.log(formData);
                                     callback(result);
-                }
+			},
+                    "error" : function(result) {
+                            console.error(result.statusText);
+                            RequestHelper.sessionAlive(result);
+                    },
+                    "async" : true,
             });
         },
 	// Utils

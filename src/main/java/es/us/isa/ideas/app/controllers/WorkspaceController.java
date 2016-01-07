@@ -297,6 +297,9 @@ public class WorkspaceController extends AbstractController {
         String fileUri = workspaceName + "/screenshot.png";
         String username = LoginService.getPrincipal().getUsername();
         
+        //BASE64Decoder decoder = new BASE64Decoder();
+        //byte[] b = decoder.decodeBuffer(dataURL.split("^data:image/(png|jpg);base64,")[1]);
+        
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
