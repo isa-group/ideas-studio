@@ -15,7 +15,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
- * This class contains some utilities to run integration tests.ﬁ
+ * This class contains some utilities to run integration tests.
  *
  * @author feserafim
  */

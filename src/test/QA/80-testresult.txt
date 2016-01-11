@@ -1,0 +1,354 @@
+cd /Users/feserafim/Dropbox/ISA/workspace/ideas-studio; JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home "/Applications/NetBeans/NetBeans 8.1.app/Contents/Resources/NetBeans/java/maven/bin/mvn" -Dtest=es.us.isa.ideas.test.app.TestSuiteFull surefire:test
+Running NetBeans Compile On Save execution. Phase execution is skipped and output directories of dependency projects (with Compile on Save turned on) will be used instead of their jar artifacts.
+Scanning for projects...
+
+Some problems were encountered while building the effective model for es.us.isa:ideas-studio:war:0.8.2
+'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: commons-io:commons-io:jar -> duplicate declaration of version 2.4 @ line 534, column 21
+'build.plugins.plugin.version' for org.apache.maven.plugins:maven-eclipse-plugin is missing. @ line 728, column 21
+
+It is highly recommended to fix these problems because they threaten the stability of your build.
+
+For this reason, future Maven versions might no longer support building such malformed projects.
+
+The metadata /Users/feserafim/.m2/repository/org/apache/maven/plugins/maven-eclipse-plugin/maven-metadata-codehaus-snapshots.xml is invalid: end tag name </head> must be the same as start tag <link> from line 15 (position: TEXT seen ...itle="Codehaus" href="http://www.codehaus.org/feed.xml" />\n</head>... @17:8) 
+                                                                        
+------------------------------------------------------------------------
+Building ideas-studio 0.8.2
+------------------------------------------------------------------------
+
+--- maven-surefire-plugin:2.12:test (default-cli) @ ideas-studio ---
+Surefire report directory: /Users/feserafim/Dropbox/ISA/workspace/ideas-studio/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running es.us.isa.ideas.test.app.TestSuiteFull
+dic 22, 2015 5:32:18 PM es.us.isa.ideas.test.app.TestSuiteFull setUp
+INFORMACIÓN: #### Starting TestSuiteFull...
+dic 22, 2015 5:32:18 PM es.us.isa.ideas.test.app.dynatree.TestSuite setUp
+INFORMACIÓN: #### Starting Dynatree TestSuite...
+dic 22, 2015 5:32:18 PM es.us.isa.ideas.test.app.dynatree.TC01_Login setUp
+INFORMACIÓN: ## Init TC01_Login...
+dic 22, 2015 5:32:18 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+Using selenium-local.properties
+Starting ChromeDriver 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b) on port 32345
+Only local connections are allowed.
+accessing: https://localhost:8181/IDEAS/j_spring_security_logout
+currentUrl: https://localhost:8181/IDEAS/security/login;jsessionid=752EC568244E178CB3E8E051EC7763F7
+dic 22, 2015 5:32:25 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+dic 22, 2015 5:32:25 PM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:32:25 PM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDownTest
+INFORMACIÓN: testResult: true
+Login with params...
+Username: DemoMaster
+Password: DemoMaster
+dic 22, 2015 5:32:25 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+accessing: https://localhost:8181/IDEAS/j_spring_security_logout
+currentUrl: https://localhost:8181/IDEAS/security/login
+dic 22, 2015 5:32:29 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+dic 22, 2015 5:32:32 PM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:32:32 PM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDown
+INFORMACIÓN: ## TC01_Login finished
+dic 22, 2015 5:32:32 PM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace setUp
+INFORMACIÓN: ## Init TC02_CreateWorkspace...
+dic 22, 2015 5:32:32 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:32:32 PM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:32:35 PM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:32:40 PM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:32:40 PM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDown
+INFORMACIÓN: ## TC02_CreateWorkspace finished
+dic 22, 2015 5:32:40 PM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject setUp
+INFORMACIÓN: ## Init TC03_CreateProject...
+dic 22, 2015 5:32:40 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:32:40 PM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:32:46 PM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:32:46 PM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject tearDown
+INFORMACIÓN: ## TC03_CreateProject finished
+dic 22, 2015 5:32:46 PM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile setUp
+INFORMACIÓN: ## Init TC04_CreateFile...
+dic 22, 2015 5:32:46 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:32:46 PM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:32:54 PM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:32:54 PM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile tearDown
+INFORMACIÓN: ## TC04_CreateFile finished
+dic 22, 2015 5:32:54 PM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory setUp
+INFORMACIÓN: ## Init TC05_CreateDirectory...
+dic 22, 2015 5:32:54 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:32:54 PM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:01 PM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:01 PM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory tearDown
+INFORMACIÓN: ## TC05_CreateDirectory finished
+dic 22, 2015 5:33:01 PM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L setUp
+INFORMACIÓN: ## Init TC06_CreateDirectory2L...
+dic 22, 2015 5:33:01 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:33:01 PM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:09 PM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:09 PM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L tearDown
+INFORMACIÓN: ## TC06_CreateDirectory2L finished
+dic 22, 2015 5:33:09 PM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile setUp
+INFORMACIÓN: ## Init TC07_CreateFile...
+dic 22, 2015 5:33:09 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:33:09 PM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:16 PM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:16 PM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile tearDown
+INFORMACIÓN: ## TC07_CreateFile finished
+dic 22, 2015 5:33:16 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile setUp
+INFORMACIÓN: ## Init TC08_RenameFile...
+dic 22, 2015 5:33:18 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:18 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:33:18 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:18 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:26 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:26 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDown
+INFORMACIÓN: ## TC08_RenameFile finished
+dic 22, 2015 5:33:26 PM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L setUp
+INFORMACIÓN: Init TC09_OpenFile2L...
+dic 22, 2015 5:33:26 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:33:26 PM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:33:34 PM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:33:34 PM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L tearDown
+INFORMACIÓN: TC09_OpenFile2L finished
+dic 22, 2015 5:33:34 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L setUp
+INFORMACIÓN: ## Init TC10_RenameFile2L...
+dic 22, 2015 5:33:34 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:33:34 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:36 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:37 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:37 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:45 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:46 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:48 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:33:48 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDown
+INFORMACIÓN: ## TC10_RenameFile2L finished
+dic 22, 2015 5:33:48 PM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace setUp
+INFORMACIÓN: ## Init TC10_RemoveCurrentWorkspace...
+dic 22, 2015 5:33:48 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:33:48 PM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+dic 22, 2015 5:33:50 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:33:55 PM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+dic 22, 2015 5:33:55 PM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace tearDown
+INFORMACIÓN: ## TC10_RemoveCurrentWorkspace finished
+dic 22, 2015 5:33:55 PM es.us.isa.ideas.test.app.dynatree.TestSuite tearDown
+INFORMACIÓN: #### Dynatree TestSuite finished
+dic 22, 2015 5:33:55 PM es.us.isa.ideas.test.app.login.TestSuite setUp
+INFORMACIÓN: Starting Login TestSuite...
+dic 22, 2015 5:33:55 PM es.us.isa.ideas.test.app.login.TC01_RegisterMaxLengthFormField setUp
+INFORMACIÓN: Init TC02_RegisterMaxLengthFormField...
+dic 22, 2015 5:33:55 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+accessing: https://localhost:8181/IDEAS/j_spring_security_logout
+currentUrl: https://localhost:8181/IDEAS/security/login
+dic 22, 2015 5:33:58 PM es.us.isa.ideas.test.utils.IdeasStudioActions goSignUpPage
+INFORMACIÓN: Loading sign up page...
+accessing: https://localhost:8181/IDEAS/settings/user
+currentUrl: https://localhost:8181/IDEAS/settings/user
+dic 22, 2015 5:34:00 PM es.us.isa.ideas.test.app.login.TC01_RegisterMaxLengthFormField tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:34:04 PM es.us.isa.ideas.test.app.login.TC01_RegisterMaxLengthFormField tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:34:05 PM es.us.isa.ideas.test.app.login.TC01_RegisterMaxLengthFormField tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:34:05 PM es.us.isa.ideas.test.app.login.TC01_RegisterMaxLengthFormField tearDown
+INFORMACIÓN: TC02_RegisterMaxLengthFormField finished
+dic 22, 2015 5:34:05 PM es.us.isa.ideas.test.app.login.TC02_RegisterTwitter setUp
+INFORMACIÓN: Init TC04_RegisterTwitter...
+dic 22, 2015 5:34:05 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+accessing: https://localhost:8181/IDEAS/j_spring_security_logout
+currentUrl: https://localhost:8181/IDEAS/security/login
+dic 22, 2015 5:34:08 PM es.us.isa.ideas.test.app.login.TC02_RegisterTwitter tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:34:08 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+accessing: https://localhost:8181/IDEAS/j_spring_security_logout
+currentUrl: https://localhost:8181/IDEAS/security/login
+dic 22, 2015 5:34:11 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+dic 22, 2015 5:34:22 PM es.us.isa.ideas.test.app.login.TC02_RegisterTwitter tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:34:22 PM es.us.isa.ideas.test.app.login.TC02_RegisterTwitter tearDown
+INFORMACIÓN: TC04_RegisterTwitter finished
+dic 22, 2015 5:34:22 PM es.us.isa.ideas.test.app.login.TC03_Login setUp
+INFORMACIÓN: Init TC08_Login...
+dic 22, 2015 5:34:22 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+accessing: https://localhost:8181/IDEAS/j_spring_security_logout
+currentUrl: https://localhost:8181/IDEAS/security/login
+dic 22, 2015 5:34:25 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+dic 22, 2015 5:34:25 PM es.us.isa.ideas.test.app.login.TC03_Login tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:34:25 PM es.us.isa.ideas.test.app.login.TC03_Login tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:34:25 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+accessing: https://localhost:8181/IDEAS/j_spring_security_logout
+currentUrl: https://localhost:8181/IDEAS/security/login
+dic 22, 2015 5:34:28 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+dic 22, 2015 5:34:31 PM es.us.isa.ideas.test.app.login.TC03_Login tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:34:31 PM es.us.isa.ideas.test.app.login.TC03_Login tearDown
+INFORMACIÓN: TC08_Login finished
+dic 22, 2015 5:34:31 PM es.us.isa.ideas.test.app.login.TestSuite tearDown
+INFORMACIÓN: Login TestSuite finished
+dic 22, 2015 5:34:31 PM es.us.isa.ideas.test.module.TestSuite setUp
+INFORMACIÓN: #### Starting TestModules TestSuite...
+dic 22, 2015 5:34:31 PM es.us.isa.ideas.test.module.plaintext.TestSuite setUp
+INFORMACIÓN: #### Starting PlainText language module TestSuite...
+dic 22, 2015 5:34:31 PM es.us.isa.ideas.test.module.plaintext.TC01_Login setUp
+INFORMACIÓN: Init TC01_Login...
+dic 22, 2015 5:34:31 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+accessing: https://localhost:8181/IDEAS/j_spring_security_logout
+currentUrl: https://localhost:8181/IDEAS/security/login
+dic 22, 2015 5:34:34 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+dic 22, 2015 5:34:34 PM es.us.isa.ideas.test.module.plaintext.TC01_Login tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:34:34 PM es.us.isa.ideas.test.module.plaintext.TC01_Login tearDownTest
+INFORMACIÓN: testResult value: true
+DemoMaster
+DemoMaster
+dic 22, 2015 5:34:34 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+accessing: https://localhost:8181/IDEAS/j_spring_security_logout
+currentUrl: https://localhost:8181/IDEAS/security/login
+dic 22, 2015 5:34:37 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+dic 22, 2015 5:34:40 PM es.us.isa.ideas.test.module.plaintext.TC01_Login tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:34:40 PM es.us.isa.ideas.test.module.plaintext.TC01_Login tearDown
+INFORMACIÓN: TC01_Login finished
+dic 22, 2015 5:34:40 PM es.us.isa.ideas.test.module.plaintext.TC02_CreateWorkspace setUp
+INFORMACIÓN: ## Init TC02_CreateWorkspace...
+dic 22, 2015 5:34:40 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:34:40 PM es.us.isa.ideas.test.module.plaintext.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:34:42 PM es.us.isa.ideas.test.module.plaintext.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:34:47 PM es.us.isa.ideas.test.module.plaintext.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:34:47 PM es.us.isa.ideas.test.module.plaintext.TC02_CreateWorkspace tearDown
+INFORMACIÓN: ## TC02_CreateWorkspace finished
+dic 22, 2015 5:34:47 PM es.us.isa.ideas.test.module.plaintext.TC03_CreateProject setUp
+INFORMACIÓN: ## Init TC03_CreateProject...
+dic 22, 2015 5:34:47 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:34:47 PM es.us.isa.ideas.test.module.plaintext.TC03_CreateProject tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:34:53 PM es.us.isa.ideas.test.module.plaintext.TC03_CreateProject tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:34:53 PM es.us.isa.ideas.test.module.plaintext.TC03_CreateProject tearDown
+INFORMACIÓN: ## TC03_CreateProject finished
+dic 22, 2015 5:34:53 PM es.us.isa.ideas.test.module.plaintext.TC04_CreateFile setUp
+INFORMACIÓN: ## Init TC04_CreateFile...
+dic 22, 2015 5:34:53 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:34:53 PM es.us.isa.ideas.test.module.plaintext.TC04_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:35:01 PM es.us.isa.ideas.test.module.plaintext.TC04_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+dic 22, 2015 5:35:01 PM es.us.isa.ideas.test.module.plaintext.TC04_CreateFile tearDown
+INFORMACIÓN: ## TC04_CreateFile finished
+dic 22, 2015 5:35:01 PM es.us.isa.ideas.test.module.plaintext.TC05_EditFile setUp
+INFORMACIÓN: Init TC09_OpenFile2L...
+dic 22, 2015 5:35:01 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:35:01 PM es.us.isa.ideas.test.module.plaintext.TC05_EditFile tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:35:09 PM es.us.isa.ideas.test.module.plaintext.TC05_EditFile tearDownTest
+INFORMACIÓN: testResult value: true
+dic 22, 2015 5:35:09 PM es.us.isa.ideas.test.module.plaintext.TC05_EditFile tearDown
+INFORMACIÓN: TC09_OpenFile2L finished
+dic 22, 2015 5:35:09 PM es.us.isa.ideas.test.module.plaintext.TC06_RemoveCurrentWorkspace setUp
+INFORMACIÓN: ## Init TC10_RemoveCurrentWorkspace...
+dic 22, 2015 5:35:09 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:35:09 PM es.us.isa.ideas.test.module.plaintext.TC06_RemoveCurrentWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+dic 22, 2015 5:35:11 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:35:15 PM es.us.isa.ideas.test.module.plaintext.TC06_RemoveCurrentWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+dic 22, 2015 5:35:15 PM es.us.isa.ideas.test.module.plaintext.TC06_RemoveCurrentWorkspace tearDown
+INFORMACIÓN: ## TC10_RemoveCurrentWorkspace finished
+dic 22, 2015 5:35:15 PM es.us.isa.ideas.test.module.plaintext.TestSuite tearDown
+INFORMACIÓN: #### Login PlainText language module finished
+dic 22, 2015 5:35:15 PM es.us.isa.ideas.test.module.TestSuite tearDown
+INFORMACIÓN: #### TestModules TestSuite finished
+dic 22, 2015 5:35:15 PM es.us.isa.ideas.test.modules.TestSuite setUp
+INFORMACIÓN: #### Starting TestModules TestSuite...
+dic 22, 2015 5:35:15 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+dic 22, 2015 5:35:15 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+accessing: https://localhost:8181/IDEAS/j_spring_security_logout
+currentUrl: https://localhost:8181/IDEAS/security/login
+dic 22, 2015 5:35:19 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+dic 22, 2015 5:35:21 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+dic 22, 2015 5:35:22 PM es.us.isa.ideas.test.modules.TestSuite tearDown
+INFORMACIÓN: #### TestModules TestSuite finished
+dic 22, 2015 5:35:22 PM es.us.isa.ideas.test.app.TestSuiteFull tearDown
+INFORMACIÓN: #### TestSuiteFull finished
+Tests run: 57, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 184.53 sec
+
+Results :
+
+Tests run: 57, Failures: 0, Errors: 0, Skipped: 0
+
+------------------------------------------------------------------------
+BUILD SUCCESS
+------------------------------------------------------------------------
+Total time: 3:10.765s
+Finished at: Tue Dec 22 17:35:23 CET 2015
+Final Memory: 11M/245M
+------------------------------------------------------------------------
