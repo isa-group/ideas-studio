@@ -80,7 +80,7 @@
                                        <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">get_app</i>
-                                                <p>${workspace.downloads}</p>
+                                                <p class="download-counter">${workspace.downloads}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -88,7 +88,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">launch</i>
-                                                <p>${workspace.launches}</p>
+                                                <p class="launch-counter">${workspace.launches}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -96,7 +96,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">label</i>
-                                                <p>v.${workspace.wsVersion}</p>
+                                                <p class="version-counter">v.${workspace.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -146,7 +146,7 @@
                                        <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">get_app</i>
-                                                <p>${demo.downloads}</p>
+                                                <p class="download-counter">${demo.downloads}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -154,7 +154,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">launch</i>
-                                                <p>${demo.launches}</p>
+                                                <p class="launch-counter">${demo.launches}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -162,7 +162,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">label</i>
-                                                <p>v.${demo.wsVersion}</p>
+                                                <p class="version-counter">v.${demo.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -213,7 +213,7 @@
                                        <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Downloads">get_app</i>
-                                                <p>${otherdemo.downloads}</p>
+                                                <p class="download-counter">${otherdemo.downloads}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -222,7 +222,7 @@
                                             <div class="card__counters-content_item">
                                                 
                                                 <i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Launches">launch</i>
-                                                <p>${otherdemo.launches}</p>
+                                                <p class="launch-counter">${otherdemo.launches}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -230,7 +230,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Version">label</i>                                             
-                                                <p>v.${otherdemo.wsVersion}</p>
+                                                <p class="version-counter">v.${otherdemo.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>
