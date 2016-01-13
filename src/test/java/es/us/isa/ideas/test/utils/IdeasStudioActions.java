@@ -388,7 +388,7 @@ public class IdeasStudioActions {
      * Go to IDEAS workspace manager.
      */
     public static boolean goWSMPage() {
-        LOG.info("Loading wsm page...");
+        LOG.info("Loading dashboard page...");
         return IdeasStudioActions.goRelativePath("/app/wsm");
     }
 
