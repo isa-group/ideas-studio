@@ -38,6 +38,7 @@
         <security:intercept-url pattern="/j_spring_security_check" access="permitAll"/>
         <security:intercept-url pattern="/welcome/**" access="permitAll" />
         <!-- Basic Resources access -->
+        <security:intercept-url pattern="/help/**" access="permitAll" />
         <security:intercept-url pattern="/#{studioConfiguration.helpURI}" access="permitAll"  requires-channel="https" />
         <security:intercept-url pattern="/favicon.ico" access="permitAll"  requires-channel="https" />
         <security:intercept-url pattern="/img/**" access="permitAll"  requires-channel="https" />
