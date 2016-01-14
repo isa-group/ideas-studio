@@ -81,7 +81,8 @@ public class TC04_EditWorkspace extends TestCase {
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME), " modified");
         waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION);
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION), " (Edit test)");
-        getExpectedActions().click(By.cssSelector(SELECTOR_FORM_SAVE_BUTTON));
+        waitForVisibleSelector(SELECTOR_FORM_SAVE_BUTTON);
+        getJs().executeScript("jQuery('" + SELECTOR_FORM_SAVE_BUTTON + "').click();");
 
         try {
             Thread.sleep(2000); // animation
@@ -91,10 +92,11 @@ public class TC04_EditWorkspace extends TestCase {
 
         IdeasStudioActions.goEditorPage();
         
+        waitForVisibleSelector(SELECTOR_WS_CURRENT);
         testResult = getWorkspaceNewName().equals(getTextFromSelector(SELECTOR_WS_CURRENT));
 
         if (testResult) {
-            echoCommandApi("Workspace \"" + getWorkspaceName() + "\" was successfully modified.");
+            echoCommandApi("Workspace was successfully modified.");
         }
 
         assertTrue(testResult);

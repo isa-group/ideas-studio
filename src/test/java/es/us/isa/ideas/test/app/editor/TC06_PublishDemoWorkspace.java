@@ -33,7 +33,7 @@ import org.openqa.selenium.By;
 public class TC06_PublishDemoWorkspace extends TestCase{
 
     protected static final String SELECTOR_PUBLISH_BUTTON = "#demo-ws";
-    private static final String SELECTOR_PUBLICDEMO_CARD_TITLE = ".publicdemo .card__meta-content-title";
+    private static final String SELECTOR_DEMO_CARD_TITLE = ".demoworkspace .card__meta-content-title";
     
     private static boolean testResult = true;
     private static final Logger LOG = Logger.getLogger(TC06_PublishDemoWorkspace.class.getName());
@@ -67,14 +67,20 @@ public class TC06_PublishDemoWorkspace extends TestCase{
         waitForVisibleSelector(SELECTOR_PUBLISH_BUTTON);
         getJs().executeScript("jQuery('" + SELECTOR_PUBLISH_BUTTON + "').click();");
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            LOG.severe(e.getMessage());
+        }
+        
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
         
         IdeasStudioActions.goWSMPage();
         
-        waitForVisibleSelector(SELECTOR_PUBLICDEMO_CARD_TITLE);
-        testResult = getWebDriver().findElements(By.cssSelector(SELECTOR_PUBLICDEMO_CARD_TITLE)).size() > 0;
+        waitForVisibleSelector(SELECTOR_DEMO_CARD_TITLE);
+        testResult = getWebDriver().findElements(By.cssSelector(SELECTOR_DEMO_CARD_TITLE)).size() > 0;
                 
         assertTrue(testResult);
     }

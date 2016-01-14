@@ -9,11 +9,9 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
-import static es.us.isa.ideas.test.utils.TestCase.getExpectedActions;
 import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
 import static org.junit.Assert.assertTrue;
 
@@ -60,16 +58,12 @@ public class TC07_DeleteWorkspace extends TestCase {
         
         // Delete workspace button
         waitForVisibleSelector(SELECTOR_DELETE_BUTTON);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage());
-        }
-        getExpectedActions().click(By.cssSelector(SELECTOR_DELETE_BUTTON));
+        getJs().executeScript("jQuery('" + SELECTOR_DELETE_BUTTON + "').click();");
+
 
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
-        getExpectedActions().click(By.cssSelector(SELECTOR_MODAL_CONTINUE));
+        getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
         
         try {
             Thread.sleep(2000);
@@ -80,7 +74,7 @@ public class TC07_DeleteWorkspace extends TestCase {
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         
-        getExpectedActions().click(By.cssSelector(SELECTOR_MODAL_CONTINUE));
+        getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
 
         try {
             Thread.sleep(2000);

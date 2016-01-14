@@ -57,6 +57,6 @@ public class TestSuite extends TestCase {
     }
     
     protected static String getWorkspaceNewName() {
-        return getTestProperty("test.app.dashboard.workspace.name.edited");
+        return getTestProperty("test.app.editor.workspace.name.edited");
     }
 }
