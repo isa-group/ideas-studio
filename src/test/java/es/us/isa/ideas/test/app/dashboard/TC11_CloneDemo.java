@@ -1,10 +1,8 @@
 package es.us.isa.ideas.test.app.dashboard;
 
 import static es.us.isa.ideas.test.app.dashboard.TestSuite.getDemoWorkspaceName;
-import static es.us.isa.ideas.test.app.dashboard.TestSuite.getWorkspaceNewName;
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
-import static es.us.isa.ideas.test.utils.TestCase.getExpectedActions;
 import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,7 +13,6 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.openqa.selenium.By;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
