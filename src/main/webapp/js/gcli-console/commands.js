@@ -274,7 +274,8 @@ var CommandsRegistry = {
             var module = args.moduleID;
             CommandApi.echo("Testing module " + module + ", please wait...");
             auxTestModule(module, function (testsSuccess, totalTests) {
-                CommandApi.echo("Module " + module + " tested: " + parseInt((testsSuccess / totalTests) * 100) + "% successful.");
+                if (testsSuccess > 0 && totalTests > 0)
+                    CommandApi.echo("Module " + module + " tested: " + parseInt((testsSuccess / totalTests) * 100) + "% successful.");
             });
 
         }
@@ -289,11 +290,14 @@ var CommandsRegistry = {
             for (var languageId in languages) {
                 CommandApi.echo("Testing module " + languageId + ", please wait...");
                 auxTestModule(languageId, function (moduleTestsSuccess, moduleTotalTests) {
-                    if (moduleTestsSuccess === moduleTotalTests)
+                    if (moduleTestsSuccess > 0 && moduleTotalTests > 0 && (moduleTestsSuccess === moduleTotalTests))
                         testsSuccess++;
                 });
             }
-            CommandApi.echo("<span id='testModulesResult'>All modules tested: " + parseInt((testsSuccess / totalTests) * 100) + "% successful.</span>");
+            console.log(testsSuccess);
+            console.log(totalTests);
+            CommandApi.echo("<span id='testModulesResult'>All modules tested: " + parseInt((testsSuccess / totalTests) * 100) +
+                    "% successful (" + testsSuccess + " successful modules of " + totalTests + " total modules).</span>");
         }
     },
     convertCurrentWorkspacetoDemo: {
@@ -399,32 +403,57 @@ var auxTestModule = function (module, callback) {
     jQuery.ajaxSetup({
         async: false
     });
-    $.getJSON("/" + url + "/tests/tests.json").done(
-            function (response) {
+    $.getJSON("/" + url + "/tests/tests.json")
+            .done(function (response) {
                 totalTests = response.length;
-                var _continue = true;
+                var valid = true;
                 for (var i = 0; i < response.length; i++) {
-                    if (_continue) {
-                        var json = response[i];
-                        var opId = json.id;
-                        var opUri = "/" + url + json.opUri;
-                        var opMethod = json.opMethod;
-                        var parameters = json.parameters;
-                        var resultList = json.results;
 
-                        jQuery.ajaxSetup({
-                            async: false
-                        });
-                        $.get("/" + url + parameters.fileUri, function (
-                                content) {
+                    var json = response[i];
+                    var opId = json.id;
+                    var opUri = "/" + url + json.opUri;
+                    var opMethod = json.opMethod;
+                    var parameters = json.parameters;
+                    var resultList = json.results;
 
-                            if (opMethod === "GET") {
-                                $.get(opUri, function (data) {
-                                    // TODO
+                    jQuery.ajaxSetup({
+                        async: false
+                    });
+                    $.get("/" + url + parameters.fileUri, function (
+                            content) {
+
+                        if (opMethod === "GET") {
+                            $.get(opUri, function (data) {
+                                // TODO
+                            });
+                        } else if (opMethod === "POST") {
+                            parameters.content = content;
+                            if (parameters.auxArg0 === undefined) {
+                                $.post(opUri, parameters, function (new_result) {
+                                    for (var k = 0; k < resultList.length; k++) {
+                                        result = eval(resultList[k]);
+                                        if (JSON.stringify(result) === JSON
+                                                .stringify(new_result)) {
+                                            CommandApi.echo("- Operation " + opId
+                                                    + ": OK");
+                                            testsSuccess++;
+                                            valid = true;
+                                            break;
+                                        } else {
+                                            valid = false;
+                                        }
+                                    }
+
+                                    if (!valid) {
+                                        CommandApi.echo("- Operation " + opId
+                                                + ": FAIL");
+                                        CommandApi.echo(new_result.message);
+                                    }
+
                                 });
-                            } else if (opMethod === "POST") {
-                                parameters.content = content;
-                                if (parameters.auxArg0 === undefined) {
+                            } else {
+                                $.get("/" + url + parameters.auxArg0, function (data) {
+                                    parameters.auxArg0 = data;
                                     $.post(opUri, parameters, function (new_result) {
                                         for (var k = 0; k < resultList.length; k++) {
                                             result = eval(resultList[k]);
@@ -433,49 +462,23 @@ var auxTestModule = function (module, callback) {
                                                 CommandApi.echo("- Operation " + opId
                                                         + ": OK");
                                                 testsSuccess++;
-                                                _continue = true;
+                                                valid = true;
                                                 break;
                                             } else {
-                                                _continue = false;
+                                                valid = false;
                                             }
                                         }
 
-                                        if (!_continue) {
+                                        if (!valid) {
                                             CommandApi.echo("- Operation " + opId
                                                     + ": FAIL");
                                             CommandApi.echo(new_result.message);
                                         }
-
                                     });
-                                } else {
-                                    $.get("/" + url + parameters.auxArg0, function (data) {
-                                        parameters.auxArg0 = data;
-                                        $.post(opUri, parameters, function (new_result) {
-                                            for (var k = 0; k < resultList.length; k++) {
-                                                result = eval(resultList[k]);
-                                                if (JSON.stringify(result) === JSON
-                                                        .stringify(new_result)) {
-                                                    CommandApi.echo("- Operation " + opId
-                                                            + ": OK");
-                                                    testsSuccess++;
-                                                    _continue = true;
-                                                    break;
-                                                } else {
-                                                    _continue = false;
-                                                }
-                                            }
-
-                                            if (!_continue) {
-                                                CommandApi.echo("- Operation " + opId
-                                                        + ": FAIL");
-                                                CommandApi.echo(new_result.message);
-                                            }
-                                        });
-                                    });
-                                }
+                                });
                             }
-                        });
-                    }
+                        }
+                    });
                 }
 
                 callback(testsSuccess, totalTests);
