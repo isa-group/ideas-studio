@@ -81,8 +81,8 @@ public class TC04_EditWorkspace extends TestCase {
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME), " modified");
         waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION);
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION), " (Edit test)");
-        waitForVisibleSelector(SELECTOR_FORM_SAVE_BUTTON);
-        getJs().executeScript("jQuery('" + SELECTOR_FORM_SAVE_BUTTON + "').click();");
+        waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
+        getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
 
         try {
             Thread.sleep(2000); // animation

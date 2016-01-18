@@ -68,9 +68,9 @@ public class TC06_EditWorkspace extends TestCase{
         getExpectedActions().click(By.cssSelector(SELECTOR_DASHBOARD_WORKSPACE_CARD_EDIT_BUTTON));
         //getJs().executeScript("jQuery('" + SELECTOR_DASHBOARD_WORKSPACE_CARD_EDIT_BUTTON + "').click();");
         
-        waitForVisibleSelector("#wsForm");
-        
-        testResult = getWebDriver().findElement(By.cssSelector("#wsForm")).isDisplayed();
+        waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME);
+
+        testResult = getWebDriver().findElement(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME)).isDisplayed();
         assertTrue(testResult);
 
     }
@@ -82,7 +82,10 @@ public class TC06_EditWorkspace extends TestCase{
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME), " Edited");
         waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION);
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION), " Edited");
-        getJs().executeScript("jQuery('.pull-right').click();");
+        waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
+        getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
+        
+        IdeasStudioActions.goWSMPage();
 
         waitForVisibleSelector(SELECTOR_WORSPACE_CARD_TITLE);
         testResult = getWebDriver().findElement(By.cssSelector(SELECTOR_WORSPACE_CARD_TITLE)).isDisplayed();
