@@ -12,7 +12,7 @@
     }
     
     console.log(tagfilter);
-    
+
 
 
 $(".openWS").click(function(e){
@@ -23,9 +23,20 @@ $(".openWS").click(function(e){
         WorkspaceManager.loadWorkspace();
     });
 });
-$("#editWS").click(function(){	
-    AppPresenter.setCurrentSection("wsm");
-    AppPresenter.loadDynamically("#wsmMain", "workspace/edit")});
+
+$(".editWS").click(function(e) {
+    e.preventDefault();
+    var name = $(this).attr('href');
+    WorkspaceManager.setSelectedWorkspace(name);
+    showContentAsModal("app/modalWindows/editWorkspace", function() {
+            var workspaceName = $("#modalCreationField input").val();
+            var description = $("#descriptionInput textarea").val();
+            $("#workspacesNavContainer li").removeClass("active");
+            WorkspaceManager.updateWorkspace(workspaceName,description);
+            WorkspaceManager.setSelectedWorkspace(workspaceName);
+             $(location).attr('href',"app/wsm"); 
+    });
+});
 
 $('#tagFilter').keypress(function (e) {
     if (e.which == 13) {

@@ -65,9 +65,8 @@
                                 <article class="actions_bar">    
                                     <div class="actions_bar_title flex-center-left">Actions:</div>
                                     <div class="actions_bar_buttons flex-center-right">                                    
-                                        <a href="${workspace.name}" id="openWS" class="openWS btn btn-success  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Open workspace"><span class="glyphicon glyphicon-folder-open"></span></a>
-                                      <jstl:url value="app/wsm/workspaces/${workspace.name}/edit" var="edit_url"/>
-                                      <a href="${edit_url}" id="editWS" class="btn btn-primary  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Edit workspace"><span class="glyphicon glyphicon-pencil"></span></a>
+                                      <a href="${workspace.name}" id="openWS" class="openWS btn btn-success  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Open workspace"><span class="glyphicon glyphicon-folder-open"></span></a>
+                                      <a href="${workspace.name}" id="editWS" class="editWS btn btn-primary  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Edit workspace"><span class="glyphicon glyphicon-pencil"></span></a>
                                       <a href="${workspace.name}" id="downloadWS" class="download-ws btn btn-info  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Download zip"><span class="glyphicon glyphicon-download"></span></a>
                                       <a href="${workspace.name}" id="publishWS" class="publish-demo btn btn-info  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Publish demo"><span class="glyphicon glyphicon-cloud-upload"></span></a>
                                       <a href="${workspace.name}" id="deleteWS" class="delete-ws btn btn-danger  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Delete workspace"><span class="glyphicon glyphicon-trash"></span></a>

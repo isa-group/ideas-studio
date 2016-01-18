@@ -144,7 +144,7 @@ var FileApi = {
 	},
 
 	createWorkspace : function(workspaceName, description, tags, callback) {
-
+            
 		$.ajax("files/workspaces?workspaceName=" + workspaceName +"&description="+description+"&tags="+tags, {
 			"type" : "POST",
 			"success" : function(result) {
@@ -237,6 +237,21 @@ var FileApi = {
 			"success" : function(result) {
 				callback(result);
 			},
+			"error" : function(result) {
+				console.error(result.statusText);
+				RequestHelper.sessionAlive(result);
+			},
+			"async" : true,
+		});
+	},
+        
+        updateWorkspace: function(newName, newDescription, callback) {
+                var ws = WorkspaceManager.getSelectedWorkspace();
+		$.ajax("files/workspaces?workspaceName=" + ws + "&newName=" + newName+ "&newDescription=" + newDescription, {
+			"type" : "PUT",
+			"success" : function(result) {
+				callback(result);
+                        },
 			"error" : function(result) {
 				console.error(result.statusText);
 				RequestHelper.sessionAlive(result);
