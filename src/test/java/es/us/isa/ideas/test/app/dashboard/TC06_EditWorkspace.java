@@ -60,13 +60,7 @@ public class TC06_EditWorkspace extends TestCase{
     public void step02_openWorkspaceEditForm() {
 
         waitForVisibleSelector(SELECTOR_DASHBOARD_WORKSPACE_CARD_EDIT_BUTTON);
-        try {
-            Thread.sleep(2000); //Extra waiting time solves error
-        } catch (InterruptedException e) {
-            LOG.severe(e.getMessage());
-        }
-        getExpectedActions().click(By.cssSelector(SELECTOR_DASHBOARD_WORKSPACE_CARD_EDIT_BUTTON));
-        //getJs().executeScript("jQuery('" + SELECTOR_DASHBOARD_WORKSPACE_CARD_EDIT_BUTTON + "').click();");
+        getJs().executeScript("jQuery('" + SELECTOR_DASHBOARD_WORKSPACE_CARD_EDIT_BUTTON + "').click();");
         
         waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME);
 
