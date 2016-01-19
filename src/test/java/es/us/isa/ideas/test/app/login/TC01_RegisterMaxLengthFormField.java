@@ -1,7 +1,5 @@
 package es.us.isa.ideas.test.app.login;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

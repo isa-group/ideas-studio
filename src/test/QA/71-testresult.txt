@@ -1,0 +1,364 @@
+cd /Users/feserafim/Dropbox/ISA/workspace/ideas-studio; JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home "/Applications/NetBeans/NetBeans 8.1.app/Contents/Resources/NetBeans/java/maven/bin/mvn" -Dtest=es.us.isa.ideas.test.app.TestSuiteFull surefire:test
+Running NetBeans Compile On Save execution. Phase execution is skipped and output directories of dependency projects (with Compile on Save turned on) will be used instead of their jar artifacts.
+Scanning for projects...
+
+Some problems were encountered while building the effective model for es.us.isa:ideas-studio:war:0.8.3
+'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: commons-io:commons-io:jar -> duplicate declaration of version 2.4 @ line 537, column 21
+'build.plugins.plugin.version' for org.apache.maven.plugins:maven-eclipse-plugin is missing. @ line 732, column 21
+
+It is highly recommended to fix these problems because they threaten the stability of your build.
+
+For this reason, future Maven versions might no longer support building such malformed projects.
+
+The metadata /Users/feserafim/.m2/repository/org/apache/maven/plugins/maven-eclipse-plugin/maven-metadata-codehaus-snapshots.xml is invalid: end tag name </head> must be the same as start tag <link> from line 15 (position: TEXT seen ...itle="Codehaus" href="http://www.codehaus.org/feed.xml" />\n</head>... @17:8) 
+                                                                        
+------------------------------------------------------------------------
+Building ideas-studio 0.8.3
+------------------------------------------------------------------------
+
+--- maven-surefire-plugin:2.12:test (default-cli) @ ideas-studio ---
+Surefire report directory: /Users/feserafim/Dropbox/ISA/workspace/ideas-studio/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running es.us.isa.ideas.test.app.TestSuiteFull
+ene 19, 2016 1:27:05 PM es.us.isa.ideas.test.app.TestSuiteFull setUp
+INFORMACIÓN: #### Starting TestSuiteFull...
+ene 19, 2016 1:27:05 PM es.us.isa.ideas.test.app.login.TestSuite setUp
+INFORMACIÓN: Starting Login TestSuite...
+ene 19, 2016 1:27:05 PM es.us.isa.ideas.test.app.login.TC01_RegisterMaxLengthFormField setUp
+INFORMACIÓN: Init TC02_RegisterMaxLengthFormField...
+ene 19, 2016 1:27:05 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+Using selenium-local.properties
+Starting ChromeDriver 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b) on port 19451
+Only local connections are allowed.
+ene 19, 2016 1:27:12 PM es.us.isa.ideas.test.utils.IdeasStudioActions goSignUpPage
+INFORMACIÓN: Loading sign up page...
+ene 19, 2016 1:27:14 PM es.us.isa.ideas.test.app.login.TC01_RegisterMaxLengthFormField tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:27:19 PM es.us.isa.ideas.test.app.login.TC01_RegisterMaxLengthFormField tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:27:20 PM es.us.isa.ideas.test.app.login.TC01_RegisterMaxLengthFormField tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:27:20 PM es.us.isa.ideas.test.app.login.TC01_RegisterMaxLengthFormField tearDown
+INFORMACIÓN: TC02_RegisterMaxLengthFormField finished
+ene 19, 2016 1:27:20 PM es.us.isa.ideas.test.app.login.TC02_RegisterTwitter setUp
+INFORMACIÓN: Init TC04_RegisterTwitter...
+ene 19, 2016 1:27:20 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:27:24 PM es.us.isa.ideas.test.app.login.TC02_RegisterTwitter tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:27:24 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:27:27 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+ene 19, 2016 1:27:36 PM es.us.isa.ideas.test.utils.IdeasStudioActions registerTwitterUser
+INFORMACIÓN: It seems 'IDEAS_ISA' user was already registered to IDEAS. So this test will fail because it does not fulfill its purpose
+ene 19, 2016 1:27:36 PM es.us.isa.ideas.test.app.login.TC02_RegisterTwitter tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:27:36 PM es.us.isa.ideas.test.app.login.TC02_RegisterTwitter tearDown
+INFORMACIÓN: TC04_RegisterTwitter finished
+ene 19, 2016 1:27:36 PM es.us.isa.ideas.test.app.login.TC03_Register setUp
+INFORMACIÓN: Init TC03_Register...
+ene 19, 2016 1:27:36 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+2016-01-19 13:27:39,460 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader  - Loading XML bean definitions from file [/Users/feserafim/Dropbox/ISA/workspace/ideas-studio/target/test-classes/data.xml]
+2016-01-19 13:27:39,460 [main] INFO  org.springframework.beans.factory.xml.XmlBeanDefinitionReader  - Loading XML bean definitions from file [/Users/feserafim/Dropbox/ISA/workspace/ideas-studio/target/test-classes/data.xml]
+2016-01-19 13:27:40,174 [main] INFO  org.springframework.context.support.GenericApplicationContext  - Refreshing org.springframework.context.support.GenericApplicationContext@1a376e79: startup date [Tue Jan 19 13:27:40 CET 2016]; root of context hierarchy
+2016-01-19 13:27:40,174 [main] INFO  org.springframework.context.support.GenericApplicationContext  - Refreshing org.springframework.context.support.GenericApplicationContext@1a376e79: startup date [Tue Jan 19 13:27:40 CET 2016]; root of context hierarchy
+2016-01-19 13:27:40,262 [main] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor  - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2016-01-19 13:27:40,262 [main] INFO  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor  - JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2016-01-19 13:27:40,536 [main] INFO  com.mchange.v2.log.MLog  - MLog clients using log4j logging.
+2016-01-19 13:27:40,536 [main] INFO  com.mchange.v2.log.MLog  - MLog clients using log4j logging.
+2016-01-19 13:27:40,658 [main] INFO  com.mchange.v2.c3p0.C3P0Registry  - Initializing c3p0-0.9.1 [built 16-January-2007 14:46:42; debug? true; trace: 10]
+2016-01-19 13:27:40,658 [main] INFO  com.mchange.v2.c3p0.C3P0Registry  - Initializing c3p0-0.9.1 [built 16-January-2007 14:46:42; debug? true; trace: 10]
+2016-01-19 13:27:40,841 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean  - Building JPA container EntityManagerFactory for persistence unit 'persistenceUnit'
+2016-01-19 13:27:40,841 [main] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean  - Building JPA container EntityManagerFactory for persistence unit 'persistenceUnit'
+2016-01-19 13:27:40,976 [main] INFO  org.hibernate.annotations.common.Version  - HCANN000001: Hibernate Commons Annotations {4.0.1.Final}
+2016-01-19 13:27:40,976 [main] INFO  org.hibernate.annotations.common.Version  - HCANN000001: Hibernate Commons Annotations {4.0.1.Final}
+2016-01-19 13:27:40,983 [main] INFO  org.hibernate.Version  - HHH000412: Hibernate Core {4.1.7.Final}
+2016-01-19 13:27:40,983 [main] INFO  org.hibernate.Version  - HHH000412: Hibernate Core {4.1.7.Final}
+2016-01-19 13:27:40,985 [main] INFO  org.hibernate.cfg.Environment  - HHH000206: hibernate.properties not found
+2016-01-19 13:27:40,985 [main] INFO  org.hibernate.cfg.Environment  - HHH000206: hibernate.properties not found
+2016-01-19 13:27:40,986 [main] INFO  org.hibernate.cfg.Environment  - HHH000021: Bytecode provider name : javassist
+2016-01-19 13:27:40,986 [main] INFO  org.hibernate.cfg.Environment  - HHH000021: Bytecode provider name : javassist
+2016-01-19 13:27:41,011 [main] INFO  org.hibernate.ejb.Ejb3Configuration  - HHH000204: Processing PersistenceUnitInfo [
+	name: persistenceUnit
+	...]
+2016-01-19 13:27:41,011 [main] INFO  org.hibernate.ejb.Ejb3Configuration  - HHH000204: Processing PersistenceUnitInfo [
+	name: persistenceUnit
+	...]
+2016-01-19 13:27:41,439 [main] INFO  org.hibernate.service.jdbc.connections.internal.ConnectionProviderInitiator  - HHH000130: Instantiating explicit connection provider: org.hibernate.ejb.connection.InjectedDataSourceConnectionProvider
+2016-01-19 13:27:41,439 [main] INFO  org.hibernate.service.jdbc.connections.internal.ConnectionProviderInitiator  - HHH000130: Instantiating explicit connection provider: org.hibernate.ejb.connection.InjectedDataSourceConnectionProvider
+2016-01-19 13:27:41,538 [main] INFO  com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource  - Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 5, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 2xe01t9eoxj9nmccq7bp|61039926, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> com.mysql.jdbc.Driver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 2xe01t9eoxj9nmccq7bp|61039926, idleConnectionTestPeriod -> 0, initialPoolSize -> 3, jdbcUrl -> jdbc:mysql://localhost:3306/ideas, lastAcquisitionFailureDefaultUser -> null, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 1800, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 600, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 5, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ]
+2016-01-19 13:27:41,538 [main] INFO  com.mchange.v2.c3p0.impl.AbstractPoolBackedDataSource  - Initializing c3p0 pool... com.mchange.v2.c3p0.ComboPooledDataSource [ acquireIncrement -> 5, acquireRetryAttempts -> 30, acquireRetryDelay -> 1000, autoCommitOnClose -> false, automaticTestTable -> null, breakAfterAcquireFailure -> false, checkoutTimeout -> 0, connectionCustomizerClassName -> null, connectionTesterClassName -> com.mchange.v2.c3p0.impl.DefaultConnectionTester, dataSourceName -> 2xe01t9eoxj9nmccq7bp|61039926, debugUnreturnedConnectionStackTraces -> false, description -> null, driverClass -> com.mysql.jdbc.Driver, factoryClassLocation -> null, forceIgnoreUnresolvedTransactions -> false, identityToken -> 2xe01t9eoxj9nmccq7bp|61039926, idleConnectionTestPeriod -> 0, initialPoolSize -> 3, jdbcUrl -> jdbc:mysql://localhost:3306/ideas, lastAcquisitionFailureDefaultUser -> null, maxAdministrativeTaskTime -> 0, maxConnectionAge -> 0, maxIdleTime -> 1800, maxIdleTimeExcessConnections -> 0, maxPoolSize -> 600, maxStatements -> 0, maxStatementsPerConnection -> 0, minPoolSize -> 5, numHelperThreads -> 3, numThreadsAwaitingCheckoutDefaultUser -> 0, preferredTestQuery -> null, properties -> {user=******, password=******}, propertyCycle -> 0, testConnectionOnCheckin -> false, testConnectionOnCheckout -> false, unreturnedConnectionTimeout -> 0, usesTraditionalReflectiveProxies -> false ]
+2016-01-19 13:27:41,878 [main] INFO  org.hibernate.dialect.Dialect  - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-01-19 13:27:41,878 [main] INFO  org.hibernate.dialect.Dialect  - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-01-19 13:27:41,897 [main] INFO  org.hibernate.engine.jdbc.internal.LobCreatorBuilder  - HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+2016-01-19 13:27:41,897 [main] INFO  org.hibernate.engine.jdbc.internal.LobCreatorBuilder  - HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+2016-01-19 13:27:41,916 [main] INFO  org.hibernate.engine.transaction.internal.TransactionFactoryInitiator  - HHH000268: Transaction strategy: org.hibernate.engine.transaction.internal.jdbc.JdbcTransactionFactory
+2016-01-19 13:27:41,916 [main] INFO  org.hibernate.engine.transaction.internal.TransactionFactoryInitiator  - HHH000268: Transaction strategy: org.hibernate.engine.transaction.internal.jdbc.JdbcTransactionFactory
+2016-01-19 13:27:41,924 [main] INFO  org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory  - HHH000397: Using ASTQueryTranslatorFactory
+2016-01-19 13:27:41,924 [main] INFO  org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory  - HHH000397: Using ASTQueryTranslatorFactory
+2016-01-19 13:27:42,544 [main] INFO  org.hibernate.dialect.Dialect  - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-01-19 13:27:42,544 [main] INFO  org.hibernate.dialect.Dialect  - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2016-01-19 13:27:42,545 [main] INFO  org.hibernate.engine.jdbc.internal.LobCreatorBuilder  - HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+2016-01-19 13:27:42,545 [main] INFO  org.hibernate.engine.jdbc.internal.LobCreatorBuilder  - HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+2016-01-19 13:27:42,545 [main] INFO  org.hibernate.engine.transaction.internal.TransactionFactoryInitiator  - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-01-19 13:27:42,545 [main] INFO  org.hibernate.engine.transaction.internal.TransactionFactoryInitiator  - HHH000399: Using default transaction strategy (direct JDBC transactions)
+2016-01-19 13:27:42,546 [main] INFO  org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory  - HHH000397: Using ASTQueryTranslatorFactory
+2016-01-19 13:27:42,546 [main] INFO  org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory  - HHH000397: Using ASTQueryTranslatorFactory
+2016-01-19 13:27:42,567 [main] INFO  org.hibernate.validator.internal.util.Version  - HV000001: Hibernate Validator 4.3.0.Final
+2016-01-19 13:27:42,567 [main] INFO  org.hibernate.validator.internal.util.Version  - HV000001: Hibernate Validator 4.3.0.Final
+2016-01-19 13:27:42,814 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker  - [DEPRECATION] Encountered positional parameter near line 1, column 86.  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2016-01-19 13:27:42,814 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker  - [DEPRECATION] Encountered positional parameter near line 1, column 86.  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2016-01-19 13:27:42,842 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker  - [DEPRECATION] Encountered positional parameter near line 1, column 82.  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2016-01-19 13:27:42,842 [main] WARN  org.hibernate.hql.internal.ast.HqlSqlWalker  - [DEPRECATION] Encountered positional parameter near line 1, column 82.  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+ene 19, 2016 1:27:43 PM es.us.isa.ideas.test.app.login.TC03_Register tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:27:43 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+ene 19, 2016 1:27:43 PM es.us.isa.ideas.test.app.login.TC03_Register tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:27:43 PM es.us.isa.ideas.test.app.login.TC03_Register tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:27:43 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:27:46 PM es.us.isa.ideas.test.utils.IdeasStudioActions goSignUpPage
+INFORMACIÓN: Loading sign up page...
+ene 19, 2016 1:27:51 PM es.us.isa.ideas.test.app.login.TC03_Register tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:27:57 PM es.us.isa.ideas.test.app.login.TC03_Register tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:28:08 PM es.us.isa.ideas.test.app.login.TC03_Register tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:28:14 PM es.us.isa.ideas.test.app.login.TC03_Register step07_copyUserPassword
+INFORMACIÓN: Opening 'Welcome to IDEAS' email
+ene 19, 2016 1:28:14 PM es.us.isa.ideas.test.app.login.TC03_Register step07_copyUserPassword
+INFORMACIÓN: Copying user password 'c35fd011-bfab-441f-874c-c0b2f5c8ca74'
+ene 19, 2016 1:28:14 PM es.us.isa.ideas.test.app.login.TC03_Register tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:28:20 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:28:23 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+ene 19, 2016 1:28:26 PM es.us.isa.ideas.test.app.login.TC03_Register tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:28:26 PM es.us.isa.ideas.test.app.login.TC03_Register tearDown
+INFORMACIÓN: TC03_Register finished
+ene 19, 2016 1:28:26 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:28:29 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword setUp
+INFORMACIÓN: Init TC05_RecoverPassword...
+ene 19, 2016 1:28:29 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:28:32 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+ene 19, 2016 1:28:32 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:28:32 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:28:33 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:28:37 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:28:44 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:28:50 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:28:56 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword step07_copyUserPassword
+INFORMACIÓN: Opening 'Welcome to IDEAS' email
+ene 19, 2016 1:28:56 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword step07_copyUserPassword
+INFORMACIÓN: Copying user password '5da41de3-bdde-4346-963f-2d8735d3b323'
+ene 19, 2016 1:28:56 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:29:02 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:29:05 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+ene 19, 2016 1:29:08 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:29:08 PM es.us.isa.ideas.test.app.login.TC04_RecoverPassword tearDown
+INFORMACIÓN: TC05_RecoverPassword finished
+ene 19, 2016 1:29:08 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:29:11 PM es.us.isa.ideas.test.app.login.TestSuite tearDown
+INFORMACIÓN: Login TestSuite finished
+ene 19, 2016 1:29:11 PM es.us.isa.ideas.test.app.dynatree.TestSuite setUp
+INFORMACIÓN: #### Starting Dynatree TestSuite...
+ene 19, 2016 1:29:11 PM es.us.isa.ideas.test.app.dynatree.TC01_Login setUp
+INFORMACIÓN: ## Init TC01_Login...
+ene 19, 2016 1:29:11 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:29:14 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+ene 19, 2016 1:29:14 PM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:14 PM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDownTest
+INFORMACIÓN: testResult: true
+Login with params...
+Username: ideas.autotester
+Password: 5da41de3-bdde-4346-963f-2d8735d3b323
+ene 19, 2016 1:29:14 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:29:18 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+ene 19, 2016 1:29:21 PM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:21 PM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDown
+INFORMACIÓN: ## TC01_Login finished
+ene 19, 2016 1:29:21 PM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace setUp
+INFORMACIÓN: ## Init TC02_CreateWorkspace...
+ene 19, 2016 1:29:21 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:29:21 PM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:23 PM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:29 PM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:29 PM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDown
+INFORMACIÓN: ## TC02_CreateWorkspace finished
+ene 19, 2016 1:29:29 PM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject setUp
+INFORMACIÓN: ## Init TC03_CreateProject...
+ene 19, 2016 1:29:29 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:29:29 PM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:34 PM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:34 PM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject tearDown
+INFORMACIÓN: ## TC03_CreateProject finished
+ene 19, 2016 1:29:34 PM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile setUp
+INFORMACIÓN: ## Init TC04_CreateFile...
+ene 19, 2016 1:29:34 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:29:34 PM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:42 PM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:42 PM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile tearDown
+INFORMACIÓN: ## TC04_CreateFile finished
+ene 19, 2016 1:29:42 PM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory setUp
+INFORMACIÓN: ## Init TC05_CreateDirectory...
+ene 19, 2016 1:29:42 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:29:42 PM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:48 PM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:48 PM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory tearDown
+INFORMACIÓN: ## TC05_CreateDirectory finished
+ene 19, 2016 1:29:48 PM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L setUp
+INFORMACIÓN: ## Init TC06_CreateDirectory2L...
+ene 19, 2016 1:29:48 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:29:48 PM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:56 PM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:29:56 PM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L tearDown
+INFORMACIÓN: ## TC06_CreateDirectory2L finished
+ene 19, 2016 1:29:56 PM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile setUp
+INFORMACIÓN: ## Init TC07_CreateFile...
+ene 19, 2016 1:29:56 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:29:56 PM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:04 PM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:04 PM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile tearDown
+INFORMACIÓN: ## TC07_CreateFile finished
+ene 19, 2016 1:30:04 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile setUp
+INFORMACIÓN: ## Init TC08_RenameFile...
+ene 19, 2016 1:30:05 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:05 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:30:05 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:05 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:13 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:13 PM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDown
+INFORMACIÓN: ## TC08_RenameFile finished
+ene 19, 2016 1:30:13 PM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L setUp
+INFORMACIÓN: Init TC09_OpenFile2L...
+ene 19, 2016 1:30:13 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:30:13 PM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:30:22 PM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L tearDownTest
+INFORMACIÓN: testResult value: true
+ene 19, 2016 1:30:22 PM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L tearDown
+INFORMACIÓN: TC09_OpenFile2L finished
+ene 19, 2016 1:30:22 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L setUp
+INFORMACIÓN: ## Init TC10_RenameFile2L...
+ene 19, 2016 1:30:22 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:30:22 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:23 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:24 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:24 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:32 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:33 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:36 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 19, 2016 1:30:36 PM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDown
+INFORMACIÓN: ## TC10_RenameFile2L finished
+ene 19, 2016 1:30:36 PM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace setUp
+INFORMACIÓN: ## Init TC10_RemoveCurrentWorkspace...
+ene 19, 2016 1:30:36 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:30:36 PM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+ene 19, 2016 1:30:38 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:30:45 PM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+ene 19, 2016 1:30:45 PM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace tearDown
+INFORMACIÓN: ## TC10_RemoveCurrentWorkspace finished
+ene 19, 2016 1:30:45 PM es.us.isa.ideas.test.app.dynatree.TestSuite tearDown
+INFORMACIÓN: #### Dynatree TestSuite finished
+ene 19, 2016 1:30:45 PM es.us.isa.ideas.test.modules.TestSuite setUp
+INFORMACIÓN: #### Starting TestModules TestSuite...
+ene 19, 2016 1:30:45 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+ene 19, 2016 1:30:45 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 19, 2016 1:30:49 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+ene 19, 2016 1:30:51 PM es.us.isa.ideas.test.modules.TestSuite step04_executeTestModules
+INFORMACIÓN: Waiting for testModules execution
+ene 19, 2016 1:30:51 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 19, 2016 1:30:55 PM es.us.isa.ideas.test.modules.TestSuite tearDown
+INFORMACIÓN: #### TestModules TestSuite finished
+ene 19, 2016 1:30:55 PM es.us.isa.ideas.test.app.TestSuiteFull tearDown
+INFORMACIÓN: #### TestSuiteFull finished
+Tests run: 56, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 231.083 sec
+2016-01-19 13:30:56,136 [Thread-5] INFO  org.springframework.context.support.GenericApplicationContext  - Closing org.springframework.context.support.GenericApplicationContext@1a376e79: startup date [Tue Jan 19 13:27:40 CET 2016]; root of context hierarchy
+2016-01-19 13:30:56,136 [Thread-5] INFO  org.springframework.context.support.GenericApplicationContext  - Closing org.springframework.context.support.GenericApplicationContext@1a376e79: startup date [Tue Jan 19 13:27:40 CET 2016]; root of context hierarchy
+2016-01-19 13:30:56,151 [Thread-5] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean  - Closing JPA EntityManagerFactory for persistence unit 'persistenceUnit'
+2016-01-19 13:30:56,151 [Thread-5] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean  - Closing JPA EntityManagerFactory for persistence unit 'persistenceUnit'
+
+Results :
+
+Tests run: 56, Failures: 0, Errors: 0, Skipped: 0
+
+------------------------------------------------------------------------
+BUILD SUCCESS
+------------------------------------------------------------------------
+Total time: 3:57.703s
+Finished at: Tue Jan 19 13:30:56 CET 2016
+Final Memory: 12M/310M
+------------------------------------------------------------------------

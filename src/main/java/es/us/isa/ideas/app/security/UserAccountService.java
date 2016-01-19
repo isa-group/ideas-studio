@@ -158,7 +158,8 @@ public class UserAccountService extends BusinessService<UserAccount> {
 
 	public void resetPassword(UserAccount account, String notificationEmail) {
 		String password = UUID.randomUUID().toString();
-		account.setPassword(password);
+        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+		account.setPassword(encoder.encodePassword(password, null));
 		userRepository.save(account);
 		if (notificationEmail != null && !notificationEmail.isEmpty()) {
 			sendPasswordResetEmail(notificationEmail, account, password);
