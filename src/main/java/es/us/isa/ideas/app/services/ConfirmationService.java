@@ -19,135 +19,139 @@ import es.us.isa.ideas.app.mail.CustomMailer;
 import es.us.isa.ideas.app.mail.TemplateMail;
 import es.us.isa.ideas.app.repositories.ConfirmationRepository;
 import es.us.isa.ideas.app.security.UserAccountService;
+import javax.servlet.http.HttpServletRequest;
 
 /**
- * 
- * 
+ *
+ *
  * @author japarejo
  */
 @Service
 @Transactional
 public class ConfirmationService extends BusinessService<Confirmation> {
 
-	@Autowired
-	ConfirmationRepository repository;
+    @Autowired
+    ConfirmationRepository repository;
 
-	@Autowired
-	CustomMailer mailer;
+    @Autowired
+    CustomMailer mailer;
 
-	@Autowired
-	ResearcherService researcherService;
+    @Autowired
+    ResearcherService researcherService;
 
-	@Autowired
-	UserAccountService userAccountService;
+    @Autowired
+    UserAccountService userAccountService;
 
-	@Autowired
-	@Qualifier("registrationConfirmationTemplate")
-	TemplateMail registrationConfirmationTemplate;
+    @Autowired
+    @Qualifier("registrationConfirmationTemplate")
+    TemplateMail registrationConfirmationTemplate;
 
-	@Autowired
-	@Qualifier("resetPasswordConfirmationTemplate")
-	TemplateMail resetPasswordConfirmationTemplate;
+    @Autowired
+    @Qualifier("resetPasswordConfirmationTemplate")
+    TemplateMail resetPasswordConfirmationTemplate;
 
-	public Confirmation findByResearcherId(int id) {
-		return repository.getByResearcherId(id);
-	}
+    @Autowired
+    HttpServletRequest request;
 
-	public Confirmation createRegistrationConfirmation(int researcherId) {
-		Researcher researcher = researcherService.findById(researcherId);
-		return createRegistrationConfirmation(researcher);
-	}
+    public Confirmation findByResearcherId(int id) {
+        return repository.getByResearcherId(id);
+    }
 
-	public Confirmation createRegistrationConfirmation(Actor actor) {
+    public Confirmation createRegistrationConfirmation(int researcherId) {
+        Researcher researcher = researcherService.findById(researcherId);
+        return createRegistrationConfirmation(researcher);
+    }
 
-		Assert.notNull(actor);
+    public Confirmation createRegistrationConfirmation(Actor actor) {
 
-		Confirmation result = new Confirmation();
-		result.setRegistrationDate(new Date());
-		result.setConfirmationDate(null);
-		result.setResearcher((Researcher) actor);
-		result.setConfirmationCode(UUID.randomUUID().toString());
+        Assert.notNull(actor);
 
-		repository.save(result);
+        Confirmation result = new Confirmation();
+        result.setRegistrationDate(new Date());
+        result.setConfirmationDate(null);
+        result.setResearcher((Researcher) actor);
+        result.setConfirmationCode(UUID.randomUUID().toString());
 
-		sendRegistrationConfirmationMail(result, new HashMap<String, String>());
-		return result;
-	}
+        repository.save(result);
 
-	public void delete(Confirmation rc) {
-		repository.delete(rc);
-	}
+        sendRegistrationConfirmationMail(result, new HashMap<String, String>());
+        return result;
+    }
 
-	public Confirmation confirmRegistration(String code) {
-		try {
-			Confirmation confirmation = repository.getByConfirmationCode(code);
-			Assert.notNull(confirmation);
-			confirmation.setConfirmationDate(new Date());
-			repository.save(confirmation);
-			userAccountService.create(confirmation.getResearcher());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    public void delete(Confirmation rc) {
+        repository.delete(rc);
+    }
 
-		return repository.getByConfirmationCode(code);
-	}
+    public Confirmation confirmRegistration(String code) {
+        try {
+            Confirmation confirmation = repository.getByConfirmationCode(code);
+            Assert.notNull(confirmation);
+            confirmation.setConfirmationDate(new Date());
+            repository.save(confirmation);
+            userAccountService.create(confirmation.getResearcher());
 
-	public void createPasswordResetConfirmation(Actor actor) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		Confirmation confirmation = repository.getByResearcherId(actor.getId());
+        return repository.getByConfirmationCode(code);
+    }
 
-		confirmation.setConfirmationDate(null);
-		repository.save(confirmation);
+    public void createPasswordResetConfirmation(Actor actor) {
 
-		sendPasswordResetConfirmationMail(confirmation,
-				new HashMap<String, String>());
-	}
+        Confirmation confirmation = repository.getByResearcherId(actor.getId());
 
-	public Confirmation resetPassword(String code) {
-		Confirmation confirmation = repository.getByConfirmationCode(code);
-		Assert.notNull(code);
-		confirmation.setConfirmationDate(new Date());
-		repository.save(confirmation);
-		userAccountService.resetPassword(confirmation.getResearcher()
-				.getUserAccount(), confirmation.getResearcher().getEmail());
-		return confirmation;
-	}
+        confirmation.setConfirmationDate(null);
+        repository.save(confirmation);
 
-	private void sendRegistrationConfirmationMail(Confirmation result,
-			Map<String, String> customization) {
-		Object[] templateCustomizers = { result.getResearcher(), result };
-		Map<String, String> finalCustomizations = mailer
-				.extractCustomizations(templateCustomizers);
-		finalCustomizations.putAll(customization);
-		mailer.sendMail(result.getResearcher().getEmail(), finalCustomizations,
-				registrationConfirmationTemplate);
-	}
+        sendPasswordResetConfirmationMail(confirmation,
+                new HashMap<String, String>());
+    }
 
-	private void sendPasswordResetConfirmationMail(Confirmation confirmation,
-			Map<String, String> customization) {
-		Researcher researcher = confirmation.getResearcher();
-		Object[] templateCustomizers = { researcher,
-				researcher.getUserAccount() };
-		Map<String, String> finalCustomizations = mailer
-				.extractCustomizations(templateCustomizers);
-		finalCustomizations.putAll(customization);
+    public Confirmation resetPassword(String code) {
+        Confirmation confirmation = repository.getByConfirmationCode(code);
+        Assert.notNull(code);
+        confirmation.setConfirmationDate(new Date());
+        repository.save(confirmation);
+        userAccountService.resetPassword(confirmation.getResearcher()
+                .getUserAccount(), confirmation.getResearcher().getEmail());
+        return confirmation;
+    }
+
+    private void sendRegistrationConfirmationMail(Confirmation result,
+            Map<String, String> customization) {
+        Object[] templateCustomizers = {result.getResearcher(), result};
+        Map<String, String> finalCustomizations = mailer
+                .extractCustomizations(templateCustomizers);
+        finalCustomizations.putAll(customization);
+        finalCustomizations.put("$confirmationUrl", request.getScheme() + "://" + request.getServerName() + ":" + request.getLocalPort() + request.getContextPath() + "/confirm/");
+        mailer.sendMail(result.getResearcher().getEmail(), finalCustomizations,
+                registrationConfirmationTemplate);
+    }
+
+    private void sendPasswordResetConfirmationMail(Confirmation confirmation,
+            Map<String, String> customization) {
+        Researcher researcher = confirmation.getResearcher();
+        Object[] templateCustomizers = {researcher,
+            researcher.getUserAccount()};
+        Map<String, String> finalCustomizations = mailer
+                .extractCustomizations(templateCustomizers);
+        finalCustomizations.putAll(customization);
         finalCustomizations.put("$code", confirmation.getConfirmationCode());
-		mailer.sendMail(researcher.getEmail(), finalCustomizations,
-				resetPasswordConfirmationTemplate);
-	}
-	
-	
+        finalCustomizations.put("$confirmationUrl", request.getScheme() + "://" + request.getServerName() + ":" + request.getLocalPort() + request.getContextPath() + "/confirm/");
+        mailer.sendMail(researcher.getEmail(), finalCustomizations,
+                resetPasswordConfirmationTemplate);
+    }
 
-	public void createPasswordResetConfirmation(String email) {
-		Researcher researcher = researcherService.findByEmail(email);
-		Assert.notNull(researcher);
-		createPasswordResetConfirmation(researcher);
-	}
+    public void createPasswordResetConfirmation(String email) {
+        Researcher researcher = researcherService.findByEmail(email);
+        Assert.notNull(researcher);
+        createPasswordResetConfirmation(researcher);
+    }
 
-	@Override
-	protected JpaRepository<Confirmation, Integer> getRepository() {
-		return repository;
-	}
+    @Override
+    protected JpaRepository<Confirmation, Integer> getRepository() {
+        return repository;
+    }
 
 }
