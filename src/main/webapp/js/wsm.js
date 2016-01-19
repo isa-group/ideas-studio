@@ -33,7 +33,7 @@ $(".editWS").click(function(e) {
             var description = $("#descriptionInput textarea").val();
             $("#workspacesNavContainer li").removeClass("active");
             WorkspaceManager.updateWorkspace(workspaceName,description);
-            WorkspaceManager.setSelectedWorkspace(workspaceName);
+            //WorkspaceManager.setSelectedWorkspace(workspaceName);
              $(location).attr('href',"app/wsm"); 
     });
 });
@@ -96,13 +96,14 @@ $(".delete-ws").click(function(e) {
 $(".publish-demo").click(function(e) {
     e.preventDefault();
     var name = $(this).attr('href');     
+    WorkspaceManager.setSelectedWorkspace(name);
     WorkspaceManager.publishWorskspaceAsDemo(name,refreshPage);
 });
 
 $(".delete-demo").click(function(e) {
     e.preventDefault();
     var name = $(this).attr('href');     
-    //WorkspaceManager.deleteDemoWorkspace(name).then(location.reload());
+    WorkspaceManager.setSelectedWorkspace(name);
     WorkspaceManager.deleteDemoWorkspace(name,refreshPage);
 });
 

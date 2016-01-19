@@ -376,7 +376,8 @@ public class FileController extends AbstractController {
             if (!nameExists){
                 try {
                     IdeasRepo.get().getRepo().move(oldWS, newWS, true);
-                    IdeasRepo.get().getRepo().delete(oldWS);                   
+                    IdeasRepo.get().getRepo().delete(oldWS); 
+                    
                 } catch (AuthenticationException ex) {
                     success=false;
                     Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);

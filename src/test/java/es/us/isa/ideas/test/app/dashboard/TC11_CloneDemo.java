@@ -62,13 +62,10 @@ public class TC11_CloneDemo extends TestCase{
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
         
-        waitForVisibleSelector(SELECTOR_WS_CURRENT);
-        String currentWS=getTextFromSelector(SELECTOR_WS_CURRENT);
-
         IdeasStudioActions.goWSMPage();
         
         waitForVisibleSelector(SELECTOR_CARD_PUBLIC_DEMO_NAME);
-        testResult = getTextFromSelector(SELECTOR_CARD_PUBLIC_DEMO_NAME).equals(currentWS);
+        testResult = getTextFromSelector(SELECTOR_CARD_PUBLIC_DEMO_NAME).equals("Demo Workspace");
         
         assertTrue(testResult);
     }

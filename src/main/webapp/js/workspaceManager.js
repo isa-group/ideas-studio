@@ -158,6 +158,9 @@ var WorkspaceManager = {
                     e.preventDefault();
                     var name = WorkspaceManager.getSelectedWorkspace();
                     WorkspaceManager.publishWorskspaceAsDemo(name);
+                    AppPresenter.loadSection("editor", name, function() {
+				WorkspaceManager.loadWorkspace();
+			});
             });
             $("#screenshot-ws").click(function(e) {
                     e.preventDefault();
@@ -191,7 +194,7 @@ var WorkspaceManager = {
                     hideError();
                 });
                 WorkspaceManager.deleteWorkspace(workspaceName, function () {
-                    WorkspaceManager.loadWorkspace(WorkspaceManager.getSelectedWorkspace());
+                    WorkspaceManager.loadWorkspace();
                 });
             }
             hideModal();
@@ -253,7 +256,7 @@ var WorkspaceManager = {
                 showError("Error", "Error updating workspace", function () {
                     hideError();
                 });
-                    WorkspaceManager.loadWorkspace(WorkspaceManager.getSelectedWorkspace());
+                    WorkspaceManager.loadWorkspace();
             }
             hideModal();
         });

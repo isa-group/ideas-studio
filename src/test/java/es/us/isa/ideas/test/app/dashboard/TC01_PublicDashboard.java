@@ -155,15 +155,16 @@ public class TC01_PublicDashboard extends TestCase{
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
         
-
-        IdeasStudioActions.goWSMPage();
-        
-        try {
+         try {
             Thread.sleep(2000); // animation
         } catch (InterruptedException e) {
             LOG.severe(e.getMessage());
         }
         
+
+        IdeasStudioActions.goWSMPage();
+        
+       
         waitForVisibleSelector(SELECTOR_DEMO_CARD_TITLE);
         testResult = getWebDriver().findElements(By.cssSelector(SELECTOR_DEMO_CARD_TITLE)).size() > 0;
                 
