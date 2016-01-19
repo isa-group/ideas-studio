@@ -428,7 +428,7 @@ public class IdeasStudioActions {
         goEditorPage();
 
         ((JavascriptExecutor) driver)
-                .executeScript("" + "if (CommandApi.echo) {" + "CommandApi.echo('IDT-console: " + msg + "');" + "}");
+                .executeScript("" + "if (CommandApi.echo) {" + "CommandApi.echo('" + msg + "');" + "}");
 
     }
 

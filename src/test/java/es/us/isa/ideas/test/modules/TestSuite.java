@@ -73,9 +73,8 @@ public class TestSuite extends es.us.isa.ideas.test.utils.TestCase {
         
 		LOG.info("Waiting for testModules execution");
         IdeasStudioActions.executeCommands("testModules");
-        
-        Thread.sleep(5000); // avoid blocking chromedriver when you have to wait a selector after a sychronous request
         waitForVisibleSelector("#testModulesResult");
+        
 		testResult = getWebDriver().findElement(By.cssSelector("#testModulesResult")).getText().contains("100%");
 		assertTrue(testResult);
         

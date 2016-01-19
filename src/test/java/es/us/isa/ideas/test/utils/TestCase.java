@@ -402,7 +402,7 @@ public class TestCase {
         
         try {
             TestCase.getJs().executeScript(
-                    "" + "if (CommandApi.echo) {" + "CommandApi.echo('IDT-console: " + msg + "');" + "}");
+                    "" + "if (CommandApi.echo) {" + "CommandApi.echo('" + msg + "');" + "}");
             
             Thread.sleep(3000);
         } catch (Exception e) {
