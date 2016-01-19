@@ -67,7 +67,7 @@ public class SeleniumBuilder {
             INSTANCE.driver = new ChromeDriver();
 
 			INSTANCE.driver.manage().timeouts().pageLoadTimeout(2, TimeUnit.MINUTES);
-			INSTANCE.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+			INSTANCE.driver.manage().timeouts().implicitlyWait(2, TimeUnit.MINUTES);
 
 			INSTANCE.driver.manage().window().maximize();
 

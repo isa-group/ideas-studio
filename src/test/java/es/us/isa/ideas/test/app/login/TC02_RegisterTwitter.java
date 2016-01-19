@@ -50,7 +50,7 @@ public class TC02_RegisterTwitter extends es.us.isa.ideas.test.utils.TestCase {
 	public void step01_loadSeleniumTwitterProperties() {
 		
 		tw_user = TestCase.getSeleniumTwitterUser();
-		tw_pass = TestCase.getSeleniumTwitterPasswd();
+		tw_pass = TestCase.getSeleniumTwitterPassword();
 		
 		testResult = validatePropertyValues(tw_user, tw_pass);
 		assertTrue(testResult);

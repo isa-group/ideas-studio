@@ -1,6 +1,5 @@
 package es.us.isa.ideas.test.app.login;
 
-import es.us.isa.ideas.test.utils.ExpectedActions;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,17 +11,19 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
+import es.us.isa.ideas.test.utils.TestCase;
+import static es.us.isa.ideas.test.utils.TestCase.deleteCurrentGmailEmail;
 import static es.us.isa.ideas.test.utils.TestCase.getAutotesterEmail;
-import static es.us.isa.ideas.test.utils.TestCase.getAutotesterEmailPassword;
 import static es.us.isa.ideas.test.utils.TestCase.getCurrentUrl;
 import static es.us.isa.ideas.test.utils.TestCase.getExpectedActions;
+import static es.us.isa.ideas.test.utils.TestCase.getJs;
 import static es.us.isa.ideas.test.utils.TestCase.getWebDriver;
 import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
+import java.util.List;
 import static org.junit.Assert.assertTrue;
-import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.openqa.selenium.WebElement;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -32,9 +33,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC05_RecoverPassword extends es.us.isa.ideas.test.utils.TestCase {
+public class TC04_RecoverPassword extends es.us.isa.ideas.test.utils.TestCase {
 
-    private static final Logger LOG = Logger.getLogger(TC05_RecoverPassword.class
+    private static final Logger LOG = Logger.getLogger(TC04_RecoverPassword.class
             .getName());
     private static boolean testResult = true;
     private static String email = "";
@@ -69,60 +70,90 @@ public class TC05_RecoverPassword extends es.us.isa.ideas.test.utils.TestCase {
         testResult = validatePropertyValues(email);
         assertTrue(testResult);
     }
+    
+    @Test
+    public void step02_loadResetPasswordPage() {
+        
+        waitForVisibleSelector("#dontRememberLogin");
+        List<WebElement> elements = getWebDriver().findElements(By.cssSelector("#dontRememberLogin > a"));
+        if (elements.size() > 1) {
+            elements.get(1).click();
+            testResult = getWebDriver().getCurrentUrl().contains("/security/useraccount/resetPassword");
+        } else {
+            testResult = false;
+        }
+        
+        assertTrue(testResult);
+        
+    }
 
     @Test
-    public void step02_resetPasswordResponseWithoutException() {
-
-        waitForVisibleSelector("#dontRememberLogin > a:nth-child(3)");
-        getJs().executeScript("jQuery('#dontRememberLogin > a:nth-child(3)').click();");
-        
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(TC05_RecoverPassword.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void step03_resetPasswordSubmit() throws InterruptedException {
         
         waitForVisibleSelector("#email");
         getJs().executeScript("jQuery('#email').val('"+ email +"');"); // avoid #email not clickable
-        
-        waitForVisibleSelector("#submit");
         getJs().executeScript("jQuery('#submit').click();");
         
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(TC05_RecoverPassword.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Thread.sleep(2000);
 
         waitForVisibleSelector("#pagesContent > h2");
         testResult = getWebDriver()
                 .findElement(By.cssSelector("#pagesContent > h2")).getText()
-                .toLowerCase().equals("Thank you for using E3!");
+                .toLowerCase().contains("thank you for using e3");
 
         assertTrue(testResult);
 
     }
 
     @Test
-    public void step04_loginToGmail() {
+    public void step04_loginToGmail() throws InterruptedException {
 
         getWebDriver().get("https://www.gmail.com");
 
-        waitForVisibleSelector("#Email");
+//        waitForVisibleSelector("#Email");
+//
+//        getExpectedActions().sendKeys(By.cssSelector("#Email"), getAutotesterEmail());
+//        getExpectedActions().click(By.cssSelector("#next"));
+//        getExpectedActions().sendKeys(By.cssSelector("#Passwd"), getAutotesterEmailPassword());
+//        getExpectedActions().click(By.cssSelector("#signIn"));
 
-        ExpectedActions action = getExpectedActions();
-        action.sendKeys(By.cssSelector("#Email"), getAutotesterEmail());
-        action.click(By.cssSelector("#next"));
-        action.sendKeys(By.cssSelector("#Passwd"), getAutotesterEmailPassword());
-        action.click(By.cssSelector("#signIn"));
+        Thread.sleep(2000);
 
         testResult = getCurrentUrl().contains("mail.google.com/mail/u");
         assertTrue(testResult);
 
     }
+    
+    @Test
+    public void step06_validateRegisterByEmail() throws InterruptedException {
+
+        String selectorConfirmationEmail = "#\\3a 2 > div > div > div.UI tbody tr:first-child td:nth-child(4)";
+        waitForVisibleSelector(selectorConfirmationEmail);
+        getExpectedActions().click(By.cssSelector(selectorConfirmationEmail)); // opening
+
+        waitForVisibleSelector(".ads");
+        String urlConfirmation = (String) getJs()
+                .executeScript(
+                        "return document.getElementsByClassName('ads')[0].textContent.match(/http.+code=[a-zA-Z0-9\\-]+/i)[0]");
+
+        Thread.sleep(1000);
+        deleteCurrentGmailEmail();
+
+        Thread.sleep(2000);
+        getWebDriver().get(urlConfirmation);
+
+        String selectorModalTitle = "#message > div > div > div.modal-header > h4";
+        waitForVisibleSelector(selectorModalTitle);
+        String modalTitle = TestCase.getWebDriver()
+                .findElement(By.cssSelector(selectorModalTitle)).getText();
+
+        testResult = "Account validated successfully".equals(modalTitle);
+        assertTrue(testResult);
+
+    }
 
     @Test
-    public void step06_copyUserPassword() {
+    public void step07_copyUserPassword() throws InterruptedException {
 
         getWebDriver().get("https://www.gmail.com");
 
@@ -135,18 +166,17 @@ public class TC05_RecoverPassword extends es.us.isa.ideas.test.utils.TestCase {
         waitForVisibleSelector(".gs");
         String scriptCopyPass = "var str=document.getElementsByClassName('gs')[0].textContent;"
                 + "return str.match(/([0-9a-zA-Z]+-)+([0-9a-zA-Z]+)/i)[0];";
-        String password = (String) getJs().executeScript(scriptCopyPass);
+        String pass = (String) getJs().executeScript(scriptCopyPass);
 
-        LOG.info("Copying user password \'" + password + "\'");
+        LOG.log(Level.INFO, "Copying user password ''{0}''", pass);
 
-        testResult = !password.equals("");
-
+        testResult = !pass.equals("");
         assertTrue(testResult);
 
     }
 
     @Test
-    public void step07_loginWithCopiedPassword() throws InterruptedException {
+    public void step08_loginWithCopiedPassword() throws InterruptedException {
 
         Thread.sleep(2000);
 
@@ -155,9 +185,12 @@ public class TC05_RecoverPassword extends es.us.isa.ideas.test.utils.TestCase {
                 + "return str.match(/([0-9a-zA-Z]+-)+([0-9a-zA-Z]+)/i)[0];";
         password = (String) getJs().executeScript(scriptCopyPass);
 
-        Thread.sleep(2000);
-
         setAutotesterPassword(password);
+
+        Thread.sleep(1000);
+        deleteCurrentGmailEmail();
+
+        Thread.sleep(2000);
 
         testResult = loginWithParams(getAutotesterUser(), password);
         assertTrue(testResult);
