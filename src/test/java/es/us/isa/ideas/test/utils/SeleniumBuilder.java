@@ -41,7 +41,7 @@ public class SeleniumBuilder {
 	@AfterClass
 	public static void tearDown() throws InterruptedException {
 
-		LOG.log(Level.INFO, "logging out user " + TestCase.getSeleniumAutotesterUser());
+		LOG.log(Level.INFO, "logging out user " + TestCase.getAutotesterUser());
 
 		TestCase.logout();
 
