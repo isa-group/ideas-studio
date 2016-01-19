@@ -12,8 +12,6 @@ import org.junit.runners.MethodSorters;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
-import static es.us.isa.ideas.test.utils.TestCase.getSeleniumAutotesterPassword;
-import static es.us.isa.ideas.test.utils.TestCase.getSeleniumAutotesterUser;
 import static es.us.isa.ideas.test.utils.TestCase.loginWithParams;
 import static es.us.isa.ideas.test.utils.TestCase.logout;
 import static es.us.isa.ideas.test.utils.TestCase.validatePropertyValues;
@@ -63,8 +61,8 @@ public class TC02_Login extends TestCase {
 
     @Test
     public void step02_loadSeleniumUserProperties() {
-        user = getSeleniumAutotesterUser();
-        pass = getSeleniumAutotesterPassword();
+        user = "autotester";
+        pass = "autotester";
         testResult = validatePropertyValues(user, pass);
         assertTrue(testResult);
     }

@@ -19,9 +19,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     es.us.isa.ideas.test.app.editor.TestSuite.class,
     es.us.isa.ideas.test.app.dashboard.TestSuite.class,
-    es.us.isa.ideas.test.app.dynatree.TestSuite.class,
     es.us.isa.ideas.test.app.login.TestSuite.class,
-    es.us.isa.ideas.test.module.TestSuite.class,
+    es.us.isa.ideas.test.app.dynatree.TestSuite.class,
     es.us.isa.ideas.test.modules.TestSuite.class
     
 })
