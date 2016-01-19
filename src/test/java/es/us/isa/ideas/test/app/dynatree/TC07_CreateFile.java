@@ -21,6 +21,13 @@ import static es.us.isa.ideas.test.utils.TestCase.getWebDriver;
 import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
 import static es.us.isa.ideas.test.app.dynatree.TestSuite.getFileExt2;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of

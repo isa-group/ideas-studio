@@ -6,7 +6,7 @@
 
     <groupId>es.us.isa</groupId>
     <artifactId>ideas-studio</artifactId>
-    <version>0.8.2</version>
+    <version>0.8.3</version>
 
     <name>ideas-studio</name>
     <url>http://maven.apache.org</url>
@@ -19,16 +19,13 @@
         <repo_base_uri>${settings.repo_base_uri}</repo_base_uri>
         <test.tw.user>${settings.test.tw.user}</test.tw.user>
         <test.tw.pass>${settings.test.tw.pass}</test.tw.pass>
+        <test.register.user.email>${settings.test.register.user.email}</test.register.user.email>
+        <test.register.user.email.pass>${settings.test.register.user.email.pass}</test.register.user.email.pass>
 
         <!-- MySQL properties -->
         <application.mysqlDB>${settings.mysqlDB}</application.mysqlDB>
         <application.mysqlUser>${settings.mysqlUser}</application.mysqlUser>
         <application.mysqlPass>${settings.mysqlPass}</application.mysqlPass>
-
-        <!-- Email properties -->
-        <mail.link.baseURI>${settings.mail.link.baseURI}</mail.link.baseURI>
-        <mail.link.port>${settings.mail.link.port}</mail.link.port>
-        <mail.link.app>${settings.mail.link.app}</mail.link.app>
 
         <!-- Integration Tests Execution configuration <test.rest.basePath>/${project.artifactId}-${project.version}/resources</test.rest.basePath> 
         <test.rest.port>8880</test.rest.port> -->
@@ -480,6 +477,12 @@
             <version>3.2.1</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>6.0</version>
@@ -698,8 +701,9 @@
                     <include>**/*.properties</include>
                     <include>**/*.json</include>
                     <include>**/*.txt</include>
+                    <include>**/*.xml</include>
                 </includes>
-            </testResource>
+            </testResource>            
         </testResources>
         <plugins>
             <plugin>

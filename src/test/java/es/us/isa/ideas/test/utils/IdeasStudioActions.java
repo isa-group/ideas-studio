@@ -64,15 +64,13 @@ public class IdeasStudioActions {
             }
 
             if (ret2) {
-                LOG.log(Level.INFO, msgEmailAlreadyTaken + ". Quitting register test");
+                LOG.log(Level.INFO, "{0}. Quitting register test", msgEmailAlreadyTaken);
             }
 
             ret = ret1 && !ret2;
 
-        } catch (NoSuchElementException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (NoSuchElementException | InterruptedException e) {
+            LOG.severe(e.getMessage());
         }
 
         return ret;
@@ -114,10 +112,10 @@ public class IdeasStudioActions {
         } catch (NoSuchElementException e) {
             LOG.info(
                     "Test may not be well performed because a element from DOM wasn\'t found. Please, contact realease manager to review test code execution.");
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         } catch (Exception e) {
             ret = false;
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         }
 
         return ret;
@@ -150,9 +148,9 @@ public class IdeasStudioActions {
         } catch (NoSuchElementException e) {
             LOG.info(
                     "Test may not be well performed because a element from DOM wasn\'t found. Please, contact realease manager to review test code execution.");
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         }
 
         return ret;
@@ -183,8 +181,7 @@ public class IdeasStudioActions {
                 boolean ret2 = currentUrl.contains("app/editor");
 
                 if (ret2) {
-                    LOG.log(Level.INFO, "It seems \'" + tw_user
-                            + "\' user was already registered to IDEAS. So this test will fail because it does not fulfill its purpose");
+                    LOG.log(Level.INFO, "It seems ''{0}'' user was already registered to IDEAS. So this test will fail because it does not fulfill its purpose", tw_user);
                 } else {
                     String msgConnectedToTwitter = TestCase.getWebDriver()
                             .findElement(By.cssSelector("#pagesContent > h3:nth-child(2)")).getText();
@@ -196,7 +193,7 @@ public class IdeasStudioActions {
             }
 
         } catch (NoSuchElementException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         }
 
         return ret;
@@ -219,7 +216,7 @@ public class IdeasStudioActions {
 
             ExpectedActions action = TestCase.getExpectedActions();
 
-            LOG.info("Logging google oauth with \'" + go_user + "\' and \'" + go_pass + "\'");
+            LOG.log(Level.INFO, "Logging google oauth with ''{0}'' and ''{1}''", new Object[]{go_user, go_pass});
 
             action.click(By.cssSelector("#go_signin > button"));
 
@@ -237,12 +234,12 @@ public class IdeasStudioActions {
             ret = !"400.".equals(msgStatusCode);
 
         } catch (NoSuchElementException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
             LOG.log(Level.INFO,
                     "Test wasn\'t well performed. Please, contact realease manager to review test code execution.");
             ret = false;
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
             ret = false;
         }
 
@@ -336,19 +333,17 @@ public class IdeasStudioActions {
                 relativePath = "";
             }
 
-            System.out.println("accessing: " + TestCase.getBaseUrl() + relativePath);
             TestCase.getWebDriver().get(TestCase.getBaseUrl() + relativePath);
             try {
 
                 // TODO: better solution waiting for a URL modification
                 Thread.sleep(1000); // changing url
 
-                System.out.println("currentUrl: " + TestCase.getCurrentUrl());
                 boolean ret1 = TestCase.getCurrentUrl().contains(relativePath);
                 ret = ret1;
 
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOG.severe(e.getMessage());
                 ret = false;
             }
 
@@ -362,6 +357,8 @@ public class IdeasStudioActions {
 
     /**
      * Go to IDEAS user sign up.
+     *
+     * @return
      */
     public static boolean goSignUpPage() {
         LOG.info("Loading sign up page...");
@@ -370,6 +367,8 @@ public class IdeasStudioActions {
 
     /**
      * Go to IDEAS home webpage.
+     *
+     * @return
      */
     public static boolean goHomePage() {
         LOG.info("Loading home page...");
@@ -378,6 +377,8 @@ public class IdeasStudioActions {
 
     /**
      * Go to IDEAS editor webpage.
+     *
+     * @return
      */
     public static boolean goEditorPage() {
         LOG.info("Loading editor page...");
@@ -394,6 +395,8 @@ public class IdeasStudioActions {
 
     /**
      * Go to IDEAS login webpage.
+     *
+     * @return
      */
     public static boolean goLoginPage() {
         LOG.info("Loading login page...");
@@ -402,6 +405,8 @@ public class IdeasStudioActions {
 
     /**
      * Go to IDEAS logout webpage.
+     *
+     * @return
      */
     public static boolean goLogoutPage() {
         LOG.info("Loading logout page...");
@@ -431,7 +436,7 @@ public class IdeasStudioActions {
         goEditorPage();
 
         ((JavascriptExecutor) driver)
-                .executeScript("" + "if (CommandApi.echo) {" + "CommandApi.echo('IDT-console: " + msg + "');" + "}");
+                .executeScript("" + "if (CommandApi.echo) {" + "CommandApi.echo('" + msg + "');" + "}");
 
     }
 
@@ -447,12 +452,23 @@ public class IdeasStudioActions {
         boolean ret = false;
         String inputSelector = "input.gcli-in-input";
 
-        if (goEditorPage()) {
-            ret = true;
-            for (String cmd : cmds) {
-                TestCase.getJs().executeScript("jQuery('" + inputSelector + "').focus();");    // avoid chromedriver not clickable element
-                TestCase.getExpectedActions().sendKeys(By.cssSelector(inputSelector), cmd, Keys.RETURN);
+        try {
+
+            if (goEditorPage()) {
+                ret = true;
+                for (String cmd : cmds) {
+
+                    TestCase.getJs().executeScript("jQuery('" + inputSelector + "').focus();");    // avoid chromedriver not clickable element
+                    Thread.sleep(2000);
+                    TestCase.getExpectedActions().sendKeys(By.cssSelector(inputSelector), cmd);
+                    Thread.sleep(1000);
+                    TestCase.getExpectedActions().sendKeys(By.cssSelector(inputSelector), Keys.RETURN);
+
+                }
             }
+
+        } catch (InterruptedException ex) {
+            Logger.getLogger(IdeasStudioActions.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return ret;
@@ -504,6 +520,7 @@ public class IdeasStudioActions {
     /**
      * Check if '/researcher/principaluser/' retrieves a '200' status code.
      *
+     * @return
      * @throws InterruptedException
      */
     public static boolean isAnyUserLogged() throws InterruptedException {
@@ -511,7 +528,6 @@ public class IdeasStudioActions {
         boolean ret = false;
         String url = TestCase.getUrlAbsolute("researcher/principaluser/");
         ret = "200".equals(TestCase.getStatusCode(url));
-
         return ret;
 
     }
@@ -637,7 +653,8 @@ public class IdeasStudioActions {
         try {
             String addMenuSelector = "div#editorSidePanelHeaderAddProject div.dropdown-toggle";
             if (TestCase.existDOMElement(addMenuSelector)) { // still not open
-                TestCase.getExpectedActions().click(By.cssSelector(addMenuSelector));
+//                TestCase.getExpectedActions().click(By.cssSelector(addMenuSelector));
+                TestCase.getJs().executeScript("jQuery('" + addMenuSelector + "').click();");
                 ret = true;
             }
             Thread.sleep(1000); // animation
@@ -665,20 +682,20 @@ public class IdeasStudioActions {
         }
         return ret;
     }
-    
+
     public static String getActiveNodeName() {
         String ret = "";
         String selectorDynaTree = "#projectsTree";
-        
+
         TestCase.waitForVisibleSelector(selectorDynaTree);
         Object obj = (Object) TestCase.getJs().executeScript(""
-                + "var tree = jQuery('"+ selectorDynaTree +"').dynatree('getTree');"
+                + "var tree = jQuery('" + selectorDynaTree + "').dynatree('getTree');"
                 + "return tree.getActiveNode().data.title;");
-        
+
         if (obj != null) {
             ret = (String) obj;
         }
-        
+
         return ret;
     }
 

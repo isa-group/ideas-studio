@@ -35,7 +35,7 @@
                 <bean class="es.us.isa.ideas.app.mail.ConfirmationCodeCustomizationExtractor"/>
                 <bean class="es.us.isa.ideas.app.mail.ConstantCustomizer">
                     <property name="key" value="$confirmationUrl"/>
-                    <property name="value" value="${mail.link.baseURI}:${mail.link.port}/${mail.link.app}/confirm/"/>
+                    <property name="value" value=""/>
                 </bean>
             </list>
         </constructor-arg>
