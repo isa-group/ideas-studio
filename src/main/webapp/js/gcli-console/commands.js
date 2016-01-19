@@ -273,9 +273,11 @@ var CommandsRegistry = {
         exec: function (args, context) {
             var module = args.moduleID;
             CommandApi.echo("Testing module " + module + ", please wait...");
-            auxTestModule(module, function (testsSuccess, totalTests) {
-                if (testsSuccess > 0 && totalTests > 0)
+            auxTestModule(module, function (testsSuccess, totalTests, unimplemented) {
+                if (testsSuccess > 0 && totalTests > 0 && !unimplemented)
                     CommandApi.echo("Module " + module + " tested: " + parseInt((testsSuccess / totalTests) * 100) + "% successful.");
+                else
+                    CommandApi.echo("Module " + module + " tested: No tests implemented.");
             });
 
         }
@@ -285,19 +287,20 @@ var CommandsRegistry = {
         description: 'Test all available language modules.',
         exec: function (args, context) {
             var languages = ModeManager.idUriMap;
+            var ignoredModules = [];
             var testsSuccess = 0;
-            var totalTests = Object.keys(languages).length;
             for (var languageId in languages) {
                 CommandApi.echo("Testing module " + languageId + ", please wait...");
-                auxTestModule(languageId, function (moduleTestsSuccess, moduleTotalTests) {
-                    if (moduleTestsSuccess > 0 && moduleTotalTests > 0 && (moduleTestsSuccess === moduleTotalTests))
+                auxTestModule(languageId, function (moduleTestsSuccess, moduleTotalTests, unimplemented) {
+                    if (moduleTestsSuccess > 0 && moduleTotalTests > 0 && (moduleTestsSuccess === moduleTotalTests) && !unimplemented)
                         testsSuccess++;
+                    else if(unimplemented)
+                        ignoredModules.push(languageId);
                 });
             }
-            console.log(testsSuccess);
-            console.log(totalTests);
+            var totalTests = Object.keys(languages).length - ignoredModules.length;
             CommandApi.echo("<span id='testModulesResult'>All modules tested: " + parseInt((testsSuccess / totalTests) * 100) +
-                    "% successful (" + testsSuccess + " successful modules of " + totalTests + " total modules).</span>");
+                    "% successful (" + testsSuccess + " successful modules of " + totalTests + " analyzed modules).<br>Modules ignored: " + ignoredModules + "</span>");
         }
     },
     convertCurrentWorkspacetoDemo: {
@@ -485,7 +488,7 @@ var auxTestModule = function (module, callback) {
 
             }).fail(function (jqxhr, textStatus, error) {
         CommandApi.echo("[" + textStatus + "] Module " + module + " failed: " + error);
-        callback(testsSuccess, totalTests);
+        callback(testsSuccess, totalTests, true);
     });
 
     jQuery.ajaxSetup({
