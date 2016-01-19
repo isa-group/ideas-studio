@@ -39,8 +39,8 @@ public class TestCase {
     
     protected static final String SELECTOR_MODAL_CONTINUE = "#appGenericModal > div > div > div.modal-footer > a.btn.btn-primary.continue";
     
-    protected static final String SELECTOR_WORKSPACE_FORM_INPUT_NAME = "#name";
-    protected static final String SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION = "#description";
+    protected static final String SELECTOR_WORKSPACE_FORM_INPUT_NAME = "#modalCreationField > input";
+    protected static final String SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION = "#descriptionInput > textarea";
      
     protected static final String SELECTOR_DASHBOARD_WORKSPACE_CARD_EDIT_BUTTON = "#editWS";
     protected static final String SELECTOR_DASHBOARD_WORKSPACE_CARD_PUBLISH_BUTTON = "#publishWS";
