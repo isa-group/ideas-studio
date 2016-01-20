@@ -1,5 +1,6 @@
 package es.us.isa.ideas.test.app.editor;
 
+import es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo;
 import static es.us.isa.ideas.test.app.editor.TestSuite.getWorkspaceName;
 import static es.us.isa.ideas.test.app.editor.TestSuite.getWorkspaceDescription;
 import static es.us.isa.ideas.test.app.editor.TestSuite.getWorkspaceTags;
@@ -80,6 +81,12 @@ public class TC02_CreateWorkspace extends TestCase {
         // Add workspace button
         waitForVisibleSelector(SELECTOR_ADD_BUTTON);
         getExpectedActions().click(By.cssSelector(SELECTOR_ADD_BUTTON));
+        
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         // Modal window
         waitForVisibleSelector(SELECTOR_NEW_WS_MODAL_INPUT_NAME);
@@ -88,13 +95,6 @@ public class TC02_CreateWorkspace extends TestCase {
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_NEW_WS_MODAL_INPUT_DESCRIPTION), getWorkspaceDescription());
         waitForVisibleSelector(SELECTOR_NEW_WS_MODAL_INPUT_TAGS);
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_NEW_WS_MODAL_INPUT_TAGS), getWorkspaceTags());
-        
-        try {
-            Thread.sleep(2000); //
-        } catch (InterruptedException e) {
-            LOG.severe(e.getMessage());
-        }
-        
         getExpectedActions().click(By.linkText("Create"));
 
         // Close workspace manager

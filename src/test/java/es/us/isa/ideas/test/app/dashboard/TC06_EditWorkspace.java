@@ -62,6 +62,12 @@ public class TC06_EditWorkspace extends TestCase{
         waitForVisibleSelector(SELECTOR_DASHBOARD_WORKSPACE_CARD_EDIT_BUTTON);
         getJs().executeScript("jQuery('" + SELECTOR_DASHBOARD_WORKSPACE_CARD_EDIT_BUTTON + "').click();");
         
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME);
 
         testResult = getWebDriver().findElement(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME)).isDisplayed();
@@ -76,6 +82,13 @@ public class TC06_EditWorkspace extends TestCase{
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME), " Edited");
         waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION);
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION), " Edited");
+        
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
         

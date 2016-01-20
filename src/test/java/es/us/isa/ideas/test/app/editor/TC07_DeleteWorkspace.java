@@ -59,6 +59,12 @@ public class TC07_DeleteWorkspace extends TestCase {
         // Delete workspace button
         waitForVisibleSelector(SELECTOR_DELETE_BUTTON);
         getJs().executeScript("jQuery('" + SELECTOR_DELETE_BUTTON + "').click();");
+        
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC07_DeleteWorkspace.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
 
         // Modal window

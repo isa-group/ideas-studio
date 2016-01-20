@@ -1,5 +1,6 @@
 package es.us.isa.ideas.test.app.editor;
 
+import es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo;
 import static es.us.isa.ideas.test.app.editor.TestSuite.getWorkspaceName;
 import static es.us.isa.ideas.test.app.editor.TestSuite.getWorkspaceNewName;
 import java.util.logging.Level;
@@ -81,6 +82,13 @@ public class TC04_EditWorkspace extends TestCase {
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME), " modified");
         waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION);
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION), " (Edit test)");
+        
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
 
@@ -91,6 +99,7 @@ public class TC04_EditWorkspace extends TestCase {
         }
 
         IdeasStudioActions.goEditorPage();
+        getWebDriver().navigate().refresh();
         
         waitForVisibleSelector(SELECTOR_WS_CURRENT);
         testResult = getWorkspaceNewName().equals(getTextFromSelector(SELECTOR_WS_CURRENT));

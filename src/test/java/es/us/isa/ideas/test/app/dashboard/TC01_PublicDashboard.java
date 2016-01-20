@@ -113,6 +113,12 @@ public class TC01_PublicDashboard extends TestCase{
         // Add workspace button
         waitForVisibleSelector(SELECTOR_ADD_BUTTON);
         getExpectedActions().click(By.cssSelector(SELECTOR_ADD_BUTTON));
+        
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_INPUT);

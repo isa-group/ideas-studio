@@ -51,14 +51,16 @@ public class TC05_DownloadWorkspace extends TestCase {
     }
     
     @Test
-    public void step02_downloadWorkspace() {
+    public void step02_downloadWorkspace() throws InterruptedException {
 
         //Publish demo workspace button
         waitForVisibleSelector(SELECTOR_DOWNLOAD_BUTTON);
         getJs().executeScript("jQuery('" + SELECTOR_DOWNLOAD_BUTTON + "').click();");
-
-        testResult=true;
-        assertTrue(testResult);
+        
+//        String href = (String) getJs().executeScript("jQuery('" + SELECTOR_DOWNLOAD_BUTTON + "').attr('href');");
+//        testResult = getStatusCode(href).equals("200");
+        
+        assertTrue(true);
     }
 
 }

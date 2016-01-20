@@ -58,6 +58,12 @@ public class TC07_PublishDemo extends TestCase{
         waitForVisibleSelector(SELECTOR_DASHBOARD_WORKSPACE_CARD_PUBLISH_BUTTON);    
         getJs().executeScript("jQuery('" + SELECTOR_DASHBOARD_WORKSPACE_CARD_PUBLISH_BUTTON + "').click();");
         
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");

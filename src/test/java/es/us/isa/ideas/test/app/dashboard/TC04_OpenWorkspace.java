@@ -51,13 +51,13 @@ public class TC04_OpenWorkspace extends TestCase{
     }
     
     @Test
-    public void step02_openWorkspace() {
+    public void step02_openWorkspace() throws InterruptedException {
 
         // Open workspace button
         waitForVisibleSelector(SELECTOR_DASHBOARD_WORKSPACE_CARD_OPEN);
         getJs().executeScript("jQuery('" + SELECTOR_DASHBOARD_WORKSPACE_CARD_OPEN + "').click();");
 
-        testResult = getWebDriver().getCurrentUrl().equalsIgnoreCase("https://localhost:8181/IDEAS/app/editor");
+        testResult = isCurrentUrlContains("/IDEAS/app/editor");
         assertTrue(testResult);
     }
 

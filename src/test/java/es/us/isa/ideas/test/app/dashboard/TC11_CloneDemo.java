@@ -58,6 +58,12 @@ public class TC11_CloneDemo extends TestCase{
         waitForVisibleSelector(SELECTOR_DASHBOARD_PUBLIC_DEMO_CLONE_BUTTON);
         getJs().executeScript("jQuery('" + SELECTOR_DASHBOARD_PUBLIC_DEMO_CLONE_BUTTON + "').click();");
         
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
@@ -70,6 +76,7 @@ public class TC11_CloneDemo extends TestCase{
         assertTrue(testResult);
     }
     
+    @Test
     public void step03_deleteClone() {
 
         // Delete workspace button
