@@ -289,8 +289,8 @@ var FileApi = {
 	},
 	
 	setSelectedWorkspace : function ( wsName, callback ) {
-		$.ajax("files/workspaces?workspaceName=" + wsName, {
-			"type" : "PUT",
+		$.ajax("files/workspaces/selected?workspaceName=" + wsName, {
+			"type" : "POST",
 			"success" : function(result) {
 				callback(result);
 			},

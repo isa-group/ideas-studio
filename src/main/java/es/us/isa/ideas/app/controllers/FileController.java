@@ -441,6 +441,26 @@ public class FileController extends AbstractController {
         }
         return res;
     }
+    
+    @RequestMapping(value = "/workspaces/selected", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean setSelectedWorkspace(@RequestParam("workspaceName") String workspaceName) {
+        
+        initRepoLab();
+        logger.log(Level.INFO, "Persisting selected workspace:  "
+                        + workspaceName + ", username: "
+                        + LoginService.getPrincipal().getUsername());
+        boolean res = true;
+        try {
+                FSFacade.saveSelectedWorkspace(workspaceName, LoginService
+                                .getPrincipal().getUsername());
+        } catch (Exception e) {
+                res = false;
+                logger.log(Level.SEVERE, e.getMessage());
+        }
+        return res;
+      
+    }
 
     /* Upload */
     @RequestMapping(value = "/upload/**", method = RequestMethod.POST)
