@@ -18,7 +18,6 @@
 $(".openWS").click(function(e){
     e.preventDefault();
     var name = $(this).attr('href');
-    WorkspaceManager.setSelectedWorkspace(name);
     AppPresenter.loadSection("editor", name, function () {
         WorkspaceManager.loadWorkspace();
     });
@@ -33,7 +32,6 @@ $(".editWS").click(function(e) {
             var description = $("#descriptionInput textarea").val();
             $("#workspacesNavContainer li").removeClass("active");
             WorkspaceManager.updateWorkspace(workspaceName,description);
-            //WorkspaceManager.setSelectedWorkspace(workspaceName);
              $(location).attr('href',"app/wsm"); 
     });
 });
@@ -96,14 +94,12 @@ $(".delete-ws").click(function(e) {
 $(".publish-demo").click(function(e) {
     e.preventDefault();
     var name = $(this).attr('href');     
-    WorkspaceManager.setSelectedWorkspace(name);
     WorkspaceManager.publishWorskspaceAsDemo(name,refreshPage);
 });
 
 $(".delete-demo").click(function(e) {
     e.preventDefault();
     var name = $(this).attr('href');     
-    WorkspaceManager.setSelectedWorkspace(name);
     WorkspaceManager.deleteDemoWorkspace(name,refreshPage);
 });
 

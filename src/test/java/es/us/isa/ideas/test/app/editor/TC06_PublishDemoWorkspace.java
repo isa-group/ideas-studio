@@ -77,8 +77,14 @@ public class TC06_PublishDemoWorkspace extends TestCase{
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
         
-        IdeasStudioActions.goWSMPage();
+        try {
+            Thread.sleep(10000);//Extra time for publication
+        } catch (InterruptedException e) {
+            LOG.severe(e.getMessage());
+        }
         
+        IdeasStudioActions.goWSMPage();
+          
         waitForVisibleSelector(SELECTOR_DEMO_CARD_TITLE);
         testResult = getWebDriver().findElements(By.cssSelector(SELECTOR_DEMO_CARD_TITLE)).size() > 0;
                 

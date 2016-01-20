@@ -1,0 +1,209 @@
+NetBeans: JPDA Listening Start...
+JPDA Address: MacBook-Pro-de-Dany.local:55222
+Port:55222
+cd /Users/danyal/ISA-Group/ideas-studio; JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home "/Applications/NetBeans/NetBeans 8.0.2.app/Contents/Resources/NetBeans/java/maven/bin/mvn" -Dtest=es.us.isa.ideas.test.app.TestSuiteFull -DforkMode=once "-Dmaven.surefire.debug=-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=55222" -Djpda.listen=true -Djpda.address=55222 surefire:test
+Running NetBeans Compile On Save execution. Phase execution is skipped and output directories of dependency projects (with Compile on Save turned on) will be used instead of their jar artifacts.
+Scanning for projects...
+
+Some problems were encountered while building the effective model for es.us.isa:ideas-studio:war:0.8.3
+'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: commons-io:commons-io:jar -> duplicate declaration of version 2.4 @ line 538, column 21
+'build.plugins.plugin.version' for org.apache.maven.plugins:maven-eclipse-plugin is missing. @ line 733, column 21
+
+It is highly recommended to fix these problems because they threaten the stability of your build.
+
+For this reason, future Maven versions might no longer support building such malformed projects.
+
+The metadata /Users/danyal/.m2/repository/org/apache/maven/plugins/maven-eclipse-plugin/maven-metadata-codehaus-snapshots.xml is invalid: end tag name </head> must be the same as start tag <link> from line 15 (position: TEXT seen ...itle="Codehaus" href="http://www.codehaus.org/feed.xml" />\n</head>... @17:8) 
+                                                                        
+------------------------------------------------------------------------
+Building ideas-studio 0.8.3
+------------------------------------------------------------------------
+
+--- maven-surefire-plugin:2.12:test (default-cli) @ ideas-studio ---
+Surefire report directory: /Users/danyal/ISA-Group/ideas-studio/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running es.us.isa.ideas.test.app.TestSuiteFull
+ene 20, 2016 4:51:49 PM es.us.isa.ideas.test.app.TestSuiteFull setUp
+INFORMACIÓN: #### Starting TestSuiteFull...
+ene 20, 2016 4:51:49 PM es.us.isa.ideas.test.app.dashboard.TestSuite setUp
+INFORMACIÓN: #### Starting Dashboard TestSuite...
+ene 20, 2016 4:51:49 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard setUp
+INFORMACIÓN: ## Init TC01_PublicDashboard...
+ene 20, 2016 4:51:49 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+Using selenium-local.properties
+Starting ChromeDriver 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b) on port 36568
+Only local connections are allowed.
+[0.842][SEVERE]: bind() returned an error, errno=48: Address already in use
+ene 20, 2016 4:52:01 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+ene 20, 2016 4:52:01 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+Login with params...
+Username: guest
+Password: guest
+ene 20, 2016 4:52:01 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 20, 2016 4:52:05 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+ene 20, 2016 4:52:09 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:52:11 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:52:18 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:52:39 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:52:59 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:52:59 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 20, 2016 4:53:02 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:53:03 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:04 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:04 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDown
+INFORMACIÓN: ## TC01_PublicDashboard finished
+ene 20, 2016 4:53:04 PM es.us.isa.ideas.test.app.dashboard.TC02_Login setUp
+INFORMACIÓN: ## Init TC01_Login...
+ene 20, 2016 4:53:04 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 20, 2016 4:53:07 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+ene 20, 2016 4:53:07 PM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:07 PM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDownTest
+INFORMACIÓN: testResult: true
+Login with params...
+Username: autotester
+Password: autotester
+ene 20, 2016 4:53:07 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 20, 2016 4:53:10 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+ene 20, 2016 4:53:13 PM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:13 PM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDown
+INFORMACIÓN: ## TC01_Login finished
+ene 20, 2016 4:53:13 PM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace setUp
+INFORMACIÓN: ## Init TC03_CreateWorkspace...
+ene 20, 2016 4:53:13 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 20, 2016 4:53:13 PM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:15 PM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:23 PM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:23 PM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDown
+INFORMACIÓN: ## TC03_CreateWorkspace finished
+ene 20, 2016 4:53:23 PM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace setUp
+INFORMACIÓN: ## Init TC04_OpenWorkspace...
+ene 20, 2016 4:53:23 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:53:24 PM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:25 PM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:25 PM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace tearDown
+INFORMACIÓN: ## TC04_OpenWorkspace finished
+ene 20, 2016 4:53:25 PM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace setUp
+INFORMACIÓN: ## Init TC06_DownloadWorkspace...
+ene 20, 2016 4:53:25 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:53:26 PM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:27 PM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:27 PM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace tearDown
+INFORMACIÓN: ## TC06_DownloadWorkspace finished
+ene 20, 2016 4:53:27 PM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace setUp
+INFORMACIÓN: ## Init TC05_EditWorkspace...
+ene 20, 2016 4:53:27 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:53:27 PM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:28 PM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDown
+INFORMACIÓN: ## TC05_EditWorkspace finished
+ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo setUp
+INFORMACIÓN: ## Init TC07_PublishDemo...
+ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:23 PM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:23 PM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo tearDown
+INFORMACIÓN: ## TC07_PublishDemo finished
+ene 20, 2016 4:54:23 PM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo setUp
+INFORMACIÓN: ## Init TC08_PublishDemo...
+ene 20, 2016 4:54:23 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:54:23 PM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:26 PM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:26 PM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo tearDown
+INFORMACIÓN: ## TC08_PublishDemo finished
+ene 20, 2016 4:54:26 PM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo setUp
+INFORMACIÓN: ## Init TC09_DepublishDemo...
+ene 20, 2016 4:54:26 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:54:26 PM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:27 PM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:27 PM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo tearDown
+INFORMACIÓN: ## TC09_DepublishDemo finished
+ene 20, 2016 4:54:27 PM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace setUp
+INFORMACIÓN: ## Init T10_DeleteWorkspace...
+ene 20, 2016 4:54:27 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:54:27 PM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:31 PM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:31 PM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace tearDown
+INFORMACIÓN: ## T10_DeleteWorkspace finished
+ene 20, 2016 4:54:31 PM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo setUp
+INFORMACIÓN: ## Init TC11_CloneDemo...
+ene 20, 2016 4:54:31 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:54:31 PM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:33 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 20, 2016 4:54:35 PM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:39 PM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDownTest
+INFORMACIÓN: testResult: true
+ene 20, 2016 4:54:39 PM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDown
+INFORMACIÓN: ## TC11_CloneDemo finished
+ene 20, 2016 4:54:39 PM es.us.isa.ideas.test.app.dashboard.TestSuite tearDown
+INFORMACIÓN: #### Dashboard TestSuite finished
+ene 20, 2016 4:54:39 PM es.us.isa.ideas.test.app.TestSuiteFull tearDown
+INFORMACIÓN: #### TestSuiteFull finished
+Tests run: 31, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 170.551 sec
+
+Results :
+
+Tests run: 31, Failures: 0, Errors: 0, Skipped: 0
+
+------------------------------------------------------------------------
+BUILD SUCCESS
+------------------------------------------------------------------------
+Total time: 2:55.500s
+Finished at: Wed Jan 20 16:54:40 CET 2016
+Final Memory: 12M/224M
+------------------------------------------------------------------------

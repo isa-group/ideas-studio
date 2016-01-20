@@ -67,6 +67,12 @@ public class TC07_PublishDemo extends TestCase{
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
+        
+        try {
+            Thread.sleep(10000);//Extra time for publication
+        } catch (InterruptedException e) {
+            LOG.severe(e.getMessage());
+        }
 
         waitForVisibleSelector(SELECTOR_CARD_DEMO_WORKSPACE_NAME);
         testResult = getWebDriver().findElements(By.cssSelector(SELECTOR_CARD_DEMO_WORKSPACE_NAME)).size() > 0;
