@@ -9,7 +9,7 @@
             "iagree-template-language": "/ideas-iagree-template-language",
            	"iagree-offer-language": "/ideas-iagree-offer-language",
             "iagree-agreement-language": "/ideas-iagree-agreement-language",
-            "iagree-cplex-language": "/ideas-cplex-language",
+            "ideas-cplex-language": "/ideas-cplex-language",
 			"ideas-afm-language": "/ideas-afm-language",
             "ideas-fmc-language": "/ideas-fmc-language",
             "ideas-hcs-language": "/ideas-hcs-language",
