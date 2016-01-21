@@ -18,7 +18,9 @@
             "ideas-csv-language": "/ideas-csv-language",
             "ideas-lusdl-language": "/ideas-lusdl-language",
             "ideas-html-language": "/ideas-html-language",
-            "ideas-soup-language": "/ideas-soup-language"
+            "ideas-soup-language": "/ideas-soup-language",
+            "ideas-json-language": "/ideas-json-language",
+            "ideas-yaml-language": "/ideas-yaml-language"
 	},
     "configurationFiles":{
       "application":"classpath*:application.properties",
