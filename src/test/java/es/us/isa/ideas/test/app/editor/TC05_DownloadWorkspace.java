@@ -26,7 +26,7 @@ public class TC05_DownloadWorkspace extends TestCase {
     protected static final String SELECTOR_DOWNLOAD_BUTTON = "#download-ws";
 
     private static boolean testResult = true;
-    private static final Logger LOG = Logger.getLogger(TC06_PublishDemoWorkspace.class.getName());
+    private static final Logger LOG = Logger.getLogger(TC05_DownloadWorkspace.class.getName());
 
     @BeforeClass
     public static void setUp() {
@@ -53,7 +53,6 @@ public class TC05_DownloadWorkspace extends TestCase {
     @Test
     public void step02_downloadWorkspace() throws InterruptedException {
 
-        //Publish demo workspace button
         waitForVisibleSelector(SELECTOR_DOWNLOAD_BUTTON);
         getJs().executeScript("jQuery('" + SELECTOR_DOWNLOAD_BUTTON + "').click();");
         

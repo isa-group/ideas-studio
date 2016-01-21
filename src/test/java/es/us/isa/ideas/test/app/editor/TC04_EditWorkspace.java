@@ -86,7 +86,7 @@ public class TC04_EditWorkspace extends TestCase {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
         
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);

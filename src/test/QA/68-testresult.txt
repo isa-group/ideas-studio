@@ -1,7 +1,4 @@
-NetBeans: JPDA Listening Start...
-JPDA Address: MacBook-Pro-de-Dany.local:55222
-Port:55222
-cd /Users/danyal/ISA-Group/ideas-studio; JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home "/Applications/NetBeans/NetBeans 8.0.2.app/Contents/Resources/NetBeans/java/maven/bin/mvn" -Dtest=es.us.isa.ideas.test.app.TestSuiteFull -DforkMode=once "-Dmaven.surefire.debug=-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=55222" -Djpda.listen=true -Djpda.address=55222 surefire:test
+cd /Users/danyal/ISA-Group/ideas-studio; JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home "/Applications/NetBeans/NetBeans 8.0.2.app/Contents/Resources/NetBeans/java/maven/bin/mvn" -Dtest=es.us.isa.ideas.test.app.TestSuiteFull surefire:test
 Running NetBeans Compile On Save execution. Phase execution is skipped and output directories of dependency projects (with Compile on Save turned on) will be used instead of their jar artifacts.
 Scanning for projects...
 
@@ -26,184 +23,407 @@ Surefire report directory: /Users/danyal/ISA-Group/ideas-studio/target/surefire-
  T E S T S
 -------------------------------------------------------
 Running es.us.isa.ideas.test.app.TestSuiteFull
-ene 20, 2016 4:51:49 PM es.us.isa.ideas.test.app.TestSuiteFull setUp
+ene 21, 2016 11:47:34 AM es.us.isa.ideas.test.app.TestSuiteFull setUp
 INFORMACIÓN: #### Starting TestSuiteFull...
-ene 20, 2016 4:51:49 PM es.us.isa.ideas.test.app.dashboard.TestSuite setUp
-INFORMACIÓN: #### Starting Dashboard TestSuite...
-ene 20, 2016 4:51:49 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard setUp
-INFORMACIÓN: ## Init TC01_PublicDashboard...
-ene 20, 2016 4:51:49 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+ene 21, 2016 11:47:34 AM es.us.isa.ideas.test.app.editor.TestSuite setUp
+INFORMACIÓN: #### Starting editor left menu workspace actions TestSuite...
+ene 21, 2016 11:47:34 AM es.us.isa.ideas.test.app.editor.TC01_Login setUp
+INFORMACIÓN: ## Init TC01_Login...
+ene 21, 2016 11:47:34 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
 INFORMACIÓN: Loading logout page...
 Using selenium-local.properties
-Starting ChromeDriver 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b) on port 36568
+Starting ChromeDriver 2.20.353124 (035346203162d32c80f1dce587c8154a1efa0c3b) on port 27609
 Only local connections are allowed.
-[0.842][SEVERE]: bind() returned an error, errno=48: Address already in use
-ene 20, 2016 4:52:01 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+ene 21, 2016 11:47:42 AM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
 INFORMACIÓN: Loading home page...
-ene 20, 2016 4:52:01 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+ene 21, 2016 11:47:42 AM es.us.isa.ideas.test.app.editor.TC01_Login tearDownTest
 INFORMACIÓN: testResult: true
-Login with params...
-Username: guest
-Password: guest
-ene 20, 2016 4:52:01 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
-INFORMACIÓN: Loading logout page...
-ene 20, 2016 4:52:05 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
-INFORMACIÓN: Loading login page...
-ene 20, 2016 4:52:09 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
-INFORMACIÓN: testResult: true
-ene 20, 2016 4:52:11 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
-INFORMACIÓN: testResult: true
-ene 20, 2016 4:52:18 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
-INFORMACIÓN: testResult: true
-ene 20, 2016 4:52:39 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
-INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:52:59 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
-INFORMACIÓN: testResult: true
-ene 20, 2016 4:52:59 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
-INFORMACIÓN: Loading logout page...
-ene 20, 2016 4:53:02 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
-INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:53:03 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
-INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:04 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
-INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:04 PM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDown
-INFORMACIÓN: ## TC01_PublicDashboard finished
-ene 20, 2016 4:53:04 PM es.us.isa.ideas.test.app.dashboard.TC02_Login setUp
-INFORMACIÓN: ## Init TC01_Login...
-ene 20, 2016 4:53:04 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
-INFORMACIÓN: Loading logout page...
-ene 20, 2016 4:53:07 PM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
-INFORMACIÓN: Loading home page...
-ene 20, 2016 4:53:07 PM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDownTest
-INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:07 PM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDownTest
+ene 21, 2016 11:47:42 AM es.us.isa.ideas.test.app.editor.TC01_Login tearDownTest
 INFORMACIÓN: testResult: true
 Login with params...
 Username: autotester
 Password: autotester
-ene 20, 2016 4:53:07 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+ene 21, 2016 11:47:42 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
 INFORMACIÓN: Loading logout page...
-ene 20, 2016 4:53:10 PM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+ene 21, 2016 11:47:45 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
 INFORMACIÓN: Loading login page...
-ene 20, 2016 4:53:13 PM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDownTest
+ene 21, 2016 11:47:49 AM es.us.isa.ideas.test.app.editor.TC01_Login tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:13 PM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDown
+ene 21, 2016 11:47:49 AM es.us.isa.ideas.test.app.editor.TC01_Login tearDown
 INFORMACIÓN: ## TC01_Login finished
-ene 20, 2016 4:53:13 PM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace setUp
-INFORMACIÓN: ## Init TC03_CreateWorkspace...
-ene 20, 2016 4:53:13 PM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+ene 21, 2016 11:47:49 AM es.us.isa.ideas.test.app.editor.TC02_CreateWorkspace setUp
+INFORMACIÓN: ## Init TC02_CreateWorkspace...
+ene 21, 2016 11:47:49 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
 INFORMACIÓN: Loading editor page...
-ene 20, 2016 4:53:13 PM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDownTest
+ene 21, 2016 11:47:49 AM es.us.isa.ideas.test.app.editor.TC02_CreateWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:15 PM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDownTest
+ene 21, 2016 11:47:51 AM es.us.isa.ideas.test.app.editor.TC02_CreateWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:23 PM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDownTest
+ene 21, 2016 11:47:58 AM es.us.isa.ideas.test.app.editor.TC02_CreateWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:23 PM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDown
+ene 21, 2016 11:47:58 AM es.us.isa.ideas.test.app.editor.TC02_CreateWorkspace tearDown
+INFORMACIÓN: ## TC02_CreateWorkspace finished
+ene 21, 2016 11:47:58 AM es.us.isa.ideas.test.app.editor.TC04_EditWorkspace setUp
+INFORMACIÓN: ## Init TC04_EditWorkspace...
+ene 21, 2016 11:47:58 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:47:58 AM es.us.isa.ideas.test.app.editor.TC04_EditWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:48:00 AM es.us.isa.ideas.test.app.editor.TC04_EditWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:48:03 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:48:07 AM es.us.isa.ideas.test.app.editor.TC04_EditWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:48:07 AM es.us.isa.ideas.test.app.editor.TC04_EditWorkspace tearDown
+INFORMACIÓN: ## TC04_EditWorkspace finished
+ene 21, 2016 11:48:07 AM es.us.isa.ideas.test.app.editor.TC05_DownloadWorkspace setUp
+INFORMACIÓN: ## Init TC05_DownloadWorkspace...
+ene 21, 2016 11:48:07 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:48:07 AM es.us.isa.ideas.test.app.editor.TC05_DownloadWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+ene 21, 2016 11:48:07 AM es.us.isa.ideas.test.app.editor.TC05_DownloadWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: false
+ene 21, 2016 11:48:07 AM es.us.isa.ideas.test.app.editor.TC05_DownloadWorkspace tearDown
+INFORMACIÓN: ## TC05_DownloadWorkspace finished
+ene 21, 2016 11:48:07 AM es.us.isa.ideas.test.app.editor.TC06_PublishDemoWorkspace setUp
+INFORMACIÓN: ## Init TC06_PublishDemoWorkspace...
+ene 21, 2016 11:48:07 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:48:07 AM es.us.isa.ideas.test.app.editor.TC06_PublishDemoWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+ene 21, 2016 11:48:20 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 21, 2016 11:48:21 AM es.us.isa.ideas.test.app.editor.TC06_PublishDemoWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+ene 21, 2016 11:48:21 AM es.us.isa.ideas.test.app.editor.TC06_PublishDemoWorkspace tearDown
+INFORMACIÓN: ## TC06_PublishDemoWorkspace finished
+ene 21, 2016 11:48:21 AM es.us.isa.ideas.test.app.editor.TC07_DeleteWorkspace setUp
+INFORMACIÓN: ## Init TC07_DeleteWorkspace...
+ene 21, 2016 11:48:21 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:48:23 AM es.us.isa.ideas.test.app.editor.TC07_DeleteWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+ene 21, 2016 11:48:28 AM es.us.isa.ideas.test.app.editor.TC07_DeleteWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+ene 21, 2016 11:48:28 AM es.us.isa.ideas.test.app.editor.TC07_DeleteWorkspace tearDown
+INFORMACIÓN: ## TC07_DeleteWorkspace finished
+ene 21, 2016 11:48:28 AM es.us.isa.ideas.test.app.editor.TestSuite tearDown
+INFORMACIÓN: #### Starting editor left menu workspace actions TestSuite finished
+ene 21, 2016 11:48:28 AM es.us.isa.ideas.test.app.dashboard.TestSuite setUp
+INFORMACIÓN: #### Starting Dashboard TestSuite...
+ene 21, 2016 11:48:28 AM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard setUp
+INFORMACIÓN: ## Init TC01_PublicDashboard...
+ene 21, 2016 11:48:28 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 21, 2016 11:48:31 AM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+ene 21, 2016 11:48:31 AM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+Login with params...
+Username: guest
+Password: guest
+ene 21, 2016 11:48:31 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 21, 2016 11:48:34 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+ene 21, 2016 11:48:38 AM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:48:40 AM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:48:46 AM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:48:50 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 21, 2016 11:48:51 AM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:48:51 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 21, 2016 11:48:55 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+INFORMACIÓN: Loading dashboard page...
+ene 21, 2016 11:48:56 AM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:48:56 AM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:48:56 AM es.us.isa.ideas.test.app.dashboard.TC01_PublicDashboard tearDown
+INFORMACIÓN: ## TC01_PublicDashboard finished
+ene 21, 2016 11:48:56 AM es.us.isa.ideas.test.app.dashboard.TC02_Login setUp
+INFORMACIÓN: ## Init TC01_Login...
+ene 21, 2016 11:48:56 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 21, 2016 11:48:59 AM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+ene 21, 2016 11:48:59 AM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:48:59 AM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDownTest
+INFORMACIÓN: testResult: true
+Login with params...
+Username: autotester
+Password: autotester
+ene 21, 2016 11:48:59 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 21, 2016 11:49:02 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+ene 21, 2016 11:49:06 AM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:49:06 AM es.us.isa.ideas.test.app.dashboard.TC02_Login tearDown
+INFORMACIÓN: ## TC01_Login finished
+ene 21, 2016 11:49:06 AM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace setUp
+INFORMACIÓN: ## Init TC03_CreateWorkspace...
+ene 21, 2016 11:49:06 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:49:06 AM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:49:08 AM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:49:14 AM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:49:14 AM es.us.isa.ideas.test.app.dashboard.TC03_CreateWorkspace tearDown
 INFORMACIÓN: ## TC03_CreateWorkspace finished
-ene 20, 2016 4:53:23 PM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace setUp
+ene 21, 2016 11:49:14 AM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace setUp
 INFORMACIÓN: ## Init TC04_OpenWorkspace...
-ene 20, 2016 4:53:23 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+ene 21, 2016 11:49:14 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
 INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:53:24 PM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace tearDownTest
+ene 21, 2016 11:49:16 AM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:25 PM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace tearDownTest
+ene 21, 2016 11:49:17 AM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:25 PM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace tearDown
+ene 21, 2016 11:49:17 AM es.us.isa.ideas.test.app.dashboard.TC04_OpenWorkspace tearDown
 INFORMACIÓN: ## TC04_OpenWorkspace finished
-ene 20, 2016 4:53:25 PM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace setUp
+ene 21, 2016 11:49:17 AM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace setUp
 INFORMACIÓN: ## Init TC06_DownloadWorkspace...
-ene 20, 2016 4:53:25 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+ene 21, 2016 11:49:17 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
 INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:53:26 PM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace tearDownTest
+ene 21, 2016 11:49:18 AM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:27 PM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace tearDownTest
+ene 21, 2016 11:49:18 AM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:27 PM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace tearDown
+ene 21, 2016 11:49:18 AM es.us.isa.ideas.test.app.dashboard.TC05_DownloadWorkspace tearDown
 INFORMACIÓN: ## TC06_DownloadWorkspace finished
-ene 20, 2016 4:53:27 PM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace setUp
+ene 21, 2016 11:49:18 AM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace setUp
 INFORMACIÓN: ## Init TC05_EditWorkspace...
-ene 20, 2016 4:53:27 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+ene 21, 2016 11:49:18 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
 INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:53:27 PM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDownTest
+ene 21, 2016 11:49:18 AM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:28 PM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDownTest
+ene 21, 2016 11:49:19 AM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
-INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDownTest
+ene 21, 2016 11:49:21 AM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDown
+ene 21, 2016 11:49:21 AM es.us.isa.ideas.test.app.dashboard.TC06_EditWorkspace tearDown
 INFORMACIÓN: ## TC05_EditWorkspace finished
-ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo setUp
+ene 21, 2016 11:49:21 AM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo setUp
 INFORMACIÓN: ## Init TC07_PublishDemo...
-ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+ene 21, 2016 11:49:21 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
 INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:53:44 PM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo tearDownTest
+ene 21, 2016 11:49:21 AM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:23 PM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo tearDownTest
+ene 21, 2016 11:49:23 AM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:23 PM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo tearDown
+ene 21, 2016 11:49:23 AM es.us.isa.ideas.test.app.dashboard.TC07_PublishDemo tearDown
 INFORMACIÓN: ## TC07_PublishDemo finished
-ene 20, 2016 4:54:23 PM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo setUp
+ene 21, 2016 11:49:23 AM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo setUp
 INFORMACIÓN: ## Init TC08_PublishDemo...
-ene 20, 2016 4:54:23 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+ene 21, 2016 11:49:23 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
 INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:54:23 PM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo tearDownTest
+ene 21, 2016 11:49:23 AM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:26 PM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo tearDownTest
+ene 21, 2016 11:49:25 AM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:26 PM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo tearDown
+ene 21, 2016 11:49:25 AM es.us.isa.ideas.test.app.dashboard.TC08_UpdateDemo tearDown
 INFORMACIÓN: ## TC08_PublishDemo finished
-ene 20, 2016 4:54:26 PM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo setUp
+ene 21, 2016 11:49:25 AM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo setUp
 INFORMACIÓN: ## Init TC09_DepublishDemo...
-ene 20, 2016 4:54:26 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+ene 21, 2016 11:49:25 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
 INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:54:26 PM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo tearDownTest
+ene 21, 2016 11:49:25 AM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:27 PM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo tearDownTest
+ene 21, 2016 11:49:26 AM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:27 PM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo tearDown
+ene 21, 2016 11:49:26 AM es.us.isa.ideas.test.app.dashboard.TC09_DepublishDemo tearDown
 INFORMACIÓN: ## TC09_DepublishDemo finished
-ene 20, 2016 4:54:27 PM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace setUp
+ene 21, 2016 11:49:26 AM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace setUp
 INFORMACIÓN: ## Init T10_DeleteWorkspace...
-ene 20, 2016 4:54:27 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+ene 21, 2016 11:49:26 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
 INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:54:27 PM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace tearDownTest
+ene 21, 2016 11:49:26 AM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:31 PM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace tearDownTest
+ene 21, 2016 11:49:29 AM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:31 PM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace tearDown
+ene 21, 2016 11:49:29 AM es.us.isa.ideas.test.app.dashboard.TC10_DeleteWorkspace tearDown
 INFORMACIÓN: ## T10_DeleteWorkspace finished
-ene 20, 2016 4:54:31 PM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo setUp
+ene 21, 2016 11:49:29 AM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo setUp
 INFORMACIÓN: ## Init TC11_CloneDemo...
-ene 20, 2016 4:54:31 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+ene 21, 2016 11:49:29 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
 INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:54:31 PM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDownTest
+ene 21, 2016 11:49:29 AM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:33 PM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
+ene 21, 2016 11:49:31 AM es.us.isa.ideas.test.utils.IdeasStudioActions goWSMPage
 INFORMACIÓN: Loading dashboard page...
-ene 20, 2016 4:54:35 PM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDownTest
+ene 21, 2016 11:49:33 AM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:39 PM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDownTest
+ene 21, 2016 11:49:37 AM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDownTest
 INFORMACIÓN: testResult: true
-ene 20, 2016 4:54:39 PM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDown
+ene 21, 2016 11:49:37 AM es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo tearDown
 INFORMACIÓN: ## TC11_CloneDemo finished
-ene 20, 2016 4:54:39 PM es.us.isa.ideas.test.app.dashboard.TestSuite tearDown
+ene 21, 2016 11:49:37 AM es.us.isa.ideas.test.app.dashboard.TestSuite tearDown
 INFORMACIÓN: #### Dashboard TestSuite finished
-ene 20, 2016 4:54:39 PM es.us.isa.ideas.test.app.TestSuiteFull tearDown
+ene 21, 2016 11:49:37 AM es.us.isa.ideas.test.app.dynatree.TestSuite setUp
+INFORMACIÓN: #### Starting Dynatree TestSuite...
+ene 21, 2016 11:49:37 AM es.us.isa.ideas.test.app.dynatree.TC01_Login setUp
+INFORMACIÓN: ## Init TC01_Login...
+ene 21, 2016 11:49:37 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 21, 2016 11:49:40 AM es.us.isa.ideas.test.utils.IdeasStudioActions goHomePage
+INFORMACIÓN: Loading home page...
+ene 21, 2016 11:49:40 AM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:49:40 AM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDownTest
+INFORMACIÓN: testResult: true
+Login with params...
+Username: autotester
+Password: autotester
+ene 21, 2016 11:49:40 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLogoutPage
+INFORMACIÓN: Loading logout page...
+ene 21, 2016 11:49:44 AM es.us.isa.ideas.test.utils.IdeasStudioActions goLoginPage
+INFORMACIÓN: Loading login page...
+ene 21, 2016 11:49:47 AM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:49:47 AM es.us.isa.ideas.test.app.dynatree.TC01_Login tearDown
+INFORMACIÓN: ## TC01_Login finished
+ene 21, 2016 11:49:47 AM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace setUp
+INFORMACIÓN: ## Init TC02_CreateWorkspace...
+ene 21, 2016 11:49:47 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:49:47 AM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:49:49 AM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:49:54 AM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:49:54 AM es.us.isa.ideas.test.app.dynatree.TC02_CreateWorkspace tearDown
+INFORMACIÓN: ## TC02_CreateWorkspace finished
+ene 21, 2016 11:49:54 AM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject setUp
+INFORMACIÓN: ## Init TC03_CreateProject...
+ene 21, 2016 11:49:54 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:49:54 AM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:00 AM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:00 AM es.us.isa.ideas.test.app.dynatree.TC03_CreateProject tearDown
+INFORMACIÓN: ## TC03_CreateProject finished
+ene 21, 2016 11:50:00 AM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile setUp
+INFORMACIÓN: ## Init TC04_CreateFile...
+ene 21, 2016 11:50:00 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:50:00 AM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:07 AM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:07 AM es.us.isa.ideas.test.app.dynatree.TC04_CreateFile tearDown
+INFORMACIÓN: ## TC04_CreateFile finished
+ene 21, 2016 11:50:07 AM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory setUp
+INFORMACIÓN: ## Init TC05_CreateDirectory...
+ene 21, 2016 11:50:07 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:50:07 AM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:14 AM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:14 AM es.us.isa.ideas.test.app.dynatree.TC05_CreateDirectory tearDown
+INFORMACIÓN: ## TC05_CreateDirectory finished
+ene 21, 2016 11:50:14 AM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L setUp
+INFORMACIÓN: ## Init TC06_CreateDirectory2L...
+ene 21, 2016 11:50:14 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:50:14 AM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:21 AM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:21 AM es.us.isa.ideas.test.app.dynatree.TC06_CreateDirectory2L tearDown
+INFORMACIÓN: ## TC06_CreateDirectory2L finished
+ene 21, 2016 11:50:21 AM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile setUp
+INFORMACIÓN: ## Init TC07_CreateFile...
+ene 21, 2016 11:50:21 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:50:21 AM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:28 AM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:28 AM es.us.isa.ideas.test.app.dynatree.TC07_CreateFile tearDown
+INFORMACIÓN: ## TC07_CreateFile finished
+ene 21, 2016 11:50:28 AM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile setUp
+INFORMACIÓN: ## Init TC08_RenameFile...
+ene 21, 2016 11:50:30 AM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:30 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:50:30 AM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:30 AM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:38 AM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:38 AM es.us.isa.ideas.test.app.dynatree.TC08_RenameFile tearDown
+INFORMACIÓN: ## TC08_RenameFile finished
+ene 21, 2016 11:50:38 AM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L setUp
+INFORMACIÓN: Init TC09_OpenFile2L...
+ene 21, 2016 11:50:38 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:50:38 AM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L tearDownTest
+INFORMACIÓN: testResult value: true
+ene 21, 2016 11:50:46 AM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L tearDownTest
+INFORMACIÓN: testResult value: true
+ene 21, 2016 11:50:46 AM es.us.isa.ideas.test.app.dynatree.TC09_EditFile2L tearDown
+INFORMACIÓN: TC09_OpenFile2L finished
+ene 21, 2016 11:50:46 AM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L setUp
+INFORMACIÓN: ## Init TC10_RenameFile2L...
+ene 21, 2016 11:50:46 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:50:46 AM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:47 AM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:48 AM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:48 AM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:57 AM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:50:58 AM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:51:00 AM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDownTest
+INFORMACIÓN: testResult: true
+ene 21, 2016 11:51:00 AM es.us.isa.ideas.test.app.dynatree.TC10_RenameFile2L tearDown
+INFORMACIÓN: ## TC10_RenameFile2L finished
+ene 21, 2016 11:51:00 AM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace setUp
+INFORMACIÓN: ## Init TC10_RemoveCurrentWorkspace...
+ene 21, 2016 11:51:00 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:51:00 AM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+ene 21, 2016 11:51:02 AM es.us.isa.ideas.test.utils.IdeasStudioActions goEditorPage
+INFORMACIÓN: Loading editor page...
+ene 21, 2016 11:51:10 AM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace tearDownTest
+INFORMACIÓN: java.lang.Class testResult value: true
+ene 21, 2016 11:51:10 AM es.us.isa.ideas.test.app.dynatree.TC99_RemoveCurrentWorkspace tearDown
+INFORMACIÓN: ## TC10_RemoveCurrentWorkspace finished
+ene 21, 2016 11:51:10 AM es.us.isa.ideas.test.app.dynatree.TestSuite tearDown
+INFORMACIÓN: #### Dynatree TestSuite finished
+ene 21, 2016 11:51:10 AM es.us.isa.ideas.test.app.TestSuiteFull tearDown
 INFORMACIÓN: #### TestSuiteFull finished
-Tests run: 31, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 170.551 sec
+Tests run: 77, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 216.177 sec
 
 Results :
 
-Tests run: 31, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 77, Failures: 0, Errors: 0, Skipped: 0
 
 ------------------------------------------------------------------------
 BUILD SUCCESS
 ------------------------------------------------------------------------
-Total time: 2:55.500s
-Finished at: Wed Jan 20 16:54:40 CET 2016
+Total time: 3:39.408s
+Finished at: Thu Jan 21 11:51:10 CET 2016
 Final Memory: 12M/224M
 ------------------------------------------------------------------------

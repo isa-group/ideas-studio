@@ -65,7 +65,7 @@ public class TC06_EditWorkspace extends TestCase{
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TC06_EditWorkspace.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME);
@@ -77,22 +77,15 @@ public class TC06_EditWorkspace extends TestCase{
     
     @Test
     public void step03_editWorkspace() {
-
+        
         waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME);
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_NAME), " Edited");
         waitForVisibleSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION);
         getExpectedActions().sendKeys(By.cssSelector(SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION), " Edited");
-        
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
         
-        IdeasStudioActions.goWSMPage();
+        getWebDriver().navigate().refresh(); //Refresh for view changes
 
         waitForVisibleSelector(SELECTOR_WORSPACE_CARD_TITLE);
         testResult = getWebDriver().findElement(By.cssSelector(SELECTOR_WORSPACE_CARD_TITLE)).isDisplayed();
