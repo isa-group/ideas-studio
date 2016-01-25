@@ -52,7 +52,7 @@
                             <core:set var="languageNameAux" value="${fn:replace(language.key, '-language','')}"/>
                             <core:set var="languageName" value="${fn:replace(languageNameAux, 'ideas-','')}"/>
                             <core:set var="languageNameFinal" value="${fn:toUpperCase(languageName)}" />                      
-                            <h3><a href="/${language.key}/language/help">${languageNameFinal}</a></h3>
+                            <h3><a href="/${language.key}/help/">${languageNameFinal}</a></h3>
                         </li>
 
                     </core:forEach>  
