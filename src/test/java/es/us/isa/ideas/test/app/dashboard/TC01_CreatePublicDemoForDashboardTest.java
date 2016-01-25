@@ -29,7 +29,7 @@ import org.openqa.selenium.By;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC01_PublicDashboard extends TestCase{
+public class TC01_CreatePublicDemoForDashboardTest extends TestCase{
     
     private static String user = "guest";
     private static String pass = "guest";

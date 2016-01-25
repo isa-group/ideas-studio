@@ -18,7 +18,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    TC01_PublicDashboard.class,
+    TC01_CreatePublicDemoForDashboardTest.class,
     TC02_Login.class,
     TC03_CreateWorkspace.class,
     TC04_OpenWorkspace.class,  
@@ -28,7 +28,8 @@ import org.junit.runners.Suite;
     TC08_UpdateDemo.class,
     TC09_DepublishDemo.class,
     TC10_DeleteWorkspace.class,
-    TC11_CloneDemo.class
+    TC11_CloneDemo.class,
+    TC12_DeleteGuestPublicDemo.class
 })
 public class TestSuite extends TestCase {
 
