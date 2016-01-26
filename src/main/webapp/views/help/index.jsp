@@ -44,7 +44,7 @@
             </li>
             <li>
                 <h2>Languages</h2>
-                <ul>
+                <ul class="help-links">
 
                     <core:forEach var="language" items="${studioConfiguration.languages}">
                         <li>
