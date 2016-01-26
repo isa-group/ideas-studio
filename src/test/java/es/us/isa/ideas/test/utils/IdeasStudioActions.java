@@ -384,6 +384,14 @@ public class IdeasStudioActions {
         LOG.info("Loading editor page...");
         return IdeasStudioActions.goRelativePath("/app/editor");
     }
+    
+    /**
+     * Go to IDEAS help webpage.
+     */
+    public static boolean goHelpPage() {
+        LOG.info("Loading help page...");
+        return IdeasStudioActions.goRelativePath("/app/help");
+    }
 
     /**
      * Go to IDEAS login webpage.
