@@ -1,24 +1,22 @@
 {
-    "workbenchName": "IDEAS",
+        "workbenchName": "EXEMPLAR",
     "images": {
             "logo": "exemplar/appLogoBig.png",
-            "search": "ideas/Search.png"
+                "search": "exemplar/ExperimentsSearch.png"
     },
 	"languages": {
-            "ideas-sedl-language": "/ideas-sedl-language",
+
+            "sedl-language": "/ideas-sedl-language",
             "ideas-plaintext-language": "/ideas-plaintext-language",
             "ideas-csv-language": "/ideas-csv-language",
-            "ideas-html-language": "/ideas-html-language",
-            "ideas-json-language": "/ideas-json-language",
-            "ideas-yaml-language": "/ideas-yaml-language",
-            "ideas-R-language": "/ideas-R-language"
+            "R-language": "/ideas-R-language"
 	},
     "configurationFiles":{
       "application":"classpath*:application.properties",
       "security":"classpath*:security.properties",
-      "social":"classpath*:social.properties",
-      "email":"classpath*:email.properties"
+          "social":"classpath*:social-exemplar.properties",
+          "email":"classpath*:email-exemplar.properties"
     },
-    "helpURI":"https://labs.isa.us.es/IDEAS-help/",
+    "helpURI":"exemplar.html",
     "googleAnalyticsID":"UA-68297022-1"
 } 
