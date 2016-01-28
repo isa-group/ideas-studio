@@ -477,11 +477,56 @@ var DescriptionInspector = {
 		}
 
 	},
+	expandConsole: function(menu){
+		var editor= $("#editorItself");
+		var console= $("#editorBottomPanel");
+		var expandButton= $("#expandConsole");
+		if (menu == 'first'){
+			
+			editor.animate({height: "65%"},function(){
+				
+				expandButton.off('click').click(function(){
+					DescriptionInspector.expandConsole('second');
+				});
+			});
+		}else if(menu == 'second'){
+			editor.animate({height: "6%"},function(){
+				expandButton.children('span').toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
+				//expandButton.children('span').toggleClass("glyphicon-triangle-bottom");
+				expandButton.off('click').click(function(){
+					DescriptionInspector.expandConsole('contract');
+				});
+			});
+		}else if(menu=='contract'){
+			editor.animate({height: "65%"},function(){
+				expandButton.off('click').click(function(){
+					DescriptionInspector.expandConsole('hide');
+				});
+			});
+		}else if(menu == 'hide'){
+			editor.animate({height: "90%"},function(){
+				expandButton.children('span').toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
+				//expandButton.children('span').toggleClass("glyphicon-triangle-bottom");
+				expandButton.off('click').click(function(){
+					DescriptionInspector.expandConsole('first');
+				});
+			});
+		}
+		console.css("height","100%");
+		
+	},
 
 	/**
-	 * Expande el menú desplegable independientemente del tipo que sea (add o
-	 * remove). Define la animación de despliegue.
-	 * 
+	 * Limpia todo el texto de la consola.
+	 * @memberof DescriptionInspector
+	 * */
+	clearConsole: function(){
+		 $(".gcli-row-out").remove();
+		 $(".gcli-row-in").remove();
+	},
+	/**
+	 * Expande el menú desplegable independientemente del tipo que sea (add o remove).
+	 * Define la animación de despliegue.
 	 * @memberof DescriptionInspector
 	 */
 	expandInspectorMenu : function(menu) {

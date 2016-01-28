@@ -211,7 +211,22 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 	optButton.click(function() {
 		loadOperations.onClick();
 	});
+	///////
+	var expandButton=$('<button class="btn" style="{float:left}" id="expandConsole"><span class="glyphicon glyphicon-chevron-up"></span></button>');
+	expandButton.click(function(){
+		DescriptionInspector.expandConsole('second');
+	});
+	
+	
+	var clearButton=$('<button class="btn" style="{float:left}" id="clearConsole"><span class="glyphicon glyphicon-remove-sign"></span></button>');
+	clearButton.click(function(){
+		DescriptionInspector.clearConsole();
+	});
+	
+	///////
 	divContent.append(optButton);
+	divContent.append(expandButton);
+	divContent.append(clearButton);
 	
 	var caret = $('<button class="btn btn-primary opButton" data-toggle="dropdown">...</span><span class="sr-only">Toggle Dropdown</span></button>');
 	var caretUL = $('<ul id="ulOperationsTypes" class="dropdown-menu scrollable-op-menu" role="menu"></ul>');

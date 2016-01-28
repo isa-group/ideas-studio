@@ -1977,6 +1977,10 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 .spn {
 	margin-left: 15px;
 }
+#expandConsole , #clearConsole{
+	background:none; 
+	opacity:0.35;
+}
 #footer {
 	bottom: 0;
 	position: absolute;
