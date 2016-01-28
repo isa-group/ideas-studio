@@ -134,13 +134,13 @@
 			
 			<div id="socialSigninButtons" class="form-inline">
 				<span>Or Sign in with:</span>
- 				<!--<form id="fa_signin" action="signin/facebook" method="POST"
+ 				<form id="fa_signin" action="signin/facebook" method="POST"
  					class="form-horizontal">
                                         <input type="hidden" name="scope" value="email">
                                         <button type="submit" class="btn btn-social btn-xs btn-facebook"> 
  						<i class="fa fa-facebook"></i> Facebook 
  					</button> 
- 				</form>-->
+ 				</form>
 				<form id="tw_signin" action="signin/twitter" method="POST"
 					class="form-horizontal">                                        
 					<button type="submit" class="btn btn-social btn-xs btn-twitter">
