@@ -1,4 +1,4 @@
-ideas-studio v0.8.4, 20/01/2016
+ideas-studio v0.8.4, 28/01/2016
 ----------------------------------------------
 - [new module] ideas-yaml-module
 - [new module] ideas-json-module
