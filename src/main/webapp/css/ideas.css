@@ -1874,12 +1874,14 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 */
 #version {
 	float: left;
-    color: rgba(0, 0, 0, 0.5);
-    margin-top: 6px;
-    margin-right: 5px;
-    cursor: pointer;
-    padding-left: 10px;
-    font-size: 12px;
+	color: gray;
+	margin-top: 5px;
+	right: 50%;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", Helvetica,
+		Arial, sans-serif;
+	margin-right: 5px;
+	cursor:pointer; cursor: hand;
+	padding-left: 10px;
 }
 #versions {
 	z-index: 2;
