@@ -1,9 +1,9 @@
 {
         "workbenchName": "EXEMPLAR",
-    "images": {
-            "logo": "exemplar/appLogoBig.png",
+        "images": {
+                "logo": "exemplar/appLogoBig.png",
                 "search": "exemplar/ExperimentsSearch.png"
-    },
+        },
 	"languages": {
 
             "sedl-language": "/ideas-sedl-language",
@@ -11,12 +11,12 @@
             "ideas-csv-language": "/ideas-csv-language",
             "R-language": "/ideas-R-language"
 	},
-    "configurationFiles":{
-      "application":"classpath*:application.properties",
-      "security":"classpath*:security.properties",
+        "configurationFiles":{
+          "application":"classpath*:application.properties",
+          "security":"classpath*:security.properties",
           "social":"classpath*:social-exemplar.properties",
           "email":"classpath*:email-exemplar.properties"
-    },
+        },
     "helpURI":"exemplar.html",
-    "googleAnalyticsID":"UA-68297022-1"
+    "googleAnalyticsID":"UA-56725341-1" 
 } 
