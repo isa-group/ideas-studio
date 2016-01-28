@@ -44,6 +44,7 @@
     <error-code>403</error-code>
     <location>/views/misc/403.jsp</location>
   </error-page>
+<!--   Session timeout in minutes -->
   <session-config>
     <session-timeout>720</session-timeout>
   </session-config>

@@ -35,8 +35,13 @@
 <link rel="stylesheet" href="css/passfield.min.css" type="text/css">
 <!-- Custom css styles -->
 <link rel="stylesheet" href="css/ideas.css">
+<link rel="stylesheet" href="css/exemplar-welcome.css">
 
 
+<!-- Fonts -->
+<link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="css/font-awesome/css/font-awesome.css">
 <!-- Initialization scripts -->
 <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 <script type="text/javascript" src="js/vendor/jquery.js"></script>
@@ -62,10 +67,11 @@
 		});
 	});
 </script>
+<script type="text/javascript" src="js/smoothscroll.js"></script>
 
 </head>
 
-<body id="pagesTemplate">
+<body id="pagesTemplate" data-spy="scroll" data-offset="0" data-target="#navigation">
 	<!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
@@ -82,6 +88,16 @@
 			</div>
 		</div>
 	</div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->    
+	<script>
+	$('.carousel').carousel({
+	  interval: 3500
+	})
+	</script>
+                                
 	<!-- Google Analytics. -->
 	<script>
 		var _gaq = [ [ '_setAccount', 'UA-XXXXX-X' ], [ '_trackPageview' ] ];

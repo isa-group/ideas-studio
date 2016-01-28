@@ -35,7 +35,7 @@
     <definition name="home" extends="pagesTemplate">
         <put-attribute name="body" value="/views/home/home.jsp"/>
     </definition>
-    <definition name="welcome" extends="pagesTemplate">
+    <definition name="welcome" extends="portalTemplate">
         <put-attribute name="body" value="/views/welcome/welcome.jsp"/>
     </definition>
 

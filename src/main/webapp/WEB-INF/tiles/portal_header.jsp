@@ -14,17 +14,41 @@
 	});
 </script>
 
-<div id="pagesHeader">
-	<div id="pagesHeaderLogo">
-		<security:authorize access="isAuthenticated()">
-			<div id="pagesHeaderUserTab">
-				<div class="userInfo" id="principalUserInfo">
-					<span></span> <BR /> <span class="userAuths"
-						id="principalUserAuths"></span>
-				</div>
-				<div class="userAvatar" id="principalUserAvatar"></div>
-			</div>
-		</security:authorize>
-	</div>
+
+<!-- Fixed navbar -->
+<div id="navigation" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">                    
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>                    
+            </button>
+            <a class="navbar-brand" href="#" style="padding-top: 0px;">               
+                <div id="appLogo" class="navbar-brand" style="background-image: url('./img/${studioConfiguration.images['logo']}');position:inherit;">                                                
+                </div>
+            </a>
+                <security:authorize access="isAuthenticated()">
+                <div id="pagesHeaderUserTab" style="width:auto;position:inherit;">
+                    <div class="userInfo" id="principalUserInfo">
+                        <span></span> <BR /> <span class="userAuths"
+                                                   id="principalUserAuths"></span>
+                    </div>
+                    <div class="userAvatar" id="principalUserAvatar"></div>
+                </div>
+            </security:authorize>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#home" class="smothscroll">Welcome</a></li>
+                <li><a href="#desc" class="smothscroll">Why Exemplar?</a></li>
+                <li><a href="#showcase" class="smothScroll">Showcase</a></li>
+                <li><a href="app/editor" class="smothScroll">Use it NOW!</a></li>
+                <li><a href="http://www.isa.us.es/publications?lastname=All&title=EXEMPLAR&biblio_year=&tid=All&field_reseracharea_nid=All" class="smothScroll">How to cite</a></li>                
+            </ul>            
+        </div><!--/.nav-collapse -->                     
+    </div>                
+
 </div>
+
 

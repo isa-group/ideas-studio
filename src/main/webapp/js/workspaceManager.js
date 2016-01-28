@@ -12,6 +12,7 @@ var spreadsheet_icon = "../../../css/dyntree/skin/eSpreadsheet.png";
 var slideshow_icon = "../../../css/dyntree/skin/eSlides.png";
 var csv_icon = "../../../css/dyntree/skin/eCSV.png";
 var binary_file_icon = "../../../css/dyntree/skin/eBinaryFile.png";
+var r_icon = "../../../css/dyntree/skin/Rlogo.png";
 
 var extensionsIcons = {
     'gif': 'image_icon',
@@ -27,6 +28,7 @@ var extensionsIcons = {
     'pptx': 'slideshow_icon',
     'pdf': 'pdf_icon',
     'csv': 'csv_icon',
+    'r': 'r_icon',
     '': 'binary_file_icon'
 };
 
