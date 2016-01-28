@@ -15,6 +15,13 @@ import org.openqa.selenium.By;
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -78,7 +85,7 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
 
         // Add workspace button
         waitForVisibleSelector(SELECTOR_ADD_BUTTON);
-        getExpectedActions().click(By.cssSelector(SELECTOR_ADD_BUTTON));
+        getJs().executeScript("jQuery('" + SELECTOR_ADD_BUTTON + "').click();"); // avoid element not clickable exception
 
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_INPUT);
@@ -87,7 +94,7 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
 
         // Close workspace manager
         waitForVisibleSelector(SELECTOR_WS_LIST);
-        getExpectedActions().click(By.cssSelector(SELECTOR_WS_LIST));
+        getJs().executeScript("jQuery('" + SELECTOR_WS_LIST + "').click();"); // avoid element not clickable exception
 
         try {
             Thread.sleep(2000); // animation

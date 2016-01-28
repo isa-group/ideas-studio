@@ -9,7 +9,7 @@
             "iagree-template-language": "/ideas-iagree-template-language",
            	"iagree-offer-language": "/ideas-iagree-offer-language",
             "iagree-agreement-language": "/ideas-iagree-agreement-language",
-            "iagree-cplex-language": "/ideas-cplex-language",
+            "ideas-cplex-language": "/ideas-cplex-language",
 			"ideas-afm-language": "/ideas-afm-language",
             "ideas-fmc-language": "/ideas-fmc-language",
             "ideas-hcs-language": "/ideas-hcs-language",
@@ -18,7 +18,9 @@
             "ideas-csv-language": "/ideas-csv-language",
             "ideas-lusdl-language": "/ideas-lusdl-language",
             "ideas-html-language": "/ideas-html-language",
-            "ideas-soup-language": "/ideas-soup-language"
+            "ideas-soup-language": "/ideas-soup-language",
+            "ideas-json-language": "/ideas-json-language",
+            "ideas-yaml-language": "/ideas-yaml-language"
 	},
     "configurationFiles":{
       "application":"classpath*:application.properties",

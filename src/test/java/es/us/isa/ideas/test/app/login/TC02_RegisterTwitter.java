@@ -43,14 +43,14 @@ public class TC02_RegisterTwitter extends es.us.isa.ideas.test.utils.TestCase {
 	
 	@After
 	public void tearDownTest() {
-		LOG.info("testResult value: " + testResult);
+		LOG.log(Level.INFO, "testResult value: {0}", testResult);
 	}
 	
 	@Test
 	public void step01_loadSeleniumTwitterProperties() {
 		
 		tw_user = TestCase.getSeleniumTwitterUser();
-		tw_pass = TestCase.getSeleniumTwitterPasswd();
+		tw_pass = TestCase.getSeleniumTwitterPassword();
 		
 		testResult = validatePropertyValues(tw_user, tw_pass);
 		assertTrue(testResult);

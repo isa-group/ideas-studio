@@ -17,5 +17,6 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
 	">
         <context:component-scan base-package="es.us.isa.ideas.app" />
+        <context:component-scan base-package="es.us.isa.ideas.test.app" />
         <context:component-scan base-package="org.springframework.social.connect.jpa.hibernate" />	
 </beans>
