@@ -99,13 +99,18 @@ public class ConfirmationService extends BusinessService<Confirmation> {
 
     public void createPasswordResetConfirmation(Actor actor) {
 
-        Confirmation confirmation = repository.getByResearcherId(actor.getId());
-
+        Confirmation confirmation = new Confirmation();
+        
+        confirmation.setResearcher((Researcher) actor);
+        confirmation.setRegistrationDate(new Date());
+        confirmation.setConfirmationCode(UUID.randomUUID().toString());
         confirmation.setConfirmationDate(null);
+        
         repository.save(confirmation);
-
+ 
         sendPasswordResetConfirmationMail(confirmation,
                 new HashMap<String, String>());
+
     }
 
     public Confirmation resetPassword(String code) {
