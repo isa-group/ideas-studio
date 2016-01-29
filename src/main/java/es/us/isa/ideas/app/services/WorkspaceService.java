@@ -216,9 +216,12 @@ public class WorkspaceService extends BusinessService<Workspace> {
     }
     
     public void updateTime(String workspaceName, String username) {
-        Workspace ws = findByNameAndOwner(workspaceName, username);
-        ws.setLastMod(Calendar.getInstance().getTime());
-        workspaceRepository.saveAndFlush(ws);
+        try {
+            Workspace ws = findByNameAndOwner(workspaceName, username);
+            ws.setLastMod(Calendar.getInstance().getTime());
+            workspaceRepository.saveAndFlush(ws);
+        } catch (Exception e) {
+        }
     }
 
     public void updateDownloads(String workspaceName, String username) {

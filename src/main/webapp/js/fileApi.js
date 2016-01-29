@@ -35,7 +35,7 @@ var FileApi = {
 	
 	saveFileContents : function(fileUri, fileContent, callback) {
 
-		$.ajax("files/content?fileUri=" + fileUri + "&fileContent=" + fileContent , {
+		$.ajax("files/content" , {
 			"type" : "POST",
 			"data" : {
 				'fileUri' : fileUri,
