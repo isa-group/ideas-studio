@@ -391,7 +391,7 @@ public class IdeasStudioActions {
     public static boolean goWSMPage() {
         LOG.info("Loading dashboard page...");
         return IdeasStudioActions.goRelativePath("/app/wsm");
-        
+    }   
     /**
      * Go to IDEAS help webpage.
      */
