@@ -169,6 +169,8 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 				.removeClass("active");
 	}
 
+        oldUri=EditorManager.currentUri;
+
 	EditorManager.currentUri = fileUri;
 
 	$(EditorManager.tabsMap[EditorManager.currentUri]).addClass("active");
@@ -211,7 +213,17 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 	optButton.click(function() {
 		loadOperations.onClick();
 	});
+        var expandButton=$('<button class="btn btn-link" style="{float:left}" id="expandConsole"><span class="glyphicon glyphicon-chevron-up"></span></button>');
+	expandButton.click(function(){
+		DescriptionInspector.expandConsole('second');
+	});
+	var clearButton=$('<button class="btn btn-link" style="{float:left}" id="clearConsole"><span class="glyphicon glyphicon-remove-sign"></span></button>');
+	clearButton.click(function(){
+		DescriptionInspector.clearConsole();
+	});
 	divContent.append(optButton);
+        divContent.append(expandButton);
+	divContent.append(clearButton);
 	
 	var caret = $('<button class="btn btn-primary opButton" data-toggle="dropdown">...</span><span class="sr-only">Toggle Dropdown</span></button>');
 	var caretUL = $('<ul id="ulOperationsTypes" class="dropdown-menu scrollable-op-menu" role="menu"></ul>');
@@ -225,7 +237,9 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 	var ops_name_lenght = 0;
 	var use_caret = false;
 	var ops = [];
-	if (opMap != undefined){
+	if(typeof opMap != "undefined"){
+		//Old code  in the commentary
+/*		if (opMap != undefined){
 		for (var i = 0; i < opMap.length; i++) {
 			ops_name_lenght += opMap[i].name.length;
 			if(ops_name_lenght <= 75){
@@ -249,7 +263,59 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 				});
 			}
 		}
-		
+*/		
+		for (var i = 0; i < opMap.length; i++) {
+			ops_name_lenght += opMap[i].name.length;
+			
+		if(typeof opMap[i].icon != "undefined"){
+			if(typeof opMap[i].iconOnly != "undefined" && opMap[i].iconOnly){		
+				var op = $('<button class="btn btn-primary opButton" title="'+opMap[i].name+'" id="' + opMap[i].id + '"><span class="'+opMap[i].icon+'"></span></button>');
+				operationArray.push(opMap[i]);
+				op.click(function() {
+					launchOperation($(this).attr('title'));
+					operationArray = [];
+				});
+				ops.push(op);
+			}else{
+				var op = $('<button class="btn btn-primary opButton" name="'+opMap[i].name+'" id="' + opMap[i].id + '"><span class="'+opMap[i].icon+'"></span> '+opMap[i].name+'</button>');
+				operationArray.push(opMap[i]);
+				var name= opMap[i].name;
+				op.click(function() {
+					launchOperation($(this).attr('name'));
+					operationArray = [];
+					
+				});
+				ops.push(op);
+			}
+
+		}else{
+			
+			if(ops_name_lenght <= 75){
+
+				var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '> '+ opMap[i].name + '</button>');
+				operationArray.push(opMap[i]);
+				op.click(function() {
+					launchOperation($(this).html());
+					operationArray = [];
+				});
+				ops.push(op);
+				
+
+			} else {
+				use_caret = true;
+				caretLI = $('<li><a id="' + opMap[i].id
+						+ '" class="continue onlyOne">' + opMap[i].name
+						+ '</a></li>');
+				caretUL.append(caretLI);
+				operationArray.push(opMap[i]);
+				caretLI.click(function() {
+					launchOperation($(this).children('a').html());
+					operationArray = [];
+				});
+			}
+			
+		}
+		}
 		if(use_caret){
 			divContent.append(caret);
 			divContent.append(caretUL);
@@ -259,6 +325,37 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 			divContent.append(ops[k]);
 	}
 	
+        comMap = ModeManager.getCommands(ModeManager
+			.calculateLanguageIdFromExt(ModeManager
+					.calculateExtFromFileUri(fileUri)));
+	
+	 oldCommands= ModeManager.getCommands(ModeManager
+			.calculateLanguageIdFromExt(ModeManager
+					.calculateExtFromFileUri(oldUri)));
+	require(['gcli/index', 'demo/index'], function(gcli) {
+		if(typeof oldCommands != 'undefined'){
+	for(var i=0;i<oldCommands.length;i++){
+		gcli.removeCommand(oldCommands[i]);
+	}
+	}
+        if(typeof comMap != 'undefined'){
+	for(var i=0;i<comMap.length;i++){
+		var command= comMap[i];
+		
+			var action= eval('('+command.action+')');
+			gcli.addCommand({
+				 name: command.id,
+					description: command.name,
+					params:command.params,
+					returnType: 'string',
+					exec: action,
+					defaultValue: command.defaultValue	
+			 });
+		
+	}
+    }
+    });
+        
 	buttonPanel.append(divContent);
 };
 
@@ -766,6 +863,16 @@ var moveNodeAux = function(originFileUri, targetFileUri, justRename,
 	// Calculate tree nodes
 	var targetDirForNode = trimLastFromNodeUri(targetFileUri);
 	var originNode = getNodeByFileUri(originFileUri);
+
+        // Recurs. "move" childrens
+	for (potentialUri in EditorManager.tabsMap) {
+		if (potentialUri.indexOf(originFileUri) != -1
+				&& potentialUri != originFileUri) {
+			var childName = calculateNodeNameFromUri(potentialUri);
+			moveNodeAux(potentialUri, targetFileUri + "/" + childName,
+					justRename, false, copy);
+		}
+	}
 
 	// Replace currentUri if necessary
 	if (originNode && EditorManager.currentUri == originFileUri)

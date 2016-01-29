@@ -56,5 +56,31 @@
 		<prop key="hibernate.hbm2ddl.auto">verify</prop>
 		<prop key="hibernate.cglib.use_reflection_optimizer">true</prop>
 	</util:properties>
+    <!-- Transactions an so on-->
+    <tx:annotation-driven transaction-manager="transactionManager"
+		proxy-target-class="true" />
 
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="persistenceUnitName" ref="persistenceUnit" />
+		<property name="jpaProperties" ref="jpaProperties" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="jpaVendorAdapter"
+		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="databasePlatform" ref="sqlDialect" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 </beans>

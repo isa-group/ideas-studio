@@ -1,6 +1,9 @@
-package es.us.isa.ideas.test.module.plaintext;
+package es.us.isa.ideas.test.app.editor;
 
-import static es.us.isa.ideas.test.module.plaintext.TestSuite.getWorkspace;
+import es.us.isa.ideas.test.app.dashboard.TC11_CloneDemo;
+import static es.us.isa.ideas.test.app.editor.TestSuite.getWorkspaceName;
+import static es.us.isa.ideas.test.app.editor.TestSuite.getWorkspaceDescription;
+import static es.us.isa.ideas.test.app.editor.TestSuite.getWorkspaceTags;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,10 +24,12 @@ import static org.junit.Assert.assertTrue;
  * Sevilla, Spain
  *
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ *         Daniel Francisco Alonso Jiménez <dalonso1@us.es>
+ * 
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
+public class TC02_CreateWorkspace extends TestCase {
 
     private static boolean testResult = false;
     private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
@@ -51,9 +56,6 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
         assertTrue(testResult);
     }
 
-    /**
-     * Can open workspace menu
-     */
     @Test
     public void step02_openWorkspaceMenu() {
 
@@ -72,17 +74,27 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
         assertTrue(testResult);
 
     }
-
+    
     @Test
     public void step03_createWorkspace() {
 
         // Add workspace button
         waitForVisibleSelector(SELECTOR_ADD_BUTTON);
         getExpectedActions().click(By.cssSelector(SELECTOR_ADD_BUTTON));
+        
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC11_CloneDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         // Modal window
-        waitForVisibleSelector(SELECTOR_MODAL_INPUT);
-        getExpectedActions().sendKeys(By.cssSelector(SELECTOR_MODAL_INPUT), getWorkspace());
+        waitForVisibleSelector(SELECTOR_NEW_WS_MODAL_INPUT_NAME);
+        getExpectedActions().sendKeys(By.cssSelector(SELECTOR_NEW_WS_MODAL_INPUT_NAME), getWorkspaceName());
+        waitForVisibleSelector(SELECTOR_NEW_WS_MODAL_INPUT_DESCRIPTION);
+        getExpectedActions().sendKeys(By.cssSelector(SELECTOR_NEW_WS_MODAL_INPUT_DESCRIPTION), getWorkspaceDescription());
+        waitForVisibleSelector(SELECTOR_NEW_WS_MODAL_INPUT_TAGS);
+        getExpectedActions().sendKeys(By.cssSelector(SELECTOR_NEW_WS_MODAL_INPUT_TAGS), getWorkspaceTags());
         getExpectedActions().click(By.linkText("Create"));
 
         // Close workspace manager
@@ -95,10 +107,10 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
             LOG.severe(e.getMessage());
         }
 
-        testResult = getWorkspace().equals(getTextFromSelector(SELECTOR_WS_CURRENT));
+        testResult = getWorkspaceName().equals(getTextFromSelector(SELECTOR_WS_CURRENT));
 
         if (testResult) {
-            echoCommandApi("Workspace \"" + getWorkspace() + "\" was successfully created.");
+            echoCommandApi("Workspace \"" + getWorkspaceName() + "\" was successfully created.");
         }
 
         assertTrue(testResult);

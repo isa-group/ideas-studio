@@ -12,20 +12,29 @@
     }
     
     console.log(tagfilter);
-    
+
 
 
 $(".openWS").click(function(e){
     e.preventDefault();
     var name = $(this).attr('href');
-    WorkspaceManager.setSelectedWorkspace(name);
     AppPresenter.loadSection("editor", name, function () {
         WorkspaceManager.loadWorkspace();
     });
 });
-$("#editWS").click(function(){	
-    AppPresenter.setCurrentSection("wsm");
-    AppPresenter.loadDynamically("#wsmMain", "workspace/edit")});
+
+$(".editWS").click(function(e) {
+    e.preventDefault();
+    var name = $(this).attr('href');
+    WorkspaceManager.setSelectedWorkspace(name);
+    showContentAsModal("app/modalWindows/editWorkspace", function() {
+            var workspaceName = $("#modalCreationField input").val();
+            var description = $("#descriptionInput textarea").val();
+            $("#workspacesNavContainer li").removeClass("active");
+            WorkspaceManager.updateWorkspace(workspaceName,description);
+             $(location).attr('href',"app/wsm"); 
+    });
+});
 
 $('#tagFilter').keypress(function (e) {
     if (e.which == 13) {
@@ -91,7 +100,6 @@ $(".publish-demo").click(function(e) {
 $(".delete-demo").click(function(e) {
     e.preventDefault();
     var name = $(this).attr('href');     
-    //WorkspaceManager.deleteDemoWorkspace(name).then(location.reload());
     WorkspaceManager.deleteDemoWorkspace(name,refreshPage);
 });
 

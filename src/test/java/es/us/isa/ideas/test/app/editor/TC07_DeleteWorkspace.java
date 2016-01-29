@@ -1,4 +1,4 @@
-package es.us.isa.ideas.test.module.plaintext;
+package es.us.isa.ideas.test.app.editor;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,33 +9,36 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
+import es.us.isa.ideas.test.utils.TestCase;
+import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
 import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
  * Sevilla, Spain
  *
- * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @author Daniel Francisco Alonso Jiménez <dalonso1@us.es>
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC06_RemoveCurrentWorkspace extends es.us.isa.ideas.test.utils.TestCase {
+public class TC07_DeleteWorkspace extends TestCase {
 
+    protected static final String SELECTOR_DELETE_BUTTON = "#delete-ws";
+    
     private static boolean testResult = true;
-    private static final String WORKSPACE_NAME = TestSuite.getWorkspace();
-    private static final Logger LOG = Logger.getLogger(TC06_RemoveCurrentWorkspace.class.getName());
+    private static final String WORKSPACE_NAME = TestSuite.getWorkspaceNewName();
+    private static final Logger LOG = Logger.getLogger(TC07_DeleteWorkspace.class.getName());
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC10_RemoveCurrentWorkspace...");
+        LOG.log(Level.INFO, "## Init TC07_DeleteWorkspace...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC10_RemoveCurrentWorkspace finished");
+        LOG.log(Level.INFO, "## TC07_DeleteWorkspace finished");
     }
 
     @After
@@ -51,16 +54,33 @@ public class TC06_RemoveCurrentWorkspace extends es.us.isa.ideas.test.utils.Test
     }
 
     @Test
-    public void step02_removeCurrentWorkspace() {
-        String gcliCommand = "deleteWorkspace " + WORKSPACE_NAME;
-
+    public void step02_deleteCurrentWorkspace() {
+        
+        // Delete workspace button
+        waitForVisibleSelector(SELECTOR_DELETE_BUTTON);
+        getJs().executeScript("jQuery('" + SELECTOR_DELETE_BUTTON + "').click();");
+        
         try {
-            Thread.sleep(2000); // explicity wait for command response
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC07_DeleteWorkspace.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+        // Modal window
+        waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
+        getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
+        
+        try {
+            Thread.sleep(2000);
         } catch (InterruptedException ex) {
             LOG.log(Level.SEVERE, ex.getMessage());
         }
-
-        IdeasStudioActions.executeCommands(gcliCommand);    // executing this command will auto-refresh editor page
+        
+        // Modal window
+        waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
+        
+        getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
 
         try {
             Thread.sleep(2000);
@@ -68,16 +88,7 @@ public class TC06_RemoveCurrentWorkspace extends es.us.isa.ideas.test.utils.Test
             LOG.log(Level.SEVERE, ex.getMessage());
         }
 
-        waitForVisibleSelector(SELECTOR_WS_TOGGLER);
-        getExpectedActions().click(By.cssSelector(SELECTOR_WS_TOGGLER));
-
-        try {
-            Thread.sleep(2000); // menu toggle animation
-        } catch (InterruptedException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage());
-        }
         testResult = !IdeasStudioActions.existWorkspaceByName(WORKSPACE_NAME);
         assertTrue(testResult);
     }
-
 }

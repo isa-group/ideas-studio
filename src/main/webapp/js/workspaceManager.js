@@ -99,7 +99,7 @@ var WorkspaceManager = {
                 workspaceDownload += "<span class=\"glyphicon glyphicon-download\" aria-hidden=\"true\"> </span>";
                 workspaceDownload += "</a>";
                 
-            var workspaceEdit =  "<a href=\"app/wsm/workspaces/"+WorkspaceManager.getSelectedWorkspace()+"/edit\" style=\"cursor: pointer\" id=\"edit-ws\" ";
+            var workspaceEdit =  "<a style=\"cursor: pointer\" id=\"edit-ws\" ";
                 workspaceEdit += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit workspace\">";
                 workspaceEdit += "<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"> </span></a>";
 
@@ -130,8 +130,18 @@ var WorkspaceManager = {
             $(".dynatree-expander").click();
             
             $("#edit-ws").click(function(e) {
-                    AppPresenter.setCurrentSection("wsm");
-                    AppPresenter.loadDynamically("#wsmMain", "workspace/edit")   
+                e.preventDefault();
+                var oldName = WorkspaceManager.getSelectedWorkspace();
+                $("#modalCreationField input").val(oldName);
+		showContentAsModal("app/modalWindows/editWorkspace", function() {
+			var workspaceName = $("#modalCreationField input").val();
+                        var description = $("#descriptionInput textarea").val();
+			$("#workspacesNavContainer li").removeClass("active");
+			WorkspaceManager.updateWorkspace(workspaceName,description);
+			AppPresenter.loadSection("editor", workspaceName, function() {
+				WorkspaceManager.loadWorkspace();
+			});
+		});
             });
             
             $("#download-ws").click(function(e) {
@@ -148,6 +158,9 @@ var WorkspaceManager = {
                     e.preventDefault();
                     var name = WorkspaceManager.getSelectedWorkspace();
                     WorkspaceManager.publishWorskspaceAsDemo(name);
+                    AppPresenter.loadSection("editor", name, function() {
+				WorkspaceManager.loadWorkspace();
+			});
             });
             
             $("#screenshot-ws").click(function(e) {
@@ -178,7 +191,7 @@ var WorkspaceManager = {
                     hideError();
                 });
                 WorkspaceManager.deleteWorkspace(workspaceName, function () {
-                    WorkspaceManager.loadWorkspace(WorkspaceManager.getSelectedWorkspace());
+                    WorkspaceManager.loadWorkspace();
                 });
             }
             hideModal();
@@ -222,6 +235,30 @@ var WorkspaceManager = {
         
 
     },
+    
+    updateWorkspace: function (workspaceName,description) {
+        FileApi.updateWorkspace(workspaceName,description, function (ts) {                        
+            if (ts) {
+                if(WorkspaceManager.getSelectedWorkspace()!==workspaceName){
+                    deleteWSLine(WorkspaceManager.getSelectedWorkspace());
+                }
+                createWSLine(workspaceName, function () {
+                    WorkspaceManager.setSelectedWorkspace(workspaceName);                    
+                    AppPresenter.loadSection("editor", workspaceName, function() {
+				WorkspaceManager.loadWorkspace();
+			});
+                });
+                
+            } else {
+                showError("Error", "Error updating workspace", function () {
+                    hideError();
+                });
+                    WorkspaceManager.loadWorkspace();
+            }
+            hideModal();
+        });
+    },
+    
     deleteDemoWorkspace: function (workspaceName, callback) {
         var continueHandler = function() {
             FileApi.deleteDemoWorkspace(workspaceName, function (ts) {

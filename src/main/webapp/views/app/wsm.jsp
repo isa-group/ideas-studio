@@ -65,9 +65,8 @@
                                 <article class="actions_bar">    
                                     <div class="actions_bar_title flex-center-left">Actions:</div>
                                     <div class="actions_bar_buttons flex-center-right">                                    
-                                        <a href="${workspace.name}" id="openWS" class="openWS btn btn-success  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Open workspace"><span class="glyphicon glyphicon-folder-open"></span></a>
-                                      <jstl:url value="app/wsm/workspaces/${workspace.name}/edit" var="edit_url"/>
-                                      <a href="${edit_url}" id="editWS" class="btn btn-primary  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Edit workspace"><span class="glyphicon glyphicon-pencil"></span></a>
+                                      <a href="${workspace.name}" id="openWS" class="openWS btn btn-success  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Open workspace"><span class="glyphicon glyphicon-folder-open"></span></a>
+                                      <a href="${workspace.name}" id="editWS" class="editWS btn btn-primary  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Edit workspace"><span class="glyphicon glyphicon-pencil"></span></a>
                                       <a href="${workspace.name}" id="downloadWS" class="download-ws btn btn-info  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Download zip"><span class="glyphicon glyphicon-download"></span></a>
                                       <a href="${workspace.name}" id="publishWS" class="publish-demo btn btn-info  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Publish demo"><span class="glyphicon glyphicon-cloud-upload"></span></a>
                                       <a href="${workspace.name}" id="deleteWS" class="delete-ws btn btn-danger  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Delete workspace"><span class="glyphicon glyphicon-trash"></span></a>
@@ -80,7 +79,7 @@
                                        <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">get_app</i>
-                                                <p>${workspace.downloads}</p>
+                                                <p class="download-counter">${workspace.downloads}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -88,7 +87,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">launch</i>
-                                                <p>${workspace.launches}</p>
+                                                <p class="launch-counter">${workspace.launches}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -96,7 +95,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">label</i>
-                                                <p>${workspace.wsVersion}</p>
+                                                <p class="version-counter">v.${workspace.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -146,7 +145,7 @@
                                        <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">get_app</i>
-                                                <p>${demo.downloads}</p>
+                                                <p class="download-counter">${demo.downloads}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -154,7 +153,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">launch</i>
-                                                <p>${demo.launches}</p>
+                                                <p class="launch-counter">${demo.launches}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -162,7 +161,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons">label</i>
-                                                <p>${demo.wsVersion}</p>
+                                                <p class="version-counter">v.${demo.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -213,7 +212,7 @@
                                        <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Downloads">get_app</i>
-                                                <p>${otherdemo.downloads}</p>
+                                                <p class="download-counter">${otherdemo.downloads}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -222,7 +221,7 @@
                                             <div class="card__counters-content_item">
                                                 
                                                 <i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Launches">launch</i>
-                                                <p>${otherdemo.launches}</p>
+                                                <p class="launch-counter">${otherdemo.launches}</p>
                                             </div>
                                         </a>
                                     </div>
@@ -230,7 +229,7 @@
                                         <a class="tooltips">
                                             <div class="card__counters-content_item">
                                                 <i class="material-icons" data-toggle="tooltip" data-placement="bottom" title="Version">label</i>                                             
-                                                <p>v.${otherdemo.wsVersion}</p>
+                                                <p class="version-counter">v.${otherdemo.wsVersion}</p>
                                             </div>
                                         </a>
                                     </div>

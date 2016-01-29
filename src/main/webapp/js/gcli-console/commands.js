@@ -272,9 +272,35 @@ var CommandsRegistry = {
             }],
         exec: function (args, context) {
             var module = args.moduleID;
-            CommandApi.echo("Testing module: " + module);
-            auxTestModule(module);
+            CommandApi.echo("Testing module " + module + ", please wait...");
+            auxTestModule(module, function (testsSuccess, totalTests, unimplemented) {
+                if (testsSuccess > 0 && totalTests > 0 && !unimplemented)
+                    CommandApi.echo("Module " + module + " tested: " + parseInt((testsSuccess / totalTests) * 100) + "% successful.");
+                else
+                    CommandApi.echo("Module " + module + " tested: No tests implemented.");
+            });
 
+        }
+    },
+    testModules: {
+        name: 'testModules',
+        description: 'Test all available language modules.',
+        exec: function (args, context) {
+            var languages = ModeManager.idUriMap;
+            var ignoredModules = [];
+            var testsSuccess = 0;
+            for (var languageId in languages) {
+                CommandApi.echo("Testing module " + languageId + ", please wait...");
+                auxTestModule(languageId, function (moduleTestsSuccess, moduleTotalTests, unimplemented) {
+                    if (moduleTestsSuccess > 0 && moduleTotalTests > 0 && (moduleTestsSuccess === moduleTotalTests) && !unimplemented)
+                        testsSuccess++;
+                    else if(unimplemented)
+                        ignoredModules.push(languageId);
+                });
+            }
+            var totalTests = Object.keys(languages).length - ignoredModules.length;
+            CommandApi.echo("<span id='testModulesResult'>All modules tested: " + parseInt((testsSuccess / totalTests) * 100) +
+                    "% successful (" + testsSuccess + " successful modules of " + totalTests + " analyzed modules).<br>Modules ignored: " + ignoredModules + "</span>");
         }
     },
     convertCurrentWorkspacetoDemo: {
@@ -369,39 +395,68 @@ var auxDeleteWorkspace = function (fileUri) {
     });
 };
 
-var auxTestModule = function (module) {
-
-    operations = ModeManager.getOperations(module);
+var auxTestModule = function (module, callback) {
 
     var url = module;
     if (module.indexOf("ideas") === -1)
         url = "ideas-" + module;
 
-    $.getJSON("/" + url + "/tests/tests.json").done(
-            function (response) {
-                var _continue = true;
+    var testsSuccess = 0;
+    var totalTests = 0;
+    jQuery.ajaxSetup({
+        async: false
+    });
+    $.getJSON("/" + url + "/tests/tests.json")
+            .done(function (response) {
+                totalTests = response.length;
+                var valid = true;
                 for (var i = 0; i < response.length; i++) {
-                    if (_continue) {
-                        var json = response[i];
-                        var opId = json.id;
-                        var opUri = "/" + url + json.opUri;
-                        var opMethod = json.opMethod;
-                        var parameters = json.parameters;
-                        var resultList = json.results;
 
-                        jQuery.ajaxSetup({
-                            async: false
-                        });
-                        $.get("/" + url + parameters.fileUri, function (
-                                content) {
+                    var json = response[i];
+                    var opId = json.id;
+                    var opUri = "/" + url + json.opUri;
+                    var opMethod = json.opMethod;
+                    var parameters = json.parameters;
+                    var resultList = json.results;
 
-                            if (opMethod == "GET") {
-                                $.get(opUri, function (data) {
-                                    // TODO
+                    jQuery.ajaxSetup({
+                        async: false
+                    });
+                    $.get("/" + url + parameters.fileUri, function (
+                            content) {
+
+                        if (opMethod === "GET") {
+                            $.get(opUri, function (data) {
+                                // TODO
+                            });
+                        } else if (opMethod === "POST") {
+                            parameters.content = content;
+                            if (parameters.auxArg0 === undefined) {
+                                $.post(opUri, parameters, function (new_result) {
+                                    for (var k = 0; k < resultList.length; k++) {
+                                        result = eval(resultList[k]);
+                                        if (JSON.stringify(result) === JSON
+                                                .stringify(new_result)) {
+                                            CommandApi.echo("- Operation " + opId
+                                                    + ": OK");
+                                            testsSuccess++;
+                                            valid = true;
+                                            break;
+                                        } else {
+                                            valid = false;
+                                        }
+                                    }
+
+                                    if (!valid) {
+                                        CommandApi.echo("- Operation " + opId
+                                                + ": FAIL");
+                                        CommandApi.echo(new_result.message);
+                                    }
+
                                 });
-                            } else if (opMethod == "POST") {
-                                parameters.content = content;
-                                if (parameters.auxArg0 == undefined) {
+                            } else {
+                                $.get("/" + url + parameters.auxArg0, function (data) {
+                                    parameters.auxArg0 = data;
                                     $.post(opUri, parameters, function (new_result) {
                                         for (var k = 0; k < resultList.length; k++) {
                                             result = eval(resultList[k]);
@@ -409,52 +464,31 @@ var auxTestModule = function (module) {
                                                     .stringify(new_result)) {
                                                 CommandApi.echo("- Operation " + opId
                                                         + ": OK");
-                                                _continue = true;
+                                                testsSuccess++;
+                                                valid = true;
                                                 break;
                                             } else {
-                                                _continue = false;
+                                                valid = false;
                                             }
                                         }
 
-                                        if (!_continue) {
+                                        if (!valid) {
                                             CommandApi.echo("- Operation " + opId
                                                     + ": FAIL");
                                             CommandApi.echo(new_result.message);
                                         }
-
                                     });
-                                } else {
-                                    $.get("/" + url + parameters.auxArg0, function (data) {
-                                        parameters.auxArg0 = data;
-                                        $.post(opUri, parameters, function (new_result) {
-                                            for (var k = 0; k < resultList.length; k++) {
-                                                result = eval(resultList[k]);
-                                                if (JSON.stringify(result) === JSON
-                                                        .stringify(new_result)) {
-                                                    CommandApi.echo("- Operation " + opId
-                                                            + ": OK");
-                                                    _continue = true;
-                                                    break;
-                                                } else {
-                                                    _continue = false;
-                                                }
-                                            }
-
-                                            if (!_continue) {
-                                                CommandApi.echo("- Operation " + opId
-                                                        + ": FAIL");
-                                                CommandApi.echo(new_result.message);
-                                            }
-                                        });
-                                    });
-                                }
+                                });
                             }
-                        });
-                    }
+                        }
+                    });
                 }
+
+                callback(testsSuccess, totalTests);
+
             }).fail(function (jqxhr, textStatus, error) {
-        var err = textStatus + ", " + error;
-        console.log("Request Failed: " + err);
+        CommandApi.echo("[" + textStatus + "] Module " + module + " failed: " + error);
+        callback(testsSuccess, totalTests, true);
     });
 
     jQuery.ajaxSetup({

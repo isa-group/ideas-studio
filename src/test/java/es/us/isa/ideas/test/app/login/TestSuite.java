@@ -8,8 +8,20 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+/**
+ * Applied Software Engineering Research Group (ISA Group) University of
+ * Sevilla, Spain
+ *
+ * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
+ * @version 1.0
+ */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ TC01_RegisterMaxLengthFormField.class, TC02_RegisterTwitter.class, TC03_Login.class })
+@Suite.SuiteClasses({
+    TC01_RegisterMaxLengthFormField.class, 
+    TC02_RegisterTwitter.class, 
+    TC03_Register.class,
+    TC04_RecoverPassword.class
+})
 public class TestSuite extends es.us.isa.ideas.test.utils.TestCase {
 
 	private static final Logger LOG = Logger.getLogger(TestSuite.class.getName());

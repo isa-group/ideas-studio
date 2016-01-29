@@ -41,7 +41,7 @@ public class SeleniumBuilder {
 	@AfterClass
 	public static void tearDown() throws InterruptedException {
 
-		LOG.log(Level.INFO, "logging out user " + TestCase.getSeleniumAutotesterUser());
+		LOG.log(Level.INFO, "logging out user " + TestCase.getAutotesterUser());
 
 		TestCase.logout();
 
@@ -67,7 +67,7 @@ public class SeleniumBuilder {
             INSTANCE.driver = new ChromeDriver();
 
 			INSTANCE.driver.manage().timeouts().pageLoadTimeout(2, TimeUnit.MINUTES);
-			INSTANCE.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+			INSTANCE.driver.manage().timeouts().implicitlyWait(2, TimeUnit.MINUTES);
 
 			INSTANCE.driver.manage().window().maximize();
 

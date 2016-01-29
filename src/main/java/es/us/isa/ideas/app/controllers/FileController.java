@@ -18,6 +18,7 @@ import es.us.isa.ideas.repo.impl.fs.FSFacade;
 import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
 import es.us.isa.ideas.utilities.AppResponse;
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class FileController extends AbstractController {
     private static final String FILE_TYPE_PROJECT="project";
     private static final String FILE_TYPE_DIR="directory";
     private static final String FILE_TYPE_FILE="file";
+    private static final String FILE_TYPE_WS="ws";
 
     private static IdeasRepo repoLab = null;
     
@@ -350,20 +352,54 @@ public class FileController extends AbstractController {
 
     @RequestMapping(value = "/workspaces", method = RequestMethod.PUT)
     @ResponseBody
-    public void saveWorkspace(@RequestParam("workspaceName") String workspaceName) {
+    public boolean updateWorkspace( @RequestParam("workspaceName") String workspaceName,
+                                    @RequestParam("newName") String newName,
+                                    @RequestParam("newDescription") String newDescription){
         initRepoLab();
         boolean success = true;
         String username = LoginService.getPrincipal().getUsername();
-
-        try {
-            FSFacade.saveSelectedWorkspace(workspaceName, username);
-        } catch (Exception e) {
-            success = false;
-            logger.log(Level.SEVERE, null, e);
+        
+        String workspace = getSelectedWorkspace();
+        
+        FSWorkspace oldWS = new FSWorkspace(workspaceName, username);
+        FSWorkspace newWS = new FSWorkspace(newName, username);
+        
+        boolean nameExists = true;
+        
+        if(!(workspace.equals(newName))){
+            try {
+                nameExists = FSFacade.getWorkspaces(username).contains("\"" + nameExists + "\"");
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, null , e);
+                nameExists = false;
+            }
+            if (!nameExists){
+                try {
+                    IdeasRepo.get().getRepo().move(oldWS, newWS, true);
+                    IdeasRepo.get().getRepo().delete(oldWS); 
+                    
+                } catch (AuthenticationException ex) {
+                    success=false;
+                    Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if(success){
+                    Workspace ws = workspaceService.findByNameAndOwner(workspaceName, username);
+                    ws.setDescription(newDescription);
+                    ws.setName(newName);    
+                    workspaceService.save(ws);
+                    try {
+                        FSFacade.saveSelectedWorkspace(newName, username);
+                    } catch (IOException ex) {
+                        Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+            }
+            else{
+                logger.log(Level.SEVERE, "Workspace with name {0} already exists!", newName);
+            }
         }
-        if (success) {
-            workspaceService.updateTime(workspaceName, username);
-        }
+        return success;
     }
 
     @RequestMapping(value = "/workspaces",method = RequestMethod.DELETE)
@@ -404,6 +440,26 @@ public class FileController extends AbstractController {
             logger.log(Level.SEVERE, null, e);
         }
         return res;
+    }
+    
+    @RequestMapping(value = "/workspaces/selected", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean setSelectedWorkspace(@RequestParam("workspaceName") String workspaceName) {
+        
+        initRepoLab();
+        logger.log(Level.INFO, "Persisting selected workspace:  "
+                        + workspaceName + ", username: "
+                        + LoginService.getPrincipal().getUsername());
+        boolean res = true;
+        try {
+                FSFacade.saveSelectedWorkspace(workspaceName, LoginService
+                                .getPrincipal().getUsername());
+        } catch (Exception e) {
+                res = false;
+                logger.log(Level.SEVERE, e.getMessage());
+        }
+        return res;
+      
     }
 
     /* Upload */

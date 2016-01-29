@@ -35,7 +35,7 @@ var FileApi = {
 	
 	saveFileContents : function(fileUri, fileContent, callback) {
 
-		$.ajax("files/content?fileUri=" + fileUri + "&fileContent=" + fileContent , {
+		$.ajax("files/content" , {
 			"type" : "POST",
 			"data" : {
 				'fileUri' : fileUri,
@@ -144,7 +144,7 @@ var FileApi = {
 	},
 
 	createWorkspace : function(workspaceName, description, tags, callback) {
-
+            
 		$.ajax("files/workspaces?workspaceName=" + workspaceName +"&description="+description+"&tags="+tags, {
 			"type" : "POST",
 			"success" : function(result) {
@@ -244,6 +244,21 @@ var FileApi = {
 			"async" : true,
 		});
 	},
+        
+        updateWorkspace: function(newName, newDescription, callback) {
+                var ws = WorkspaceManager.getSelectedWorkspace();
+		$.ajax("files/workspaces?workspaceName=" + ws + "&newName=" + newName+ "&newDescription=" + newDescription, {
+			"type" : "PUT",
+			"success" : function(result) {
+				callback(result);
+                        },
+			"error" : function(result) {
+				console.error(result.statusText);
+				RequestHelper.sessionAlive(result);
+			},
+			"async" : true,
+		});
+	},
 	
 	getWorkspaces : function(callback) {
 
@@ -274,8 +289,8 @@ var FileApi = {
 	},
 	
 	setSelectedWorkspace : function ( wsName, callback ) {
-		$.ajax("files/workspaces?workspaceName=" + wsName, {
-			"type" : "PUT",
+		$.ajax("files/workspaces/selected?workspaceName=" + wsName, {
+			"type" : "POST",
 			"success" : function(result) {
 				callback(result);
 			},

@@ -123,6 +123,9 @@
     <definition name="app_modal/createWorkspace" extends="app_modal">
         <put-attribute name="body" value="/views/app/modalWindows/createWorkspaceModal.jsp"/>    
     </definition>
+    <definition name="app_modal/editWorkspace" extends="app_modal">
+        <put-attribute name="body" value="/views/app/modalWindows/editWorkspaceModal.jsp"/>    
+    </definition>
     <definition name="app_modal/selectOperationItem" extends="app_modal">
         <put-attribute name="body" value="/views/app/modalWindows/selectOperationModal.jsp"/>
     </definition>

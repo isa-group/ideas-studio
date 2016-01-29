@@ -8,7 +8,8 @@
 <html lang="en">
     
     <script>
-	$(function(){$("#versions").hide();});          
+	$(function(){$("#versions").hide();}); 
+        WorkspaceManager.setSelectedWorkspace($('#name').val());
     </script>
 
 <div class="container">
@@ -18,8 +19,7 @@
         
 	<spring:url value="app/wsm/workspaces" var="wsActionUrl" />
         
-	<form:form class="form-horizontal" method="post" 
-                modelAttribute="wsForm" action="${wsActionUrl}">
+	<form:form class="form-horizontal" method="put" modelAttribute="wsForm" action="${wsActionUrl}">
 
 		<form:hidden path="id" />
                 <div class="control-group">
@@ -49,7 +49,17 @@
                 </div>
                 <br />
                 <!--TODO: TAGS-->
-                <button type="submit" class="btn btn-primary pull-right">Save</button>
+                <button type="button" id="saveWS" class="btn btn-primary pull-right">Save</button>
+                <script>
+                    $(function(){
+                        $("#saveWS").click(function(callback) {
+                            WorkspaceManager.updateWorkspace(
+                                    $('#name').val(), 
+                                    $('#description').val(),
+                                    callback);
+                        });
+                    });
+                </script>
                 <a href="/IDEAS/app/wsm" target="_self" type="submit" class="btn pull-right" style="margin-right: 4px;">Back</a>
                 
 	</form:form>
