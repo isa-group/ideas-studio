@@ -365,7 +365,7 @@ var DescriptionInspector = {
 	 * @returns {String} Contenido del fichero descriptor
 	 */
 	getDescriptionFileContent : function() {
-		var urlReq = 'file/getFileContent?fileUri='
+		var urlReq = 'files/content?fileUri='
 				+ this.getCurrentDescriptionFileUri(), descriptionData = "";
 
 		$.ajax({
