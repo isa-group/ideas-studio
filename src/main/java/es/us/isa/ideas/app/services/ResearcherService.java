@@ -17,17 +17,21 @@ import es.us.isa.ideas.app.repositories.ResearcherRepository;
 import es.us.isa.ideas.app.security.Authority;
 import es.us.isa.ideas.app.security.LoginService;
 import es.us.isa.ideas.app.security.UserAccount;
+import es.us.isa.ideas.app.security.UserAccountService;
 
 /**
  *
  * @author japarejo
  */
 @Service
-@Transactional
+@Transactional(readOnly = false)
 public class ResearcherService extends BusinessService<Researcher>{
 
     @Inject
     private ResearcherRepository researcherRepository;
+    
+    @Inject
+    private UserAccountService userAccountService;
     
     @Inject
     private ConfirmationService registrationConfirmationService;
@@ -49,7 +53,6 @@ public class ResearcherService extends BusinessService<Researcher>{
 
         Researcher result;
         
-//        result = researcherRepository.findByUsername(userAccount.getUsername());
         result = researcherRepository.findByUserAccountId(userAccount.getId());
 
         assert result != null;
@@ -57,6 +60,13 @@ public class ResearcherService extends BusinessService<Researcher>{
         return result;
     }
     
+    public Researcher findByUserName(String username) {
+        assert username != null;
+        Researcher result;
+        result = researcherRepository.findByUsername(username);
+        assert result != null;
+        return result;
+    }
     
     public Researcher findByEmail(String email){
         return researcherRepository.findByEmail(email);

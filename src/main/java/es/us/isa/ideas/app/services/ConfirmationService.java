@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 @Transactional
 public class ConfirmationService extends BusinessService<Confirmation> {
-
+	
     @Autowired
     ConfirmationRepository repository;
 
