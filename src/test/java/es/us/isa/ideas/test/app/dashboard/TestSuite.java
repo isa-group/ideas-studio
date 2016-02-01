@@ -29,7 +29,7 @@ import org.junit.runners.Suite;
     TC09_DepublishDemo.class,
     TC10_DeleteWorkspace.class,
     TC11_CloneDemo.class,
-    TC12_DeleteGuestPublicDemo.class
+    TC13_DeleteDemomasterWorkspace.class
 })
 public class TestSuite extends TestCase {
 

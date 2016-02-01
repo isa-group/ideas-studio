@@ -19,12 +19,15 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    TC01_Login.class,
+    TC01_LoginAutotester.class,
     TC02_CreateWorkspace.class,
     TC04_EditWorkspace.class,
     TC05_DownloadWorkspace.class,
     TC06_PublishDemoWorkspace.class,
-    TC07_DeleteWorkspace.class
+    TC07_DeleteWorkspace.class,
+    TC08_LoginDemomaster.class,
+    TC09_DeleteWorkspace.class
+    
 })
 public class TestSuite extends TestCase {
 
