@@ -29,7 +29,7 @@ var RequestHelper = {
 	},
 
 	sessionAlive : function(result) {
-		if (result.status == 901) {
+		if (result.status === 901) {
 			$("body")
 					.append(
 							"<div id='lostSessionPanel'>"
