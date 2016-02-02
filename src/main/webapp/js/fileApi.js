@@ -218,7 +218,7 @@ var FileApi = {
 	},
 	
 	renameFile: function(fileUri, newName, callback) {
-		$.ajax("files/move?fileUri=" + fileUri + "&fileType=file&newName=" + newName, {
+		$.ajax("files?fileUri=" + fileUri + "&fileType=file&newName=" + newName, {
 			"type" : "PUT",
 			"success" : function(result) {
 				callback(result);
