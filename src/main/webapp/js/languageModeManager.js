@@ -39,7 +39,6 @@ var ModeManager = {
 	languageModeMap: {},
 	converterMap: {},
 	operationsMap: {},
-        commandsMap:{},
 	formatsBiMap:{},
 	inspectorLoadersMap: {},
 	
@@ -74,9 +73,6 @@ var ModeManager = {
 			if (!(languageId in ModeManager.formatsBiMap))
 				ModeManager.formatsBiMap[languageId] = {};
 			
-			if(typeof languageMode.commands!== 'undefined' && languageMode.commands!==null)
-				ModeManager.commandsMap[languageId]=languageMode.commands;
-		
 			
 
 			for (var i=0; i<languageMode.formats.length; i++) {
@@ -121,10 +117,6 @@ var ModeManager = {
 		return ModeManager.operationsMap[languageId];
 	},
 	
-        getCommands: function(languageId){
-		return ModeManager.commandsMap[languageId];
-	},
-        
 	getBaseUri: function(languageId) {
 		return ModeManager.idUriMap[languageId];
 	},

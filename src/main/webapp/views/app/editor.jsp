@@ -45,12 +45,8 @@
  			<li class="upload separator"><a href="#upload">Upload</a></li>
 		</ul>
 		<div id="projectsTree"> </div>
-                </div>
-        <div id="wsactions">
-
-        </div>
 	</div>
-
+</div>
 <div id="editorMainPanel">
 	<div id="editorItself">
 		<div id="editorHeader">

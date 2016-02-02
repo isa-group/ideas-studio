@@ -8,23 +8,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 
+<script>
+	jQuery(function() {
+		AppPresenter.loadUserData(function() {
 
+		});
+	});
+</script>
 
 <div id="appHeader">
-        <security:authorize access="hasRole('ADMIN')||hasRole('RESEARCHER')">
-            <div id="menuToggler"></div>
-        </security:authorize>
-        
+	<div id="menuToggler"></div>
 	<div id="appLogo" style="background-image: url('./img/${studioConfiguration.images['logo']}')">            
         </div>
-        <security:authorize access="isAuthenticated()">
-            <script>
-                    jQuery(function() {
-                            AppPresenter.loadUserData(function() {
-
-                            });
-                    });
-            </script>
 	<div id="userTab" class="dropdown-toggle" data-toggle="dropdown">
 		<div id="principalUserInfo">
 			<span></span> <BR />
@@ -44,7 +39,6 @@
 		<li class="divider"></li>
 		<li><a href="j_spring_security_logout" target="_self"><spring:message code="master.page.logout" /></a></li>
 	</ul>
-        </security:authorize>
 	<!-- 	<div id="sectionText"> -->
 	<%-- 		<spring:message code="app.header.sectiontext.editor" /> --%>
 	<!-- 	</div> -->

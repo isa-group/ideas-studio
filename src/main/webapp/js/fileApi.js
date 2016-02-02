@@ -1,8 +1,8 @@
 var FileApi = {
 	loadWorkspace : function(workspaceName, callback) {
 
-		$.ajax("workspaces/" + workspaceName + "/load", {
-			"type" : "GET",
+		$.ajax("file/getWorkspace?workspaceName=" + workspaceName, {
+			"type" : "get",
 			"success" : function(result) {
 				var treeStruct = eval("(" + result + ")");
 				callback(treeStruct);
@@ -19,8 +19,8 @@ var FileApi = {
 
 	loadFileContents : function(fileUri, callback) {
 
-		$.ajax("files/content?fileUri=" + fileUri, {
-			"type" : "GET",
+		$.ajax("file/getFileContent?fileUri=" + fileUri, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -35,8 +35,8 @@ var FileApi = {
 	
 	saveFileContents : function(fileUri, fileContent, callback) {
 
-		$.ajax("files/content" , {
-			"type" : "POST",
+		$.ajax("file/setFileContent", {
+			"type" : "post",
 			"data" : {
 				'fileUri' : fileUri,
 				'fileContent' : fileContent
@@ -53,10 +53,11 @@ var FileApi = {
 
 	},
 	
+
 	createFile : function(fileUri, callback) {
 
-		$.ajax("files?fileUri=" + fileUri+"&fileType=file", {
-			"type" : "POST",
+		$.ajax("file/createFile?fileUri=" + fileUri, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -70,8 +71,8 @@ var FileApi = {
 
 	createDirectory : function(directoryUri, callback) {
 
-		$.ajax("files?fileUri=" + directoryUri+"&fileType=directory", {
-			"type" : "POST",
+		$.ajax("file/createDirectory?directoryUri=" + directoryUri, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -85,8 +86,8 @@ var FileApi = {
 
 	createProject : function(projectUri, callback) {
 
-		$.ajax("files?fileUri=" + projectUri+"&fileType=project", {
-			"type" : "POST",
+		$.ajax("file/createProject?projectUri=" + projectUri, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -100,8 +101,8 @@ var FileApi = {
 
 	deleteFile : function(fileUri, callback) {
 
-		$.ajax("files?fileUri=" + fileUri +"&fileType=file", {
-			"type" : "DELETE",
+		$.ajax("file/deleteFile?fileUri=" + fileUri, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -115,8 +116,8 @@ var FileApi = {
 
 	deleteDirectory : function(directoryUri, callback) {
 
-		$.ajax("files?fileUri=" + directoryUri +"&fileType=directory", {
-			"type" : "DELETE",
+		$.ajax("file/deleteDirectory?directoryUri=" + directoryUri, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -130,8 +131,8 @@ var FileApi = {
 
 	deleteProject : function(projectUri, callback) {
 
-		$.ajax("files?fileUri=" + projectUri+"&fileType=project", {
-			"type" : "DELETE",
+		$.ajax("file/deleteProject?projectUri=" + projectUri, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -143,10 +144,10 @@ var FileApi = {
 		});
 	},
 
-	createWorkspace : function(workspaceName, description, tags, callback) {
-            
-		$.ajax("files/workspaces?workspaceName=" + workspaceName +"&description="+description+"&tags="+tags, {
-			"type" : "POST",
+	createWorkspace : function(workspaceName, callback) {
+
+		$.ajax("file/createWorkspace?workspaceName=" + workspaceName, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -160,22 +161,8 @@ var FileApi = {
 	
 	deleteWorkspace : function(workspaceUri, callback) {
 
-		$.ajax("files/workspaces?workspaceName=" + workspaceUri, {
-			"type" : "DELETE",
-			"success" : function(result) {
-				callback(result);
-			},
-			"error" : function(result) {
-				console.error(result.statusText);
-				RequestHelper.sessionAlive(result);
-			},
-			"async" : true,
-		});
-	},
-        deleteDemoWorkspace : function(workspaceUri, callback) {
-
-		$.ajax("demo/"+ workspaceUri, {
-			"type" : "DELETE",
+		$.ajax("file/deleteWorkspace?workspaceUri=" + workspaceUri, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -189,8 +176,8 @@ var FileApi = {
 	
 	moveFile: function(fileUri, destUri, copy, callback) {
 		console.log("->>" + fileUri + " " + destUri);
-		$.ajax("files/move?fileUri=" + fileUri + "&fileType=file&destUri=" + destUri + "&copy=" + copy, {
-			"type" : "PUT",
+		$.ajax("file/moveFile?fileUri=" + fileUri + "&destUri=" + destUri + "&copy=" + copy, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -204,8 +191,8 @@ var FileApi = {
 	
 	moveDirectory: function(directoryUri, destUri, copy, callback) {
 		console.log("->>" + directoryUri + " " + destUri);
-		$.ajax("files/move?fileUri=" + directoryUri + "&fileType=directory&destUri=" + destUri + "&copy=" + copy,  {
-			"type" : "PUT",
+		$.ajax("file/moveDirectory?directoryUri=" + directoryUri + "&destUri=" + destUri + "&copy=" + copy,  {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -218,8 +205,8 @@ var FileApi = {
 	},
 	
 	renameFile: function(fileUri, newName, callback) {
-		$.ajax("files/move?fileUri=" + fileUri + "&fileType=file&newName=" + newName, {
-			"type" : "PUT",
+		$.ajax("file/renameFile?fileUri=" + fileUri + "&newName=" + newName, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -232,8 +219,8 @@ var FileApi = {
 	},
 	
 	renameDirectory: function(directoryUri, newName, callback) {
-		$.ajax("files?fileUri=" + directoryUri + "&fileType=directory&newName=" + newName, {
-			"type" : "PUT",
+		$.ajax("file/renameDirectory?directoryUri=" + directoryUri + "&newName=" + newName, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -244,26 +231,12 @@ var FileApi = {
 			"async" : true,
 		});
 	},
-        
-        updateWorkspace: function(newName, newDescription, callback) {
-                var ws = WorkspaceManager.getSelectedWorkspace();
-		$.ajax("files/workspaces?workspaceName=" + ws + "&newName=" + newName+ "&newDescription=" + newDescription, {
-			"type" : "PUT",
-			"success" : function(result) {
-				callback(result);
-                        },
-			"error" : function(result) {
-				console.error(result.statusText);
-				RequestHelper.sessionAlive(result);
-			},
-			"async" : true,
-		});
-	},
+
 	
 	getWorkspaces : function(callback) {
 
-		$.ajax("files/workspaces", {
-			"type" : "GET",
+		$.ajax("file/getWorkspaces", {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -276,21 +249,22 @@ var FileApi = {
 	},
 	
 	getSelectedWorkspace : function ( callback ) {
-		$.ajax("files/workspaces/selected", {
-			"type" : "GET",
+		$.ajax("file/getSelectedWorkspace", {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
 			"error" : function(result) {
 				console.error(result.statusText);
+				RequestHelper.sessionAlive(result);
 			},
 			"async" : true,
 		});
 	},
 	
 	setSelectedWorkspace : function ( wsName, callback ) {
-		$.ajax("files/workspaces/selected?workspaceName=" + wsName, {
-			"type" : "POST",
+		$.ajax("file/saveSelectedWorkspace?workspaceName=" + wsName, {
+			"type" : "get",
 			"success" : function(result) {
 				callback(result);
 			},
@@ -298,69 +272,27 @@ var FileApi = {
 				console.error(result.statusText);
 				RequestHelper.sessionAlive(result);
 			},
-			"async" : true,
+			"async" : true
 		});
 	},
 	
-	currentWSAsDemoWS :function( wsName, callback){
-		$.ajax("workspaces/"+wsName+"/toDemo", {
-			"type" : "GET",
+	currnetWSAsDemoWS :function( wsName, callback){
+		$.ajax("file/cloneSelectedWorkspaceToDemo?workspaceName=" + wsName, {
+			"type" : "get",
 			"success" : function(result) {
-                            if( callback ) callback(result);
+				callback(result);
 			},
 			"error" : function(result) {
 				console.error(result.statusText);
 				RequestHelper.sessionAlive(result);
 			},
-			"async" : true,
+			"async" : true
 		});
 	},
         
-        downloadAsZip: function(wsName){
-            window.location.href = "files/getAsZip/"+wsName;   
+        downloadAsZip: function(uri,callback){
+            window.location.href = "file/getAsZip/"+uri;            
         },
-        
-        
-        viewDemoWorkspace : function ( wsName, callback ) {
-		$.ajax("demo/" + wsName, {
-			"type" : "GET",
-			"success" : function(result) {
-				callback(result);
-			},
-			"error" : function(result) {
-				console.error(result.statusText);
-				RequestHelper.sessionAlive(result);
-			},
-			"async" : true,
-		});
-	},
-        
-        updateDemoWorkspace : function ( wsName, callback ) {
-		$.ajax("demo/" + wsName, {
-			"type" : "PUT",
-			"success" : function(result) {
-				callback(result);
-			},
-			"error" : function(result) {
-				console.error(result.statusText);
-				RequestHelper.sessionAlive(result);
-			},
-			"async" : true,
-		});
-	},
-        importNewDemoWorkspace : function ( wsName, callback ) {
-		$.ajax("demo/" + wsName + "/import", {
-			"type" : "GET",
-			"success" : function(result) {
-				callback(result);
-			},
-			"error" : function(result) {
-				console.error(result.statusText);
-				RequestHelper.sessionAlive(result);
-			},
-			"async" : true,
-		});
-	},
 	
 	// Utils
 

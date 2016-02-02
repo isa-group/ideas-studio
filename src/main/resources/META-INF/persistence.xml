@@ -10,8 +10,6 @@
     <class>es.us.isa.ideas.app.entities.SocialNetworkConfiguration</class>
     <class>es.us.isa.ideas.app.security.Authority</class>
     <class>es.us.isa.ideas.app.security.UserAccount</class>
-    <class>es.us.isa.ideas.app.entities.Tag</class>
-    <class>es.us.isa.ideas.app.entities.Workspace</class>
     <class>org.springframework.social.connect.jpa.hibernate.UserConnection</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <validation-mode>NONE</validation-mode>

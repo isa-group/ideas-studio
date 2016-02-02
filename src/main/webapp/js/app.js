@@ -21,10 +21,8 @@ jQuery(function() {
 	$(".addWorkspace").click(function() {
 		showContentAsModal("app/modalWindows/createWorkspace", function() {
 			var workspaceName = $("#modalCreationField input").val();
-                        var description = $("#descriptionInput textarea").val();
-                        var tags = $("#tagsInput textarea").val();
 			$("#workspacesNavContainer li").removeClass("active");
-			WorkspaceManager.createWorkspace(workspaceName,description,tags);
+			WorkspaceManager.createWorkspace(workspaceName);
 			AppPresenter.loadSection("editor", workspaceName, function() {
 				WorkspaceManager.loadWorkspace();
 			});

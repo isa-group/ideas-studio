@@ -60,15 +60,11 @@
 
 <div id="appLeftMenuContent">
 
-        <div id="appLeftMenuContentHeader">
-            <span class="wsm-icon glyphicon glyphicon-th-large blue"></span>
-            <a class="apl_wsm" href="app/wsm"><spring:message code="app.leftmenu.wsm"/></a>
-            <div class="addWorkspace btn btn-primary float-right">+</div> 
-        </div>
+	<div id="appLeftMenuContentHeader"></div>
 	<div id="appNavigator">
 
 		<div id="appNavigatorInnerWrapper">
-			<div class="header"></div>
+			<div class="header"><div id="appNavigatorWorkspacesAnchor"><spring:message code="app.leftmenu.editorworkspaces" /></div></div>
 			<div class="shadowCurvedBottom1"></div>
 			<div id="workspacesNavContainerWrapper">
 				<ul id="workspacesNavContainer" class="nav nav-pills nav-stacked">
@@ -76,22 +72,17 @@
 				</ul>
 			</div>
 			<div class="shadowCurvedTop1"></div>
-			<div id="lastWorkspace"></div>
+			<div id="lastWorkspace"><div id="appNavigatorWorkspacesTools"><span class="addWorkspace">+<spring:message code="app.leftmenu.addworkspace" /></span></div></div>
 			
 			<ul class="nav nav-pills nav-stacked">
-			
 <%-- 			<li><a class="apl_social"><spring:message code="app.leftmenu.social" /></a><span class="glyphicon glyphicon-chevron-right"></span></li> --%>
 <%-- 			<li><a class="apl_settings"><spring:message code="app.leftmenu.settings" /></a><span class="glyphicon glyphicon-chevron-right"></span></li> --%>
 			<security:authorize access="hasRole('ADMIN')">
 				<li><a class="apl_administration"><spring:message code="app.leftmenu.administration" /></a><span class="glyphicon glyphicon-chevron-right"></span></li>
 			</security:authorize>
+			<li><a class="apl_help"><spring:message code="app.leftmenu.help" /></a><span class="glyphicon glyphicon-chevron-right"></span></li>
 			</ul>
-                        
 		</div>
-                        
-                <ul id="leftMenuHelp" class="nav nav-pills nav-stacked">
-                    <li><a class="apl_help"><spring:message code="app.leftmenu.help" /></a><span class="glyphicon glyphicon-chevron-right"></span></li>
-                </ul>
 		<ul id="leftMenuLogout" class="nav nav-pills nav-stacked">
 			<li><a href="j_spring_security_logout" target="_self">
 				<span class="glyphicon glyphicon-log-out"></span>

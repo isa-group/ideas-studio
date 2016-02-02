@@ -220,7 +220,7 @@ var createNewFile = function(languageId,languageExtension){
 	            node.addChild(newChild);
 	            node.sortChildren();
 	        }
-                if(templateName && templateName!="")
+                if(templateName!="")
                     instantiateFileContentFromTemplate(languageId,templateName,fileUri);
                 else{
                     EditorManager.openFile(fileUri);

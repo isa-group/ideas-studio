@@ -71,15 +71,10 @@
         <security:intercept-url pattern="/researcher/principaluser" access="hasRole('ADMIN') || hasRole('RESEARCHER')" requires-channel="https"/>          
         <security:intercept-url pattern="/researcher/delete" access="hasRole('ADMIN') || hasRole('RESEARCHER')" />             
         <security:intercept-url pattern="/confirm/**" access="permitAll"  requires-channel="https"/>
-        <security:intercept-url pattern="/app/wsm" access="permitAll"  requires-channel="https"/>
         <security:intercept-url pattern="/app/**" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>
         <security:intercept-url pattern="/app_content/**" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>
         <security:intercept-url pattern="/app_content/app_administration_content" access="hasRole('ADMIN')"  requires-channel="https"/>
-        <security:intercept-url pattern="/files/**" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>
-        <security:intercept-url pattern="/tags/**" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>
-        <security:intercept-url pattern="/views/workspace/**" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>
-        <security:intercept-url pattern="/workspaces/**" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>
-<!--        <security:intercept-url pattern="/wsm" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>-->
+        <security:intercept-url pattern="/file/**" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>
         <security:intercept-url pattern="/analyse/**" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>
         <security:intercept-url pattern="/command/**" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>
         <security:intercept-url pattern="/convert/**" access="hasRole('ADMIN') || hasRole('RESEARCHER')"  requires-channel="https"/>
@@ -88,14 +83,14 @@
         <security:intercept-url pattern="/settings/admin" access="hasRole('ADMIN')" requires-channel="https"/>
         <security:intercept-url pattern="/settings/detail" access="hasRole('ADMIN')" requires-channel="https"/>
         <security:intercept-url pattern="/module/**" access="permitAll"/>
-        <security:intercept-url pattern="/demo/**" access="permitAll"/>
+        <security:intercept-url pattern="/demo/*" access="permitAll"/>
         
         <security:intercept-url pattern="/**" access="hasRole('ADMIN')" requires-channel="https"/>
         
          <security:custom-filter ref="ajaxTimeoutRedirectFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
         <security:form-login login-page="/security/login"
                                  password-parameter="password" username-parameter="username"
-                                 default-target-url="/app/wsm"
+                                 default-target-url="/app/editor"
                                  authentication-failure-url="/security/loginFailure"
                                    />
 
