@@ -65,6 +65,9 @@
         <script src='js/workspaceManager.js' type="text/javascript"></script>
         <script type="text/javascript" src="js/appPresenter.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
+        
+        <script type="text/javascript" src="js/vendor/angular.min.js"></script>
+        <script type="text/javascript" src="js/angular/app.js"></script>
                 
     </head>
 
@@ -81,7 +84,7 @@
 	        <div id="appMainContent">
 	        	<div id="appMainContentBlocker" class="hidden"></div>
 		        <tiles:insertAttribute name="header" />
-		        <div id="appBody">
+		        <div id="appBody" ng-app="mainApp" ng-controller="MainCtrl">
 		        	<div id="appBodyBlocker"></div>
 		        	<div id="appBodyLoader">
 		        		<tiles:insertAttribute name="body"/>

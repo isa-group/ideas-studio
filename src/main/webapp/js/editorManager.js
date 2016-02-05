@@ -156,6 +156,9 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 										mayCheckLanguageSyntax(EditorManager.currentUri);
 
 									}, 1000);
+                            
+                            DescriptionInspector.slaString2Model();
+                            
 						});
 		
 		DescriptionInspector.loaders.onInitAceEditor();
@@ -391,19 +394,18 @@ var EditorManager = {
 		//		.calculateLanguageIdFromExt(ext));
 		var loader = ModeManager.getInspectorLoader(ext)
 			, descriptionLoader = DescriptionInspector.loader
-			, inspectorLoader = $("#editorInspectorLoader");
+			, editorInspector = $("#editorInspectorLoader");
 		
-		inspectorLoader.empty();
+		editorInspector.empty();
 		
 		if (loader || descriptionLoader) {
 			
-			DescriptionInspector.loaders.loadInspectorTab(inspectorLoader);
+			DescriptionInspector.loaders.loadInspectorTabs();
 
-			if (loader && typeof loader != "undefined") {
-				var loadFn = loader(inspectorLoader.find(".moduleInspectorContent"), format);
-				
-				if (typeof loadFn != "undefined") {
-					DescriptionInspector.buildInspectorTabs(inspectorLoader);
+			if (loader) {
+				var loadFn = loader(editorInspector.find(".moduleInspectorContent"), format);
+				if (loadFn) {
+					DescriptionInspector.tabs.loadInspectorModuleTab(editorInspector);
 					console.log("Inspector module content loaded");
 				}
 				DescriptionInspector.loader($("#editorInspector .descriptionInspectorContent"));
@@ -411,7 +413,7 @@ var EditorManager = {
 
 		} else {
 			// Default inspector content (REFACTOR?)
-			inspectorLoader
+			editorInspector
 				.append("<span class='emptyMsg'>Nothing to show</span>");
 		}
 	
@@ -538,7 +540,7 @@ var EditorManager = {
 		} catch (Exception) {
 			console.log("#editor was empty");
 		}
-		$("#editorWrapper").append('<div id="editor"></div>');
+		$("#editorWrapper").append('<div id="editor" ui-ace="slaString"></div>');
 		try {
 			$("#projectsTree").dynatree("getRoot").visit(function(node) {
 				node.deactivate();

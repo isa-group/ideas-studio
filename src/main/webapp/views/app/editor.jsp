@@ -67,6 +67,7 @@
 		<div id="editorWrapper">
 			<div id="editorTopShadow"></div>
 			<div id="editor"></div>
+            <input id="editorContent" type="text" ng-change="slaString2Model()" ng-model="slaString" />
 		</div>
 		
 		<div id="editorFooter">
@@ -94,11 +95,13 @@
 	</div>
 </div>
 
+<inspector-model ng-click="onClicked()">
 <div id="editorInspector" class="ui-widget-content hdd">
 	<div id="editorInspectorLoader">
 		
 	</div>
 </div>
+</inspector-model>
 <!-- script require for the internationalizaton of the menus -->
 <script>
     var menuMessages={};

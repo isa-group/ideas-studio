@@ -53,13 +53,50 @@ var DescriptionInspector = {
 
 			/**
 			 * @memberof DescriptionInspector.vars.selectors
+             * @type String
 			 */
 			inspector : "#editorInspector",
+            
+            /**
+			 * @memberof DescriptionInspector.vars.selectors
+             * @type String
+			 */
+			inspectorLoader : "#editorInspectorLoader",
 
 			/**
+             * Description inspector content tab.
 			 * @memberof DescriptionInspector.vars.selectors
+             * @type String
 			 */
-			inspectorContent : "#inspectorContent"
+			inspectorDescriptionContent : "#inspectorContent",
+            
+            /**
+             * Description inspector content tab.
+			 * @memberof DescriptionInspector.vars.selectors
+             * @type String
+			 */
+			inspectorDescriptionTab : "#editorTabs > .descriptionInspectorTab",
+            
+            /**
+             * Model inspector content tab.
+             * @memberof DescriptionInspector.vars.selectors
+             * @type String
+             */
+            inspectorModelContent: "#inspectorModelContent",
+            
+            /**
+             * Model inspector tab.
+             * @memberof DescriptionInspector.vars.selectors
+             * @type String
+             */
+            inspectorModelTab: "#editorTabs > .modelInspectorTab",
+            
+            /**
+             * 
+             * @type String
+             */
+            inspectorTabs : "#editorTabs.inspectorTabs"
+            
 		},
 
 		/**
@@ -102,7 +139,7 @@ var DescriptionInspector = {
 		var _this = DescriptionInspector;
 
 		if (_this.existCurrentDescriptionFile()) {
-			_this.loadInspectorContent(inspectorLoader, _this
+			_this.setInspectorDescriptionContent(inspectorLoader, _this
 					.getDescriptionFileContent());
 			_this.loaders.bindings(inspectorLoader);
 			_this.loaders.allowSelection(inspectorLoader);
@@ -119,13 +156,19 @@ var DescriptionInspector = {
 			_this.loaders.onEditorSelectionShowCursors();
 			_this.loaders.descriptionFormatView();
 			// _this.loaders.customEvents();
-			_this.showDescriptionTab();
-
-			_this.preventBackspaceKeyPress();
+            
+			_this.showDescriptionTab(); //TODO: activate first available tab
+//			_this.preventBackspaceKeyPress();
 
 		} else {
 			_this.loaders.descriptionFileCreator(inspectorLoader);
 		}
+        
+        if (_this.existCurrentAngularFile()) {
+            _this.setInspectorModelContent();
+        } else {
+            // nothing yet
+        }
 	},
 
 	/**
@@ -138,6 +181,12 @@ var DescriptionInspector = {
 		return getNodeByFileUri(this.getCurrentDescriptionFileUri()) ? true
 				: false;
 	},
+    
+    existCurrentAngularFile : function () {
+        var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
+        return getNodeByFileUri(fileUriWithoutExt + ".ang") ? true
+				: false;
+    },
 
 	/**
 	 * Check if current opened file is a description file.
@@ -166,12 +215,12 @@ var DescriptionInspector = {
 	 */
 	setReaderMode : function() {
 		// Oculta botones de "add" y "remove"
-		var $parent = $("#expandableMenu");
+		var expandableMenu = $("#expandableMenu");
 
 		// Crear botón de recarga
-		var $reloadButton = $parent.find(".inspectorButtonReload");
-		if ($reloadButton.length == 0) {
-			$parent
+		var inspectorReloadBtn = expandableMenu.find(".inspectorButtonReload");
+		if (inspectorReloadBtn.length == 0) {
+			expandableMenu
 					.append($('\
 				<div id="" class="inspectorButton inspectorButtonReload" style="background:rgba(0,0,0,0.02);"> \
 					<div class="btn-group"> \
@@ -181,23 +230,23 @@ var DescriptionInspector = {
 				</div> \
 			'));
 		} else {
-			$reloadButton.show();
+			inspectorReloadBtn.show();
 		}
 
-		$parent.find(".inspectorButtonReload").show();
-		$parent.find(".inspectorButtonAdd").hide();
-		$parent.find(".inspectorButtonRemove").hide();
+		expandableMenu.find(".inspectorButtonReload").show();
+		expandableMenu.find(".inspectorButtonAdd").hide();
+		expandableMenu.find(".inspectorButtonRemove").hide();
 
 		// Da funcionalidad al botón de recarga
-		var _this = DescriptionInspector
-		$parent.find(".inspectorButtonReload").unbind("click").click(
+		var _this = DescriptionInspector;
+		expandableMenu.find(".inspectorButtonReload").unbind("click").click(
 				function() {
 					// Reload inspectorContent
 					var content = _this.getDescriptionFileContent();
 					$("#inspectorContent").html(content);
 				});
 
-		$parent.find(".inspectorButtonReload").click();
+		expandableMenu.find(".inspectorButtonReload").click();
 
 		DescriptionInspector.vars.mode = "reader";
 	},
@@ -208,11 +257,11 @@ var DescriptionInspector = {
 	 * @memberof DescriptionInspector
 	 */
 	setEditorMode : function() {
-		var $parent = $("#expandableMenu");
+		var expandableMenu = $("#expandableMenu");
 
-		$parent.find(".inspectorButtonReload").hide();
-		$parent.find(".inspectorButtonAdd").show();
-		$parent.find(".inspectorButtonRemove").show();
+		expandableMenu.find(".inspectorButtonReload").hide();
+		expandableMenu.find(".inspectorButtonAdd").show();
+		expandableMenu.find(".inspectorButtonRemove").show();
 
 		DescriptionInspector.vars.mode = "editor";
 	},
@@ -243,7 +292,7 @@ var DescriptionInspector = {
 
 		var currentUri = EditorManager.getCurrentUri();
 
-		if (ModeManager.calculateExtFromFileUri(currentUri) == "html") {
+		if (ModeManager.calculateExtFromFileUri(currentUri) === "html") {
 			DescriptionInspector.setReaderMode();
 			// DescriptionInspector.setExpandableMenuVisibility(0);
 		} else {
@@ -252,28 +301,6 @@ var DescriptionInspector = {
 		}
 
 		DescriptionInspector.inspectorContent.resize();
-	},
-
-	/**
-	 * Añade la pestaña de inspector del módulo y le da funcionalidad al hacerle
-	 * clic. Sirve para mostrar el contenido del inspector creado en el
-	 * manifiesto del módulo en cuestión.
-	 * 
-	 * @memberof DescriptionInspector
-	 * @param {inspectorLoader}
-	 */
-	buildInspectorTabs : function(inspectorLoader) {
-
-		inspectorLoader
-				.find(".inspectorTabs")
-				.append(
-						'\
-				<li class="moduleInspectorTab" class="" style="bottom: 0px; max-width: 100%;"> \
-					<a class="editorTab" style="background-color:#fafafa;padding:4px 10px;">MODULE</a> \
-				</li>');
-
-		this.loaders.inspectorTabsClick(inspectorLoader);
-
 	},
 
 	/**
@@ -313,7 +340,7 @@ var DescriptionInspector = {
 		var preparedContent = this.prepareDescriptionContentToSave($(
 				"#inspectorContent").html());
 
-		if (preparedContent != null) {
+		if (preparedContent !== null) {
 			this.saveContentToDescriptionFile(preparedContent);
 		} else {
 			console.log("Unable to prepare description file content to save.");
@@ -339,23 +366,20 @@ var DescriptionInspector = {
 	},
 
 	/**
-	 * Obtiene la uri del fichero descriptor que hace referencia al fichero
+	 * Calcula la uri del fichero descriptor que hace referencia al fichero
 	 * actualmenente abierto.
 	 * 
 	 * @memberof DescriptionInspector
-	 * @returns {String} Devuelve la uri del fichero descriptor en cuestión.
+	 * @returns {String} Uri del fichero descriptor.
 	 */
 	getCurrentDescriptionFileUri : function() {
-		// TODO: make it functionable for folding
-		var arrayCurrentUri = EditorManager.getCurrentUri().split('/'), retFileUri = "";
-
-		if (arrayCurrentUri.length == 3) {
-			var fileName = arrayCurrentUri[2].split(".")[0];
-			retFileUri = arrayCurrentUri[0] + "/" + arrayCurrentUri[1] + "/"
-					+ fileName + ".html";
-		}
-
-		return retFileUri;
+		var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
+        return fileUriWithoutExt + ".html";
+	},
+    
+    getCurrentModelFileUri : function() {
+		var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
+        return fileUriWithoutExt + ".ang";
 	},
 
 	/**
@@ -374,10 +398,27 @@ var DescriptionInspector = {
 			success : function(content) {
 				if (content) {
 					descriptionData = content;
-					// console.log('inspector was successfully downloaded
-					// description file data');
 				} else {
-					console.log("Description file content not found.");
+					console.error("No description file content");
+				}
+			}
+		});
+
+		return descriptionData;
+	},
+    
+    getModelFileContent : function() {
+		var urlReq = 'file/getFileContent?fileUri='
+				+ this.getCurrentModelFileUri(), descriptionData = "";
+
+		$.ajax({
+			url : urlReq,
+			async : false,
+			success : function(content) {
+				if (content) {
+					descriptionData = content;
+				} else {
+					console.error("No model file content");
 				}
 			}
 		});
@@ -412,10 +453,9 @@ var DescriptionInspector = {
 		 * @returns {number} Valor de altura.
 		 */
 		height : function() {
-			var inspectorHeight = $("#editorInspector").height(), tabHeight = $(
-					"#editorHeader").height(), expandMenuHeight = $(
-					"#expandableMenu").css("display") == "none" ? 0 : $(
-					"#expandableMenu").height();
+			var inspectorHeight = $("#editorInspector").height(),
+                tabHeight = $("#editorHeader").height(),
+                expandMenuHeight = $("#expandableMenu").css("display") === "none" ? 0 : $("#expandableMenu").height();
 
 			return inspectorHeight - tabHeight - expandMenuHeight;
 		},
@@ -471,7 +511,7 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.inspectorContent
 		 */
 		loadLocalContent : function() {
-			if (DescriptionInspector.vars.progressBar.step3 != null)
+			if (DescriptionInspector.vars.progressBar.step3 !== null)
 				this.getSelector().html(
 						DescriptionInspector.vars.progressBar.step3);
 		}
@@ -489,7 +529,7 @@ var DescriptionInspector = {
 
 		var expandableMenu = $("#expandableMenu"), contentObjToExpand = null;
 
-		menu == "remove" ? contentObjToExpand = $("#descriptionInspectorHeaderRemove")
+		menu === "remove" ? contentObjToExpand = $("#descriptionInspectorHeaderRemove")
 				: contentObjToExpand = $("#descriptionInspectorHeaderAdd");
 
 		$(".inspectorButton").fadeOut(100);
@@ -624,11 +664,9 @@ var DescriptionInspector = {
 			.attr("tabindex", "-1")
 			.unbind("focus")
 			.focus(function () {
-				console.log("enfocado");
 				$(this).unbind("keydown").keydown(function (e) {
 					if(e.keyCode == 8) {
 						e.preventDefault();
-						console.log("presionado backspace");
 					}
 				});	
 			});
@@ -645,7 +683,7 @@ var DescriptionInspector = {
 	 *            content - Cadena del texto html.
 	 * @memberof DescriptionInspector
 	 */
-	loadInspectorContent : function(loader, content) {
+	setInspectorDescriptionContent : function(loader, content) {
 		if (loader && content) {
 			loader.append(this.getHTMLTemplate());
 			$("#inspectorContent").html(content);
@@ -655,10 +693,18 @@ var DescriptionInspector = {
 				}, 100);
 			}
 		} else {
-			console.error("::loadInspectorContent undefined params", loader,
-					content);
+			console.error("undefined params", loader, content);
 		}
 	},
+    
+    setInspectorModelContent : function () {
+        
+        var modelInspectorContentWrapper = $(DescriptionInspector.vars.selectors.inspectorModelContent),
+            content = DescriptionInspector.getModelFileContent();
+        
+        modelInspectorContentWrapper.html(content);
+        
+    },
 
 	/**
 	 * Obtiene la plantilla html de lo que se verá en el inspector.
@@ -775,6 +821,114 @@ var DescriptionInspector = {
 			return Object.keys(EditorManager.tabsMap).length > 0
 		}
 	},
+    
+    tabs : {
+        
+        /**
+         * @memberof DescriptionInspector.tabs
+         */
+        buildDescriptionTab : function () {
+            
+            var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
+                title = "DESCRIPTION";
+        
+            inspectorTabs.append('\
+                <li class="descriptionInspectorTab" style="bottom: 0px; max-width: 100%;"> \
+                    <a class="editorTab" style="padding:4px 10px;">'+ title +'</a> \
+                </li>');
+            
+            var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab);
+                
+            descriptionTab.click(function() {
+                // Hide others tabs content
+                $(".moduleInspectorContent").hide();
+                $(".moduleInspectorTab")
+                    .removeClass("active")
+                    .find("a")
+                    .css({
+                        "background": "#fff",
+                        "border-bottom": "none"
+                    });
+
+                $(".modelInspectorContent").hide();
+                $(".modelInspectorTab")
+                    .removeClass("active")
+                    .find("a")
+                    .css({
+                        "background": "#fff",
+                        "border-bottom": "none"
+                    });
+
+                $(".descriptionInspectorContent").show();
+                $(".descriptionInspectorTab")
+                    .addClass("active")
+                    .find("a")
+                    .css("background", "rgba(0,0,0,0.02)");
+
+            });
+                    
+        },
+        
+        /**
+         * @memberof DescriptionInspector.tabs
+         */
+        buildModelTab : function() {
+            
+            if ( ModeManager.calculateExtFromFileUri(EditorManager.getCurrentUri()) === "json" ) {
+                var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
+                    title = "MODEL";
+
+                inspectorTabs.append('\
+                    <li class="modelInspectorTab" style="bottom: 0px; max-width: 100%;"> \
+                        <a class="editorTab" style="padding:4px 10px;">'+ title +'</a> \
+                    </li>');
+
+                var modelTab = $(DescriptionInspector.vars.selectors.inspectorModelTab);
+                modelTab.click(function() {
+                    // Hide others tabs content
+                    $(".moduleInspectorContent").hide();
+                    $(".moduleInspectorTab")
+                        .removeClass("active")
+                        .find("a")
+                        .css({
+                            "background": "#fff",
+                            "border-bottom": "none"
+                        });
+
+                    $(".descriptionInspectorContent").hide();
+                    $(".descriptionInspectorTab")
+                        .removeClass("active")
+                        .find("a")
+                        .css({
+                            "background": "#fff",
+                            "border-bottom": "none"
+                        });
+
+                    $(".modelInspectorContent").show();
+                    $(".modelInspectorTab")
+                            .addClass("active")
+                            .find("a")
+                            .css("background", "rgba(0,0,0,0.02)");
+
+                });
+
+                $("#editorInspectorLoader .modelInspectorContent").html("<article id='inspectorModelContent' />");
+                
+            }
+        }
+    },
+    
+    slaString2Model : function() {
+        if (document.editor && 
+            document.editor.getValue() && 
+            ModeManager.calculateExtFromFileUri(EditorManager.getCurrentUri()) === "json" ) {
+
+            console.log("updating #editorContent hidden input");
+            $("#editorContent").val( document.editor.getValue() );
+            angular.element($("#editorContent")).triggerHandler('input');
+
+        }
+    },
 
 	expandableMenu : {
 
@@ -982,7 +1136,9 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.progressBar
 		 */
 		setDefaultContent : function() {
-			var progress = DescriptionInspector.progressBar, ace = DescriptionInspector.ace, editorInspector = $("#editorInspector");
+			var progress = DescriptionInspector.progressBar,
+                ace = DescriptionInspector.ace,
+                editorInspector = $("#editorInspector");
 
 			$(document).unbind("keyup");
 			$(".ace_content").unbind("click");
@@ -1031,8 +1187,6 @@ var DescriptionInspector = {
 			var progress = this;
 
 			$(".cancelExpandedMenu").unbind("click").click(function() {
-				console.log("Binding adder canceled");
-
 				DescriptionInspector.unexpandInspectorMenu();
 				progress.setDefaultContent();
 
@@ -1055,8 +1209,6 @@ var DescriptionInspector = {
 
 			DescriptionInspector.unexpandInspectorMenu();
 			DescriptionInspector.progressBar.setDefaultContent();
-
-			console.log("Binding created");
 		},
 
 		disableStepFowardBtn : function() {
@@ -1643,7 +1795,6 @@ var DescriptionInspector = {
 					DescriptionInspector.progressBar.disableStepFowardBtn();
 				}
 
-				console.log("validating done button", ret);
 				return ret;
 			},
 
@@ -1663,7 +1814,6 @@ var DescriptionInspector = {
 																.click();
 													});
 										}
-										console.log("yes");
 									} else {
 										// simple binding
 										if (!$(".rdfaContent").is(":hidden")) {
@@ -1705,7 +1855,6 @@ var DescriptionInspector = {
 																				});
 															});
 										}
-										console.log("no");
 									}
 									_this.validateDoneBtn();
 								});
@@ -1741,7 +1890,6 @@ var DescriptionInspector = {
 												":hidden")) {
 											// $(".rdfaElementContent").slideDown();
 										}
-										console.log("new");
 									} else {
 										// current element case
 										var $ancestorBinding = _this
@@ -1771,7 +1919,6 @@ var DescriptionInspector = {
 												":hidden")) {
 											// $(".rdfaElementContent").slideUp();
 										}
-										console.log("current");
 									}
 									_this.validateDoneBtn();
 								});
@@ -1784,8 +1931,6 @@ var DescriptionInspector = {
 
 			disableListOfOptions : function($select, listOfOptions) {
 
-				console.log("listOfOptions", listOfOptions);
-
 				if ($select.prop("tagName").toLowerCase() === "select") {
 
 					var disabledItems_i = 0;
@@ -1794,7 +1939,6 @@ var DescriptionInspector = {
 						if ($select.find(option_i)
 								&& $select.find(option_i).length > 0) {
 							$select.find(option_i).prop("disabled", true);
-							console.log("disabling option", listOfOptions[i]);
 						}
 					}
 					// Disables select element if necessary
@@ -1935,8 +2079,7 @@ var DescriptionInspector = {
 								.deleteContents();
 						DescriptionInspector.vars.progressBar.step2
 								.insertNode(frag);
-
-						console.log("created a new rdfa binding");
+                        
 					} else {
 						// Updated RDFa current binding
 						var $ancestor = this.getStep2AncestorBinding();
@@ -1946,8 +2089,7 @@ var DescriptionInspector = {
 						}
 						if (textNote != "")
 							$ancestor.attr("data-text", textNote);
-
-						console.log("update current rdfa binding");
+                        
 					}
 				} else {
 					// create simple binding
@@ -1962,8 +2104,7 @@ var DescriptionInspector = {
 							.deleteContents();
 					DescriptionInspector.vars.progressBar.step2
 							.insertNode(frag);
-
-					console.log("created a simple binding");
+                    
 				}
 
 				DescriptionInspector.progressBar.finish();
@@ -2054,7 +2195,6 @@ var DescriptionInspector = {
 		 *            $obj
 		 */
 		_showModalRemoveBinding : function($obj) {
-			console.log("Showing binding remover modal window.");
 
 			var bind = Binding.getBinding($obj), rowAux = parseInt(bind.startRows[0]) + 1, content = "<label>Source:</label> <span>"
 					+ bind.textNote
@@ -2099,7 +2239,6 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 */
 		_showModalBulkRemoveBindings : function() {
-			console.log("Showing binding bulk delete modal window.");
 
 			var binds = $("#inspectorContent .ideas-binding"), $listContainer = $("<div>"), _this = this;
 
@@ -2245,8 +2384,6 @@ var DescriptionInspector = {
 			var removeBindingInspector = this;
 
 			$(".cancelExpandedMenu").unbind("click").click(function() {
-				console.log("Binding remover canceled.");
-
 				DescriptionInspector.unexpandInspectorMenu(function() {
 					removeBindingInspector._unhighlightBindingsToRemove();
 				});
@@ -2354,7 +2491,6 @@ var DescriptionInspector = {
 			if (!EditorManager.currentDocumentHasProblems()) {
 
 				if (this.mayShow()) {
-					console.log("Showing descriptionFormatView");
 					setTimeout(function() {
 						EditorManager.changeFormat(EditorManager.currentUri, $(
 								"#editorFormats li.formatTab").first().text()
@@ -2389,7 +2525,6 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.descriptionFormatView
 		 */
 		hide : function() {
-			console.log("Hiding descriptionFormatView");
 
 			var _this = this;
 
@@ -2625,17 +2760,17 @@ var DescriptionInspector = {
 			inspector.bind("inspectorChangeState",
 					function(e, open) {
 						if (open) {
-							if (document.editor)
+							if (document.editor) {
 								DescriptionInspector.highlightAllBindings();
-
-							if (DescriptionInspector.descriptionFormatView
-									.getHtmlObj().length > 0)
-								DescriptionInspector.descriptionFormatView
-										.hide();
+                            }
+							if (DescriptionInspector.descriptionFormatView.getHtmlObj().length > 0) {
+								DescriptionInspector.descriptionFormatView.hide();
+                            }
 
 						} else {
-							if (document.editor)
+							if (document.editor) {
 								DescriptionInspector.unHighlightAllBidings();
+                            }
 						}
 					});
 
@@ -2660,6 +2795,8 @@ var DescriptionInspector = {
 			setTimeout(function() {
 				DescriptionInspector.highlightAllBindings();
 			}, 100);
+            
+            DescriptionInspector.slaString2Model();
 		},
 
 		/**
@@ -2716,16 +2853,19 @@ var DescriptionInspector = {
 										// modal
 										// window.
 
-										var value = e.data.text, range = e.data.range, actionType = e.data.action, objHtmlBindingRange = DescriptionInspector
-												.getHtmlBindingFromRange(range), colIndex = 0;
+										var value = e.data.text,
+											range = e.data.range,
+											actionType = e.data.action,
+											objHtmlBindingRange = DescriptionInspector.getHtmlBindingFromRange(range),
+											colIndex = 0;
 
 										if (objHtmlBindingRange
 												&& value !== ""
-												&& value.replace(/\s+/i, " ") != " "
-												&& value != ";" && value != ":"
-												&& value != "," && value != "="
-												&& value != ")" && value != "("
-												&& value != "<" && value != ">") { // FIXME:
+												&& value.replace(/\s+/i, " ") !== " "
+												&& value !== ";" && value !== ":"
+												&& value !== "," && value !== "="
+												&& value !== ")" && value !== "("
+												&& value !== "<" && value !== ">") { // FIXME:
 											// regexp
 											// it!!
 
@@ -2790,8 +2930,6 @@ var DescriptionInspector = {
 											// checking
 											// syntax.
 
-											console.log("Binding modified");
-
 										} else if (actionType !== "removeLines"
 												&& actionType !== "insertLines") {
 											// Modification wont change a
@@ -2839,48 +2977,27 @@ var DescriptionInspector = {
 		 * 
 		 * @memberof DescriptionInspector.loaders
 		 */
-		loadInspectorTab : function(inspectorLoader) {
-			inspectorLoader
-					.append(
-							'\
+		loadInspectorTabs : function() {
+            
+			var inspectorLoader = $(DescriptionInspector.vars.selectors.inspectorLoader);
+            
+            inspectorLoader
+					.append('\
 					<!-- Inspector tabs --> \
 					<div id="editorHeader" style="position:relative"> \
 						<div id="editorTabsContainer"> \
 							<ul id="editorTabs" class="nav nav-tabs inspectorTabs" style="width:100%;display:inline-block;"> \
-								<li class="descriptionInspectorTab" class="active" style="bottom: 0px; max-width: 100%;"> \
-									<a class="editorTab" style="padding:4px 10px;">DESCRIPTION</a> \
-								</li> \
-								<!-- <li class="moduleInspectorTab" class="" style="bottom: 0px; max-width: 100%;"> \
-									<a class="editorTab" style="padding:4px 10px;"></a> \
-								</li> --> \
+								\
 							</ul> \
 						</div> \
 					</div> \
 					<div class="descriptionInspectorContent"></div> \
-					<div class="moduleInspectorContent" style="display:none;"></div>')
-
-					.find(".descriptionInspectorTab")
-					.click(
-							function() {
-								console
-										.log("Showing description inspector content.");
-
-								$(".moduleInspectorContent").hide();
-								$(".moduleInspectorTab").removeClass("active")
-										.find("a").css("background", "#fff");
-								$(".moduleInspectorTab").css("border-bottom",
-										"1px solid #EFEFEF");
-
-								$(".descriptionInspectorContent").show();
-								$(".descriptionInspectorTab")
-										.addClass("active").find("a").css(
-												"background",
-												"rgba(0,0,0,0.02)");
-
-								$(".moduleInspectorTab").css("border-bottom",
-										"none");
-
-							});
+                    <div class="modelInspectorContent"></div> \
+					<div class="moduleInspectorContent"></div>');
+            
+            DescriptionInspector.tabs.buildDescriptionTab();
+            DescriptionInspector.tabs.buildModelTab();
+					
 
 		},
 
@@ -3422,8 +3539,6 @@ var DescriptionInspector = {
 										&& DescriptionInspector
 												.isFirstEditorFormatSelected()) {
 
-									console.log("Binding activated");
-
 									var binding = Binding.getBinding($(this)), annotations = [], ranges = [], ace = DescriptionInspector.ace;
 
 									if (binding.isValid()) {
@@ -3440,8 +3555,6 @@ var DescriptionInspector = {
 										// always
 										// visible.
 										for (var i = 0; i < ranges.length; i++) {
-											console.log("adding range",
-													ranges[i]);
 											DescriptionInspector.ace
 													.getEditor().multiSelect
 													.addRange(ranges[i], false);
@@ -3467,40 +3580,8 @@ var DescriptionInspector = {
 														"Couldn\'t highlight a invalid Binding",
 														$(this))
 									}
-
-									console.log("Binding annotations",
-											annotations);
-
 								}
 							});
-		},
-
-		/**
-		 * Muestra el contenido del inspector del módulo.
-		 * 
-		 * @memberof DescriptionInspector.loaders
-		 * @param {jQuery}
-		 *            inspectorLoader - Contenedor del inspector de descripción.
-		 */
-		inspectorTabsClick : function(inspectorLoader) {
-			inspectorLoader.find(".moduleInspectorTab").click(
-					function() {
-						// console.log("Showing module inspector content");
-						console.log("Description tab bar click");
-
-						$(".descriptionInspectorContent").hide();
-
-						$(".descriptionInspectorTab").removeClass("active")
-								.find("a").css("background", "#fff");
-						$(".descriptionInspectorTab").css("border-bottom",
-								"1px solid #EFEFEF");
-
-						$(".moduleInspectorContent").show();
-
-						$(".moduleInspectorTab").addClass("active").find("a")
-								.css("background", "rgba(0,0,0,0.02)");
-						$(".moduleInspectorTab").css("border-bottom", "none");
-					});
 		}
 	},
 
@@ -4087,11 +4168,9 @@ var DescriptionInspector = {
 				DescriptionInspector.setEditorAnnotation(annotations);
 				DescriptionInspector.ace.getSelection().clearSelection();
 
-				if ($("#editorInspector .to-remove").length === 0)
+				if ($("#editorInspector .to-remove").length === 0) {
 					DescriptionInspector.loaders.bindings();
-
-				console.log("All bindings highlighted.");
-
+                }
 				DescriptionInspector.hideEditorCursors();
 
 			}
@@ -4117,10 +4196,7 @@ var DescriptionInspector = {
 		// TODO: remove the lines below
 		DescriptionInspector.ace.getSession().clearAnnotations();
 		DescriptionInspector.ace.getSelection().clearSelection();
-
-		// $(".ace_ideas_binding").unbind("click");
-
-		console.log("All bindings unhighlighted.");
+        
 	},
 
 	/**
@@ -4132,11 +4208,9 @@ var DescriptionInspector = {
 	 */
 	removeBinding : function($obj) {
 		var text = $obj.text();
-		if (text == "")
+		if (text == "") {
 			$obj.val();
-
-		// console.log("removing binding to:", text);
-
+        }
 		$obj.replaceWith(text);
 	},
 
@@ -4214,8 +4288,6 @@ Binding.getBindingID = function(htmlObj) {
  *            htmlObj
  */
 Binding.getBinding = function(htmlObj) {
-	// console.log("ejecutando getBinding", htmlObj.data("start-row"), typeof
-	// htmlObj.data("start-row"))
 	return new Binding(Binding.getBindingID(htmlObj), DescriptionInspector
 			.getBindingText(htmlObj), htmlObj.attr("data-start-row").toString()
 			.split(","), htmlObj.attr("data-end-row").toString().split(","),
@@ -4230,7 +4302,6 @@ Binding.getBinding = function(htmlObj) {
  * @memberof Binding
  */
 Binding.prototype.isValid = function() {
-	// console.log("Checking if binding is valid...");
 	return typeof this.textNote != "undefined" && this.textNote != ""
 			&& typeof this.startRows != "undefined"
 			&& this.startRows.toString().split(",").length >= 0
@@ -4322,8 +4393,6 @@ Binding.prototype.getRanges = function() {
 				.concat(range);
 	}
 
-	// console.log("result of getRanges:", ranges);
-
 	return ranges;
 };
 
@@ -4387,7 +4456,6 @@ Binding.prototype.getRowRanges = function(row) {
 		 * @memberof Binding
 		 */
 		Binding.prototype.getTargetText = function() {
-			// console.log(this.getRange(), this.getRange().toString());
 			return DescriptionInspector.ace.getSession().getTextRange(
 					this.getRange());
 		};
@@ -4644,7 +4712,6 @@ BindingMap.prototype.empty = function() {
 BindingMap.prototype.fetchBindings = function() {
 
 	if (DescriptionInspector.vars.mode === "editor") {
-		console.log("fetching bindings");
 
 		$bindingMap.empty();
 
@@ -4661,9 +4728,7 @@ BindingMap.prototype.fetchBindings = function() {
 						var newBindingId = $bindingMap.calculateNewId();
 
 						$(this).attr("id", "ideasBinding_" + newBindingId);
-
-						console.log("Automatically assigned BindingId",
-								newBindingId);
+                        
 						b = true;
 					}
 
@@ -4673,7 +4738,6 @@ BindingMap.prototype.fetchBindings = function() {
 				});
 
 		if (b) {
-			console.log("highlightAllBindings for the second time");
 			DescriptionInspector.saveInspectorContentToDescriptionFile();
 			DescriptionInspector.highlightAllBindings();
 		}
@@ -4715,15 +4779,12 @@ BindingMap.prototype.addBinding = function(bindingObj) {
  */
 BindingMap.prototype.removeBinding = function(bindingObj) {
 
-	console.log("Borrando binding de BindingMap");
-
 	if (this.existBinding(bindingObj)) {
 
 		var rows = bindingObj.getRows();
 
 		// Remove from bindingRowsMap
 		delete this.bindingRowsMap[bindingObj.id];
-		console.log("borrado de bindinRownMpa", bindingObj.id);
 
 		// Remove from rowBindingsMap
 		for (var i = 0; i < rows.length; i++) {
@@ -4734,10 +4795,7 @@ BindingMap.prototype.removeBinding = function(bindingObj) {
 
 				if (this.rowBindingsMap[row].length === 0) {
 					delete this.rowBindingsMap[row];
-					console.log("borrado fila entera", row);
 				}
-
-				console.log("borrado de rowBindingsMap", bindingObj.id);
 
 			}
 		}
