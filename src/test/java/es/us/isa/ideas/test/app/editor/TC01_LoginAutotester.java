@@ -34,7 +34,7 @@ public class TC01_LoginAutotester extends es.us.isa.ideas.test.utils.TestCase {
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC01_Login...");
+        LOG.log(Level.INFO, "## Init TC01_LoginAutotester...");
         try {
             logout();
         } catch (InterruptedException ex) {
@@ -44,7 +44,7 @@ public class TC01_LoginAutotester extends es.us.isa.ideas.test.utils.TestCase {
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC01_Login finished");
+        LOG.log(Level.INFO, "## TC01_LoginAutotester finished");
     }
 
     @After
@@ -69,10 +69,6 @@ public class TC01_LoginAutotester extends es.us.isa.ideas.test.utils.TestCase {
 
     @Test
     public void step03_loginWithSeleniumProperties() {
-
-        System.out.println("Login with params...");
-        System.out.println("Username: " + user);
-        System.out.println("Password: " + pass);
 
         try {
             if (validatePropertyValues(user, pass)) {
