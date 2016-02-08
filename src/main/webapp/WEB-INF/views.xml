@@ -25,9 +25,12 @@
         <put-attribute name="footer" value="/WEB-INF/tiles/portal_footer.jsp"/>        
     </definition>
     
+    <definition name="resultsTemplate" template="/WEB-INF/tiles/results_template.jsp">
+        <put-attribute name="header" value="/WEB-INF/tiles/results_header.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/tiles/results_footer.jsp"/>        
+    </definition>
+    
     <definition name="loginTemplate" template="/WEB-INF/tiles/login_template.jsp"></definition>
-    
-    
 
     <definition name="misc/panic" extends="pagesTemplate">
         <put-attribute name="body" value="/views/misc/panic.jsp"/>
