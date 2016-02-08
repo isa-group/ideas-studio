@@ -11,6 +11,8 @@ import org.junit.runners.Suite;
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
  * Sevilla, Spain
+ * 
+ * This test suite should be run only by following Release Manager policy.
  *
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
  * @version 1.0
@@ -19,9 +21,9 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     es.us.isa.ideas.test.app.editor.TestSuite.class,
     es.us.isa.ideas.test.app.dashboard.TestSuite.class,
-//  es.us.isa.ideas.test.app.login.TestSuite.class,
-//    es.us.isa.ideas.test.app.dynatree.TestSuite.class,
-//    es.us.isa.ideas.test.modules.TestSuite.class
+    es.us.isa.ideas.test.app.login.TestSuite.class,
+    es.us.isa.ideas.test.app.dynatree.TestSuite.class,
+    es.us.isa.ideas.test.modules.TestSuite.class
     
 })
 public class TestSuiteFull {

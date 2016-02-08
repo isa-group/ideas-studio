@@ -1,7 +1,5 @@
 package es.us.isa.ideas.test.app.login;
 
-import es.us.isa.ideas.app.entities.Researcher;
-import es.us.isa.ideas.app.repositories.ResearcherRepository;
 import es.us.isa.ideas.test.utils.ExpectedActions;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,10 +15,6 @@ import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import org.openqa.selenium.By;
 import static org.junit.Assert.assertTrue;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -29,16 +23,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
  * @version 1.0
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-    "classpath:**/data.xml"
-})
+// Connect to database using a test data.xml
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = {
+//    "classpath:**/data.xml"
+//})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC03_Register extends es.us.isa.ideas.test.utils.TestCase {
 
-    @Autowired
-    ResearcherRepository researcherRepository;
-
+//    @Autowired
+//    ResearcherRepository researcherRepository;
     private static final Logger LOG = Logger.getLogger(TC03_Register.class
             .getName());
     private static boolean testResult = true;
@@ -65,20 +59,21 @@ public class TC03_Register extends es.us.isa.ideas.test.utils.TestCase {
         LOG.log(Level.INFO, "testResult value: {0}", testResult);
     }
 
-    @Test
-    public void step01_prepareDatabase() {
-
-        // Check if user already exists
-        String email = getAutotesterEmail();
-        Researcher researcher = researcherRepository.findByEmail(email);
-        if (researcher != null) {
-            // Remove researcher
-            int researcherId = researcher.getId();
-            researcherRepository.delete(researcherId);
-        }
-
-    }
-
+    // Database will must be prepared by 
+//    @Test
+//    public void step01_prepareDatabase() {
+//
+//        // Check if user already exists
+//        String email = getAutotesterEmail();
+//        Researcher researcher = researcherRepository.findByEmail(email);
+//        if (researcher != null) {
+//            // Remove researcher
+//            int researcherId = researcher.getId();
+//            researcherRepository.delete(researcherId);
+//        }
+//
+//    }
+    
     @Test
     public void step02_goHomePage() {
         testResult = IdeasStudioActions.goHomePage();
@@ -87,7 +82,7 @@ public class TC03_Register extends es.us.isa.ideas.test.utils.TestCase {
 
     @Test
     public void step03_loadAutoTesterProperties() {
-        
+
         name = getAutotesterName();
         email = getAutotesterEmail();
         phone = getAutotesterPhone();
@@ -95,19 +90,19 @@ public class TC03_Register extends es.us.isa.ideas.test.utils.TestCase {
 
         testResult = validatePropertyValues(name, email, phone, address);
         assertTrue(testResult);
-        
+
     }
 
     @Test
     public void step04_register() {
-        
+
         Boolean register = IdeasStudioActions.registerUser(name, email, phone, address);
         waitForVisibleSelector("#statusPanel");
         String statusPanelText = getWebDriver().findElement(By.cssSelector("#statusPanel")).getText();
-        
+
         testResult = register && !statusPanelText.contains("The email address you entered is already in use");
         assertTrue(testResult);
-        
+
     }
 
     @Test

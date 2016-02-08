@@ -1,3 +1,20 @@
+ideas-studio v0.8.4, 28/01/2016
+----------------------------------------------
+- [new module] ideas-yaml-module
+- [new module] ideas-json-module
+- [update module] ideas-iagree-module
+- [update module] ideas-cplex-module
+- Password reset confirmation link with "labs.isa.us.es"
+- Unable to login with a recovered password
+- Remove unnecessary displaytag dependency
+- This is the first version using ideas-repo-0.7.jar from Maven Central Repository
+
+ideas-studio v0.8.3, 22/12/2015
+----------------------------------------------
+- Cannot find nexus repositories
+- Page reload when renaming a project
+- Create command testModules
+
 ideas-studio v0.8.2, 15/12/2015
 ----------------------------------------------
 - [new module] ideas-soup-module

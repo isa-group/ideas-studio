@@ -16,17 +16,12 @@ import org.openqa.selenium.By;
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
  * Sevilla, Spain
+ * 
+ * Edit second level (folder inside folder) file content.
  *
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
  * @version 1.0
@@ -39,12 +34,12 @@ public class TC09_EditFile2L extends es.us.isa.ideas.test.utils.TestCase {
 
     @BeforeClass
     public static void setUp() throws InterruptedException {
-        LOG.log(Level.INFO, "Init TC09_OpenFile2L...");
+        LOG.log(Level.INFO, "Init TC09_EditFile2L...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "TC09_OpenFile2L finished");
+        LOG.log(Level.INFO, "TC09_EditFile2L finished");
     }
 
     @After
