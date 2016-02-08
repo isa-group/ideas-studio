@@ -36,12 +36,12 @@ public class TC06_EditWorkspace extends TestCase{
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC05_EditWorkspace...");
+        LOG.log(Level.INFO, "## Init TC06_EditWorkspace...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC05_EditWorkspace finished");
+        LOG.log(Level.INFO, "## TC06_EditWorkspace finished");
     }
 
     @After

@@ -67,10 +67,6 @@ public class TC01_Login extends es.us.isa.ideas.test.utils.TestCase {
     @Test
     public void step03_loginWithSeleniumProperties() {
 
-        System.out.println("Login with params...");
-        System.out.println("Username: " + user);
-        System.out.println("Password: " + pass);
-
         try {
             if (validatePropertyValues(user, pass)) {
                 testResult = loginWithParams(user, pass);

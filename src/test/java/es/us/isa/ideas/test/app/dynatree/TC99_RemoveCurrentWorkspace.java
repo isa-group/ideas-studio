@@ -9,7 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import static org.junit.Assert.assertTrue;
@@ -30,12 +29,12 @@ public class TC99_RemoveCurrentWorkspace extends es.us.isa.ideas.test.utils.Test
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC10_RemoveCurrentWorkspace...");
+        LOG.log(Level.INFO, "## Init TC99_RemoveCurrentWorkspace...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC10_RemoveCurrentWorkspace finished");
+        LOG.log(Level.INFO, "## TC99_RemoveCurrentWorkspace finished");
     }
 
     @After

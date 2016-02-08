@@ -32,13 +32,13 @@ public class TC02_RegisterTwitter extends es.us.isa.ideas.test.utils.TestCase {
 
 	@BeforeClass
 	public static void setUp() throws InterruptedException {
-		LOG.log(Level.INFO, "Init TC04_RegisterTwitter...");
+		LOG.log(Level.INFO, "Init TC02_RegisterTwitter...");
 		logout();
 	}
 
 	@AfterClass
 	public static void tearDown() {
-		LOG.log(Level.INFO, "TC04_RegisterTwitter finished");
+		LOG.log(Level.INFO, "TC02_RegisterTwitter finished");
 	}
 	
 	@After
