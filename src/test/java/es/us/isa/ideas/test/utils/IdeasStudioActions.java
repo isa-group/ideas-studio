@@ -386,6 +386,13 @@ public class IdeasStudioActions {
     }
     
     /**
+     * Go to IDEAS workspace manager.
+     */
+    public static boolean goWSMPage() {
+        LOG.info("Loading dashboard page...");
+        return IdeasStudioActions.goRelativePath("/app/wsm");
+    }   
+    /**
      * Go to IDEAS help webpage.
      */
     public static boolean goHelpPage() {
