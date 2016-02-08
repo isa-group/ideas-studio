@@ -56,8 +56,8 @@
 
     <definition name="settings/detail" template="/views/researcher/detail.jsp"></definition>
 
-	<!-- inview -->
-	<definition name="researcher/edit" template="/views/researcher/edit.jsp"></definition>
+    <!-- inview -->
+    <definition name="researcher/edit" template="/views/researcher/edit.jsp"></definition>
     
     <definition name="researcher/deleteSuccessful" extends="pagesTemplate">
         <put-attribute name="body" value="/views/researcher/deleteSuccessful.jsp"/>
@@ -100,7 +100,7 @@
         <put-attribute name="body" value="/views/app/wsm.jsp"/>
     </definition>
     
-<!--     App content  -->
+    <!--     App content  -->
     
     <definition name="app_content/app_editor_content" template="/views/app/editor.jsp"></definition>
     <definition name="app_content/app_social_content" template="/views/app/social.jsp"></definition>
@@ -138,13 +138,17 @@
     <definition name="app_modal/userDemoInfo" extends="app_modal">
         <put-attribute name="body" value="/views/app/modalWindows/userDemoInfo.jsp"/>
     </definition>
-<!--     Adapted user views 	-->
-	<definition name="/misc/empty" template="/misc/empty.jsp"></definition>
+    
+    <!--     Adapted user views 	-->
+    <definition name="/misc/empty" template="/misc/empty.jsp"></definition>
         
-	
-	<definition name="security/login" extends="loginTemplate">
+    <definition name="security/login" extends="loginTemplate">
         <put-attribute name="body" value="/views/security/login.jsp"/>
     </definition>
     <definition name="security/login_inview" template="/views/security/login.jsp"></definition>
+    
+    <definition name="operationalReplication" extends="resultsTemplate">
+        <put-attribute name="body" value="/views/operationalReplication.jsp"/>
+    </definition>
     
 </tiles-definitions>
