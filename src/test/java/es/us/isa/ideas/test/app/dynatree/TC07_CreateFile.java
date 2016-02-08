@@ -21,13 +21,6 @@ import static es.us.isa.ideas.test.utils.TestCase.getWebDriver;
 import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
 import static es.us.isa.ideas.test.app.dynatree.TestSuite.getFileExt2;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -93,8 +86,7 @@ public class TC07_CreateFile extends es.us.isa.ideas.test.utils.TestCase {
                     LOG.severe(e.getMessage());
                 }
 
-                // Expand project
-                getExpectedActions().click(By.linkText(FILE_CONTAINER));
+                IdeasStudioActions.expandAllDynatreeNodes();
 
                 waitForVisibleSelector(SELECTOR_DYNATREE);
                 testResult = getWebDriver()

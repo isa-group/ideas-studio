@@ -39,7 +39,7 @@ public class LoginService implements UserDetailsService {
 	}
 
 	public static UserAccount getPrincipal() {
-		UserAccount result;
+		UserAccount result=null;
 		SecurityContext context;
 		Authentication authentication;
 		Object principal;
@@ -56,9 +56,10 @@ public class LoginService implements UserDetailsService {
 		authentication = context.getAuthentication();
 		Assert.notNull(authentication);
 		principal = authentication.getPrincipal();
-		Assert.isTrue(principal instanceof UserAccount);
-		result = (UserAccount) principal;
-		Assert.notNull(result);
+		//Assert.isTrue();
+		if(principal instanceof UserAccount)
+                    result = (UserAccount) principal;
+		//Assert.notNull(result);
 		//Assert.isTrue(result.getId() != 0);
 
 		return result;

@@ -13,13 +13,6 @@ import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -69,6 +62,14 @@ public class TC99_RemoveCurrentWorkspace extends es.us.isa.ideas.test.utils.Test
 
         IdeasStudioActions.executeCommands(gcliCommand);    // executing this command will auto-refresh editor page
 
+        // Modal window
+        waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
+        getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
+        
+        // Modal window
+        waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
+        getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
+        
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
@@ -76,7 +77,7 @@ public class TC99_RemoveCurrentWorkspace extends es.us.isa.ideas.test.utils.Test
         }
 
         waitForVisibleSelector(SELECTOR_WS_TOGGLER);
-        getExpectedActions().click(By.cssSelector(SELECTOR_WS_TOGGLER));
+        getJs().executeScript("jQuery('" + SELECTOR_WS_TOGGLER + "').click();");
 
         try {
             Thread.sleep(2000); // menu toggle animation

@@ -82,6 +82,8 @@ var WorkspaceManager = {
         var workspaceName = WorkspaceManager.getSelectedWorkspace();
         console.log("Loading WS " + workspaceName + " ...");
         FileApi.loadWorkspace(workspaceName, function (ts) {
+            $(".wsactions").remove();
+            var wsactions = $('#wsActions');
             var wsLabel = $("#editorSidePanelHeaderWorkspaceInfo");
             wsLabel.empty(WorkspaceManager.getSelectedWorkspace());
             wsLabel.append(WorkspaceManager.getSelectedWorkspace());                        
@@ -91,21 +93,97 @@ var WorkspaceManager = {
                 $(".indented.apl_editor_"
                         + WorkspaceManager.getSelectedWorkspace())
                         .parent().addClass("active");
-                var workspaceDownload = "<div id='downloadAsZip'>"
-                workspaceDownload +=    "   <a href=\"file/getAsZip/"+WorkspaceManager.getSelectedWorkspace()+"\" ";
-                workspaceDownload +=    "           data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Download workspace as a single zip file\">";
-                workspaceDownload +=    "       Download workspace";
-                workspaceDownload +=    "       <span class=\"glyphicon glyphicon-download\" aria-hidden=\"true\"></span>";
-                workspaceDownload +=    "   </a>";
-                workspaceDownload +=    "</div>";
-                $("#projectsTree").append(workspaceDownload);
+            
+            var wsActions = "";
+            
+            var workspaceDownload =  "<a style=\"cursor: pointer\" id=\"download-ws\" ";
+                workspaceDownload += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Download workspace as a single zip file\">";
+                workspaceDownload += "<span class=\"glyphicon glyphicon-download\" aria-hidden=\"true\"> </span>";
+                workspaceDownload += "</a>";
+                
+            var workspaceEdit =  "<a style=\"cursor: pointer\" id=\"edit-ws\" ";
+                workspaceEdit += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit workspace\">";
+                workspaceEdit += "<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"> </span></a>";
+
+            var workspaceToDemo =  "<a style=\"cursor: pointer\" id=\"demo-ws\" ";
+                workspaceToDemo += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Publish as Demo\">";
+                workspaceToDemo += "<span class=\"glyphicon glyphicon-cloud-upload\" aria-hidden=\"true\"> </span></a>";
+
+
+            var workspaceDelete =  "<a style=\"cursor: pointer\" id=\"delete-ws\"";
+                workspaceDelete += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete workspace\">";
+                workspaceDelete += "<span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"> </span></a>";
+                
+//            var workspaceScreenshot =  "<a style=\"cursor: pointer\" id=\"screenshot-ws\"";
+//                workspaceScreenshot += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Screenshot\">";
+//                workspaceScreenshot += "<span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"> </span></a>";
+                           
+                wsActions+="<br>&nbsp;&nbsp;"+workspaceEdit+"";
+                wsActions+="&nbsp;&nbsp;"+workspaceDownload+"";
+                wsActions+="&nbsp;&nbsp;"+workspaceToDemo+"";
+                wsActions+="&nbsp;&nbsp;"+workspaceDelete+"<br>";
+//                wsActions+="&nbsp;&nbsp;"+workspaceScreenshot+"<br>";
+                wsActions+="";
+                
+                
+                $("#wsactions").append(wsActions);          
+            
             }
-            EditorManager.reset();
             $(".dynatree-expander").click();
+            
+            $("#edit-ws").click(function(e) {
+                e.preventDefault();
+                var oldName = WorkspaceManager.getSelectedWorkspace();
+                $("#modalCreationField input").val(oldName);
+		showContentAsModal("app/modalWindows/editWorkspace", function() {
+			var workspaceName = $("#modalCreationField input").val();
+                        var description = $("#descriptionInput textarea").val();
+			$("#workspacesNavContainer li").removeClass("active");
+			WorkspaceManager.updateWorkspace(workspaceName,description);
+			AppPresenter.loadSection("editor", workspaceName, function() {
+				WorkspaceManager.loadWorkspace();
+			});
+		});
+            });
+            
+            $("#download-ws").click(function(e) {
+                    e.preventDefault();
+                    var name = WorkspaceManager.getSelectedWorkspace();
+                    WorkspaceManager.downloadAsZip(name);
+            });
+            
+            $("#delete-ws").click(function(e) {
+                    e.preventDefault();
+                    WorkspaceManager.deleteWorkspace(WorkspaceManager.getSelectedWorkspace());
+            });
+            $("#demo-ws").click(function(e) {
+                    e.preventDefault();
+                    var name = WorkspaceManager.getSelectedWorkspace();
+                    WorkspaceManager.publishWorskspaceAsDemo(name);
+                    AppPresenter.loadSection("editor", name, function() {
+				WorkspaceManager.loadWorkspace();
+			});
+            });
+            $("#screenshot-ws").click(function(e) {
+                    e.preventDefault();
+                    
+                    var name = WorkspaceManager.getSelectedWorkspace();
+                    html2canvas($("#editor"), {
+                        onrendered: function(canvas) {
+                            theCanvas = canvas;
+                            document.body.appendChild(canvas);
+
+                            canvas.toBlob(function(blob) {
+                                                    saveAs(blob, "Dashboard.png"); 
+                                            });
+                        }
+                    });
+            });
+                        
         });
     },
-    createWorkspace: function (workspaceName) {
-        FileApi.createWorkspace(workspaceName, function (ts) {                        
+    createWorkspace: function (workspaceName,description,tags) {
+        FileApi.createWorkspace(workspaceName,description,tags, function (ts) {                        
             if (ts) {
                 createWSLine(workspaceName, function () {
                     WorkspaceManager.setSelectedWorkspace(workspaceName);                    
@@ -118,7 +196,7 @@ var WorkspaceManager = {
                     hideError();
                 });
                 WorkspaceManager.deleteWorkspace(workspaceName, function () {
-                    WorkspaceManager.loadWorkspace(WorkspaceManager.getSelectedWorkspace());
+                    WorkspaceManager.loadWorkspace();
                 });
             }
             hideModal();
@@ -126,25 +204,135 @@ var WorkspaceManager = {
         });
     },
     deleteWorkspace: function (workspaceName, callback) {
-        FileApi.deleteWorkspace(workspaceName, function (ts) {
-            if (ts) {
-                deleteWSLine(workspaceName);
-            } else {
-                showError("Error", "Error deleting workspace", function () {
-                    hideError();
+        var continueHandler = function() {
+            FileApi.deleteWorkspace(workspaceName, function (ts) {
+                    if (ts) {
+                        deleteWSLine(workspaceName);
+                    } else {
+                        showError("Error", "Error deleting workspace", function () {
+                            hideError();
+                        });
+                    }
                 });
-            }
-            callback(ts);
-        });
+            hideModal();
+            showModal("Confirm demos delete", 
+                      "Your demos for <b>'" + workspaceName +"'</b> will be erased too.<BR/><BR/>\n\
+                      <b>Do you want to delete your existing demos?</b><BR/></i>",
+                        "Continue", deleteDemosHandler,
+                        function(){}, function(){});
+        };
+        
+        var deleteDemosHandler = function() {
+                FileApi.deleteDemoWorkspace(workspaceName, function (ts) {
+                    if (ts) {
+                    } else {
+                        showError("Error", "Error deleting workspace", function () {
+                            hideError();
+                        });
+                    }
+                });
+            hideModal();
+            $(location).attr('href',"app/wsm"); 
+        };
+        showModal("Confirm workspace delete", "The workspace <b>'" + workspaceName +"'</b> will be erased and all data will be lost.<BR/><BR/><b>Do you want to delete the existing workspace?</b><BR/></i>",
+						"Continue", continueHandler,
+						function(){}, function(){});
+        
 
     },
-    downloadAsZip: function (workspaceName) {
-        FileApi.downloadAsZip(workspaceName, function (ts) {
+    
+    updateWorkspace: function (workspaceName,description) {
+        FileApi.updateWorkspace(workspaceName,description, function (ts) {                        
+            if (ts) {
+                if(WorkspaceManager.getSelectedWorkspace()!==workspaceName){
+                    deleteWSLine(WorkspaceManager.getSelectedWorkspace());
+                }
+                createWSLine(workspaceName, function () {
+                    WorkspaceManager.setSelectedWorkspace(workspaceName);                    
+                    AppPresenter.loadSection("editor", workspaceName, function() {
+				WorkspaceManager.loadWorkspace();
+			});
+                });
+                
+            } else {
+                showError("Error", "Error updating workspace", function () {
+                    hideError();
+                });
+                    WorkspaceManager.loadWorkspace();
+            }
+            hideModal();
         });
+    },
+    
+    deleteDemoWorkspace: function (workspaceName, callback) {
+        var continueHandler = function() {
+            FileApi.deleteDemoWorkspace(workspaceName, function (ts) {
+                    if (ts) {
+                    } else {
+                        showError("Error", "Error deleting workspace", function () {
+                            hideError();
+                        });
+                    }
+                    if (callback) {
+                        callback(ts);
+                    }
+                });
+            hideModal();
+        };
+        showModal("Confirm workspace delete", "The workspace <b>'" + workspaceName +"'</b> will be erased and all data will be lost.<BR/><BR/><b>Do you want to delete the existing workspace?</b><BR/></i>",
+						"Continue", continueHandler,
+						function(){}, function(){});
+
+    },
+    downloadAsZip: function (workspaceName,callback) {
+        FileApi.downloadAsZip(workspaceName);
     },
     initializeWithZipFile: function(){
         var submitButton=$("#uploadSubmit");
         submitButton.click();
+    },
+    importDemoWorkspace : function(demoWorkspaceName, targetWorkspaceName) {
+        CommandApi.importDemoWorkspace(demoWorkspaceName,targetWorkspaceName);
+    },
+    loadWorkspaceManagementWindow: function(){
+        AppPresenter.loadSection("wsm");
+    },
+    publishWorskspaceAsDemo: function (workspaceName, callback) {
+        var continueHandler = function() {
+                FileApi.currentWSAsDemoWS(workspaceName, callback);
+                hideModal();
+        };
+        showModal("Confirm publication as demo", "A demo for the workspace <b>'" + workspaceName +"'</b> will be published. \n\\n\
+                    <BR/> All data will be accessible from:\n\
+                    <BR/><BR/>https://IDEAS/demo/"+workspaceName+"\n\
+                    <BR/><BR/><b>Do you want to create a demo for the existing workspace?</b><BR/></i>",
+						"Continue", continueHandler,
+						function(){}, function(){});
+    },
+    updateDemoWorkspace:function (workspaceName, callback) {
+        var continueHandler = function() {
+                FileApi.updateDemoWorkspace(workspaceName, callback);
+                hideModal();
+                $(location).attr('href',"app/wsm");             
+        };
+        showModal("Confirm demo update", "The demo for the workspace <b>'" + workspaceName +"'</b> will be overwritten and new data will be accessible from:\n\
+                    <BR/><BR/>https://IDEAS/demo/"+workspaceName+"\n\
+                    <BR/><BR/><b>Do you want to update the demo for the existing workspace?</b><BR/></i>",
+						"Continue", continueHandler,
+						function(){}, function(){});
+    },
+    importNewDemoWorkspace:function (workspaceName, callback) {
+        var continueHandler = function() {
+                FileApi.importNewDemoWorkspace(workspaceName, callback);
+                WorkspaceManager.setSelectedWorkspace(workspaceName);
+                hideModal();
+                $(location).attr('href',"app/editor"); 
+        };
+        showModal("Confirm clone", "A clone for the demo workspace <b>'" + workspaceName +"'</b> will be created in your workspaces\n\
+                    You will be redirected to the editor after the clone action\n\
+                    <BR/><BR/><b>Do you want to clone the public demo ?</b><BR/></i>",
+						"Continue", continueHandler,
+						function(){}, function(){});
     }
 };
 

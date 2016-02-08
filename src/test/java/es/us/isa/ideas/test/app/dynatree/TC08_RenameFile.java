@@ -15,13 +15,6 @@ import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import org.openqa.selenium.Keys;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -35,6 +28,7 @@ public class TC08_RenameFile extends es.us.isa.ideas.test.utils.TestCase {
 
     private static boolean testResult = false;
     private static final String ORIGIN_FILE_NAME_WITH_EXT = TestSuite.getFileName1() + TestSuite.getFileExt1();
+    private static final String TARGET_FILE_NAME_WITH_EXT = "mod_" + ORIGIN_FILE_NAME_WITH_EXT;
     private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
     @BeforeClass
@@ -78,7 +72,6 @@ public class TC08_RenameFile extends es.us.isa.ideas.test.utils.TestCase {
 
     @Test
     public void step03_submitRenameInput() {
-        String targetFileName = "mod_" + ORIGIN_FILE_NAME_WITH_EXT;
 
         waitForVisibleSelector(SELECTOR_EDIT_NODE_INPUT);
         // Clear input
@@ -92,7 +85,7 @@ public class TC08_RenameFile extends es.us.isa.ideas.test.utils.TestCase {
 
         // Updates node title
         getExpectedActions()
-                .sendKeys(By.cssSelector(SELECTOR_EDIT_NODE_INPUT), targetFileName);
+                .sendKeys(By.cssSelector(SELECTOR_EDIT_NODE_INPUT), TARGET_FILE_NAME_WITH_EXT);
 
         try {
             Thread.sleep(2000);
@@ -114,15 +107,31 @@ public class TC08_RenameFile extends es.us.isa.ideas.test.utils.TestCase {
 
         // Is the renamed file visible
         testResult = getWebDriver()
-                .findElements(By.linkText(targetFileName)).size() > 0;
+                .findElements(By.linkText(TARGET_FILE_NAME_WITH_EXT)).size() > 0;
 
         if (testResult) {
-            echoCommandApi("File \"" + ORIGIN_FILE_NAME_WITH_EXT + "\" was successfully renamed to mod_\"" + ORIGIN_FILE_NAME_WITH_EXT + "\"."); 	// saving file
+            echoCommandApi("File \"" + ORIGIN_FILE_NAME_WITH_EXT + "\" was successfully renamed to \"" + ORIGIN_FILE_NAME_WITH_EXT + "\"."); 	// saving file
         }
         assertTrue(testResult);
     }
-
-//    @Test
-//    public void step04_checkIdeasRepoFileRenamed () {}
-    //TODO: check remote repository if file has been successfully renamed
+    
+    @Test
+    public void step04_checkFilenameAfterReloading() {
+        
+        getWebDriver().navigate().refresh();
+        
+        try {
+            Thread.sleep(1000); // tab animation
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC08_RenameFile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        IdeasStudioActions.expandAllDynatreeNodes();
+        
+        testResult = getWebDriver()
+                .findElements(By.linkText(TARGET_FILE_NAME_WITH_EXT)).size() > 0;
+        
+        assertTrue(testResult);
+        
+    }
 }

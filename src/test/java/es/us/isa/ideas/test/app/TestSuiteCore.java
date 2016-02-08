@@ -20,7 +20,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     es.us.isa.ideas.test.app.dynatree.TestSuite.class,
-    es.us.isa.ideas.test.modules.TestSuite.class
+    es.us.isa.ideas.test.modules.TestSuite.class,
+    es.us.isa.ideas.test.app.editor.TestSuite.class,
+    es.us.isa.ideas.test.app.dashboard.TestSuite.class
 })
 public class TestSuiteCore {
 

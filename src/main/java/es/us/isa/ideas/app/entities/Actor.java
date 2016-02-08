@@ -27,13 +27,12 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import es.us.isa.ideas.app.security.UserAccount;
+import javax.persistence.FetchType;
 
 @Entity
 @Access(AccessType.PROPERTY)
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Actor extends DomainEntity implements Serializable {
-
-	private static final long serialVersionUID = 2855736734155494409L;
 
 	// Constructors -----------------------------------------------------------
 
@@ -87,11 +86,12 @@ public abstract class Actor extends DomainEntity implements Serializable {
 	}
 
 	// Relationships ----------------------------------------------------------
-
+	
+	
 	private UserAccount userAccount;
-
+	
 	@Valid
-	@OneToOne(cascade = CascadeType.ALL, optional = true)
+	@OneToOne(cascade = CascadeType.ALL, optional = true,fetch = FetchType.LAZY)
 	public UserAccount getUserAccount() {
 		return userAccount;
 	}

@@ -122,6 +122,10 @@ var ModeManager = {
 		return ModeManager.commandsMap[languageId];
 	},
 	
+        getCommands: function(languageId){
+		return ModeManager.commandsMap[languageId];
+	},
+        
 	getBaseUri: function(languageId) {
 		return ModeManager.idUriMap[languageId];
 	},
