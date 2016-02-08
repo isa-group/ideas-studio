@@ -26,7 +26,6 @@ var createNewTabbedInstance = function(fileUri, content) {
 	var sessionAg = ModeManager.createSessionAggregationForEditor(fileUri,
 			content);
 	if (sessionAg == null) {
-		var win = window.open("file/get/" + fileUri, "_blank");
 		var win = window.open("files/get/" + fileUri, "_blank");
 		if (win) {
 			// Browser has allowed it to be opened
@@ -171,6 +170,7 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 	}
 
         oldUri=EditorManager.currentUri;
+
 	EditorManager.currentUri = fileUri;
 
 	$(EditorManager.tabsMap[EditorManager.currentUri]).addClass("active");
