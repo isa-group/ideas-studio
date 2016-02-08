@@ -44,7 +44,7 @@ public class TC01_CreatePublicDemoForDashboardTest extends TestCase{
     
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC01_PublicDashboard...");
+        LOG.log(Level.INFO, "## Init TC01_CreatePublicDemoForDashboardTest...");
         try {
             logout();
         } catch (InterruptedException ex) {
@@ -54,7 +54,7 @@ public class TC01_CreatePublicDemoForDashboardTest extends TestCase{
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC01_PublicDashboard finished");
+        LOG.log(Level.INFO, "## TC01_CreatePublicDemoForDashboardTest finished");
     }
 
     @After
@@ -71,10 +71,6 @@ public class TC01_CreatePublicDemoForDashboardTest extends TestCase{
 
     @Test
     public void step02_loginWithGuestUser() {
-
-        System.out.println("Login with params...");
-        System.out.println("Username: " + user);
-        System.out.println("Password: " + pass);
 
         try {
             if (validatePropertyValues(user, pass)) {

@@ -2,7 +2,6 @@ package es.us.isa.ideas.test.app.dashboard;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
-import static es.us.isa.ideas.test.utils.TestCase.getExpectedActions;
 import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,12 +30,12 @@ public class TC08_UpdateDemo extends TestCase{
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC08_PublishDemo...");
+        LOG.log(Level.INFO, "## Init TC08_UpdateDemo...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC08_PublishDemo finished");
+        LOG.log(Level.INFO, "## TC08_UpdateDemo finished");
     }
 
     @After

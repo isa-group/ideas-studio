@@ -8,7 +8,6 @@ package es.us.isa.ideas.test.app.editor;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
-import static es.us.isa.ideas.test.utils.TestCase.getExpectedActions;
 import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
 
 import java.util.logging.Level;

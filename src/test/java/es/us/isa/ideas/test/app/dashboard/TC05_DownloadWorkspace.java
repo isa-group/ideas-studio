@@ -31,12 +31,12 @@ public class TC05_DownloadWorkspace extends TestCase{
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC06_DownloadWorkspace...");
+        LOG.log(Level.INFO, "## Init TC05_DownloadWorkspace...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC06_DownloadWorkspace finished");
+        LOG.log(Level.INFO, "## TC05_DownloadWorkspace finished");
     }
 
     @After
