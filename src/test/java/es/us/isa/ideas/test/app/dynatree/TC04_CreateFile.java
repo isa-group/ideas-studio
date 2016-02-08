@@ -17,13 +17,6 @@ import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import static es.us.isa.ideas.test.app.dynatree.TestSuite.getFileExt1;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of

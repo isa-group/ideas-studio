@@ -12,6 +12,17 @@
         <span class="input-group-addon"><spring:message code="editor.actions.modal.create_workspace.msg" /></span>
         <input type="text" class="form-control focusedInput">
     </div>
+        <br>
+    <div class="input-group" id="descriptionInput" >
+        <span class="input-group-addon"><spring:message code="editor.actions.modal.create_workspace.description" /></span>
+        <textarea type="text" class="form-control"></textarea>
+    </div>
+        <br>
+    <div class="input-group" id="tagsInput" >
+        <span class="input-group-addon"><spring:message code="editor.actions.modal.create_workspace.tags" /></span>
+        <textarea type="text" class="form-control"></textarea>
+    </div>
+        
     <div class="input-group">     
         <div class="checkbox">
             <label>
@@ -21,7 +32,7 @@
         </div>                                                            
         <div class="collapse" id="zipFileDiv">            
             <div class="input-group">
-                <form action="file/uploadAndExtract/" method="POST" enctype="multipart/form-data">
+                <form action="files/uploadAndExtract/" method="POST" enctype="multipart/form-data">
                     <input type="file" name="zipFile" id="zipFile" class="form-control"/>            
                     <input type="submit" id="uploadSubmit" class="hidden"/>
                 </form>

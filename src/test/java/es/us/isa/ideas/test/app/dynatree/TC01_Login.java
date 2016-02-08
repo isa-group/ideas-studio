@@ -13,13 +13,6 @@ import org.junit.runners.MethodSorters;
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -73,10 +66,6 @@ public class TC01_Login extends es.us.isa.ideas.test.utils.TestCase {
 
     @Test
     public void step03_loginWithSeleniumProperties() {
-
-        System.out.println("Login with params...");
-        System.out.println("Username: " + user);
-        System.out.println("Password: " + pass);
 
         try {
             if (validatePropertyValues(user, pass)) {

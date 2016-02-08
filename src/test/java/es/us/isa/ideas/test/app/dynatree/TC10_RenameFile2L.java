@@ -15,13 +15,7 @@ import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import org.openqa.selenium.Keys;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
+import org.openqa.selenium.NoSuchElementException;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -127,13 +121,13 @@ public class TC10_RenameFile2L extends es.us.isa.ideas.test.utils.TestCase {
                 .findElements(By.linkText(TARGET_FILE_NAME_WITH_EXT)).size() > 0;
 
         if (testResult) {
-            echoCommandApi("File \"" + ORIGIN_FILE_NAME_WITH_EXT + "\" was successfully renamed to mod_\"" + ORIGIN_FILE_NAME_WITH_EXT + "\"."); 	// saving file
+            echoCommandApi("File \"" + ORIGIN_FILE_NAME_WITH_EXT + "\" was successfully renamed to \"mod_" + ORIGIN_FILE_NAME_WITH_EXT + "\"."); 	// saving file
         }
         assertTrue(testResult);
     }
     
     @Test
-    public void step06_checkTabRename() {
+    public void step06_checkTabRenameBeforeReloading() {
         
         try {
             Thread.sleep(1000); // tab animation
@@ -152,8 +146,6 @@ public class TC10_RenameFile2L extends es.us.isa.ideas.test.utils.TestCase {
     @Test
     public void step07_onlyOneActiveTab() {
         
-        getExpectedActions().click(By.linkText("mod_" + TestSuite.getFileName1() + TestSuite.getFileExt1()));
-        
         try {
             Thread.sleep(1000); // tab animation
         } catch (InterruptedException ex) {
@@ -170,6 +162,31 @@ public class TC10_RenameFile2L extends es.us.isa.ideas.test.utils.TestCase {
         }
         
         testResult = getWebDriver().findElements(By.cssSelector(SELECTOR_TAB_ACTIVE)).size() == 1;
+        assertTrue(testResult);
+        
+    }
+    
+    @Test
+    public void step08_checkFilenameAfterReloading() {
+        
+        getWebDriver().navigate().refresh();
+        
+        try {
+            Thread.sleep(1000); // tab animation
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC10_RenameFile2L.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        IdeasStudioActions.expandAllDynatreeNodes();
+        
+        try {
+            testResult = getWebDriver()
+                .findElements(By.linkText(TARGET_FILE_NAME_WITH_EXT)).size() > 0;
+        } catch (NoSuchElementException ex) {
+            Logger.getLogger(TC10_RenameFile2L.class.getName()).log(Level.SEVERE, null, ex);
+            testResult = false;
+        }
+        
         assertTrue(testResult);
         
     }
