@@ -4,6 +4,7 @@ import es.us.isa.ideas.app.entities.OperationalReplication;
 import es.us.isa.ideas.app.services.OperationalReplicationService;
 import es.us.isa.ideas.app.services.WorkspaceService;
 import java.util.Collection;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class OperationalReplicationController {
     
     @Autowired
-    OperationalReplicationService experimentalExecutionService;
+    OperationalReplicationService operationalReplicationService;
     @Autowired
     WorkspaceService workspaceService;
 
@@ -28,31 +29,33 @@ public class OperationalReplicationController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public Collection<OperationalReplication> list() {
-        Collection<OperationalReplication> exc = experimentalExecutionService.findAll();
+        Collection<OperationalReplication> exc = operationalReplicationService.findAll();
         return exc;
     }
     
     @RequestMapping(value = "",method = RequestMethod.POST, consumes = {"application/json"})
     @ResponseBody
-    public ModelAndView createExperimentalExecution(   @RequestParam("workspace") String workspaceName,
-                        @RequestParam("operation") String operationCode,
-                        @RequestParam("file") String fileUri,
-                        @RequestParam("data") String dataUri,
-                        @RequestParam("params") String auxParams){
+    public String createOperationalReplicationLink( @RequestParam("workspace") String workspaceName,
+                                                    @RequestParam("operation") String operationCode,
+                                                    @RequestParam("file") String fileUri,
+                                                    @RequestParam("data") String dataUri,
+                                                    @RequestParam("params") String auxParams){
         
-        experimentalExecutionService.createExperimentalExecution(workspaceName, operationCode, fileUri, dataUri, auxParams);
+        String operationUUID = UUID.randomUUID().toString();
+
+        operationalReplicationService.createExperimentalExecution(operationUUID, workspaceName, operationCode, fileUri, dataUri, auxParams);
     
-        return new ModelAndView();
+        return operationUUID;
     }
     
-    @RequestMapping(value = "/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/{uuid}",method = RequestMethod.GET)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public ModelAndView executeExperimentalExecution(@PathVariable("id") String id){
+    public ModelAndView executeExperimentalExecution(@PathVariable("uuid") String uuid){
         
         ModelAndView result = new ModelAndView("operationalReplication");
         
-        OperationalReplication eExec = experimentalExecutionService.findById(Integer.parseInt(id));
+        OperationalReplication eExec = operationalReplicationService.findByUUID(uuid);
         try{
             
             String operationCode = eExec.getOperation();
@@ -61,6 +64,7 @@ public class OperationalReplicationController {
             String params = eExec.getAuxParams();
             
             result.addObject("id", operationCode);
+            result.addObject("workspace", eExec.getFileUri().substring(0, eExec.getFileUri().indexOf("/")));
             result.addObject("content", fileContent);
             result.addObject("fileUri", eExec.getFileUri());
             result.addObject("data", data);

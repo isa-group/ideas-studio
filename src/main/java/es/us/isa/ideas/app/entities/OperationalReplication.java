@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 @Access(AccessType.PROPERTY)
 public class OperationalReplication extends DomainEntity implements Serializable {
     
+    private String UUID;
     private Workspace workspace;
     private Date creationDate;
     private String operation;
@@ -20,6 +21,15 @@ public class OperationalReplication extends DomainEntity implements Serializable
     private String auxParams;
     private Integer launches;
       
+    @NotNull
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
+    }
+    
     @NotNull
     @ManyToOne
     public Workspace getWorkspace() {

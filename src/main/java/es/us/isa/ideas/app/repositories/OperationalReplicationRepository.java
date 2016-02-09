@@ -12,6 +12,9 @@ public interface OperationalReplicationRepository extends JpaRepository<Operatio
     
     @Query("SELECT r FROM OperationalReplication r WHERE r.id = ?")
     OperationalReplication findById(Integer id);
+    
+    @Query("SELECT r FROM OperationalReplication r WHERE r.UUID = ?")
+    OperationalReplication findByUUID(String UUID);
        
     @Query("SELECT r FROM OperationalReplication r WHERE r.workspace = ?")
     Collection<OperationalReplication> findByWorkspace(String id);

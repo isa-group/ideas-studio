@@ -7,8 +7,6 @@ import es.us.isa.ideas.app.repositories.OperationalReplicationRepository;
 import es.us.isa.ideas.app.repositories.WorkspaceRepository;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.inject.Inject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -20,18 +18,21 @@ import org.springframework.util.Assert;
 public class OperationalReplicationService extends BusinessService<OperationalReplication>{
     
     @Inject
-    private OperationalReplicationRepository experimentalExecutionRepository;
+    private OperationalReplicationRepository operationalReplicationRepository;
     @Inject
     private WorkspaceRepository workspaceRepository;
     
     private static final String DEMO_MASTER = "DemoMaster";
     
     
-    public OperationalReplication createExperimentalExecution(String workspaceName, 
+    public OperationalReplication createExperimentalExecution(
+                                            String operationUUID,
+                                            String workspaceName, 
                                             String operationCode, 
                                             String fileUri,
                                             String dataUri,
                                             String params){
+        Assert.notNull(operationUUID);
         Assert.notNull(workspaceName);
         Assert.notNull(operationCode);
         Assert.notNull(fileUri);
@@ -43,34 +44,30 @@ public class OperationalReplicationService extends BusinessService<OperationalRe
         
         if (existDemoWorkspace){
             OperationalReplication eExec =  new OperationalReplication();
+            eExec.setUUID(operationUUID);
             eExec.setWorkspace(demoWS);
             eExec.setCreationDate(Calendar.getInstance().getTime());
             eExec.setOperation(operationCode);
             eExec.setFileUri(fileUri);
             eExec.setDataUri(dataUri);
             eExec.setLaunches(0);  
-            res = experimentalExecutionRepository.saveAndFlush(eExec);
+            res = operationalReplicationRepository.saveAndFlush(eExec);
         }
         
         return res;
     }
     
+    public OperationalReplication findByUUID(String operationUUID) {
+        return operationalReplicationRepository.findByUUID(operationUUID);
+    }
+    
     public Collection<OperationalReplication> findAll() {
-        return experimentalExecutionRepository.findAll();
+        return operationalReplicationRepository.findAll();
     }
 
     @Override
     protected JpaRepository<OperationalReplication, Integer> getRepository() {
-        return experimentalExecutionRepository;
+        return operationalReplicationRepository;
     }
     
-    public String calculateExtFromFileUri(String fileUri) {
-        String extension = "";
-        Matcher m = Pattern.compile(".*/.*?(\\..*)").matcher(fileUri);//Alt /(?:\.([^.]+))?$/
-        if (m.matches()) {
-            extension = m.group(1);
-        }
-        return extension;
-    }
-
 }
