@@ -40,6 +40,23 @@ public class TestCase {
     protected static final String SELECTOR_EDIT_NODE_INPUT = "input#editNode";
     protected static final String SELECTOR_TAB_ACTIVE = "div#editorMainPanel ul#editorTabs > li.active";
     
+    protected static final String SELECTOR_NEW_WS_MODAL_INPUT_NAME = "#modalCreationField > input";
+    protected static final String SELECTOR_NEW_WS_MODAL_INPUT_DESCRIPTION = "#descriptionInput > textarea";
+    protected static final String SELECTOR_NEW_WS_MODAL_INPUT_TAGS = "#tagsInput > textarea";
+    
+    protected static final String SELECTOR_MODAL_CONTINUE = "#appGenericModal > div > div > div.modal-footer > a.btn.btn-primary.continue";
+    
+    protected static final String SELECTOR_WORKSPACE_FORM_INPUT_NAME = "#modalCreationField > input";
+    protected static final String SELECTOR_WORKSPACE_FORM_INPUT_DESCRIPTION = "#descriptionInput > textarea";
+     
+    protected static final String SELECTOR_DASHBOARD_WORKSPACE_CARD_EDIT_BUTTON = "#editWS";
+    protected static final String SELECTOR_DASHBOARD_WORKSPACE_CARD_PUBLISH_BUTTON = "#publishWS";
+    protected static final String SELECTOR_DASHBOARD_WORKSPACE_CARD_DELETE_BUTTON = "#deleteWS";
+    protected static final String SELECTOR_DASHBOARD_DEMO_CARD_UPDATE_BUTTON = "#updateDemo";
+    protected static final String SELECTOR_DASHBOARD_DEMO_CARD_DELETE_BUTTON = "#deleteDemo";
+    protected static final String SELECTOR_DASHBOARD_DEMO_VIEW_BUTTON = "#viewDemo";
+    protected static final String SELECTOR_DASHBOARD_PUBLIC_DEMO_CLONE_BUTTON = "#cloneDemo";
+    
     private static final String PROPERTY_APPLICATION_FILE_NAME = "application.properties";
     private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
     

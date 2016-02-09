@@ -20,7 +20,6 @@ import static es.us.isa.ideas.test.utils.TestCase.getJs;
 import static es.us.isa.ideas.test.utils.TestCase.getWebDriver;
 import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
 import java.util.List;
-import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import static org.junit.Assert.assertTrue;
@@ -43,13 +42,13 @@ public class TC04_RecoverPassword extends es.us.isa.ideas.test.utils.TestCase {
 
     @BeforeClass
     public static void setUp() throws InterruptedException {
-        LOG.log(Level.INFO, "Init TC05_RecoverPassword...");
+        LOG.log(Level.INFO, "Init TC04_RecoverPassword...");
         logout();
     }
 
     @AfterClass
     public static void tearDown() throws InterruptedException {
-        LOG.log(Level.INFO, "TC05_RecoverPassword finished");
+        LOG.log(Level.INFO, "TC04_RecoverPassword finished");
         logout();
     }
 

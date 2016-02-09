@@ -20,7 +20,7 @@
     <div id="files" class="files"></div>
     <script>
         var nodeUri = FileApi.calculateNodeUri(currentSelectedNode);
-        var url = "file/upload/" + nodeUri;
+        var url = "files/upload/" + nodeUri;
         $("#fileupload").fileupload(
                 {
                     url: url,

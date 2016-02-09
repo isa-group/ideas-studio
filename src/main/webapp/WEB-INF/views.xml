@@ -67,7 +67,15 @@
     </definition>
     <definition name="confirmation/confirmationError" extends="pagesTemplate">
         <put-attribute name="body" value="/views/confirmation/confirmationError.jsp"/>
+    </definition>  
+    
+    <definition name="wsm/edit" extends="appTemplate">
+        <put-attribute name="body" value="/views/workspace/edit.jsp"/>
     </definition>    
+    
+    <definition name="wsm/list" extends="appTemplate">
+        <put-attribute name="body" value="/views/workspace/list.jsp"/>
+    </definition>
     
 <!--     App 	-->
     <definition name="app/editor" extends="appTemplate">
@@ -85,6 +93,9 @@
      <definition name="app/help" extends="appTemplate">
         <put-attribute name="body" value="/views/app/help.jsp"/>
     </definition>
+    <definition name="app/wsm" extends="appTemplate">
+        <put-attribute name="body" value="/views/app/wsm.jsp"/>
+    </definition>
     
 <!--     App content  -->
     
@@ -93,6 +104,7 @@
     <definition name="app_content/app_settings_content" template="/views/app/settings.jsp"></definition>
     <definition name="app_content/app_administration_content" template="/views/app/administration.jsp"></definition>
     <definition name="app_content/app_help_content" template="/views/app/help.jsp"></definition>
+    <definition name="app_content/app_wsm_content" template="/views/app/wsm.jsp"></definition>
     
     <!-- App modal windows--> 
     <definition name="app_modal" template="/WEB-INF/tiles/appModalDialog.jsp"/>
@@ -110,6 +122,9 @@
     </definition>
     <definition name="app_modal/createWorkspace" extends="app_modal">
         <put-attribute name="body" value="/views/app/modalWindows/createWorkspaceModal.jsp"/>    
+    </definition>
+    <definition name="app_modal/editWorkspace" extends="app_modal">
+        <put-attribute name="body" value="/views/app/modalWindows/editWorkspaceModal.jsp"/>    
     </definition>
     <definition name="app_modal/selectOperationItem" extends="app_modal">
         <put-attribute name="body" value="/views/app/modalWindows/selectOperationModal.jsp"/>

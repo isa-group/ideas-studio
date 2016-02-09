@@ -30,13 +30,13 @@ public class TC01_RegisterMaxLengthFormField extends es.us.isa.ideas.test.utils.
 
 	@BeforeClass
 	public static void setUp() throws InterruptedException {
-		LOG.log(Level.INFO, "Init TC02_RegisterMaxLengthFormField...");
+		LOG.log(Level.INFO, "Init TC01_RegisterMaxLengthFormField...");
 		logout();
 	}
 
 	@AfterClass
 	public static void tearDown() {
-		LOG.log(Level.INFO, "TC02_RegisterMaxLengthFormField finished");
+		LOG.log(Level.INFO, "TC01_RegisterMaxLengthFormField finished");
 	}
 
 	@After

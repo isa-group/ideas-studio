@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 @Transactional
 public class ConfirmationService extends BusinessService<Confirmation> {
-
+	
     @Autowired
     ConfirmationRepository repository;
 
@@ -99,15 +99,19 @@ public class ConfirmationService extends BusinessService<Confirmation> {
 
     public void createPasswordResetConfirmation(Actor actor) {
 
-        Confirmation confirmation = new Confirmation();
+        Confirmation confirmation;
+        if (repository.getByResearcherId(actor.getId()) != null) {
+            confirmation = repository.getByResearcherId(actor.getId());
+        } else {
+            confirmation = new Confirmation();
+            confirmation.setResearcher((Researcher) actor);
+        }
         
-        confirmation.setResearcher((Researcher) actor);
         confirmation.setRegistrationDate(new Date());
         confirmation.setConfirmationCode(UUID.randomUUID().toString());
         confirmation.setConfirmationDate(null);
-        
         repository.save(confirmation);
- 
+        
         sendPasswordResetConfirmationMail(confirmation,
                 new HashMap<String, String>());
 

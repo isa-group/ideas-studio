@@ -139,7 +139,7 @@ var CommandApi = {
 		WorkspaceManager.getWorkspaces(function(workspacesArray) {
 			var exists = false;
 			for (index in workspacesArray)
-				if (workspacesArray[index].name == targetWorkspaceName) {
+				if (workspacesArray[index].name === targetWorkspaceName) {
 					exists = true;
 					break;
 				}
@@ -309,7 +309,7 @@ var CommandApi = {
 };
 
 var switchToDemoWorkspace = function(demoWorkspaceName, targetWorkspaceName) {
-	RequestHelper.ajax("file/importDemoWorkspace", {
+	RequestHelper.ajax("files/importDemo", {
 		"type" : "get",
 		"data" : {
 			"demoWorkspaceName" : demoWorkspaceName,
