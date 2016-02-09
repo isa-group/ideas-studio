@@ -56,23 +56,7 @@
 <script type="text/javascript" src="js/gcli-console/commands.js"></script>
 <script  type="text/javascript" src="js/gcli-console/gcli-uncompressed.js"></script>
 <script type="text/javascript" src="js/appPresenter.js"></script>
-
-<script>
-	var fitBottom = function() {
-		var pagesContainer = $('#pagesContent');
-		var hh = $(window).height() - pagesContainer.position().top - 110;
-		$('#pagesContent').css("min-height", hh + "px");
-	};
-
-	jQuery(function() {
-
-		fitBottom();
-
-		$(window).resize(function() {
-			fitBottom();
-		});
-	});
-</script>
+        <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 
 </head>
 
@@ -86,8 +70,7 @@
 	        <div id="appMainContent">
 	        	<div id="appMainContentBlocker" class="hidden"></div>
 		        <tiles:insertAttribute name="header" />
-		        <div id="appBody">
-		        	<div id="appBodyBlocker"></div>
+                        <div id="appBody" style="overflow: scroll">
 		        	<div id="appBodyLoader">
 		        		<tiles:insertAttribute name="body"/>
 		        	</div>
