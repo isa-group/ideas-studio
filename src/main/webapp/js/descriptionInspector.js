@@ -13,14 +13,14 @@ var descriptionCheckerTimer;
  * ("onClick", "onFocus", ...). - ace: simplifican la llamadas los métodos del
  * editor web. - inspectorContent: centraliza el funcionamiento y método de
  * gesitón del contenido del inspector de descripción.
- * 
+ *
  * @namespace DescriptionInspector
  */
 var DescriptionInspector = {
 
 	/**
 	 * Variables globales del DescriptionInspector
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @namespace DescriptionInspector.vars
 	 */
@@ -29,7 +29,7 @@ var DescriptionInspector = {
 		/**
 		 * Variable del entorno que indica en qué modo estamos actualmente.
 		 * Actualmente cuenta con una única variable.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.vars
 		 */
 		mode : "editor",
@@ -37,7 +37,7 @@ var DescriptionInspector = {
 		/**
 		 * Variable usada para almacenar el contenido del inspector cuando haga
 		 * falta.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.vars
 		 */
 		inspectorContent : "",
@@ -45,7 +45,7 @@ var DescriptionInspector = {
 		/**
 		 * Variable que contiene los selectores más usados del
 		 * DescriptionInspector.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.vars
 		 * @namespace DescriptionInspector.vars.selectors
 		 */
@@ -56,7 +56,7 @@ var DescriptionInspector = {
              * @type String
 			 */
 			inspector : "#editorInspector",
-            
+
             /**
 			 * @memberof DescriptionInspector.vars.selectors
              * @type String
@@ -69,40 +69,40 @@ var DescriptionInspector = {
              * @type String
 			 */
 			inspectorDescriptionContent : "#inspectorContent",
-            
+
             /**
              * Description inspector content tab.
 			 * @memberof DescriptionInspector.vars.selectors
              * @type String
 			 */
 			inspectorDescriptionTab : "#editorTabs > .descriptionInspectorTab",
-            
+
             /**
              * Model inspector content tab.
              * @memberof DescriptionInspector.vars.selectors
              * @type String
              */
             inspectorModelContent: "#inspectorModelContent",
-            
+
             /**
              * Model inspector tab.
              * @memberof DescriptionInspector.vars.selectors
              * @type String
              */
             inspectorModelTab: "#editorTabs > .modelInspectorTab",
-            
+
             /**
-             * 
+             *
              * @type String
              */
             inspectorTabs : "#editorTabs.inspectorTabs"
-            
+
 		},
 
 		/**
 		 * Variables para el funcionamiento del progressBar. Almacenan la
 		 * información conseguida en cada step.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.vars
 		 * @namespace DescriptionInspector.vars.progressBar
 		 */
@@ -117,7 +117,7 @@ var DescriptionInspector = {
 		 * desde un método o desde el mismo editor. 0 indica que se realiza
 		 * sobre el editor 1 indica que se realiza fuera del editor, por ejemplo
 		 * la llamada al método "DescriptionInspector.modifyBindings".
-		 * 
+		 *
 		 * @memberof DescriptionInspector.vars
 		 */
 		modificationFlag : 0
@@ -129,7 +129,7 @@ var DescriptionInspector = {
 	 * asociado al fichero actualmente abierto. Si existe un fichero descriptor,
 	 * carga todos los métodos loaders de inicio. En caso contrario, muestra
 	 * botón de construcción del fichero descriptor con una plantilla.
-	 * 
+	 *
 	 * @this window
 	 * @memberof DescriptionInspector
 	 * @param {jQuery}
@@ -156,14 +156,14 @@ var DescriptionInspector = {
 			_this.loaders.onEditorSelectionShowCursors();
 			_this.loaders.descriptionFormatView();
 			// _this.loaders.customEvents();
-            
+
 			_this.showDescriptionTab(); //TODO: activate first available tab
 //			_this.preventBackspaceKeyPress();
 
 		} else {
 			_this.loaders.descriptionFileCreator(inspectorLoader);
 		}
-        
+
         if (_this.existCurrentAngularFile()) {
             _this.setInspectorModelContent();
         } else {
@@ -173,7 +173,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Comprueba si el fichero de descripción existe.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @returns {boolean}
 	 */
@@ -181,7 +181,7 @@ var DescriptionInspector = {
 		return getNodeByFileUri(this.getCurrentDescriptionFileUri()) ? true
 				: false;
 	},
-    
+
     existCurrentAngularFile : function () {
         var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
         return getNodeByFileUri(fileUriWithoutExt + ".ang") ? true
@@ -190,7 +190,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Check if current opened file is a description file.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @returns {boolean}
 	 */
@@ -200,7 +200,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Comprueba si DescriptionInspector se encuentra en modo edición.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @returns {boolean}
 	 */
@@ -210,7 +210,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Habilita el modo de lectura en la visualización del inspector.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	setReaderMode : function() {
@@ -253,7 +253,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Habilita el modo de edición en la visualización del inspector.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	setEditorMode : function() {
@@ -270,7 +270,7 @@ var DescriptionInspector = {
 	 * Elimina toda la estructura del inspector dejándolo en su aspecto inicial
 	 * al cargar la aplicación. Se utiliza cuando ya no queda ningún fichero que
 	 * mostrar.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	empty : function() {
@@ -284,7 +284,7 @@ var DescriptionInspector = {
 	 * Muestra u oculta el menú expandible en función de la extensión del
 	 * fileUri pasado como parámetro. Si se trata de un fichero descriptor,
 	 * oculta el menú. En caso contrario, lo muestra.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	manageExpandableMenuVisibility : function(inspectorLoader) {
@@ -306,7 +306,7 @@ var DescriptionInspector = {
 	/**
 	 * Almacena el contenido del htmlObj pasado por parámetro en el fichero
 	 * descriptor asociado.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	saveContentToDescriptionFile : function(content) {
@@ -332,7 +332,7 @@ var DescriptionInspector = {
 	 * Almacena en servidor el contenido actual del inspector de descripción. Es
 	 * necesario comprobar que el fichero descriptor en cuestión se encuentra
 	 * cerrado antes de intentar guardarlo.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	saveInspectorContentToDescriptionFile : function() {
@@ -351,7 +351,7 @@ var DescriptionInspector = {
 	/**
 	 * Prepara el contenido a almacenar en el fichero de descripción
 	 * correspondiente.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	prepareDescriptionContentToSave : function(content) {
@@ -368,7 +368,7 @@ var DescriptionInspector = {
 	/**
 	 * Calcula la uri del fichero descriptor que hace referencia al fichero
 	 * actualmenente abierto.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @returns {String} Uri del fichero descriptor.
 	 */
@@ -376,15 +376,15 @@ var DescriptionInspector = {
 		var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
         return fileUriWithoutExt + ".html";
 	},
-    
+
     getCurrentModelFileUri : function() {
-		var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
-        return fileUriWithoutExt + ".ang";
+			var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
+			return fileUriWithoutExt + ".ang";
 	},
 
 	/**
 	 * Obtiene el contenido del fichero descriptor en cuestión.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @returns {String} Contenido del fichero descriptor
 	 */
@@ -406,31 +406,32 @@ var DescriptionInspector = {
 
 		return descriptionData;
 	},
-    
+
     getModelFileContent : function() {
-		var urlReq = 'file/getFileContent?fileUri='
-				+ this.getCurrentModelFileUri(), descriptionData = "";
 
-		$.ajax({
-			url : urlReq,
-			async : false,
-			success : function(content) {
-				if (content) {
-					descriptionData = content;
-				} else {
-					console.error("No model file content");
+			var urlReq = 'files/content?fileUri='
+					+ this.getCurrentModelFileUri(), descriptionData = "";
+
+			$.ajax({
+				url : urlReq,
+				async : false,
+				success : function(content) {
+					if (content) {
+						descriptionData = content;
+					} else {
+						console.error("No model file content");
+					}
 				}
-			}
-		});
+			});
 
-		return descriptionData;
+			return descriptionData;
 	},
 
 	/**
 	 * Objeto inspectorContent centralizador de operaciones comúnes sobre esta
 	 * sección de IDEAS. Dicha sección se refiere al contenido del inspector de
 	 * descripción.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @namespace DescriptionInspector.inspectorContent
 	 */
@@ -438,7 +439,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Obtiene el contenedor de inspectorContent en formaro jQuery.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.inspectorContent
 		 * @return {jQuery} Contenedor de inspectorContent.
 		 */
@@ -448,7 +449,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Calcula y obtiene la altura del inspectorContent.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.inspectorContent
 		 * @returns {number} Valor de altura.
 		 */
@@ -462,7 +463,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Calcula y obtiene la anchura del inspectorContent.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.inspectorContent
 		 * @returns {number} Valor de anchura.
 		 */
@@ -473,7 +474,7 @@ var DescriptionInspector = {
 		/**
 		 * Redimensiona el tamaño del inspectorContent teniendo en cuenta el
 		 * zoom actual.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.inspectorContent
 		 * @returns {boolean} Devuelve true si se han cambiado los valores, y
 		 *          false si no.
@@ -497,7 +498,7 @@ var DescriptionInspector = {
 		 * Almacena en una variable "inspectorContent" el contenido actual del
 		 * inspector de descripción. Sirve para que tengamos un respaldo del
 		 * contenido si hemos modificado algo y queremos cancelar el cambio.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.inspectorContent
 		 */
 		saveCurrentLocalData : function() {
@@ -507,7 +508,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Carga sobre el contenedor el valor guardado en "saveCurrentLocalData"
-		 * 
+		 *
 		 * @memberof DescriptionInspector.inspectorContent
 		 */
 		loadLocalContent : function() {
@@ -522,9 +523,9 @@ var DescriptionInspector = {
 		var console= $("#editorBottomPanel");
 		var expandButton= $("#expandConsole");
 		if (menu == 'first'){
-			
+
 			editor.animate({height: "65%"},function(){
-				
+
 				expandButton.off('click').click(function(){
 					DescriptionInspector.expandConsole('second');
 				});
@@ -553,7 +554,7 @@ var DescriptionInspector = {
 			});
 		}
 		console.css("height","100%");
-		
+
 	},
 	/**
 	 * Limpia todo el texto de la consola.
@@ -566,7 +567,7 @@ var DescriptionInspector = {
 	/**
 	 * Expande el menú desplegable independientemente del tipo que sea (add o
 	 * remove). Define la animación de despliegue.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	expandInspectorMenu : function(menu) {
@@ -609,7 +610,7 @@ var DescriptionInspector = {
 	/**
 	 * Contrae el menú desplegable independientemente del tipo que sea (add o
 	 * remove). Define la animación de contracción.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	unexpandInspectorMenu : function(callback) {
@@ -646,7 +647,7 @@ var DescriptionInspector = {
 	 * Muestra el contenido del inspector de descripción haciendo clic en su
 	 * pestaña. Además trata de redimensionar el contenedor "inspectorContent"
 	 * para visualizarlo bien.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	showDescriptionTab : function() {
@@ -662,7 +663,7 @@ var DescriptionInspector = {
 	 * Obtiene el texto de anotación a partir de un objeto HTML. Si el objeto no
 	 * cuenta con un atributo data-text, se coge como anotación el texto/valor
 	 * de dicho objeto HTML.
-	 * 
+	 *
 	 * @param {HTMLObject}
 	 * @memberof DescriptionInspector
 	 * @returns {HTML} htmlObj - Representación de Binding en HTML.
@@ -677,7 +678,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Selecciona un fragmento de texto en ace a partir de un objeto Binding.
-	 * 
+	 *
 	 * @param {Binding}
 	 * @memberof DescriptionInspector
 	 */
@@ -702,9 +703,9 @@ var DescriptionInspector = {
 	 * @memberof DescriptionInspector
 	 */
 	preventBackspaceKeyPress : function () {
-		
+
 		var inspectorSelector = $("#editorInspectorLoader");
-		
+
 		inspectorSelector
 			.attr("tabindex", "-1")
 			.unbind("focus")
@@ -713,15 +714,15 @@ var DescriptionInspector = {
 					if(e.keyCode == 8) {
 						e.preventDefault();
 					}
-				});	
+				});
 			});
-			
+
 	},
 
 	/**
 	 * Carga sobre el inspector de descripción el contenido pasado por
 	 * parámetro, cargando antes la plantilla html.
-	 * 
+	 *
 	 * @param {jQuery}
 	 *            loader
 	 * @param {string}
@@ -741,19 +742,19 @@ var DescriptionInspector = {
 			console.error("undefined params", loader, content);
 		}
 	},
-    
+
     setInspectorModelContent : function () {
-        
+
         var modelInspectorContentWrapper = $(DescriptionInspector.vars.selectors.inspectorModelContent),
             content = DescriptionInspector.getModelFileContent();
-        
+
         modelInspectorContentWrapper.html(content);
-        
+
     },
 
 	/**
 	 * Obtiene la plantilla html de lo que se verá en el inspector.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @returns {String} Plantilla html
 	 */
@@ -828,7 +829,7 @@ var DescriptionInspector = {
 	ace : {
 		/**
 		 * Obtiene objeto "Editor" de ace
-		 * 
+		 *
 		 * @memberof DescriptionInspector.ace
 		 * @returns {Editor} Objeto de ace
 		 */
@@ -838,7 +839,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Obtiene objeto "Session" de ace
-		 * 
+		 *
 		 * @memberof DescriptionInspector.ace
 		 * @returns {Session} Objeto de ace
 		 */
@@ -848,7 +849,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Obtiene objeto "Selection" de ace
-		 * 
+		 *
 		 * @memberof DescriptionInspector.ace
 		 * @returns {Selection} Objeto de ace
 		 */
@@ -858,7 +859,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Comprueba si el editor tiene pestañas abiertas
-		 * 
+		 *
 		 * @memberof DescriptionInspector.ace
 		 * @returns {boolean}
 		 */
@@ -866,24 +867,24 @@ var DescriptionInspector = {
 			return Object.keys(EditorManager.tabsMap).length > 0
 		}
 	},
-    
+
     tabs : {
-        
+
         /**
          * @memberof DescriptionInspector.tabs
          */
         buildDescriptionTab : function () {
-            
+
             var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
                 title = "DESCRIPTION";
-        
+
             inspectorTabs.append('\
                 <li class="descriptionInspectorTab" style="bottom: 0px; max-width: 100%;"> \
                     <a class="editorTab" style="padding:4px 10px;">'+ title +'</a> \
                 </li>');
-            
+
             var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab);
-                
+
             descriptionTab.click(function() {
                 // Hide others tabs content
                 $(".moduleInspectorContent").hide();
@@ -911,14 +912,14 @@ var DescriptionInspector = {
                     .css("background", "rgba(0,0,0,0.02)");
 
             });
-                    
+
         },
-        
+
         /**
          * @memberof DescriptionInspector.tabs
          */
         buildModelTab : function() {
-            
+
             if ( ModeManager.calculateExtFromFileUri(EditorManager.getCurrentUri()) === "json" ) {
                 var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
                     title = "MODEL";
@@ -958,13 +959,13 @@ var DescriptionInspector = {
                 });
 
                 $("#editorInspectorLoader .modelInspectorContent").html("<article id='inspectorModelContent' />");
-                
+
             }
         }
     },
-    
+
     slaString2Model : function() {
-        if (document.editor && 
+        if (document.editor &&
             document.editor.getValue() && 
             ModeManager.calculateExtFromFileUri(EditorManager.getCurrentUri()) === "json" ) {
 
@@ -979,7 +980,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Devuelve el selector del menú expandible.
-		 * 
+		 *
 		 * @returns {jQuery}
 		 */
 		getSelector : function() {
@@ -988,7 +989,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Comprueba si hay un menú expandido.
-		 * 
+		 *
 		 * @returns {boolean}
 		 */
 		isVisible : function() {
@@ -997,7 +998,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Modifica el texto de título del menú expandible.
-		 * 
+		 *
 		 * @param {string}
 		 *            text - Cadena de texto del título.
 		 * @returns {text}
@@ -1008,7 +1009,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Modifica el texto de descripción del menú expandible.
-		 * 
+		 *
 		 * @param {string}
 		 *            text - Cadena de texto de la descripción.
 		 * @returns {boolean}
@@ -1029,7 +1030,7 @@ var DescriptionInspector = {
 
 		/**
 		 * (deprecated) Elimina el binding a realizarse.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 */
 		unWrapBindings : function() {
@@ -1040,7 +1041,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Elimina todos las variables de progreso.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 */
 		eraseData : function() {
@@ -1053,7 +1054,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Devuelve el objeto step en función del número pasado por parámetro.
-		 * 
+		 *
 		 * @param {number}
 		 *            progressNumber
 		 * @returns {progressStep}
@@ -1069,7 +1070,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Obtiene el selector de campo descripción del menú de progressBar.
-		 * 
+		 *
 		 * @returns {jQuery}
 		 */
 		getDescriptionSelector : function() {
@@ -1078,7 +1079,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Modifica el título del progressBar por un valor pasado por parámetro.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 * @param {string}
 		 *            Título del progressBar
@@ -1091,7 +1092,7 @@ var DescriptionInspector = {
 		/**
 		 * Modifica la descripción del porgressBar por un valor pasado por
 		 * parámetro.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 * @param {string}
 		 *            Descripción del progressBar
@@ -1103,11 +1104,11 @@ var DescriptionInspector = {
 		/**
 		 * Añade referencia de texto del fragmento seleccionado pasado como
 		 * parámetro.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 * @param {string}
 		 *            fragmentText
-		 * 
+		 *
 		 */
 		appendSelectedFragment : function(fragmentText) {
 			var $progressContent = $("#descriptionInspectorHeaderAdd .contentWrapper p.progressContent"), prevContent = $progressContent
@@ -1145,7 +1146,7 @@ var DescriptionInspector = {
 		/**
 		 * Comprime el texto del fragmento para que se visualice correctamente
 		 * en el menú de progressBar.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 */
 		compressFragmentTexts : function() {
@@ -1168,7 +1169,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Redimensiona el tamaño de los visualizadores de fragmento.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 */
 		resize : function() {
@@ -1177,7 +1178,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Establece el contenido por defecto del progressBar
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 */
 		setDefaultContent : function() {
@@ -1208,7 +1209,7 @@ var DescriptionInspector = {
 		/**
 		 * Da comienzo al funcionamiento del progressBar y almacena el contenido
 		 * del inspector antes de modificarlo.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 */
 		start : function() {
@@ -1222,7 +1223,7 @@ var DescriptionInspector = {
 		/**
 		 * Cancela el progressBar y establece los valores por defectos para la
 		 * próxima vez que se vaya a ejecutar.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 * @param {function}
 		 *            Función opcional a ejecutarse una vez se cancele el
@@ -1243,7 +1244,7 @@ var DescriptionInspector = {
 		/**
 		 * Termina satisfactoriamente la ejecución del progressBar, guardando el
 		 * contenido final del "inspectorContent".
-		 * 
+		 *
 		 * @memberof DescriptionInspector.progressBar
 		 */
 		finish : function() {
@@ -1278,7 +1279,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Pone a funcionar el primer paso del progressBar.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step1
 			 */
 			run : function() {
@@ -1307,7 +1308,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Comprueba si el step 1 se encuentra activado.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step1
 			 * @returns {boolean} True si step 1 activo, false en caso contrario
 			 */
@@ -1320,7 +1321,7 @@ var DescriptionInspector = {
 			 * Almacena contenido relevante al step 1. En este caso sólo se
 			 * almacena "DescriptionInspector.vars.progressBar.step1" como
 			 * variable global.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step1
 			 */
 			_saveSelectedContent : function() {
@@ -1349,7 +1350,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Comprueba si el step 1 es válido para seguir al siguiente step
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step1
 			 * @returns {boolean}
 			 */
@@ -1362,7 +1363,7 @@ var DescriptionInspector = {
 			/**
 			 * Establece el contenido por defecto del step 1. Siempre que se
 			 * cargue este step, se cargará esta configuración.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step1
 			 */
 			setStepDefaultContent : function() {
@@ -1392,7 +1393,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Establece el contenido de texto predeterminado del step actual.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step1
 			 */
 			setDefaultHeaderText : function() {
@@ -1404,7 +1405,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Cancela el progressBar estando en el step 1.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step1
 			 * @param {Event}
 			 *            event
@@ -1423,7 +1424,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Activa el step 2 del progressBar.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step1
 			 * @param {Event}
 			 *            event
@@ -1465,7 +1466,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Pone para funcionar el primer paso del progressBar.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step2
 			 */
 			run : function() {
@@ -1482,7 +1483,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Comprueba si el step 2 se encuentra activado.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step2
 			 * @returns {boolean}
 			 */
@@ -1494,7 +1495,7 @@ var DescriptionInspector = {
 			/**
 			 * Almacena contenido relavante al step 2. En este caso sólo se
 			 * alamacena "DescriptionInspector.vars.progressBar.step2".
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step2
 			 */
 			_saveSelectedContent : function() {
@@ -1526,7 +1527,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Obtiene el texto seleccionado sobre el inspector.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step2
 			 * @returns {string} Texto seleccionado.
 			 */
@@ -1537,7 +1538,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Comprueba si el step 2 es válido para seguir al siguiente step.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step2
 			 * @returns {boolean}
 			 */
@@ -1549,7 +1550,7 @@ var DescriptionInspector = {
 			/**
 			 * Establece el contenido por defecto del step 2. Siempre que se
 			 * cargue el step se cargará esta configuración.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step2
 			 */
 			setStepDefaultContent : function() {
@@ -1595,7 +1596,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Establece el contenido de texto predeterminado del step actual.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step1
 			 */
 			setDefaultHeaderText : function() {
@@ -1617,7 +1618,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Cancela el progressBar estando en el step 2.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step2
 			 */
 			onCancel : function() {
@@ -1631,7 +1632,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Activa el step 3 del progressBar
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step2
 			 */
 			stepFowardManager : function() {
@@ -1683,7 +1684,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Pone para funcionar el primer paso del progressBar.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step3
 			 */
 			run : function() {
@@ -1701,7 +1702,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Comprueba si el step 3 se encuentra activado.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step3
 			 * @returns {boolean}
 			 */
@@ -1712,7 +1713,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Devuelve el html del texto seleccionado en el inspector.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step3
 			 * @returns {string} HTML del texto seleccionado
 			 */
@@ -1727,7 +1728,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Comprueba si el step 3 es válido para seguir al siguiente step.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step3
 			 * @returns {boolean}
 			 */
@@ -1739,7 +1740,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Cancela el progressBar estando en el step 3
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step3
 			 */
 			onCancel : function() {
@@ -1749,7 +1750,7 @@ var DescriptionInspector = {
 			/**
 			 * Establece el contenido por defecto del step 3. Siempre que se
 			 * cargue el step se cargará esta configuración.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step3
 			 */
 			setStepDefaultContent : function() {
@@ -2073,7 +2074,7 @@ var DescriptionInspector = {
 
 			/**
 			 * Finaliza el step 3 y guarda los bindings creados.
-			 * 
+			 *
 			 * @memberof DescriptionInspector.progressBar.step3
 			 */
 			stepForwardManager : function() {
@@ -2124,7 +2125,7 @@ var DescriptionInspector = {
 								.deleteContents();
 						DescriptionInspector.vars.progressBar.step2
 								.insertNode(frag);
-                        
+
 					} else {
 						// Updated RDFa current binding
 						var $ancestor = this.getStep2AncestorBinding();
@@ -2134,7 +2135,7 @@ var DescriptionInspector = {
 						}
 						if (textNote != "")
 							$ancestor.attr("data-text", textNote);
-                        
+
 					}
 				} else {
 					// create simple binding
@@ -2149,7 +2150,7 @@ var DescriptionInspector = {
 							.deleteContents();
 					DescriptionInspector.vars.progressBar.step2
 							.insertNode(frag);
-                    
+
 				}
 
 				DescriptionInspector.progressBar.finish();
@@ -2172,7 +2173,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Inicia el menú de eliminación de binding.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 */
 		start : function() {
@@ -2189,7 +2190,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Resalta los bindings y los pasa a modo de eliminación.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 */
 		_highlightBindingsToRemove : function(callback) {
@@ -2205,7 +2206,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Vuelve al estado inicial, quitando el resaltado.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 */
 		_unhighlightBindingsToRemove : function(callback) {
@@ -2221,7 +2222,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Realiza unwrap sobre el objeto jQuery pasado por parámetro.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 * @returns {jQuery} $obj
 		 */
@@ -2234,7 +2235,7 @@ var DescriptionInspector = {
 		/**
 		 * Muestra ventana modal para remover un bindign en concreto. Se
 		 * muestran los parámetros básicos del binding seleccionado.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 * @param {jQuery}
 		 *            $obj
@@ -2280,7 +2281,7 @@ var DescriptionInspector = {
 		/**
 		 * Muestra la ventana modal para realizar "Bulk remove" listando todos
 		 * los bindings posibles para eliminar.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 */
 		_showModalBulkRemoveBindings : function() {
@@ -2379,7 +2380,7 @@ var DescriptionInspector = {
 		/**
 		 * Establece el contenido por defecto para el menú de eliminación de
 		 * bindings.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 */
 		setDefaultContent : function() {
@@ -2405,7 +2406,7 @@ var DescriptionInspector = {
 		/**
 		 * Muestra un mensaje u otro en el description si todavía quedan
 		 * bindings en el inspector.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 */
 		loadAvailableBindingsToRemoveMessage : function() {
@@ -2422,7 +2423,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Cancela el menú de eliminación de bindings.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 */
 		onCancel : function() {
@@ -2444,7 +2445,7 @@ var DescriptionInspector = {
 		/**
 		 * Inicializa todo el ecosistema de descriptionFormatView y su
 		 * contenido.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.descriptionFormatView
 		 */
 		init : function() {
@@ -2518,7 +2519,7 @@ var DescriptionInspector = {
 		/**
 		 * Comprueba si el estamos en la situación de mostrar el
 		 * DescriptionFullView: el inspector está oculto
-		 * 
+		 *
 		 * @memberof DescriptionInspector.descriptionFormatView
 		 */
 		mayShow : function() {
@@ -2528,7 +2529,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Activa el descriptionFormatView
-		 * 
+		 *
 		 * @memberof DescriptionInspector.descriptionFormatView
 		 */
 		show : function() {
@@ -2566,7 +2567,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Oculta el DescriptionFullView
-		 * 
+		 *
 		 * @memberof DescriptionInspector.descriptionFormatView
 		 */
 		hide : function() {
@@ -2823,7 +2824,7 @@ var DescriptionInspector = {
 
 		/**
 		 * TODO:
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 */
 		descriptionFormatView : function() {
@@ -2832,7 +2833,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Código a ejecutar cuando se abre un fichero.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 */
 		onEditorOpenFile : function() {
@@ -2840,13 +2841,13 @@ var DescriptionInspector = {
 			setTimeout(function() {
 				DescriptionInspector.highlightAllBindings();
 			}, 100);
-            
+
             DescriptionInspector.slaString2Model();
 		},
 
 		/**
 		 * Código a ejecutar cuando se cierra un fichero.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 */
 		onEditorCloseFile : function() {
@@ -2856,7 +2857,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Código a ejecutar cuando se inicializa el Ace Editor.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 */
 		onInitAceEditor : function() {
@@ -2871,7 +2872,7 @@ var DescriptionInspector = {
 		/**
 		 * Código a ejecutar cuando se realiza una modificación del contenido
 		 * del editor.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 */
 		onEditorChangeBindingValue : function() {
@@ -2882,9 +2883,9 @@ var DescriptionInspector = {
 							"change",
 							function(e) {
 
-								if (DescriptionInspector.existCurrentDescriptionFile() && 
+								if (DescriptionInspector.existCurrentDescriptionFile() &&
 										DescriptionInspector.vars.mode === "editor" &&
-										DescriptionInspector.isFirstEditorFormatSelected() && 
+										DescriptionInspector.isFirstEditorFormatSelected() &&
 										DescriptionInspector.vars.modificationFlag === 0) {
 
 									if (!$("#appGenericModal").is(":visible")) { // TODO:
@@ -3019,13 +3020,13 @@ var DescriptionInspector = {
 
 		/**
 		 * Carga estructura de la tabla del inspector.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 */
 		loadInspectorTabs : function() {
-            
+
 			var inspectorLoader = $(DescriptionInspector.vars.selectors.inspectorLoader);
-            
+
             inspectorLoader
 					.append('\
 					<!-- Inspector tabs --> \
@@ -3039,16 +3040,16 @@ var DescriptionInspector = {
 					<div class="descriptionInspectorContent"></div> \
                     <div class="modelInspectorContent"></div> \
 					<div class="moduleInspectorContent"></div>');
-            
+
             DescriptionInspector.tabs.buildDescriptionTab();
             DescriptionInspector.tabs.buildModelTab();
-					
+
 
 		},
 
 		/**
 		 * TODO:
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 */
 		onEditorAnnotationChange : function() {
@@ -3065,7 +3066,7 @@ var DescriptionInspector = {
 		/**
 		 * Muestra los cursores del editor si se selecciona el editor y se
 		 * permite el cambio de contenido.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 */
 		onEditorSelectionShowCursors : function() {
@@ -3087,7 +3088,7 @@ var DescriptionInspector = {
 		/**
 		 * Realiza un scroll hasta el binding correspondiente haciendo clic
 		 * sobre la línea resaltada de un Binding.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 */
 		onEditorBindingLineClick : function() {
@@ -3171,7 +3172,7 @@ var DescriptionInspector = {
 		/**
 		 * Da funcionalidad a todos los botones del menú contextual del
 		 * inspector.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3192,7 +3193,7 @@ var DescriptionInspector = {
 		/**
 		 * Da funciondalidad al botón contextual "All bindings". Seleccionará y
 		 * resaltará todos los bindings del inspector.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3207,7 +3208,7 @@ var DescriptionInspector = {
 		/**
 		 * Da funcionalidad al botón contextual "Clear bindings". Quitará el
 		 * resaltado de todos los bindigns.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3222,7 +3223,7 @@ var DescriptionInspector = {
 		/**
 		 * Da funcionalidad al botón contextual "Zoom in". Incrementará el zoom
 		 * del inspector al doble del existente.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3243,7 +3244,7 @@ var DescriptionInspector = {
 		/**
 		 * Da funcionalidad al botón contextual "Zoom out". Disminuirá el zoom
 		 * del contenido del inspector a la mitad del actual.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3264,7 +3265,7 @@ var DescriptionInspector = {
 		/**
 		 * Realiza el ajuste de línea del contenido del inspector en función del
 		 * valor actual del atributo "white-space".
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3344,7 +3345,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Crea el menú contextual del inspector.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3390,7 +3391,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Habilitar el seleccionado de texto en el inspector.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3404,7 +3405,7 @@ var DescriptionInspector = {
 
 		/**
 		 * Permite que el inspectorContent sea redimensionable.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3424,7 +3425,7 @@ var DescriptionInspector = {
 		/**
 		 * Cambia el valor de un binding en el fichero en el inspector y en el
 		 * fichero que se le está haciendo binding.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3499,7 +3500,7 @@ var DescriptionInspector = {
 		/**
 		 * Crea un fichero descriptor asociado al fichero actual de forma
 		 * automática, y establece una plantilla.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3547,7 +3548,7 @@ var DescriptionInspector = {
 		/**
 		 * Da funcionalidad a los botones de para accionar los menúes de "Add" y
 		 * "Remove".
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3567,7 +3568,7 @@ var DescriptionInspector = {
 		/**
 		 * Da funcionalidad a los bindings para que cuando se le haga clic
 		 * seleccione el fragmento de texto asociado en ace.
-		 * 
+		 *
 		 * @memberof DescriptionInspector.loaders
 		 * @param {jQuery}
 		 *            inspectorLoader - Contenedor del inspector de descripción.
@@ -3635,7 +3636,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Comprueba si el editor tiene una anotación de error.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @returns {boolean} Indica si el editor contiene alguna anotación de error
 	 *          de sintaxis.
@@ -3656,7 +3657,7 @@ var DescriptionInspector = {
 	/**
 	 * Carga sobre el editor las anotaciones pasadas por parámetro, sólo en el
 	 * caso de que no exista ninguna anotación de error previamente.
-	 * 
+	 *
 	 * @param {array}
 	 *            annotations - Lista de anotaciones a cargar sobre el editor.
 	 * @memberof DescriptionInspector
@@ -3681,7 +3682,7 @@ var DescriptionInspector = {
 	/**
 	 * Desplaza los rangos de los bindings asociados a una fila, a partir de una
 	 * columna determinada.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	displaceBindingRanges : function(row, fromColumn, n) {
@@ -3745,7 +3746,7 @@ var DescriptionInspector = {
 	/**
 	 * /** Obtiene el html del Binding involucrado al rango que se le pasa por
 	 * parámetro.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	getHtmlBindingFromRange : function(range) {
@@ -3787,7 +3788,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Modifica el valor de todos rangos del Binding.
-	 * 
+	 *
 	 * @param {jQuery}
 	 *            htmlObj
 	 * @param {string}
@@ -3841,7 +3842,7 @@ var DescriptionInspector = {
 
 	/**
 	 * TODO
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	getHTMLBinding : function(bindingId) {
@@ -3850,7 +3851,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Deshabilitar menu contextual de MultiBinding
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	disableMultiBinding : function() {
@@ -3859,7 +3860,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Habilitar menu contextual de MultiBinding
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	enableMultiBinding : function() {
@@ -3868,7 +3869,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Comprueba si se puede habilitar o no el menú contextual de multibinding.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	mayEnableMultiBinding : function() {
@@ -3878,7 +3879,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Comprueba que existe un solo binding activado.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	isOneBindingActivated : function() {
@@ -3888,7 +3889,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Deshabilitar menu contextual de MultiBinding
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	isMultiBindingEnabled : function() {
@@ -3897,7 +3898,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Resalta los rangos pasados por parámetro sobre el editor.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	addRangesToEditor : function(ranges, annotations) {
@@ -3932,7 +3933,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Realiza un scroll del editor al rango pasado por parametro.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	scrollEditorToRange : function(range) {
@@ -3948,7 +3949,7 @@ var DescriptionInspector = {
 	 * Transforma el texto seleccionado en un rango de selección sobre el
 	 * editor. Sólo se realiza esta operación si no se trata de una selección
 	 * múltiple.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	editorSelectedFragmentToRangeSelection : function() {
@@ -3966,7 +3967,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Oculta los cursores del editor.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	hideEditorCursors : function() {
@@ -3975,7 +3976,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Muestran los cursores del editor.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	showEditorCursors : function() {
@@ -3984,7 +3985,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Elimina todas las marcas del editor.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	clearAllEditorMarkers : function() {
@@ -3997,7 +3998,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Cuando el editor ha chequeado el lenguaje
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	onEditorCheckedLanguage : function() {
@@ -4026,7 +4027,7 @@ var DescriptionInspector = {
 	 * Muestra los demás binding con menos intensidad que el pasado por
 	 * parámetro. Sirve para cuando hacemos clic sobre un binding específico y
 	 * lo queremos resaltar más que los demás.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	middleHighlightBindingExcept : function($binding) {
@@ -4048,7 +4049,7 @@ var DescriptionInspector = {
 	/**
 	 * Realiza "submit" de un formulario ubicado en la ventana modal, desde la
 	 * sección de un campo de dicho formulario.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	onEnterPressSubmitModalForm : function() {
@@ -4064,7 +4065,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Desplaza el scroll al primer binding del inspector.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	scrollToFirstBinding : function() {
@@ -4074,7 +4075,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Desplaza el scroll al primer binding del inspector.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	scrollInspectorToBinding : function($htmlObj, click) {
@@ -4102,7 +4103,7 @@ var DescriptionInspector = {
 	 * Devuelve una lista de objetos jQuery con los bindings actuales en el
 	 * inspector. Los Bindings disponibles son aquellos que se pueden activar o
 	 * borrar.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @returns {jQuery}
 	 */
@@ -4112,7 +4113,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Devuelve el numero de bindings actuales en el inspector.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @returns {Number}
 	 */
@@ -4122,7 +4123,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Comprueba si existe al menos un binding en el inspector.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @retuns {Boolean}
 	 */
@@ -4132,7 +4133,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Resalta el objeto jQuery pasado por parámetro.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @param {jQuery}
 	 *            $obj
@@ -4144,7 +4145,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Elimina el resaltado del objeto jQuery pasado por parámetro.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @param {jQuery}
 	 *            $obj
@@ -4155,7 +4156,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Resalta todos los bindings.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	highlightAllBindings : function() {
@@ -4229,7 +4230,7 @@ var DescriptionInspector = {
 
 	/**
 	 * Eliminar el resaltado de todos los bindings.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 */
 	unHighlightAllBidings : function() {
@@ -4241,12 +4242,12 @@ var DescriptionInspector = {
 		// TODO: remove the lines below
 		DescriptionInspector.ace.getSession().clearAnnotations();
 		DescriptionInspector.ace.getSelection().clearSelection();
-        
+
 	},
 
 	/**
 	 * Elimina el binding del objeto jQuery pasado por parámetro.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @param {jQuery}
 	 *            $obj - Representación de Binding en HTML.
@@ -4262,7 +4263,7 @@ var DescriptionInspector = {
 	/**
 	 * Muestra u oculta el menu expandible del inspector. Para ello, se le pasa
 	 * un valor como parámetro que indicará si se debe mostrar o no el menú.
-	 * 
+	 *
 	 * @memberof DescriptionInspector
 	 * @param {boolean}
 	 *            show - Se muestra si es verdadero, en caso contrario, se
@@ -4276,7 +4277,7 @@ var DescriptionInspector = {
 /**
  * Representa un binding. Un binding debe tener una anotación asociada, fila
  * inicial y final, y columna inicial y final.
- * 
+ *
  * @namespace Binding
  * @constructor
  * @param {number}
@@ -4327,7 +4328,7 @@ Binding.getBindingID = function(htmlObj) {
 /**
  * Devuelve un objeto Binding a partir de un objeto html. Para ello, se saca
  * toda la información necesaria a partir de los atributos "data" del parámetro.
- * 
+ *
  * @memberof Binding
  * @param {jQuery}
  *            htmlObj
@@ -4343,7 +4344,7 @@ Binding.getBinding = function(htmlObj) {
 /**
  * Comprueba si la instancia contiene todos los valores correctamente
  * inicializados.
- * 
+ *
  * @memberof Binding
  */
 Binding.prototype.isValid = function() {
@@ -4360,7 +4361,7 @@ Binding.prototype.isValid = function() {
 
 /**
  * Obtiene las anotaciones de ace del objeto instanciado.
- * 
+ *
  * @memberof Binding
  */
 Binding.prototype.getAnnotations = function() {
@@ -4396,7 +4397,7 @@ Binding.prototype.getAnnotations = function() {
 
 /**
  * Obtiene el objeto Range de Ace del objeto instanciado.
- * 
+ *
  * @memberof Binding
  */
 Binding.prototype.getRange = function() {
@@ -4416,7 +4417,7 @@ Binding.prototype.getRange = function() {
 
 /**
  * Obtiene todos los rangos de un Binding.
- * 
+ *
  * @memberof Binding
  */
 Binding.prototype.getRanges = function() {
@@ -4443,7 +4444,7 @@ Binding.prototype.getRanges = function() {
 
 /**
  * Obtiene los rangos del binding que pertenezcan a una fila inicial dada.
- * 
+ *
  * @memberof Binding
  */
 Binding.prototype.getRowRanges = function(row) {
@@ -4462,7 +4463,7 @@ Binding.prototype.getRowRanges = function(row) {
 		/**
 		 * Obtiene los rangos del binding que pertenezcan a una fila inicial
 		 * dada omitiendo el del objeto instanciado.
-		 * 
+		 *
 		 * @memberof Binding
 		 */
 		Binding.prototype.getOmmitedRowRanges = function(row) {
@@ -4497,7 +4498,7 @@ Binding.prototype.getRowRanges = function(row) {
 
 		/**
 		 * Obtiene el fragmento de texto de Ace asociado al binding instanciado.
-		 * 
+		 *
 		 * @memberof Binding
 		 */
 		Binding.prototype.getTargetText = function() {
@@ -4507,7 +4508,7 @@ Binding.prototype.getRowRanges = function(row) {
 
 /**
  * Comprueba si el rango del editor pertecene al Binding pasado por parámetro
- * 
+ *
  * @memberof Binding
  */
 Binding.prototype.hasRange = function(range) {
@@ -4519,7 +4520,7 @@ Binding.prototype.hasRange = function(range) {
 
 /**
  * Devuelve las filas que pertenece un Binding
- * 
+ *
  * @returns {array} Filas que contiene un binding.
  * @memberof Binding
  */
@@ -4547,7 +4548,7 @@ Binding.prototype.getRows = function() {
 
 /**
  * Comprueba si el Binding tiene más de una fila asociado.
- * 
+ *
  * @memberof Binding
  */
 Binding.prototype.isMultiBinding = function() {
@@ -4556,7 +4557,7 @@ Binding.prototype.isMultiBinding = function() {
 
 /**
  * Añade un nuevo rango a un Binding en HTML.
- * 
+ *
  * @memberof Binding
  */
 Binding.addRange = function(bindingHtmlObj, range) {
@@ -4592,7 +4593,7 @@ Binding.addRange = function(bindingHtmlObj, range) {
 
 /**
  * Obtiene el Binding en HTML a partir de una instancia de Binding.
- * 
+ *
  * @memberof Binding
  */
 Binding.prototype.getBindingHtml = function() {
@@ -4604,7 +4605,7 @@ Binding.prototype.getBindingHtml = function() {
 /**
  * Desplaza los rangos de una línea n caracteres hacia la derecha, excepto el
  * objeto instanciado.
- * 
+ *
  * @memberof Binding
  */
 Binding.prototype.displaceRange = function(row, thisEndColumn, n) {
@@ -4672,7 +4673,7 @@ $bindingMap = new BindingMap();
 
 /**
  * Objeto que contiene la información sobre todos los Bindings actuales.
- * 
+ *
  * @namespace BindingMap
  */
 function BindingMap() {
@@ -4682,7 +4683,7 @@ function BindingMap() {
 
 /**
  * Obtiene la instancia global actual del objeto BindingMap.
- * 
+ *
  * @memberof BindingMap
  */
 BindingMap.getInstance = function() {
@@ -4691,7 +4692,7 @@ BindingMap.getInstance = function() {
 
 /**
  * Devuelve la estructura estándar para todos los items de bindingRowsMap
- * 
+ *
  * @memberof BindingMap
  */
 BindingMap.getBindingRowsStructure = function() {
@@ -4702,7 +4703,7 @@ BindingMap.getBindingRowsStructure = function() {
 
 /**
  * Obtiene el objeto html equivalente al objeto Binding.
- * 
+ *
  * @param {Binding}
  * @returns {array}
  * @memberof Binding
@@ -4713,7 +4714,7 @@ BindingMap.prototype.getHTMLBinding = function(row) {
 
 /**
  * Calcula un ID no existente para un Binding que se quiera crear.
- * 
+ *
  * @returns {Number} Nuevo id disponible para creación de un Binding.
  * @memberof BindingMap
  */
@@ -4725,7 +4726,7 @@ BindingMap.prototype.calculateNewId = function() {
 /**
  * Comprueba si el id del Binding pasado por parámetro existe dentro de
  * BindingMap
- * 
+ *
  * @param {Binding}
  *            bindingObj
  * @returns {boolean} Si existe o no el Binding.
@@ -4737,7 +4738,7 @@ BindingMap.prototype.existBinding = function(bindingObj) {
 
 /**
  * Borra todos los datos del mapa de bindings.
- * 
+ *
  * @memberof BindingMap
  */
 BindingMap.prototype.empty = function() {
@@ -4751,7 +4752,7 @@ BindingMap.prototype.empty = function() {
 /**
  * Carga sobre el objeto el mapeo de todos los Bindings disponibles en el
  * sistema.
- * 
+ *
  * @memberof BindingMap
  */
 BindingMap.prototype.fetchBindings = function() {
@@ -4773,7 +4774,7 @@ BindingMap.prototype.fetchBindings = function() {
 						var newBindingId = $bindingMap.calculateNewId();
 
 						$(this).attr("id", "ideasBinding_" + newBindingId);
-                        
+
 						b = true;
 					}
 
@@ -4792,7 +4793,7 @@ BindingMap.prototype.fetchBindings = function() {
 
 /**
  * Añade nuevo Binding a la base de datos de mapeo.
- * 
+ *
  * @memberof BindingMap
  */
 BindingMap.prototype.addBinding = function(bindingObj) {
@@ -4819,7 +4820,7 @@ BindingMap.prototype.addBinding = function(bindingObj) {
 
 /**
  * Borra un Binding existente en BindingMap.
- * 
+ *
  * @memberof BindingMap
  */
 BindingMap.prototype.removeBinding = function(bindingObj) {
@@ -4851,7 +4852,7 @@ BindingMap.prototype.removeBinding = function(bindingObj) {
 
 /**
  * Obtiene los Bindings en HTML a partir de una fila.
- * 
+ *
  * @memberof BindingMap
  */
 BindingMap.prototype.getHTMLBindingsFromRow = function(row) {
