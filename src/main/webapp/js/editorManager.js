@@ -105,9 +105,9 @@ var mayCheckLanguageSyntax = function(fileUri) {
 							console.log("Syntax is OK.");
 							EditorManager
 									.setAnnotations(eval('(' + "[]" + ')'));
-							
+
 							DescriptionInspector.onEditorCheckedLanguage();
-							
+
 							checkSyntaxFlag = true;
 						} else {
 							console.log(ts);
@@ -153,16 +153,16 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 													EditorManager.currentUri,
 													content);
 										}
+
 										mayCheckLanguageSyntax(EditorManager.currentUri);
+										DescriptionInspector.slaString2Model();
 
 									}, 1000);
-                            
-                            DescriptionInspector.slaString2Model();
-                            
+
 						});
-		
+
 		DescriptionInspector.loaders.onInitAceEditor();
-		
+
 	}
 
 	$("editor").css("visibility", "visible");
@@ -194,7 +194,7 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 		count++;
 	}
 
-	if (count <= 1 && 
+	if (count <= 1 &&
 			(DescriptionInspector.isCurrentDescriptionFile() ||
 				!DescriptionInspector.existCurrentDescriptionFile())) {
 			$("#editorItself").removeClass("multiformat");
@@ -227,20 +227,20 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 	divContent.append(optButton);
         divContent.append(expandButton);
 	divContent.append(clearButton);
-	
+
 	var caret = $('<button class="btn btn-primary opButton" data-toggle="dropdown">...</span><span class="sr-only">Toggle Dropdown</span></button>');
 	var caretUL = $('<ul id="ulOperationsTypes" class="dropdown-menu scrollable-op-menu" role="menu"></ul>');
 	var caretLI = "";
-	
+
 	fileUriOperation = EditorManager.getCurrentUri();
 	opMap = ModeManager.getOperations(ModeManager
 			.calculateLanguageIdFromExt(ModeManager
 					.calculateExtFromFileUri(fileUri)));
-	
+
 	var ops_name_lenght = 0;
 	var use_caret = false;
 	var ops = [];
-	if(typeof opMap != "undefined"){
+	if(opMap && typeof opMap != "undefined"){
 		//Old code  in the commentary
 /*		if (opMap != undefined){
 		for (var i = 0; i < opMap.length; i++) {
@@ -266,12 +266,12 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 				});
 			}
 		}
-*/		
+*/
 		for (var i = 0; i < opMap.length; i++) {
 			ops_name_lenght += opMap[i].name.length;
-			
+
 		if(typeof opMap[i].icon != "undefined"){
-			if(typeof opMap[i].iconOnly != "undefined" && opMap[i].iconOnly){		
+			if(typeof opMap[i].iconOnly != "undefined" && opMap[i].iconOnly){
 				var op = $('<button class="btn btn-primary opButton" title="'+opMap[i].name+'" id="' + opMap[i].id + '"><span class="'+opMap[i].icon+'"></span></button>');
 				operationArray.push(opMap[i]);
 				op.click(function() {
@@ -286,13 +286,13 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 				op.click(function() {
 					launchOperation($(this).attr('name'));
 					operationArray = [];
-					
+
 				});
 				ops.push(op);
 			}
 
 		}else{
-			
+
 			if(ops_name_lenght <= 75){
 
 				var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '> '+ opMap[i].name + '</button>');
@@ -302,7 +302,7 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 					operationArray = [];
 				});
 				ops.push(op);
-				
+
 
 			} else {
 				use_caret = true;
@@ -316,22 +316,22 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 					operationArray = [];
 				});
 			}
-			
+
 		}
 		}
 		if(use_caret){
 			divContent.append(caret);
 			divContent.append(caretUL);
 		}
-		
+
 		for(var k=0; k<ops.length;k++)
 			divContent.append(ops[k]);
 	}
-	
+
         comMap = ModeManager.getCommands(ModeManager
 			.calculateLanguageIdFromExt(ModeManager
 					.calculateExtFromFileUri(fileUri)));
-	
+
 	 oldCommands= ModeManager.getCommands(ModeManager
 			.calculateLanguageIdFromExt(ModeManager
 					.calculateExtFromFileUri(oldUri)));
@@ -344,7 +344,7 @@ var loadExistingTabbedInstance = function(fileUri, content) {
         if(typeof comMap != 'undefined'){
 	for(var i=0;i<comMap.length;i++){
 		var command= comMap[i];
-		
+
 			var action= eval('('+command.action+')');
 			gcli.addCommand({
 				 name: command.id,
@@ -352,13 +352,13 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 					params:command.params,
 					returnType: 'string',
 					exec: action,
-					defaultValue: command.defaultValue	
+					defaultValue: command.defaultValue
 			 });
-		
+
 	}
     }
     });
-        
+
 	buttonPanel.append(divContent);
 };
 
@@ -383,7 +383,7 @@ var launchOperation = function(name) {
 								EditorManager.setAnnotations(result.annotations);
 							action(operation, fileUriOperation, result);
 						}
-						
+
 						OperationReport.launchedOperations.push(operation.name);
 						OperationReport.resultLaunchedOperations.push(result.message);
 					});
@@ -391,7 +391,7 @@ var launchOperation = function(name) {
 					action(operation, fileUriOperation);
 				}
 				OperationReport.timeOfOperations.push(OperationMetrics.getOperationMilliseconds());
-				
+
 				break;
 			}
 		} catch (err) {
@@ -479,7 +479,7 @@ var EditorManager = {
 		inspectorToggle.removeClass("hdd");
 		inspector.addClass("hdd");
 		inspector.css("max-width", inspector.width() + "px");
-		
+
 
 		$("#editorInspector").trigger("inspectorChangeState", [false]);
 
@@ -492,11 +492,11 @@ var EditorManager = {
 		var loader = ModeManager.getInspectorLoader(ext)
 			, descriptionLoader = DescriptionInspector.loader
 			, editorInspector = $("#editorInspectorLoader");
-		
+
 		editorInspector.empty();
-		
+
 		if (loader || descriptionLoader) {
-			
+
 			DescriptionInspector.loaders.loadInspectorTabs();
 
 			if (loader) {
@@ -513,7 +513,7 @@ var EditorManager = {
 			editorInspector
 				.append("<span class='emptyMsg'>Nothing to show</span>");
 		}
-	
+
 	},
 
 	// FM
@@ -565,11 +565,11 @@ var EditorManager = {
 								.calculateExtFromFileUri(fileUri)),
 						EditorManager.sessionsMap[EditorManager.currentUri]
 								.getCurrentFormat());
-				
+
 				if (DescriptionInspector) {
-					if (!DescriptionInspector.existBinding()) 
+					if (!DescriptionInspector.existBinding())
 						document.editor.focus();
-						
+
 					DescriptionInspector.loaders.onEditorOpenFile();
 				} else {
 					document.editor.focus();
@@ -604,15 +604,15 @@ var EditorManager = {
 					// EditorManager.currentUri = "";
 					// document.editor.destroy();
 					// document.editor = null;
-					//						
+					//
 					// $("#editor").empty();
 					// $('#editor').remove();
 					// $('#editorWrapper').append('<div id="editor"></div>');
-					//						
+					//
 					// $("#projectsTree").dynatree("getRoot").visit(function(node){
 					// node.deactivate();
 					// });
-					//						
+					//
 					// $("#editorItself").removeClass("multiformat");
 				}
 
@@ -622,7 +622,7 @@ var EditorManager = {
 
 			delete EditorManager.sessionsMap[fileUri];
 			delete EditorManager.tabsMap[fileUri];
-			
+
 			if (DescriptionInspector) DescriptionInspector.loaders.onEditorCloseFile();
 		});
 	},
@@ -647,7 +647,7 @@ var EditorManager = {
 			console.log("#projectTree was empty");
 		}
 	},
-	
+
 	saveFile : function(fileUri, content, callback) {
 		FileApi.saveFileContents(fileUri, content, function(ts) {
 			if (ts == true) {
@@ -669,10 +669,10 @@ var EditorManager = {
 		var converterUri = ModeManager.getConverter(ModeManager
 				.calculateLanguageIdFromExt(ModeManager
 						.calculateExtFromFileUri(EditorManager.currentUri)));
-		
+
 		if (desiredFormat in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() &&
 			currentFormat !== desiredFormat) {
-		
+
 			CommandApi
 					.callConverter(
 							currentFormat,
@@ -702,6 +702,8 @@ var EditorManager = {
 
 							});
 
+			//TODO: check model tab is still clickable
+
 		}
 
 	},
@@ -726,7 +728,7 @@ var EditorManager = {
 		EditorManager.sessionsMap[fileUri].getBaseSession().setAnnotations(
 				annotations);
 	},
-	
+
 	// Felipe
 	currentDocumentHasErrorAnnotation : function() {
 		var ret = false
@@ -737,7 +739,7 @@ var EditorManager = {
 				break;
 			}
 		}
-		
+
 		return ret;
 	},
 

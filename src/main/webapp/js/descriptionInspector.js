@@ -749,6 +749,7 @@ var DescriptionInspector = {
             content = DescriptionInspector.getModelFileContent();
 
         modelInspectorContentWrapper.html(content);
+				DescriptionInspector.tabs.angularCompileModelInspector();
 
     },
 
@@ -920,7 +921,9 @@ var DescriptionInspector = {
          */
         buildModelTab : function() {
 
-            if ( ModeManager.calculateExtFromFileUri(EditorManager.getCurrentUri()) === "json" ) {
+            if ( document.editor &&
+								 "json" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() &&
+					 			 DescriptionInspector.existCurrentAngularFile() ) {
                 var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
                     title = "MODEL";
 
@@ -951,6 +954,7 @@ var DescriptionInspector = {
                         });
 
                     $(".modelInspectorContent").show();
+                    $("#inspectorModelContent").show();
                     $(".modelInspectorTab")
                             .addClass("active")
                             .find("a")
@@ -958,20 +962,47 @@ var DescriptionInspector = {
 
                 });
 
-                $("#editorInspectorLoader .modelInspectorContent").html("<article id='inspectorModelContent' />");
+                $("#editorInspectorLoader .modelInspectorContent").html("<article id='inspectorModelContent' style='display:none;' />");
 
             }
-        }
+        },
+
+				angularCompileModelInspector : function () {
+
+					$("#compileModel").val(0);
+					angular.element($("#compileModel")).triggerHandler('input');
+
+					$("#compileModel").val(1);
+					angular.element($("#compileModel")).triggerHandler('input');
+
+				},
     },
 
     slaString2Model : function() {
         if (document.editor &&
-            document.editor.getValue() && 
-            ModeManager.calculateExtFromFileUri(EditorManager.getCurrentUri()) === "json" ) {
+            "json" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() ) {
 
-            console.log("updating #editorContent hidden input");
+            // console.log("updating #editorContent hidden input");
             $("#editorContent").val( document.editor.getValue() );
+
+            // Re-focusing element after sending input trigger
+						activeElementSelector = $(':focus');
             angular.element($("#editorContent")).triggerHandler('input');
+
+						console.log(activeElementSelector);
+
+						// setTimeout(function() {
+						// activeElement.removeClass("ng-dirty ng-valid-parse")
+						// activeElement.trigger("focus");
+					  // console.log("timeout");
+						// },1000);
+
+						// $("#inspectorModelContent > div:nth-child(1) > div > input").first().triggerHandler( "focus" );
+
+
+						// console.log(activeElement);
+            // }, 3000);
+
 
         }
     },

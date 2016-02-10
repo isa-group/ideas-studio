@@ -1,32 +1,46 @@
 // AngularJS initialization
-angular
-    .module("mainApp", [])
+angular.module("mainApp", [])
     .controller("MainCtrl", ["$scope", "$compile", function ($scope, $compile) {
-        
-        $scope.slaString = JSON.stringify($scope.sla);
 
-        $scope.$watch(
-            function () { return JSON.stringify($scope.sla); },
-            function (newValue, oldValue) {
-                $scope.slaString = newValue;
-                if (document.editor) {
-                    document.editor.setValue(newValue);
-                }
+      // Update editor content from model
+      $scope.$watch(
+        function () { return angular.toJson($scope.sla); },
+        function (newValue, oldValue) {
+
+          $scope.slaString = newValue;
+
+          if (document.editor && EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat() === "json") {
+            newValue = angular.toJson($scope.sla, 4);
+            if (newValue !== document.editor.getValue()) {
+              document.editor.setValue(newValue, -1);
             }
-        );
-      
-        $scope.slaString2Model = function () {
+          }
+
+        }
+      );
+
+      // Ordering a model update from ace editor
+      $scope.slaString2Model = function () {
+        try {
+          if ($scope.slaString !== "") {
             $scope.sla = JSON.parse($scope.slaString);
-        };
+          } else {
+            $scope.sla = undefined;
+          }
+        } catch (err) {
+          // empty
+        }
 
-    }]).directive('inspectorModel', function($compile) {
-        return {
-            
-            link : function(scope, element, attr) {
-                scope.onClicked = function () {
-                    $compile(document.getElementById("inspectorModelContent"))(scope);
-                };
-            }
-            
-        };
-    });
+
+      };
+
+      // Ordering a model compilation from DescriptionInspector
+      $scope.compilationFlag = 0;
+      $scope.compileModel = function () {
+        if ($scope.compilationFlag == 1) {
+          console.log("compiling angular inspector");
+          $compile(document.getElementById("inspectorModelContent"))($scope);
+        }
+      };
+
+    }]);
