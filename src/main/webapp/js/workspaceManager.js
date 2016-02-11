@@ -127,6 +127,7 @@ var WorkspaceManager = {
                 $("#wsactions").append(wsActions);          
             
             }
+            EditorManager.reset();
             $(".dynatree-expander").click();
             
             $("#edit-ws").click(function(e) {
