@@ -948,6 +948,7 @@ var DescriptionInspector = {
 
                 var modelTab = $(DescriptionInspector.vars.selectors.inspectorModelTab);
                 modelTab.click(function() {
+									if ( EditorManager.sessionsMap[EditorManager.currentUri].current === "json" ) {
                     // Hide others tabs content
                     $(".moduleInspectorContent").hide();
                     $(".moduleInspectorTab")
@@ -973,6 +974,9 @@ var DescriptionInspector = {
                             .addClass("active")
                             .find("a")
                             .css("background", "rgba(0,0,0,0.02)");
+									} else {
+										alert('Please, select json language format.');
+									}
 
                 });
 
@@ -3075,6 +3079,10 @@ var DescriptionInspector = {
 
             DescriptionInspector.tabs.buildDescriptionTab();
             DescriptionInspector.tabs.buildModelTab();
+
+						// Activate description tab by default
+						var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab);
+						descriptionTab.click();
 
 
 		},
