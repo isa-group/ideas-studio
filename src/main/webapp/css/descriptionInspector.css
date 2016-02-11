@@ -47,7 +47,7 @@
 	float: left;
 }
 
-#inspectorContent {
+#inspectorContent, #inspectorModelContent {
 	position: relative;
 	padding: 10px 35px;
 	overflow: auto;
@@ -57,6 +57,19 @@
 	white-space: normal;
 	margin: 0;
 	-webkit-user-select: initial;
+}
+
+#inspectorModelContent {
+	padding-top: 30px;
+	white-space: nowrap;
+}
+
+#inspectorModelContent div {
+	margin-bottom: 20px;
+}
+
+#inspectorModelContent li {
+	margin-bottom: 10px;
 }
 
 #editorInspector a.editorTab {

@@ -933,7 +933,7 @@ var DescriptionInspector = {
         /**
          * @memberof DescriptionInspector.tabs
          */
-        buildModelTab : function() {
+        	buildModelTab : function() {
 
             if ( document.editor &&
 								 "json" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() &&
@@ -969,13 +969,19 @@ var DescriptionInspector = {
                         });
 
                     $(".modelInspectorContent").show();
-                    $("#inspectorModelContent").show();
+                    $("#inspectorModelContent")
+											.show()
+											.height(
+											  $("#editorInspectorLoader").height() - $("#appFooter").height() - $("ul#editorTabs.inspectorTabs").height() - 12
+											);
+										// .css("height", $("#inspectorModelContent").height()/2);
                     $(".modelInspectorTab")
                             .addClass("active")
                             .find("a")
                             .css("background", "rgba(0,0,0,0.02)");
 									} else {
-										alert('Please, select json language format.');
+										CommandApi
+												.echo('<span style="color:red;">Please, select a json language format.</span>');
 									}
 
                 });
@@ -984,6 +990,12 @@ var DescriptionInspector = {
 
             }
         },
+
+				activateDefaultTab : function () {
+					// Activate description tab by default
+					var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab);
+					descriptionTab.click();
+				},
 
 				angularCompileModelInspector : function () {
 
@@ -3079,11 +3091,7 @@ var DescriptionInspector = {
 
             DescriptionInspector.tabs.buildDescriptionTab();
             DescriptionInspector.tabs.buildModelTab();
-
-						// Activate description tab by default
-						var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab);
-						descriptionTab.click();
-
+						DescriptionInspector.tabs.activateDefaultTab();
 
 		},
 

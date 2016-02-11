@@ -702,7 +702,9 @@ var EditorManager = {
 
 							});
 
-			//TODO: check model tab is still clickable
+			if (currentFormat === "json") {
+				DescriptionInspector.tabs.activateDefaultTab();
+			}
 
 		}
 
