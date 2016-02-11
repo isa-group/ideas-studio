@@ -30,8 +30,6 @@ angular.module("mainApp", [])
         } catch (err) {
           // empty
         }
-
-
       };
 
       // Ordering a model compilation from DescriptionInspector
