@@ -20,6 +20,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.By;
+import org.openqa.selenium.net.Urls;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -37,6 +38,8 @@ public class TC01_CreatePublicDemoForDashboardTest extends TestCase{
     private static final String SELECTOR_DASHBOARD_PUBLIC_DEMO_VIEW = "#viewDemo";
     private static final String SELECTOR_PUBLISH_BUTTON = "#demo-ws";
     private static final String SELECTOR_DEMO_CARD_TITLE = ".demoworkspace .card__meta-content-title";
+    private static final String DEMO_URL = "#demoURL";
+
 
  
     private static boolean testResult = false;
@@ -166,11 +169,25 @@ public class TC01_CreatePublicDemoForDashboardTest extends TestCase{
 
         IdeasStudioActions.goWSMPage();
         
+        boolean result= Boolean.FALSE; 
+        boolean status200= Boolean.FALSE; 
        
         waitForVisibleSelector(SELECTOR_DEMO_CARD_TITLE);
-        testResult = getWebDriver().findElements(By.cssSelector(SELECTOR_DEMO_CARD_TITLE)).size() > 0;
-                
+        String demoURL = getWebDriver().findElement(By.cssSelector(DEMO_URL)).getText();
+
+        result = getWebDriver().findElements(By.cssSelector(SELECTOR_DEMO_CARD_TITLE)).size() > 0;
+         
+        try {
+            status200=TestCase.getStatusCode(demoURL.replaceAll(" ","+")).equals("200");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC01_CreatePublicDemoForDashboardTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        testResult  = result && status200;    
+        
         assertTrue(testResult);
+        
+        
     }
     
     @Test

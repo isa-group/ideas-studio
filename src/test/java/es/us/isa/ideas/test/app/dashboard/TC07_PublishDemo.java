@@ -13,6 +13,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.By;
+import org.openqa.selenium.net.Urls;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -25,6 +26,8 @@ import org.openqa.selenium.By;
 public class TC07_PublishDemo extends TestCase{
     
     private static final String SELECTOR_CARD_DEMO_WORKSPACE_NAME = ".demoworkspace .card__meta-content-title";
+    private static final String DEMO_URL = "#demoURL";
+
     private static boolean testResult = false;
     private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
@@ -65,13 +68,25 @@ public class TC07_PublishDemo extends TestCase{
         
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
+        String demoURL = getWebDriver().findElement(By.cssSelector(DEMO_URL)).getText();
+
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
         
         getWebDriver().navigate().refresh();
 
+        boolean result= Boolean.FALSE; 
+        boolean status200= Boolean.FALSE; 
+        
         waitForVisibleSelector(SELECTOR_CARD_DEMO_WORKSPACE_NAME);
-        testResult = getWebDriver().findElements(By.cssSelector(SELECTOR_CARD_DEMO_WORKSPACE_NAME)).size() > 0;
-                
+        result = getWebDriver().findElements(By.cssSelector(SELECTOR_CARD_DEMO_WORKSPACE_NAME)).size() > 0;
+        
+        try {
+            status200=TestCase.getStatusCode(demoURL.replaceAll(" ","+")).equals("200");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC07_PublishDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        testResult  = result && status200;    
         
         assertTrue(testResult);
     }
