@@ -1,8 +1,10 @@
 package es.us.isa.ideas.app.controllers;
 
+import static es.us.isa.ideas.app.controllers.FileController.initRepoLab;
 import es.us.isa.ideas.app.entities.OperationalReplication;
 import es.us.isa.ideas.app.services.OperationalReplicationService;
 import es.us.isa.ideas.app.services.WorkspaceService;
+import es.us.isa.ideas.repo.impl.fs.FSFacade;
 import java.util.Collection;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class OperationalReplicationController {
         return exc;
     }
     
-    @RequestMapping(value = "",method = RequestMethod.POST, consumes = {"application/json"})
+    @RequestMapping(value = "",method = RequestMethod.POST)
     @ResponseBody
     public String createOperationalReplicationLink( @RequestParam("workspace") String workspaceName,
                                                     @RequestParam("operation") String operationCode,
@@ -42,8 +44,12 @@ public class OperationalReplicationController {
                                                     @RequestParam("params") String auxParams){
         
         String operationUUID = UUID.randomUUID().toString();
-
-        operationalReplicationService.createExperimentalExecution(operationUUID, workspaceName, operationCode, fileUri, dataUri, auxParams);
+        
+        OperationalReplication or = operationalReplicationService.createExperimentalExecution(operationUUID, workspaceName, operationCode, fileUri, dataUri, auxParams);
+        
+        if(or ==null){
+            operationUUID="ERROR";
+        }
     
         return operationUUID;
     }
@@ -57,13 +63,19 @@ public class OperationalReplicationController {
         
         OperationalReplication eExec = operationalReplicationService.findByUUID(uuid);
         try{
+            initRepoLab();
             
             String operationCode = eExec.getOperation();
-            String fileContent = "";//FSFacade.getFileContent(eExec.getFileUri(), "DemoMaster");
-            String data = "";//FSFacade.getFileContent(eExec.getDataUri(), "DemoMaster");
+            String fileContent = FSFacade.getFileContent(eExec.getFileUri(), "DemoMaster");
+            
+            String data = "";
+            if (eExec.getDataUri()!=null && !eExec.getDataUri().equals("")){
+                data = FSFacade.getFileContent(eExec.getDataUri(), "DemoMaster");
+            }
+           
             String params = eExec.getAuxParams();
             
-            result.addObject("id", operationCode);
+            result.addObject("operation", operationCode);
             result.addObject("workspace", eExec.getFileUri().substring(0, eExec.getFileUri().indexOf("/")));
             result.addObject("content", fileContent);
             result.addObject("fileUri", eExec.getFileUri());

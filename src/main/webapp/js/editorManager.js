@@ -22,7 +22,7 @@ var saveSession = function(uri, callback) {
 	}
 };
 
-var createNewTabbedInstance = function(fileUri, content) {
+var createNewTabbedInstance = function(fileUri, content) {   
 	var sessionAg = ModeManager.createSessionAggregationForEditor(fileUri,
 			content);
 	if (sessionAg == null) {

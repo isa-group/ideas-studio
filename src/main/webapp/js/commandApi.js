@@ -84,6 +84,15 @@ var CommandApi = {
 					console.log(operationUri);
 					callback(result);
 					OperationMetrics.stop();
+                                        
+                                        CommandApi.echo("<a id=\"replicationLinkButton\" class=\"btn btn-link btn-xs\" role=\"button\">Generate replication link</a>"+
+                                    "<script type=\"text/javascript\">"+
+                                                                "$('#replicationLinkButton').click(function(e) {"+
+                                                                "e.preventDefault();"+
+                                                                   "alert('Clicked');"+
+                                                                   "OperationalReplication.generateReplicationLink("+name+","+extendedData+",function(){});"+
+                                                                "});"+
+                                                            "</script>");
 				},
 				"onProblems" : function(result) {
 					console.log("onProblems");
@@ -94,7 +103,7 @@ var CommandApi = {
 					console.log("onError");
 					console.log(operationUri);
 					callback(result);
-					OperationMetrics.stop();
+					OperationMetrics.stop();                                        
 				},
 				"onSessionError" : function(result) {
 					console.log("onSessionError");
@@ -343,3 +352,4 @@ var closeAllTabs = function(){
 		tabs[i].click();
 	}
 };
+

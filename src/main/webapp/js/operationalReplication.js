@@ -1,124 +1,151 @@
-var operationID = "Small Sampling";//'${id}';
-var data = {};//'${data}';
-var fileUri = "TFM-SEDL/Howard1999/ExperimentalDescription.sedl";//'${fileUri}';
-var content ='import Charts↵/*  #====================================================================================#↵    #    This experiment description is part of the material of the paper on↵    #    EXEMPLAR to be publishen in ESEJ.↵    #====================================================================================#↵    # Experiment of the paper:↵    #   Howard, Geoffry S., et al. ↵    #  "The efficacy of matching information systems development methodologies with ↵    #     application characteristics–an empirical study." ↵    #   Journal of Systems and Software 45.3 (1999): 177-195.↵    #====================================================================================#↵    # Created on 2015/06/25 by D. F. Alonso and J. A. Parejo  ↵    #====================================================================================#↵*/↵EXPERIMENT:Howard1999Experiment version:1.0↵↵Variables:↵Factors:    ↵        methodology enum "data-centered","process-centered","none"↵Outcome:↵    quality ordered enum 1, 2, 3, 4, 5, 6↵Extraneous:↵    expert enum 1,2,3,4,5↵Hypothesis: Differential↵↵Design:↵    Sampling: Random  ↵    Groups: by methodology sizing 10↵    Protocol: Random↵    Analyses:↵    DescriptiveStatistics:↵        Avg(by methodology)↵        StdDev(by methodology)↵        Charts::BoxPlot by methodology↵    NHST-Premises:↵        Shapiro-Wilk(by methodology,0.05)↵        Levene(by methodology, 0.05)↵    NHST:↵        KruskalWalls(of quality by methodology,0.05)↵        Wilcoxon(by methodology,0.05)↵        ';
-var params = '${params}';
-var modelAttributeValue = '${modelAttribute}';
+var operationID = $('#helpLink').text();
+var data = $('dataTextarea').text();
+var fileUri = $('#fileUriText').text();
+var content = $('#inputAceEditor').text();
+var params = $('paramsTextarea').text();
 
-executeOperation = function(operationUri, extendedData, callback){
-    try{
-        //OperationMetrics.play(name);
-
-        RequestHelper.ajax(operationUri, {
-                "type" : "POST",
-                "data" : extendedData,
-                "onSuccess" : function(result) {
-                        console.log("onSuccess");
-                        console.log(operationUri);
-                        callback(result);
-                        //OperationMetrics.stop();
-                },
-                "onProblems" : function(result) {
-                        console.log("onProblems");
-                        callback(result);
-                        //OperationMetrics.stop();
-                },
-                "onError" : function(result) {
-                        console.log("onError");
-                        console.log(operationUri);
-                        callback(result);
-                        //OperationMetrics.stop();
-                },
-                "onSessionError" : function(result) {
-                        console.log("onSessionError");
-                        callback(result);
-                        //OperationMetrics.stop();
-                },
-                "async" : true,
+var OperationalReplication = {
+    generateReplicationLink: function (name, extendedData, callback) {
+        $.ajax("replications", {
+            "type": "POST",
+            "data": {
+                workspace: WorkspaceManager.getSelectedWorkspace(),
+                operation: name,
+                file: extendedData.fileUri,
+                data: extendedData.content,
+                params: extendedData.toString()
+            },
+            "success": function (result) {
+                CommandApi.echo("<input id=\"replicationLink\" disabled size=\"85\" value=\"" + $("base").attr('href').valueOf() + "replications/" + result + "\"></input><a id=\"replicationLinkCopyButton\" class=\"btn btn-default btn-xs\" role=\"button\"><span class=\"glyphicon glyphicon-file\"></span></a>");
+                CommandApi.echo("<script>" +
+                        "$('#replicationLinkCopyButton').click(function() {" +
+                        "alert($('#replicationLink').valueOf());" +
+                        "});");
+                callback(result);
+            },
+            "error": function (result) {
+                console.error(result.statusText);
+                //RequestHelper.sessionAlive(result);
+            },
+            "async": true,
         });
-    }
-    catch(e){
+    },
+    launchOperation: function (operationName) {
+        try {
+
+            var languageID = ModeManager.calculateLanguageIdFromExt(
+                    ModeManager.calculateExtFromFileUri(fileUri));
+
+            var opMap = ModeManager.getOperations(languageID);
+
+            for (var i = 0; i < opMap.length; i++) {
+
+                if (opMap[i].name == operationName) {
+
+                    var _remoteExecution = opMap[i]._remoteExecution;
+                    var action = eval('(' + opMap[i].action + ')');
+                    var operation = opMap[i];
+
+                    if (_remoteExecution != undefined
+                            && _remoteExecution != null
+                            && eval('(' + _remoteExecution + ')')) {
+
+                        var extendedData = JSON.parse(JSON.stringify(operation.data));
+                        extendedData.fileUri = fileUri;
+                        extendedData.content = content;
+                        extendedData.id = operation.id;
+
+
+
+                        for (var i = 5; i < arguments.length; i++) {
+                            extendedData["auxArg" + (i - 5)] = arguments[i];
+                        }
+
+                        var operationUri = ModeManager.getBaseUri(languageID)
+                                + "/language/operation/" + operation.id + "/execute";
+
+                        OperationalReplication.executeOperation(operationUri, extendedData,
+                                function (result) {
+                                    if (action !== undefined && action !== null) {
+                                        action(operation, fileUri, result);
+                                    }
+                                });
+                    }
+                    else if (action != undefined && action != null) {
+
+                        action(operation, fileUriOperation);
+
+                    }
+
+                    break;
+
+
+                }
+            }
+
+
+        }
+
+        catch (err) {
+            CommandApi.echo("An error occurred while performing the operation ");
+        }
+    },
+    executeOperation: function (operationUri, extendedData, callback) {
+        try {
+            //OperationMetrics.play(operationID);
+
+            RequestHelper.ajax(operationUri, {
+                "type": "POST",
+                "data": extendedData,
+                "onSuccess": function (result) {
+                    console.log("onSuccess");
+                    console.log(operationUri);
+                    callback(result);
+                    //OperationMetrics.stop();
+                },
+                "onProblems": function (result) {
+                    console.log("onProblems");
+                    callback(result);
+                    //OperationMetrics.stop();
+                },
+                "onError": function (result) {
+                    console.log("onError");
+                    console.log(operationUri);
+                    callback(result);
+                    //OperationMetrics.stop();
+                },
+                "onSessionError": function (result) {
+                    console.log("onSessionError");
+                    callback(result);
+                    //OperationMetrics.stop();
+                },
+                "async": true,
+            });
+        }
+        catch (e) {
             console.log("Error executing operation: \n" + e);
             callback(e);
-    }
-},
-        
-launchOperation = function() {
-    
-    try {
-        
-        var languageID = ModeManager.calculateLanguageIdFromExt(
-                            ModeManager.calculateExtFromFileUri(fileUri));
-        
-        
-        
-        var opMap = ModeManager.getOperations(languageID);
-        
-        for (var i = 0; i < opMap.length; i++) {
-            
-            if (opMap[i].name == "Small Sampling") {
-                
-                var _remoteExecution = opMap[i]._remoteExecution;
-                var action = eval('(' + opMap[i].action + ')');
-                var operation = opMap[i];
-                
-                if (_remoteExecution != undefined 
-                    && _remoteExecution != null
-                    && eval('(' + _remoteExecution + ')')) {
-                
-                    var extendedData = JSON.parse(JSON.stringify(operation.data));
-                            extendedData.fileUri = fileUri;
-                            extendedData.content = content;
-                            extendedData.id = operation.id;
-                            
-//                            var name = '';
-//                            for (var i = 0; i < opMap.length; i++) {
-//                                    if(opMap[i].id == operationId){
-//                                            name = opMap[i].name;
-//                                    }
-//                            }
-                            
-                            for (var i=5; i < arguments.length; i++) {
-                                extendedData["auxArg"+(i-5)] = arguments[i];
-                            }
-
-                            var operationUri = ModeManager.getBaseUri(languageID)
-                        + "/language/operation/" + operation.id + "/execute";
-
-                    executeOperation(operationUri, extendedData,
-                        function(result) {
-                            if (action !== undefined && action !== null) {
-                                action(operation, fileUri, result);
-                            }						
-                            //OperationReport.launchedOperations.push(operation.name);
-                            //OperationReport.resultLaunchedOperations.push(result.message);
-                        });
-                } 
-                else if (action != undefined && action != null){
-                    
-                    action(operation, fileUriOperation);  
-                    
-                }
-		
-                //OperationReport.timeOfOperations.push(OperationMetrics.getOperationMilliseconds());
-
-                break;
-                
-                
-            }
         }
-        
-        
-    }
 
-    catch (err) {
-	    //OperationMetrics.stop();
-	    //OperationReport.timeOfOperations.push(OperationMetrics.getOperationMilliseconds());
-            alert("An error occurred while performing the operation ");
     }
 };
 
-$('#executeTest').click(function() {
-    alert( "Handler for .click() called." );
-    launchOperation();
+$('#helpLink').click(function () {
+    var helpUri = ModeManager.getBaseUri(
+            ModeManager.calculateLanguageIdFromExt(
+                    ModeManager.calculateExtFromFileUri(fileUri)))
+            + "/help/";
+
+    window.location.href = helpUri;
+
+});
+
+$('#executeTest').click(function () {
+    operationID = $('#helpLink').text();
+    data = $('dataTextarea').text();
+    fileUri = $('#fileUriText').text();
+    content = $('#inputAceEditor').text();
+    params = $('paramsTextarea').text();
+    console.log("Executing test");
+    OperationalReplication.launchOperation(operationID);
 });

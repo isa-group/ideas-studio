@@ -10,11 +10,11 @@
     </div>
     <div id="pagesHeaderLogo">
         <br>
-        <span>Executing Operation <a id="helpLink" href="#">operation name</a> on file ${fileUri}</span>   
+        <span>Executing Operation <strong><a id="helpLink">${operation}</a></strong> on file <span id="fileUriText">${fileUri}</span></span>  
     </div>
     <div id="userTab">
         <br>
-        <button>Open in ${studioConfiguration.workbenchName}</button>
+        <a id="openDemoLink" href="${base}demo/${workspace}" class="btn btn-default btn-xs" role="button">Open in ${studioConfiguration.workbenchName}</a>
     </div>
 </div>
 

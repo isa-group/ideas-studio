@@ -302,7 +302,7 @@ var WorkspaceManager = {
         };
         showModal("Confirm publication as demo", "A demo for the workspace <b>'" + workspaceName +"'</b> will be published. \n\\n\
                     <BR/> All data will be accessible from:\n\
-                    <BR/><BR/>https://IDEAS/demo/"+workspaceName+"\n\
+                    <BR/><BR/>"+$("base").attr('href').valueOf()+"demo/"+workspaceName+"\n\
                     <BR/><BR/><b>Do you want to create a demo for the existing workspace?</b><BR/></i>",
 						"Continue", continueHandler,
 						function(){}, function(){});
@@ -314,7 +314,7 @@ var WorkspaceManager = {
                 $(location).attr('href',"app/wsm");             
         };
         showModal("Confirm demo update", "The demo for the workspace <b>'" + workspaceName +"'</b> will be overwritten and new data will be accessible from:\n\
-                    <BR/><BR/>https://IDEAS/demo/"+workspaceName+"\n\
+                    <BR/><BR/>"+$("base").attr('href').valueOf()+"demo/"+workspaceName+"\n\
                     <BR/><BR/><b>Do you want to update the demo for the existing workspace?</b><BR/></i>",
 						"Continue", continueHandler,
 						function(){}, function(){});
@@ -331,6 +331,16 @@ var WorkspaceManager = {
                     <BR/><BR/><b>Do you want to clone the public demo ?</b><BR/></i>",
 						"Continue", continueHandler,
 						function(){}, function(){});
+    },
+    existsDemoWorkspace:function(){
+        var res=true;
+        try {
+            FileApi.viewDemoWorkspace(WorkspaceManager.getSelectedWorkspace(),function(){});     
+        }
+        catch(err) {
+            res=false;
+        }
+        return res;
     }
 };
 
