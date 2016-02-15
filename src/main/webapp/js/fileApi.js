@@ -283,6 +283,7 @@ var FileApi = {
 			},
 			"error" : function(result) {
 				console.error(result.statusText);
+				RequestHelper.sessionAlive(result);
 			},
 			"async" : true,
 		});

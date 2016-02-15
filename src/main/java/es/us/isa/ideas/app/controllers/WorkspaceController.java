@@ -1,17 +1,9 @@
 package es.us.isa.ideas.app.controllers;
 
+import static es.us.isa.ideas.app.controllers.FileController.initRepoLab;
 import es.us.isa.ideas.app.entities.Tag;
 import es.us.isa.ideas.app.entities.Workspace;
 import es.us.isa.ideas.app.repositories.ResearcherRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import es.us.isa.ideas.app.repositories.WorkspaceRepository;
 import es.us.isa.ideas.app.security.LoginService;
 import es.us.isa.ideas.app.security.UserAccount;
@@ -27,8 +19,16 @@ import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
@@ -47,38 +47,12 @@ public class WorkspaceController extends AbstractController {
     private static IdeasRepo repoLab = null;
     
     private static final Logger logger = Logger.getLogger(WorkspaceController.class.getName());
-
     
     private static final String DEMO_MASTER="DemoMaster";
 
     protected WorkspaceRepository workspaceRepository;
     
     protected ResearcherRepository researcherRepository;
-
-    public static void initRepoLab() {
-        if (WorkspaceController.repoLab == null) {
-            IdeasRepo.init(new AuthenticationManagerDelegate() {
-
-                @Override
-                public boolean operationAllowed(String authenticatedUser, String Owner,
-                        String workspace, String project, String fileOrDirectoryUri,
-                        AuthenticationManagerDelegate.AuthOpType operationType) {
-                    return true;
-                }
-
-                @Override
-                public String getAuthenticatedUserId() {
-                    if (SecurityContextHolder.getContext().getAuthentication() == null || !(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserAccount)) {
-                        return "";
-                    } else {
-                        return LoginService.getPrincipal().getUsername();
-                    }
-                }
-            });
-
-            repoLab = IdeasRepo.get();
-        }
-    }
     
     /* API REST JSON FROM DB */
         
@@ -183,7 +157,7 @@ public class WorkspaceController extends AbstractController {
         try {
             wsJson = FSFacade.getWorkspaceTree(workspaceName, LoginService.getPrincipal().getUsername());
             if(LoginService.getPrincipal().getUsername().startsWith("demo"))
-                workspaceService.updateLaunches(workspaceName, wsJson);
+                workspaceService.updateLaunches(workspaceName, "DemoMaster");
         } catch (AuthenticationException e) {
             logger.log(Level.SEVERE, null, e);
         }

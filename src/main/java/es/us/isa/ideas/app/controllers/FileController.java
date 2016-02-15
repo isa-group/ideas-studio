@@ -435,7 +435,7 @@ public class FileController extends AbstractController {
         
         try {
             res = FSFacade.getSelectedWorkspace(LoginService.getPrincipal().getUsername());
-        } 
+            }
         catch (Exception e) {
             logger.log(Level.SEVERE, null, e);
         }
