@@ -116,7 +116,7 @@ public class WorkspaceService extends BusinessService<Workspace> {
     public Collection<Workspace> findByTags(String[] filter) {
         assert filter != null;
         Collection<Workspace> result;
-        if(filter==null || filter.length==0){
+        if(filter.length==0){
             result = workspaceRepository.findAll();
         }
         else{
@@ -285,7 +285,7 @@ public class WorkspaceService extends BusinessService<Workspace> {
         ws.setLaunches(l+1);
         
         if(ws.getOrigin()!=null && username.equals(DEMO_MASTER))
-            updateLaunches(ws.getOrigin().getName(), ws.getOrigin().getOwner().getName());
+            updateLaunches(ws.getOrigin().getName(), ws.getOrigin().getOwner().getUserAccount().getUsername());
                 
         workspaceRepository.saveAndFlush(ws);  
     
@@ -324,7 +324,7 @@ public class WorkspaceService extends BusinessService<Workspace> {
             ws.setOwner(rese);
             
             String[] array = tags.split("\\s+");
-            Collection<Tag> wsTags = new ArrayList<Tag>();
+            Collection<Tag> wsTags = new ArrayList<>();
             
             for(String a:array){
                 if(a.length()>1){
