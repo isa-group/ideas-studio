@@ -6,7 +6,6 @@
 package es.us.isa.ideas.test.app.pageobject.editor;
 
 import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
-import static es.us.isa.ideas.test.utils.TestCase.echoCommandApi;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Assert;

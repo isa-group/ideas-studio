@@ -2,6 +2,7 @@ package es.us.isa.ideas.test.app.pageobject.login;
 
 import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
 import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
+import es.us.isa.ideas.test.app.pageobject.testcase.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Assert;
@@ -34,7 +35,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
 
     @FindBy(id = "settingsSubmitChanges")
     WebElement saveChangesButton;
-    
+
     // MODAL
     @FindBy(css = "#loginFailPanel > div > div > div.modal-header > h4")
     WebElement modalErrorHeaderTitle;
@@ -43,7 +44,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
 
     public static RegisterPage navigateTo() {
         //TODO: automatically set base url.
-        getWebDriver().get("https://localhost:8181/IDEAS/settings/user");
+        getWebDriver().get(TestProperty.getBaseUrl() + "/settings/user");
         return PageFactory.initElements(getWebDriver(), RegisterPage.class);
     }
 
@@ -73,7 +74,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
         addressField.sendKeys(address);
         return PageFactory.initElements(getWebDriver(), RegisterPage.class);
     }
-    
+
     // others
     public WebElement getModalErrorHeaderTitle() {
         return modalErrorHeaderTitle;
@@ -89,41 +90,41 @@ public class RegisterPage extends PageObject<RegisterPage> {
 
         /**
          * This test expects to show a modal error message.
+         *
          * @param name
          * @param email
          * @param phone
-         * @param address 
+         * @param address
          */
         public void testRegister(CharSequence name, CharSequence email,
-        CharSequence phone, CharSequence address) {
+            CharSequence phone, CharSequence address) {
 
             RegisterPage page = RegisterPage.navigateTo()
                 .typeName(name)
                 .typeEmail(email)
                 .typePhone(phone)
                 .typeAddress(address);
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             page.clickOnSaveChanges();
-            
+
             WebElement element = page.modalErrorHeaderTitle;
             getWebDriverWait().until(ExpectedConditions.visibilityOf(element));
-            
+
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             TEST_RESULT = element.getText().equals("Sign up error");
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
-            
 
         }
 

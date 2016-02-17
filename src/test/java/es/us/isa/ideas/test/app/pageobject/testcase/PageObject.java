@@ -111,14 +111,14 @@ public class PageObject<T> {
      * @return
      */
     public static PageObject logout() {
-        getWebDriver().get("https://localhost:8181/IDEAS/j_spring_security_logout");
-        
+        getWebDriver().get(TestProperty.getBaseUrl() + "/j_spring_security_logout");
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
             Logger.getLogger(PageObject.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return PageFactory.initElements(driver, PageObject.class);
     }
 

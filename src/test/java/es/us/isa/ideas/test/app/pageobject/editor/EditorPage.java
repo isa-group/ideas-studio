@@ -1,6 +1,7 @@
 package es.us.isa.ideas.test.app.pageobject.editor;
 
 import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
+import es.us.isa.ideas.test.app.pageobject.testcase.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.WebElement;
@@ -138,7 +139,7 @@ public class EditorPage extends PageObject<EditorPage> {
 
     public static EditorPage navigateTo() {
         //TODO: automatically set base url.
-        getWebDriver().get("https://localhost:8181/IDEAS/app/editor");
+        getWebDriver().get(TestProperty.getBaseUrl() + "/app/editor");
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
@@ -177,7 +178,7 @@ public class EditorPage extends PageObject<EditorPage> {
         clickOnClickableElement(wsAddButton);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
-    
+
     // click - workspace dashboard
     public EditorPage clickOnWorkspaceDashboardOpenCardButton() {
         clickOnNotClickableElement(wsDashboardOpenCardButton);

@@ -7,6 +7,7 @@ package es.us.isa.ideas.test.app.pageobject.editor;
 
 import static es.us.isa.ideas.test.app.pageobject.testcase.PageObject.getWebDriver;
 import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
+import es.us.isa.ideas.test.app.pageobject.testcase.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.Keys;
@@ -27,7 +28,7 @@ public class WorkspaceSection extends EditorPage {
 
     public static WorkspaceSection navigateTo() {
         //TODO: automatically set base url.
-        getWebDriver().get("https://localhost:8181/IDEAS/app/wsm");
+        getWebDriver().get(TestProperty.getBaseUrl() + "/app/wsm");
         return PageFactory.initElements(getWebDriver(), WorkspaceSection.class);
     }
 
@@ -121,13 +122,13 @@ public class WorkspaceSection extends EditorPage {
         public void testCreateWorkspace(String wsName, String wsDescription, String wsTags) {
 
             EditorPage page = EditorPage.navigateTo();
-            
+
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             page.clickOnMenuTogglerButton()
                 .clickOnWorkspaceAddButton()
                 .typeWorkspaceName(wsName)
@@ -159,13 +160,13 @@ public class WorkspaceSection extends EditorPage {
         public void testOpenWorkspaceFromDashboard() {
 
             EditorPage page = WorkspaceSection.navigateTo();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             page.clickOnWorkspaceDashboardOpenCardButton();
 
             try {
@@ -244,7 +245,7 @@ public class WorkspaceSection extends EditorPage {
                 .clickOnWorkspaceDashboardDownloadCardButton();
             assertTrue(true); // copied by previous version of this test
         }
-        
+
         public static boolean deleteWorkspace(String wsName) {
             return false;
         }
@@ -253,9 +254,9 @@ public class WorkspaceSection extends EditorPage {
 
             EditorPage page = EditorPage.navigateTo();
             String wsName = page.getProjCurrentWSText();
-            
+
             TEST_RESULT = WorkspaceTestCase.deleteWorkspace(wsName);
-            
+
             page.clickOnWorkspaceDeleteButton();
 
             try {
@@ -275,7 +276,7 @@ public class WorkspaceSection extends EditorPage {
             getWebDriver().navigate().refresh();
 
             page.clickOnMenuTogglerButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -334,7 +335,7 @@ public class WorkspaceSection extends EditorPage {
 
             EditorPage page = WorkspaceSection.navigateTo()
                 .clickOnWorkspaceDashboardUpdateDemoCardButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -344,13 +345,13 @@ public class WorkspaceSection extends EditorPage {
             page.clickOnModalContinueButton();
 
             WorkspaceSection.navigateTo();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             String wsCardTitle = page.getWorkspaceDemoCardTitle();
 
             TEST_RESULT = !wsCardTitle.equals("");
@@ -363,7 +364,7 @@ public class WorkspaceSection extends EditorPage {
 
             EditorPage page = WorkspaceSection.navigateTo()
                 .clickOnWorkspaceDashboardDeleteDemoCardButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -373,21 +374,21 @@ public class WorkspaceSection extends EditorPage {
             page.clickOnModalContinueButton();
 
             WorkspaceSection.navigateTo();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             page.clickOnMenuTogglerButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             TEST_RESULT = !existWorkspaceByName(wsName);
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             assertTrue(TEST_RESULT);
@@ -398,7 +399,7 @@ public class WorkspaceSection extends EditorPage {
 
             EditorPage page = WorkspaceSection.navigateTo()
                 .clickOnWorkspaceDashboardDeleteCardButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -406,15 +407,15 @@ public class WorkspaceSection extends EditorPage {
             }
 
             page.clickOnModalContinueButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             page.clickOnModalContinueButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -422,7 +423,7 @@ public class WorkspaceSection extends EditorPage {
             }
 
             page.clickOnMenuTogglerButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -438,15 +439,15 @@ public class WorkspaceSection extends EditorPage {
         public void testClonePublicDemoFromDashboard(String wsName) {
 
             EditorPage page = WorkspaceSection.navigateTo();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             page.clickOnWorkspaceDashboardClonePublicDemoCardButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -454,22 +455,15 @@ public class WorkspaceSection extends EditorPage {
             }
 
             page.clickOnModalContinueButton();
-            
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
             WorkspaceSection.navigateTo();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            String targetWSName = page.getWorkspaceDemoCardTitle();
+            String targetWSName = page.getWorkspacePublicDemoCardTitle();
 
             TEST_RESULT = targetWSName.equals(wsName);
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
@@ -479,9 +473,16 @@ public class WorkspaceSection extends EditorPage {
 
         public void testDeleteCloneDemoFromDashboard(String wsName) {
 
-            EditorPage page = WorkspaceSection.navigateTo()
-                .clickOnWorkspaceDashboardDeleteCardButton();
-            
+            EditorPage page = WorkspaceSection.navigateTo();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            page.clickOnWorkspaceDashboardDeleteCardButton();
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -489,23 +490,23 @@ public class WorkspaceSection extends EditorPage {
             }
 
             page.clickOnModalContinueButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             page.clickOnModalContinueButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             page.clickOnMenuTogglerButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -548,7 +549,7 @@ public class WorkspaceSection extends EditorPage {
             getWebDriver().navigate().refresh();
 
             page.clickOnMenuTogglerButton();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -570,21 +571,21 @@ public class WorkspaceSection extends EditorPage {
 
             EditorPage page = WorkspaceSection.navigateTo()
                 .clickOnWorkspaceViewDemoButton();
-            
+
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             page.clickOnModalContinueButton();
-            
+
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             TEST_RESULT = page.getProjCurrentWSText().equals(wsName);
 
             if (TEST_RESULT) {

@@ -2,6 +2,7 @@ package es.us.isa.ideas.test.app.pageobject.login;
 
 import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
 import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
+import es.us.isa.ideas.test.app.pageobject.testcase.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class LoginPage extends PageObject<LoginPage> {
 
     public static LoginPage navigateTo() {
         //TODO: automatically set base url.
-        getWebDriver().get("https://localhost:8181/IDEAS");
+        getWebDriver().get(TestProperty.getBaseUrl());
         return PageFactory.initElements(getWebDriver(), LoginPage.class);
     }
 
