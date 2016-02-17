@@ -16,15 +16,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.us.isa.ideas.app.controllers.FileController;
+import es.us.isa.ideas.app.controllers.WorkspaceController;
 import es.us.isa.ideas.app.entities.Actor;
 import es.us.isa.ideas.app.entities.Researcher;
+import es.us.isa.ideas.app.entities.Workspace;
 import es.us.isa.ideas.app.mail.CustomMailer;
 import es.us.isa.ideas.app.mail.TemplateMail;
+import es.us.isa.ideas.app.repositories.WorkspaceRepository;
 import es.us.isa.ideas.app.services.BusinessService;
 import es.us.isa.ideas.app.services.ResearcherService;
 import es.us.isa.ideas.repo.IdeasRepo;
 import es.us.isa.ideas.repo.exception.AuthenticationException;
+import es.us.isa.ideas.repo.impl.fs.FSFacade;
 import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 
@@ -44,6 +51,9 @@ public class UserAccountService extends BusinessService<UserAccount> {
 
 	@Autowired
 	ResearcherService researcherService;
+        
+        @Autowired
+	WorkspaceRepository workspaceRepository;
 
 	@Autowired
 	CustomMailer mailer;
@@ -207,6 +217,32 @@ public class UserAccountService extends BusinessService<UserAccount> {
 		try {
 			FileController.initRepoLab();
 			IdeasRepo.get().getRepo().move(demoWS, newWS, true);
+                        if(workspaceRepository.findByName("SampleWorkspace", "DemoMaster")==null){
+                            Workspace wsdemo = new Workspace();
+                            wsdemo.setName("SampleWorkspace");
+                            wsdemo.setOwner(researcherService.findByUserName("DemoMaster"));
+                            wsdemo.setWsVersion(0);
+                            workspaceRepository.save(wsdemo);
+                            try {
+                                FSFacade.saveSelectedWorkspace("SampleWorkspace", "DemoMaster");
+                            } catch (IOException ex) {
+                                Logger.getLogger(UserAccountService.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        if(!username.startsWith("demo")){
+                            Workspace ws = new Workspace();
+                        ws.setName("SampleWorkspace");
+                        ws.setWsVersion(0);
+                        ws.setOwner(researcherService.findByUserName(username));
+                        workspaceRepository.save(ws);
+                            try {
+                                FSFacade.saveSelectedWorkspace("SampleWorkspace", username);
+                            } catch (IOException ex) {
+                                Logger.getLogger(UserAccountService.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        
+                        
 		} catch (AuthenticationException e) {
 			System.out.println("### Error creating demo WS for " + username);
 			e.printStackTrace();

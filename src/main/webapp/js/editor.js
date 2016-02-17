@@ -8,19 +8,19 @@
 //      INITIALIZATION FUNCTIONS
 //------------------------------------------------------------------------------
 // Editor window initialization:
-var initializeEditor=function(){
+var initializeEditor = function () {
     intializeEditorWindow();
     initializeCommandLine();
-    $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function(){
+    $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function () {
         MenuManager.setupGlobalMenu("Create $1 file");
     });
-    
-    if(localStorage.getItem("demo")=="demo"){
-    	$("#menuToggler").hide();
-    	$("#userTab").hide();
-    	userDemoInfo.onClick();
-    	if(localStorage.getItem("ws")!=""){
-    		auxGenerateDemo(localStorage.getItem("ws"));
+
+    if (localStorage.getItem("demo") == "demo") {
+        $("#menuToggler").hide();
+        $("#userTab").hide();
+        userDemoInfo.onClick();
+        if (localStorage.getItem("ws") != "") {
+            auxGenerateDemo(localStorage.getItem("ws"));
         }
     }
 };
@@ -31,8 +31,8 @@ var initializeEditor=function(){
 
 // Initialization of the command line, basically adds the file, project and 
 // workspace management commands.
-var initializeCommandLine = function() {
-    require(['gcli/index', 'demo/index'], function(gcli) {
+var initializeCommandLine = function () {
+    require(['gcli/index', 'demo/index'], function (gcli) {
         gcli.createDisplay();
         gcli.addCommand(CommandsRegistry.generateDemoWorkspace);
         gcli.addCommand(CommandsRegistry.generateDemoWorkspaceWithDestination);
@@ -58,36 +58,36 @@ var initializeCommandLine = function() {
 var currentSelectedNode = null;
 var previousSizes = new Object();
 var maximizing = false;
-var intializeEditorWindow = function() {
-	
-	//For demo user, session expired
-	window.onload=function(){
-		window.onbeforeunload = confirmExit;
-	}
-	function confirmExit(){
-		if(localStorage.getItem("demo")=="demo"){
-			$.ajax("j_spring_security_logout", {
-					"type" : "get",
-					"success" : function(result) {
-						console.log("logOut");
-					},
-					"error" : function(result) {
-						console.error("logOut fail");
-					},
-					"async" : true,
-			});
-			return "You tried to leave this page, your changes will be lost. Are you sure want to leave this page? ";
-		}
-	}
-	
+var intializeEditorWindow = function () {
+
+    //For demo user, session expired
+    window.onload = function () {
+        window.onbeforeunload = confirmExit;
+    }
+    function confirmExit() {
+        if (localStorage.getItem("demo") == "demo") {
+            $.ajax("j_spring_security_logout", {
+                "type": "get",
+                "success": function (result) {
+                    console.log("logOut");
+                },
+                "error": function (result) {
+                    console.error("logOut fail");
+                },
+                "async": true,
+            });
+            return "You tried to leave this page, your changes will be lost. Are you sure want to leave this page? ";
+        }
+    }
+
     AppPresenter.setCurrentSection("editor");
-    
+
     // Hide the editor during loading:
     $("editor").css("visibility", "hidden");
 
     // Setup editor content loading:
     $("#projectsTree").dynatree({
-        onActivate: function(node) {
+        onActivate: function (node) {
             console.log("Activated node: " + node);
             currentSelectedNode = node;
             if (!node.data.isFolder) {
@@ -99,7 +99,7 @@ var intializeEditorWindow = function() {
     });
 
     // Setup editor interface and editor window events:
-    $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function(){
+    $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function () {
         MenuManager.setupGlobalMenu("Create $1 file");
     });
     $("#editorSidePanel").resizable({
@@ -112,34 +112,34 @@ var intializeEditorWindow = function() {
         maxHeight: 800,
         minHeight: 51,
         handles: "s"
-    });    
+    });
     $("#editorItself").resize(fitBottomPanel);
     $("#editorInspector").resizable({
         maxWidth: 900,
         minWidth: 150,
         handles: "w"
     });
-    $("#editorInspector").resize(function() {
+    $("#editorInspector").resize(function () {
         $("#editorInspector").css("left", "0");
         fitEditorMainPanel();
     });
-    $(window).resize(fitEditor);    
-    $("#editorMaximize").click(maximize);   
+    $(window).resize(fitEditor);
+    $("#editorMaximize").click(maximize);
     $("#editorToggleInspector").click(toggleInspector);
     //share Document
     $("#shareDocumentModal").hide();
-    $("#shareDocument").click(function(){
-    	$("#shareDocumentModal").show();
-    	$("#mailContent").val(EditorManager.getCurrentEditorContent());
+    $("#shareDocument").click(function () {
+        $("#shareDocumentModal").show();
+        $("#mailContent").val(EditorManager.getCurrentEditorContent());
     });
-    $("#shareDocClosed").click(function(){
-    	$("#shareDocumentModal").hide();
+    $("#shareDocClosed").click(function () {
+        $("#shareDocumentModal").hide();
     });
-    $("#sendMail").click(function(){
-    	var to=$("#mailTo").val();
-    	var content=$("#mailContent").val();
-    	share(to,content);
-    	$("#shareDocumentModal").hide();
+    $("#sendMail").click(function () {
+        var to = $("#mailTo").val();
+        var content = $("#mailContent").val();
+        share(to, content);
+        $("#shareDocumentModal").hide();
     });
     // Finally we show and fit the editor :
     fitEditor();
@@ -151,12 +151,12 @@ var intializeEditorWindow = function() {
 
 // File name management:
 //share document
-function share(dst,mailContent){	
-	$.ajax({
-		  type: "POST",
-		  url: "app/share",
-		  data: { to: dst, content: mailContent },
-		});	
+function share(dst, mailContent) {
+    $.ajax({
+        type: "POST",
+        url: "app/share",
+        data: {to: dst, content: mailContent},
+    });
 }
 
 //      Normalization:
@@ -198,7 +198,7 @@ function checkerName(e) {
 }
 
 // Gets the filename from the full path in the three node:
-function extractFileName(fullpath){
+function extractFileName(fullpath) {
     var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
     var filename = fullPath.substring(startIndex);
     if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
@@ -208,7 +208,7 @@ function extractFileName(fullpath){
 }
 
 // Gets the extension from a filename:
-function extractFileExtension(filename){
+function extractFileExtension(filename) {
     var startIndex = filename.indexOf('.');
     var result = "";
     if (filename[startIndex] === '.')
@@ -225,7 +225,7 @@ function getIconName(fileExtension) {
 }
 
 function saveEditorToFile(fileUri, code) {
-    FileApi.saveFileContents(fileUri, code, function(ts) {
+    FileApi.saveFileContents(fileUri, code, function (ts) {
         if (ts == true) {
             console.log("File " + fileUri + " saved correctly.");
         }
@@ -234,12 +234,12 @@ function saveEditorToFile(fileUri, code) {
 
 
 // Panels resizing:
-var fitEditorMainPanel = function() {
+var fitEditorMainPanel = function () {
     $("#editorMainPanel").width($(window).width() - $("#editorSidePanel").width() - $("#editorInspector").width());
     $("#editorMainPanel").css("right", $("#editorInspector").width() + "px");
 };
 
-var fitBottomPanel = function() {
+var fitBottomPanel = function () {
     $("#editorBottomPanel").height(
             $(window).height() - $("#appHeader").height()
             - $("#appFooter").height()
@@ -249,7 +249,7 @@ var fitBottomPanel = function() {
         document.editor.resize(true);
 };
 
-var fitEditor = function() {
+var fitEditor = function () {
     fitEditorMainPanel();
     fitBottomPanel();
     $("#editorItself").resizable(
@@ -262,21 +262,21 @@ var fitEditor = function() {
 
 // Maximization
 
-var maximize = function() {
+var maximize = function () {
     if (!maximizing) {
         maximizing = true;
         toggleMaximization();
     }
 };
 
-var toggleMaximization = function() {
+var toggleMaximization = function () {
     var appMainContent = $("#appMainContent");
     var editorSidePanel = $("#editorSidePanel");
     var editorMainPanel = $("#editorMainPanel");
     var max_min = $("#editorMaximize");
 
     setTimeout(function () {
-    	DescriptionInspector.inspectorContent.resize();
+        DescriptionInspector.inspectorContent.resize();
     }, 500);
 
     if (appMainContent.hasClass("maximizedEditor")) {
@@ -285,13 +285,13 @@ var toggleMaximization = function() {
         editorSidePanel.css("max-width", +"0px");
         editorMainPanel.css("min-width", editorMainPanel.width() + "px");
         editorMainPanel.css("width", previousSizes.editorWidth + "px");
-        setTimeout(function() {
+        setTimeout(function () {
             editorSidePanel.css("max-width", previousSizes.sidePanelWidth + 2 + "px");
 // 		    		editorMainPanel.css("max-width", previousSizes.editorWidth + "px");
 // 		    		editorSidePanel.css("min-width", previousSizes.sidePanelWidth + "px");
             editorMainPanel.css("min-width", previousSizes.editorWidth + "px");
             setTimeout(
-                    function() {
+                    function () {
                         editorSidePanel.css("max-width", "100%");
                         editorMainPanel.css("max-width", "");
                         editorSidePanel.css("min-width", "");
@@ -302,7 +302,7 @@ var toggleMaximization = function() {
 
         max_min.removeClass("minimize");
 
-        setTimeout(function() {
+        setTimeout(function () {
             maximizing = false;
         }, 900);
 
@@ -314,14 +314,14 @@ var toggleMaximization = function() {
 
         editorSidePanel.css("max-width", editorSidePanel.width());
         editorMainPanel.css("min-width", editorMainPanel.width());
-        setTimeout(function() {
+        setTimeout(function () {
             editorSidePanel.css("max-width", "0px");
             editorMainPanel.css("min-width", $(window).width() - $("#editorInspector").width());
         }, 1);
 
         max_min.addClass("minimize");
 
-        setTimeout(function() {
+        setTimeout(function () {
             maximizing = false;
             editorMainPanel.css("width", $(window).width() - $("#editorInspector").width());
             editorMainPanel.css("min-width", "");
@@ -330,7 +330,7 @@ var toggleMaximization = function() {
     }
 };
 
-var toggleInspector = function() {
+var toggleInspector = function () {
     var inspector = $("#editorInspector");
     if (inspector.hasClass("hdd")) {
         EditorManager.showInspector();
@@ -338,7 +338,7 @@ var toggleInspector = function() {
         EditorManager.hideInspector();
     }
 
-    setTimeout(function() {
+    setTimeout(function () {
         inspector.css("max-width", "");
         fitEditorMainPanel();
     }, 1);

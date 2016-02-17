@@ -1,20 +1,9 @@
 package es.us.isa.ideas.app.services;
 
-import java.io.IOException;
-import java.util.Collection;
-
-import javax.inject.Inject;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.us.isa.ideas.app.entities.Researcher;
-
 import es.us.isa.ideas.app.entities.Tag;
 import es.us.isa.ideas.app.entities.Workspace;
 import es.us.isa.ideas.app.repositories.ResearcherRepository;
@@ -23,10 +12,17 @@ import es.us.isa.ideas.app.repositories.WorkspaceRepository;
 import es.us.isa.ideas.app.security.LoginService;
 import es.us.isa.ideas.app.security.UserAccount;
 import es.us.isa.ideas.app.security.UserAccountRepository;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import javax.inject.Inject;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
 @Transactional(readOnly = false)
@@ -44,6 +40,8 @@ public class WorkspaceService extends BusinessService<Workspace> {
     @Inject
     private UserAccountRepository uar;
     
+    private static final String DEMO_MASTER="DemoMaster";
+    
     public Collection<Workspace> findByPrincipal() {       
         Collection<Workspace> result;
         UserAccount userAccount;
@@ -58,7 +56,7 @@ public class WorkspaceService extends BusinessService<Workspace> {
     
     public Collection<Workspace> findByDemo() {
         Collection<Workspace> result;
-        result = findByOwner("DemoMaster");
+        result = findByOwner(DEMO_MASTER);
         assert result != null;
         return result;
     }
@@ -118,7 +116,7 @@ public class WorkspaceService extends BusinessService<Workspace> {
     public Collection<Workspace> findByTags(String[] filter) {
         assert filter != null;
         Collection<Workspace> result;
-        if(filter==null || filter.length==0){
+        if(filter.length==0){
             result = workspaceRepository.findAll();
         }
         else{
@@ -225,13 +223,15 @@ public class WorkspaceService extends BusinessService<Workspace> {
     }
 
     public void updateDownloads(String workspaceName, String username) {
-        Workspace ws = findByNameAndOwner(workspaceName, username);
-        int d = ws.getDownloads()+1;
-        ws.setDownloads(d);
-        if(ws.getOrigin()!=null){
-            updateDownloads(ws.getOrigin().getName(),ws.getOrigin().getOwner().getUserAccount().getUsername());
-        }
-        workspaceRepository.saveAndFlush(ws);
+        if(username.equals(DEMO_MASTER) ||  !username.startsWith("demo")){
+           Workspace ws = findByNameAndOwner(workspaceName, username);
+            int d = ws.getDownloads()+1;
+            ws.setDownloads(d);
+            if(ws.getOrigin()!=null){
+                updateDownloads(ws.getOrigin().getName(),ws.getOrigin().getOwner().getUserAccount().getUsername());
+            }
+            workspaceRepository.saveAndFlush(ws); 
+        }     
     }
     
     public void delete(String workspaceName, String username){
@@ -264,7 +264,7 @@ public class WorkspaceService extends BusinessService<Workspace> {
                 ws.setDescription(workspaceRepository.findById(Integer.valueOf(origin)).getDescription());
                 
                 if(username.startsWith("demo"))
-                    updateLaunches(workspaceName,"DemoMaster");
+                    updateLaunches(workspaceName,DEMO_MASTER);
             }
             workspaceRepository.saveAndFlush(ws);  
         }
@@ -284,8 +284,8 @@ public class WorkspaceService extends BusinessService<Workspace> {
         int l = ws.getLaunches();
         ws.setLaunches(l+1);
         
-        if(ws.getOrigin()!=null && username.equals("DemoMaster"))
-            updateLaunches(ws.getOrigin().getName(), ws.getOrigin().getOwner().getName());
+        if(ws.getOrigin()!=null && username.equals(DEMO_MASTER))
+            updateLaunches(ws.getOrigin().getName(), ws.getOrigin().getOwner().getUserAccount().getUsername());
                 
         workspaceRepository.saveAndFlush(ws);  
     
@@ -296,7 +296,7 @@ public class WorkspaceService extends BusinessService<Workspace> {
         Assert.notNull(demoWorkspaceName);
         Assert.notNull(username);
         
-        Workspace demoWS = workspaceRepository.findByName(demoWorkspaceName, "DemoMaster");
+        Workspace demoWS = workspaceRepository.findByName(demoWorkspaceName, DEMO_MASTER);
         Workspace originWS = demoWS.getOrigin();      
         
         demoWS.setLastMod(Calendar.getInstance().getTime());
@@ -324,7 +324,7 @@ public class WorkspaceService extends BusinessService<Workspace> {
             ws.setOwner(rese);
             
             String[] array = tags.split("\\s+");
-            Collection<Tag> wsTags = new ArrayList<Tag>();
+            Collection<Tag> wsTags = new ArrayList<>();
             
             for(String a:array){
                 if(a.length()>1){

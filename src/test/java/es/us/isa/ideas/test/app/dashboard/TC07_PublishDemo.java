@@ -71,7 +71,7 @@ public class TC07_PublishDemo extends TestCase{
 
         waitForVisibleSelector(SELECTOR_CARD_DEMO_WORKSPACE_NAME);
         testResult = getWebDriver().findElements(By.cssSelector(SELECTOR_CARD_DEMO_WORKSPACE_NAME)).size() > 0;
-                
+        
         
         assertTrue(testResult);
     }
