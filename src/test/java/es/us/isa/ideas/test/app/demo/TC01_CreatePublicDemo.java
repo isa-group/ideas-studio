@@ -1,6 +1,6 @@
-package es.us.isa.ideas.test.app.dashboard;
+package es.us.isa.ideas.test.app.demo;
 
-import static es.us.isa.ideas.test.app.dashboard.TestSuite.getDemoWorkspaceName;
+import static es.us.isa.ideas.test.app.demo.TestSuite.getDemoWorkspaceName;
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import static es.us.isa.ideas.test.utils.TestCase.echoCommandApi;
@@ -29,7 +29,7 @@ import org.openqa.selenium.By;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC01_CreatePublicDemoForDashboardTest extends TestCase{
+public class TC01_CreatePublicDemo extends TestCase{
     
     private static String user = "guest";
     private static String pass = "guest";
@@ -44,7 +44,7 @@ public class TC01_CreatePublicDemoForDashboardTest extends TestCase{
     
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC01_CreatePublicDemoForDashboardTest...");
+        LOG.log(Level.INFO, "## Init TC01_CreatePublicDemo...");
         try {
             logout();
         } catch (InterruptedException ex) {
@@ -54,7 +54,7 @@ public class TC01_CreatePublicDemoForDashboardTest extends TestCase{
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC01_CreatePublicDemoForDashboardTest finished");
+        LOG.log(Level.INFO, "## TC01_CreatePublicDemo finished");
     }
 
     @After
@@ -78,7 +78,7 @@ public class TC01_CreatePublicDemoForDashboardTest extends TestCase{
             }
             Thread.sleep(1000); // avoid failing sometimes
         } catch (InterruptedException ex) {
-            Logger.getLogger(TC02_Login.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TC01_CreatePublicDemo.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         assertTrue(testResult);
