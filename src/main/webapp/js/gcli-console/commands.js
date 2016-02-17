@@ -310,7 +310,7 @@ var CommandsRegistry = {
             CommandApi.echo("Converting WS...");
             console.log(WorkspaceManager.getSelectedWorkspace());
 
-            FileApi.currnetWSAsDemoWS(WorkspaceManager.getSelectedWorkspace(), function () {});
+            FileApi.currentWSAsDemoWS(WorkspaceManager.getSelectedWorkspace(), function () {});
         }
     },
     clearConsole: {
