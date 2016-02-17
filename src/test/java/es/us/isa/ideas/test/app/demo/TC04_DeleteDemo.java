@@ -31,7 +31,7 @@ import org.junit.runners.MethodSorters;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC03_DeleteDemo extends TestCase{
+public class TC04_DeleteDemo extends TestCase{
     
     private static String user = "guest";
     private static String pass = "guest";
@@ -75,7 +75,7 @@ public class TC03_DeleteDemo extends TestCase{
             }
             Thread.sleep(1000); // avoid failing sometimes
         } catch (InterruptedException ex) {
-            Logger.getLogger(TC03_DeleteDemo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TC04_DeleteDemo.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         assertTrue(testResult);
@@ -98,7 +98,7 @@ public class TC03_DeleteDemo extends TestCase{
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(TC03_DeleteDemo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TC04_DeleteDemo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         // Modal window
@@ -108,7 +108,7 @@ public class TC03_DeleteDemo extends TestCase{
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(TC03_DeleteDemo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TC04_DeleteDemo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         // Modal window

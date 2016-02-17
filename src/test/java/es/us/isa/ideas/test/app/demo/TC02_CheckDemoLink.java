@@ -16,6 +16,9 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -27,9 +30,7 @@ import org.openqa.selenium.By;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TC02_CheckDemoLink extends TestCase{
     
-    private static final String SELECTOR_CARD_DEMO_WORKSPACE_NAME = ".demoworkspace .card__meta-content-title";
     private static final String SELECTOR_WS_INFO = "#editorSidePanelHeaderWorkspaceInfo";
-    private static final String DEMO_URL = "#demoURL";
 
     private static boolean testResult = false;
     private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
@@ -64,9 +65,31 @@ public class TC02_CheckDemoLink extends TestCase{
     @Test
     public void step02_visitDemoWorkspaceLink() throws InterruptedException {
   
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC02_CheckDemoLink.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         // Publish workspace button
-        waitForVisibleSelector(SELECTOR_DASHBOARD_DEMO_VIEW_BUTTON);    
-        getJs().executeScript("jQuery('" + SELECTOR_DASHBOARD_DEMO_VIEW_BUTTON + "').click();");
+//        waitForVisibleSelector(SELECTOR_DASHBOARD_DEMO_VIEW_BUTTON);    
+        
+        By locator = By.cssSelector(SELECTOR_DASHBOARD_DEMO_VIEW_BUTTON);
+        getExpectedActions().getWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
+        getExpectedActions().getWait().until(ExpectedConditions.elementToBeSelected(locator));
+        
+        WebElement element = getWebDriver().findElement(locator);
+        
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ex.getMessage());
+        }
+
+        JavascriptExecutor js = ((JavascriptExecutor) getWebDriver());
+        js.executeScript("window.scrollTo(0," + element.getLocation().x + ")");
+        element.click();
         
         try {
             Thread.sleep(1000);

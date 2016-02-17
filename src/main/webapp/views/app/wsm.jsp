@@ -133,7 +133,7 @@
                                     <div class="actions_bar_title flex-center-left">Actions:</div>
                                     <div class="actions_bar_buttons flex-center-right">  
                                         <jstl:url value="demo/${demo.name}" var="demo_url"/>
-                                        <a href="${demo_url}" id="viewDemo" target="_blank" class="btn btn-success solid  nounderline collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="View demo"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                        <a href="${demo_url}" id="viewDemo" class="btn btn-success solid  nounderline collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="View demo"><span class="glyphicon glyphicon-eye-open"></span></a>
                                         <a href="${demo.name}" id="updateDemo" class="updateDemo btn btn-primary solid nounderline collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Update demo"><span class="glyphicon glyphicon-refresh"></span></a>            
                                         <a href="${demo.name}" id="deleteDemo" class="delete-demo btn btn-danger  collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Depublish demo"><span class="glyphicon glyphicon-eject"></span></a>
                                     </div>
@@ -201,7 +201,7 @@
                                     <div class="actions_bar_title flex-center-left">Actions:</div>
                                     <div class="actions_bar_buttons flex-center-right">  
                                         <jstl:url value="demo/${otherdemo.name}" var="otherdemo_url"/>
-                                        <a href="${otherdemo_url}" id="viewDemo" target="_blank" class="btn btn-success solid nounderline collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="View demo" ><span class="glyphicon glyphicon-eye-open"></span></a>
+                                        <a href="${otherdemo_url}" id="viewDemo" class="btn btn-success solid nounderline collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="View demo" ><span class="glyphicon glyphicon-eye-open"></span></a>
                                         <a href="${otherdemo.name}" id="cloneDemo" class="importDemo btn btn-primary solid nounderline collapse-margin-bottom-0 margin-right-1" data-toggle="tooltip" data-placement="bottom" title="Clone demo"><span class="glyphicon glyphicon-import"></span></a>
                                     </div>
                                 </article>

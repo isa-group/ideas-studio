@@ -21,7 +21,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     TC01_CreatePublicDemo.class,
     TC02_CheckDemoLink.class,
-    TC03_DeleteDemo.class
+    TC04_DeleteDemo.class
 })
 public class TestSuite extends TestCase {
 
@@ -42,6 +42,6 @@ public class TestSuite extends TestCase {
     }
     
     protected static String getDemoWorkspaceName() {
-        return getTestProperty("test.app.dashboard.workspace.demo");
+        return "DemoTest";
     }
 }
