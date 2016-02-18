@@ -5,6 +5,7 @@
  */
 package es.us.isa.ideas.test.app.pageobject.editor;
 
+import static es.us.isa.ideas.test.app.pageobject.editor.EditorPage.LOG;
 import static es.us.isa.ideas.test.app.pageobject.testcase.PageObject.getWebDriver;
 import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
 import es.us.isa.ideas.test.app.pageobject.testcase.TestProperty;
@@ -14,6 +15,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import static org.junit.Assert.assertTrue;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -32,6 +35,10 @@ public class WorkspaceSection extends EditorPage {
 
     public static void testCreateWorkspace(String wsName, String wsDescription, String wsTags) {
         new WorkspaceTestCase().testCreateWorkspace(wsName, wsDescription, wsTags);
+    }
+
+    public static void testOpenWorkspace(String wsName) {
+        new WorkspaceTestCase().testOpenWorkspace(wsName);
     }
 
     public static void testOpenWorkspaceFromDashboard() {
@@ -153,6 +160,41 @@ public class WorkspaceSection extends EditorPage {
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             assertTrue(TEST_RESULT);
 
+        }
+
+        public void testOpenWorkspace(String wsName) {
+            
+            EditorPage page = PageFactory.initElements(getWebDriver(), EditorPage.class);
+            page.clickOnMenuTogglerButton();
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            By locator = By.linkText(wsName);
+            WebElement element = page.wsMenuListContainer.findElement(locator);
+            page.clickOnClickableElement(element);
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnMenuTogglerButton();
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            TEST_RESULT = page.getProjCurrentWSText().equals(wsName);
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            assertTrue(TEST_RESULT);
+            
         }
 
         public void testOpenWorkspaceFromDashboard() {

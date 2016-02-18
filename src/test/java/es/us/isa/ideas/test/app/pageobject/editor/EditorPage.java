@@ -21,6 +21,9 @@ public class EditorPage extends PageObject<EditorPage> {
     // WORKSPACES
     @FindBy(id = "menuToggler")
     WebElement wsMenuTogglerButton;
+    
+    @FindBy(id = "workspacesNavContainer")
+    WebElement wsMenuListContainer;
 
     @FindBy(css = "#appLeftMenuContentHeader > div")
     WebElement wsAddButton;
