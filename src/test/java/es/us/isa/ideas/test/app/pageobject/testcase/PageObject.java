@@ -41,15 +41,24 @@ public class PageObject<T> {
     }
 
     public T clickOnClickableElement(WebElement element) {
-        wait.until(ExpectedConditions.visibilityOf(element));
-        wait.until(ExpectedConditions.elementToBeClickable(element));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+        } catch (Exception ex) {
+            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         element.click();
         return (T) this;
     }
 
     public T clickOnNotClickableElement(WebElement element) {
-        wait.until(ExpectedConditions.visibilityOf(element));
-        wait.until(ExpectedConditions.elementToBeClickable(element));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+        } catch (Exception ex) {
+            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         try {
             Thread.sleep(3000);
@@ -64,8 +73,12 @@ public class PageObject<T> {
     }
 
     public T clickOnNotClickableLocator(By locator) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        wait.until(ExpectedConditions.elementToBeClickable(locator));
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            wait.until(ExpectedConditions.elementToBeClickable(locator));
+        } catch (Exception ex) {
+            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         WebElement element = driver.findElement(locator);
 
@@ -75,13 +88,19 @@ public class PageObject<T> {
     /**
      * Sets content into element field.
      *
+     * @param element
      * @param content
      * @return
      */
     public T sendKeysWithWait(WebElement element, CharSequence... content) {
 
-        wait.until(ExpectedConditions.visibilityOf(element));
-        wait.until(ExpectedConditions.elementToBeClickable(element));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+        } catch (Exception ex) {
+            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         element.clear();
         element.sendKeys(content);
 
@@ -99,7 +118,13 @@ public class PageObject<T> {
                 return (!d.getCurrentUrl().equals(previousURL));
             }
         };
-        wait.until(e);
+        
+        try {
+            wait.until(e);
+        } catch (Exception ex) {
+            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
 
         return (T) this;
 
