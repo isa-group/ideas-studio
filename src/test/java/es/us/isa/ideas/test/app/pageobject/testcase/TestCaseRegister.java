@@ -1,8 +1,10 @@
 package es.us.isa.ideas.test.app.pageobject.testcase;
 
 import es.us.isa.ideas.test.app.pageobject.login.RegisterPage;
+import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialGooglePage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialTwitterPage;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -15,7 +17,7 @@ import org.junit.runners.MethodSorters;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestCaseRegister extends TestCase {
-
+    
     @Test
     public void step01_registerFormFieldMaxLength() {
         String bigString = "1729374981723894719283749812734987192834719827398417293847198237489173417293749817238947192837498127349871928347198273984172938471982374891734172937498172389471928374981273498719283471982739841729384719823748917341729374981723894719283749812734987192834719827398417293847198237489173417293749817238947192837498127349871928347198273984172938471982374891734172937498172389471928374981273498719283471982739841729384719823748917341729374981723894719283749812734987192834719827398417293847198237489173417293749817238947192837498127349871928347198273984172938471982374891734";
@@ -24,14 +26,34 @@ public class TestCaseRegister extends TestCase {
         String phone = bigString;
         String address = bigString;
         
-        RegisterPage.testRegister(name, email, phone, address);
+        RegisterPage.testRegisterWithErrors(name, email, phone, address);
+    }
+    
+    @Ignore
+    public void step02_twitterRegister() {
+        String twUser = TestProperty.getTestTwitterUser();
+        String twPass = TestProperty.getTestTwitterPassword();
+        RegisterSocialTwitterPage.testTwitterSocialLogin(twUser, twPass);
+    }
+    
+    @Ignore
+    public void step03_googleRegister() {
+        String goUser = TestProperty.getTestGoogleUser();
+        String goPass = TestProperty.getTestGooglePassword();
+        System.out.println("goUser"+goUser);
+        System.out.println("goPass"+goPass);
+        RegisterSocialGooglePage.testGoogleSocialLogin(goUser, goPass);
     }
     
     @Test
-    public void step02_twitterRegister() {
-        String twUser = "IDEAS_ISA";
-        String twPass = "ideas.isa.us%TWITTER";
-        RegisterSocialTwitterPage.testTwitterSocialLogin(twUser, twPass);
+    public void step04_register() {
+        String user = TestProperty.getTestUser();
+        String name = TestProperty.getTestUserName();
+        String email = TestProperty.getTestUserEmail();
+        String emailPass = TestProperty.getTestUserEmailPassword();
+        String phone = TestProperty.getTestUserPhone();
+        String address = TestProperty.getTestUserAddress();
+        RegisterPage.testRegister(name, email, emailPass, phone, address, user);
     }
     
 }

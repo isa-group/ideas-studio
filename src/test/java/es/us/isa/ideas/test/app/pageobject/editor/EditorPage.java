@@ -132,14 +132,14 @@ public class EditorPage extends PageObject<EditorPage> {
     WebElement contextMenuEditField;
 
     // CONSOLE
-    @FindBy(css = "input.gcli-in-input")
+    @FindBy(css = "#gcli-root input.gcli-in-input")
     WebElement console;
 
     static final Logger LOG = Logger.getLogger(EditorPage.class.getName());
+    static final String URL = TestProperty.getBaseUrl() + "/app/editor";
 
     public static EditorPage navigateTo() {
-        //TODO: automatically set base url.
-        getWebDriver().get(TestProperty.getBaseUrl() + "/app/editor");
+        getWebDriver().get(URL);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 

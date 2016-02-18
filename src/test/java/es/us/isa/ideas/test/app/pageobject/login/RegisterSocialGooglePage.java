@@ -2,10 +2,13 @@ package es.us.isa.ideas.test.app.pageobject.login;
 
 import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
 import es.us.isa.ideas.test.app.pageobject.editor.EditorPage;
+import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -16,38 +19,84 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class RegisterSocialGooglePage extends PageObject<RegisterSocialGooglePage> {
 
-    @FindBy(id = "username_or_email")
+    @FindBy(id = "Email")
     WebElement usernameField;
 
-    @FindBy(id = "password")
+    @FindBy(id = "Passwd")
     WebElement passwordField;
 
-    @FindBy(id = "allow")
+    @FindBy(id = "next")
+    WebElement nextButton;
+
+    @FindBy(id = "signIn")
     WebElement loginButton;
 
     static final Logger LOG = Logger.getLogger(RegisterSocialGooglePage.class.getName());
+    
+    public static RegisterSocialGooglePage navigateTo() {
+        logout();
+        PageFactory.initElements(getWebDriver(), LoginPage.class).clickOnGoogle();
+        return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
+    }
 
-    public RegisterSocialGooglePage clickOnLogin() {
+    public RegisterSocialGooglePage clickOnNext() {
+        nextButton.click();
+        return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
+    }
+
+    public RegisterSocialGooglePage clickOnSignIn() {
         loginButton.click();
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
 
-    public RegisterSocialGooglePage typeUsername(String twUser) {
-        usernameField.sendKeys(twUser);
+    public RegisterSocialGooglePage typeUsername(CharSequence goUser) {
+        sendKeysWithWait(usernameField, goUser);
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
 
-    public RegisterSocialGooglePage typePassword(String twPass) {
-        passwordField.sendKeys(twPass);
+    public RegisterSocialGooglePage typePassword(CharSequence goPass) {
+        sendKeysWithWait(passwordField, goPass);
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
+    
+    public static void testGoogleSocialLogin(String goUser, String goPass) {
+        new GoogleRegisterTestCase().testGoogleSocialLogin(goUser, goPass);
+    }
+    
+    private static class GoogleRegisterTestCase extends TestCase {
 
-    public EditorPage login(String twUser, String twPass) {
-        this.typeUsername(twUser)
-            .typePassword(twPass)
-            .clickOnLogin();
+        public void testGoogleSocialLogin(String goUser, String goPass) {
 
-        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+            RegisterSocialGooglePage page = RegisterSocialGooglePage.navigateTo();
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                LOG.severe(ex.getMessage());
+            }
+            
+            page.typeUsername(goUser)
+                .clickOnNext()
+                .typePassword(goPass)
+                .clickOnSignIn();
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                LOG.severe(ex.getMessage());
+            }
+
+            TEST_RESULT = page.getCurrentUrl().contains("app/editor");
+
+            if (TEST_RESULT) {
+                new EditorPage().consoleEchoCommand("User logged with Google account \"" + goUser + "\".");
+            }
+
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            assertTrue(TEST_RESULT);
+
+        }
+
     }
 
 }

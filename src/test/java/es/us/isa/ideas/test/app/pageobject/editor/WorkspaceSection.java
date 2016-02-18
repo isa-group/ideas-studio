@@ -24,8 +24,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class WorkspaceSection extends EditorPage {
 
-    static final Logger LOG = Logger.getLogger(WorkspaceSection.class.getName());
-
     public static WorkspaceSection navigateTo() {
         //TODO: automatically set base url.
         getWebDriver().get(TestProperty.getBaseUrl() + "/app/wsm");

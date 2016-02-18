@@ -1,17 +1,14 @@
 package es.us.isa.ideas.test.app.pageobject.login;
 
-import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
 import es.us.isa.ideas.test.app.pageobject.editor.EditorPage;
-import static es.us.isa.ideas.test.app.pageobject.login.RegisterPage.LOG;
-import static es.us.isa.ideas.test.app.pageobject.testcase.PageObject.getWebDriverWait;
+import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
 import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.Assert;
+import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -34,7 +31,6 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
     static final Logger LOG = Logger.getLogger(RegisterSocialTwitterPage.class.getName());
 
     public static RegisterSocialTwitterPage navigateTo() {
-        //TODO: automatically set base url.
         logout();
         PageFactory.initElements(getWebDriver(), LoginPage.class).clickOnTwitter();
         return PageFactory.initElements(getWebDriver(), RegisterSocialTwitterPage.class);
@@ -56,25 +52,32 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
     }
 
     public static void testTwitterSocialLogin(String twUser, String twPass) {
-        new TwitterRegisterTestCase().testRegister(twUser, twPass);
-    }
-
-    public EditorPage login(String twUser, String twPass) {
-
-        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+        new TwitterRegisterTestCase().testTwitterSocialLogin(twUser, twPass);
     }
 
     private static class TwitterRegisterTestCase extends TestCase {
 
-        public void testRegister(String twUser, String twPass) {
-
+        public void testTwitterSocialLogin(String twUser, String twPass) {
             RegisterSocialTwitterPage page = RegisterSocialTwitterPage.navigateTo()
                 .typeUsername(twUser)
                 .typePassword(twPass)
                 .clickOnLogin();
 
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterSocialTwitterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            TEST_RESULT = page.getCurrentUrl().contains("app/editor");
+
+            if (TEST_RESULT) {
+                new EditorPage().consoleEchoCommand("User logged with Twitter account \"" + twUser + "\".");
+            }
+
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            assertTrue(TEST_RESULT);
+
         }
-
     }
-
 }

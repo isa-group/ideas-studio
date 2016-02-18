@@ -25,8 +25,6 @@ public class ProjectSection extends EditorPage {
 
     @FindBy(css = "#projectsTree > ul > li:nth-child(1) > span > a")
     WebElement projectElement;
-    
-    static final Logger LOG = Logger.getLogger(ProjectSection.class.getName());
 
     public static void testCreateProject(String projName) {
         new ProjectTestCase().testCreateProject(projName);

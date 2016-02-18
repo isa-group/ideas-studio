@@ -19,6 +19,8 @@
         <repo_base_uri>${settings.repo_base_uri}</repo_base_uri>
         <test.tw.user>${settings.test.tw.user}</test.tw.user>
         <test.tw.pass>${settings.test.tw.pass}</test.tw.pass>
+        <test.go.user>${settings.test.go.user}</test.go.user>
+        <test.go.pass>${settings.test.go.pass}</test.go.pass>
         <test.user>${settings.test.user}</test.user>
         <test.user.name>${settings.test.user.name}</test.user.name>
         <test.user.email>${settings.test.user.email}</test.user.email>
