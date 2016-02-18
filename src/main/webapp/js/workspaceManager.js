@@ -80,7 +80,7 @@ var WorkspaceManager = {
         var workspaceName = WorkspaceManager.getSelectedWorkspace();
         console.log("Loading WS " + workspaceName + " ...");
         FileApi.loadWorkspace(workspaceName, function (ts) {
-            $(".wsactions").remove();
+            $("#wsactions").empty();
             var wsactions = $('#wsActions');
             var wsLabel = $("#editorSidePanelHeaderWorkspaceInfo");
             wsLabel.empty(WorkspaceManager.getSelectedWorkspace());
@@ -127,6 +127,7 @@ var WorkspaceManager = {
                 $("#wsactions").append(wsActions);          
             
             }
+            EditorManager.reset();
             $(".dynatree-expander").click();
             
             $("#edit-ws").click(function(e) {
@@ -302,7 +303,7 @@ var WorkspaceManager = {
         };
         showModal("Confirm publication as demo", "A demo for the workspace <b>'" + workspaceName +"'</b> will be published. \n\\n\
                     <BR/> All data will be accessible from:\n\
-                    <BR/><BR/>https://IDEAS/demo/"+workspaceName+"\n\
+                    <BR/><BR/><span id=\"demoURL\">"+$("base").attr('href').valueOf()+"demo/"+workspaceName+"</span>\n\
                     <BR/><BR/><b>Do you want to create a demo for the existing workspace?</b><BR/></i>",
 						"Continue", continueHandler,
 						function(){}, function(){});
@@ -314,7 +315,7 @@ var WorkspaceManager = {
                 $(location).attr('href',"app/wsm");             
         };
         showModal("Confirm demo update", "The demo for the workspace <b>'" + workspaceName +"'</b> will be overwritten and new data will be accessible from:\n\
-                    <BR/><BR/>https://IDEAS/demo/"+workspaceName+"\n\
+                    <BR/><BR/><span id=\"demoURL\">"+$("base").attr('href').valueOf()+"demo/"+workspaceName+"</span>\n\
                     <BR/><BR/><b>Do you want to update the demo for the existing workspace?</b><BR/></i>",
 						"Continue", continueHandler,
 						function(){}, function(){});

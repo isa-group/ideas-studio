@@ -309,7 +309,7 @@ var CommandApi = {
 };
 
 var switchToDemoWorkspace = function(demoWorkspaceName, targetWorkspaceName) {
-	RequestHelper.ajax("files/importDemo", {
+	RequestHelper.ajax("files/importDemoWorkspace", {
 		"type" : "get",
 		"data" : {
 			"demoWorkspaceName" : demoWorkspaceName,
@@ -318,7 +318,8 @@ var switchToDemoWorkspace = function(demoWorkspaceName, targetWorkspaceName) {
 		"onSuccess" : function(result) {
 			CommandApi.echo("Swithching to workspace...");
 			WorkspaceManager.getWorkspaces(function(wss) {
-				$("#projectsTree").dynatree("getTree").reload();
+                            $("#wsactions").remove();
+                               $("#projectsTree").dynatree("getTree").reload();
 				WorkspaceManager.setSelectedWorkspace(targetWorkspaceName);
 				WorkspaceManager.loadWorkspace();
 				EditorManager.reset();
