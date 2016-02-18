@@ -198,7 +198,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 }
 
 #pagesTemplate .footerContainer {
-	
+
 }
 
 #pagesFooter {
@@ -887,7 +887,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
         vertical-align: middle;
         display: block;
         position: relative;
-	
+
 }
 
 #appLeftMenuContentHeader span {
@@ -914,7 +914,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 }
 
 #appNavigator {
-	
+
 }
 
 #appNavigatorInnerWrapper {
@@ -967,7 +967,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 }
 
 #workspacesNavContainer {
-	
+
 }
 
 #workspacesNavContainerWrapper {
@@ -986,12 +986,12 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 
 #appNavigatorInnerWrapper .shadowCurvedBottom1 {
 	/* 	margin-bottom: -8px; */
-	
+
 }
 
 #appNavigatorInnerWrapper .shadowCurvedTop1 {
 	/* 	margin-top: -8px; */
-	
+
 }
 
 #appNavigator .glyphicon {
@@ -1204,7 +1204,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 	max-width: 100%;
 
 	/* 	 Toggle transition*/
-	
+
 	/* 	-webkit-transition: max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);   */
 	/*    -moz-transition: max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);  */
 	/*      -o-transition: max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);  */
@@ -1247,7 +1247,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 	transition: min-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
 
 	/* 	 Maximization transition */
-	
+
 	/* 	-webkit-transition: min-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000), max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);   */
 	/*    -moz-transition: min-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000), max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);  */
 	/*      -o-transition: min-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000), max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);   */
@@ -1255,7 +1255,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 }
 
 #appMainContent.maximizedEditor #editorMainPanel {
-	
+
 }
 
 #editorItself {
@@ -1660,7 +1660,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 }
 
 .appTabbedView .tabsPanel li:FIRST-CHILD {
-	
+
 }
 
 .appTabbedView .tab-contentWrapper {
@@ -1706,7 +1706,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 }
 
 .appTabbedView .buttonPanel .btn {
-	
+
 }
 
 /* Bootstrap extension */
@@ -1863,7 +1863,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 #returnToLogin {
 	color:white;
 	background-color: rgba(48, 123, 189, 0.9);
-	
+
 	padding: 7px;
 	margin-bottom: 10px;
 	margin-left: 40%;
@@ -1878,10 +1878,10 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 	transform: translate(-50%, -50%);
 	z-index: 1000;
 	width: 500px;
-	background-color:white;	
+	background-color:white;
 	-webkit-box-shadow: 2px 2px 5px #999;
   	-moz-box-shadow: 2px 2px 5px #999;
-  	box-shadow: 2px 2px 5px #999;  	
+  	box-shadow: 2px 2px 5px #999;
 	border-top-left-radius: 10px;
 	border-bottom-left-radius: 10px;
 }
@@ -1893,18 +1893,18 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 #message {
 	background-color: white;
 	border: 2px solid #000000;
-	
+
 	height: 200px;
 	width: 75%;
 	-webkit-border-radius: 30px;
 	-moz-border-radius: 30px;
 	-webkit-box-shadow: 0px 0px 50px #614727;
 	-moz-box-shadow: 0px 0px 50px #614727;
-	
+
 	margin-top: -100px;
 	top: 50%;
 	position: absolute;
- 	margin-left: -250px; 
+ 	margin-left: -250px;
 	left: 10%;
 	text-align: center;
 }
@@ -1960,7 +1960,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 #goToApp {
 	color:white;
 	background-color: rgba(48, 123, 189, 0.9);
-	
+
 	padding: 7px;
 	margin-bottom: 10px;
 	margin-top: 15px;
@@ -2054,7 +2054,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     border-top: 1px solid rgba(0, 0, 0, 0.12);
     display:block;
     position:absolute;
-    bottom:30px;    
+    bottom:30px;
     width:100%;
 }
 
@@ -2118,16 +2118,16 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     border-top: 1px solid rgba(0, 0, 0, 0.12);
     display:block;
     position: absolute;
-    bottom:0px;    
+    bottom:0px;
     width:100%;
     text-align: center;
     vertical-align: middle;
-    
+
 }
 
 #wsactions .glyphicon{
     color: #666666;
-    font-size: 20px;   
+    font-size: 20px;
     margin-left: 7px;
     margin-right: 7px;
     margin-bottom: 7px;
@@ -2150,4 +2150,8 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 
 .blue{
     color:#3078B3;
+
+#expandConsole , #clearConsole{
+    background:none;
+    opacity:0.35;
 }

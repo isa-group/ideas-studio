@@ -34,12 +34,12 @@ public class TC09_DeleteWorkspace extends TestCase {
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC07_DeleteWorkspace...");
+        LOG.log(Level.INFO, "## Init TC09_DeleteWorkspace...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC07_DeleteWorkspace finished");
+        LOG.log(Level.INFO, "## TC09_DeleteWorkspace finished");
     }
 
     @After

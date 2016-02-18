@@ -20,7 +20,8 @@
             "ideas-html-language": "/ideas-html-language",
             "ideas-soup-language": "/ideas-soup-language",
             "ideas-json-language": "/ideas-json-language",
-            "ideas-yaml-language": "/ideas-yaml-language"
+            "ideas-yaml-language": "/ideas-yaml-language",
+            "ideas-language-angular": "/ideas-language-angular"
 	},
     "configurationFiles":{
       "application":"classpath*:application.properties",
@@ -30,4 +31,4 @@
     },
     "helpURI":"https://labs.isa.us.es/IDEAS-help/",
     "googleAnalyticsID":"UA-68297022-1"
-} 
+}

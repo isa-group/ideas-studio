@@ -1,6 +1,5 @@
-package es.us.isa.ideas.test.app.dynatree;
+package es.us.isa.ideas.test.app.workspaces.switching;
 
-import static es.us.isa.ideas.test.app.dynatree.TestSuite.getWorkspace;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,19 +23,19 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
+public class TC02_CreateWorkspace1 extends es.us.isa.ideas.test.utils.TestCase {
 
     private static boolean testResult = false;
     private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC02_CreateWorkspace...");
+        LOG.log(Level.INFO, "## Init TC02_CreateWorkspace_1...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC02_CreateWorkspace finished");
+        LOG.log(Level.INFO, "## TC02_CreateWorkspace_1 finished");
     }
 
     @After
@@ -82,7 +81,7 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
 
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_INPUT);
-        getExpectedActions().sendKeys(By.cssSelector(SELECTOR_MODAL_INPUT), getWorkspace());
+        getExpectedActions().sendKeys(By.cssSelector(SELECTOR_MODAL_INPUT), TestSuite.getWorkspace1());
         getExpectedActions().click(By.linkText("Create"));
 
         // Close workspace manager
@@ -95,10 +94,10 @@ public class TC02_CreateWorkspace extends es.us.isa.ideas.test.utils.TestCase {
             LOG.severe(e.getMessage());
         }
 
-        testResult = getWorkspace().equals(getTextFromSelector(SELECTOR_WS_CURRENT));
+        testResult = TestSuite.getWorkspace1().equals(getTextFromSelector(SELECTOR_WS_CURRENT));
 
         if (testResult) {
-            echoCommandApi("Workspace \"" + getWorkspace() + "\" was successfully created.");
+            echoCommandApi("Workspace \"" + TestSuite.getWorkspace1() + "\" was successfully created.");
         }
 
         assertTrue(testResult);

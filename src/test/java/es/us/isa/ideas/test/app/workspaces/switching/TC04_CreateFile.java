@@ -1,7 +1,5 @@
-package es.us.isa.ideas.test.app.dynatree;
+package es.us.isa.ideas.test.app.workspaces.switching;
 
-import static es.us.isa.ideas.test.app.dynatree.TestSuite.getFileName1;
-import static es.us.isa.ideas.test.app.dynatree.TestSuite.getProject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,7 +13,6 @@ import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
-import static es.us.isa.ideas.test.app.dynatree.TestSuite.getFileExt1;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -29,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 public class TC04_CreateFile extends es.us.isa.ideas.test.utils.TestCase {
 
     private static boolean testResult = false;
-    private static final String FILE_CONTAINER = getProject();
+    private static final String FILE_CONTAINER = TestSuite.getProject();
     private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
     @BeforeClass
@@ -68,7 +65,7 @@ public class TC04_CreateFile extends es.us.isa.ideas.test.utils.TestCase {
         }
 
         // Modal window
-        getExpectedActions().sendKeys(By.cssSelector(SELECTOR_MODAL_INPUT), getFileName1());
+        getExpectedActions().sendKeys(By.cssSelector(SELECTOR_MODAL_INPUT), TestSuite.getFileName1());
         getExpectedActions().click(By.linkText("Create"));
 
         try {
@@ -80,12 +77,45 @@ public class TC04_CreateFile extends es.us.isa.ideas.test.utils.TestCase {
         IdeasStudioActions.expandAllDynatreeNodes();
         
         testResult = getWebDriver()
-                .findElements(By.linkText(getFileName1() + getFileExt1())).size() > 0;
+                .findElements(By.linkText(TestSuite.getFileName1() + TestSuite.getFileExt1())).size() > 0;
 
         if (testResult) {
-            echoCommandApi("File \"" + getFileName1() + getFileExt1() + "\" was successfully created.");
+            echoCommandApi("File \"" + TestSuite.getFileName1() + TestSuite.getFileExt1() + "\" was successfully created.");
         }
         assertTrue(testResult);
+    }
+    
+    @Test
+    public void step03_editFile() {
+
+        if (IdeasStudioActions.expandAllDynatreeNodes()) {
+
+            TestCase.getExpectedActions().click(By.linkText(TestSuite.getFileName1() + TestSuite.getFileExt1()));
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TC04_CreateFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            // Set editor content
+            IdeasStudioActions.setCurrentEditorContent("Contenido fichero " + TestSuite.getFileName1() + TestSuite.getFileExt1());
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TC04_CreateFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            // Check if file content is not empty
+            testResult = !IdeasStudioActions.isEditorContentEmpty();
+        }
+
+        if (testResult) {
+            echoCommandApi("File \"" + TestSuite.getFileName1() + TestSuite.getFileExt1() + "\" was successfully edited.");
+        }
+        assertTrue(testResult);
+
     }
 
 }

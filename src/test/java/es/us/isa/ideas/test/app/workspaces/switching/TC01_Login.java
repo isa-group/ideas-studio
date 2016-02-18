@@ -1,4 +1,4 @@
-package es.us.isa.ideas.test.app.dashboard;
+package es.us.isa.ideas.test.app.workspaces.switching;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,9 +12,6 @@ import org.junit.runners.MethodSorters;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
-import static es.us.isa.ideas.test.utils.TestCase.loginWithParams;
-import static es.us.isa.ideas.test.utils.TestCase.logout;
-import static es.us.isa.ideas.test.utils.TestCase.validatePropertyValues;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -25,7 +22,7 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC02_Login extends TestCase {
+public class TC01_Login extends es.us.isa.ideas.test.utils.TestCase {
 
     private static String user = "";
     private static String pass = "";
@@ -34,7 +31,7 @@ public class TC02_Login extends TestCase {
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC02_Login...");
+        LOG.log(Level.INFO, "## Init TC01_Login...");
         try {
             logout();
         } catch (InterruptedException ex) {
@@ -44,7 +41,7 @@ public class TC02_Login extends TestCase {
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC02_Login finished");
+        LOG.log(Level.INFO, "## TC01_Login finished");
     }
 
     @After
@@ -61,8 +58,8 @@ public class TC02_Login extends TestCase {
 
     @Test
     public void step02_loadSeleniumUserProperties() {
-        user = "autotester";
-        pass = "autotester";
+        user = getAutotesterUser();
+        pass = getAutotesterPassword();
         testResult = validatePropertyValues(user, pass);
         assertTrue(testResult);
     }
@@ -76,7 +73,7 @@ public class TC02_Login extends TestCase {
             }
             Thread.sleep(1000); // avoid failing sometimes
         } catch (InterruptedException ex) {
-            Logger.getLogger(TC02_Login.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TC01_Login.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         assertTrue(testResult);

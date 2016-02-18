@@ -1,3 +1,11 @@
+ideas-studio v0.9, 08/02/2016
+----------------------------------------------
+- Workspace Management Integration implementation
+- Cannot recover password (IllegalArgumentException) fixed
+- Fix google login with oauth @localhost
+- Rename test doesn't check if filename is renamed in ideas-repo
+- Organize Workspaces of DemoMaster
+
 ideas-studio v0.8.4, 28/01/2016
 ----------------------------------------------
 - [new module] ideas-yaml-module

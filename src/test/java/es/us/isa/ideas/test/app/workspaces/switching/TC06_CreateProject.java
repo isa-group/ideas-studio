@@ -1,7 +1,5 @@
-package es.us.isa.ideas.test.app.dynatree;
+package es.us.isa.ideas.test.app.workspaces.switching;
 
-import static es.us.isa.ideas.test.app.dynatree.TestSuite.getDir1;
-import static es.us.isa.ideas.test.app.dynatree.TestSuite.getProject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +13,9 @@ import org.openqa.selenium.By;
 
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
+import static es.us.isa.ideas.test.utils.TestCase.echoCommandApi;
+import static es.us.isa.ideas.test.utils.TestCase.getTextFromSelector;
+import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -25,19 +26,19 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TC05_CreateDirectory extends es.us.isa.ideas.test.utils.TestCase {
+public class TC06_CreateProject extends es.us.isa.ideas.test.utils.TestCase {
 
     private static boolean testResult = false;
     private static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
     @BeforeClass
     public static void setUp() {
-        LOG.log(Level.INFO, "## Init TC05_CreateDirectory...");
+        LOG.log(Level.INFO, "## Init TC06_CreateProject...");
     }
 
     @AfterClass
     public static void tearDown() {
-        LOG.log(Level.INFO, "## TC05_CreateDirectory finished");
+        LOG.log(Level.INFO, "## TC06_CreateProject finished");
     }
 
     @After
@@ -53,43 +54,32 @@ public class TC05_CreateDirectory extends es.us.isa.ideas.test.utils.TestCase {
     }
 
     @Test
-    public void step02_createDirectory() {
-
-        // Activate project
-        getExpectedActions().click(By.linkText(getProject()));
+    public void step02_createProject() {
 
         if (IdeasStudioActions.expandAddMenu()) {
-            getExpectedActions().click(By.linkText("Create Directory"));
+
+            TestCase.getExpectedActions().click(By.linkText("Create Project"));
 
             try {
-                Thread.sleep(500); // modal animation 
+                Thread.sleep(1000); // modal animation 
             } catch (InterruptedException e) {
                 LOG.severe(e.getMessage());
             }
 
             // Modal window
-            getExpectedActions().sendKeys(By.cssSelector(SELECTOR_MODAL_INPUT), getDir1());
-            getExpectedActions().click(By.linkText("Create"));
+            TestCase.getExpectedActions().sendKeys(By.cssSelector(SELECTOR_MODAL_INPUT), TestSuite.getProject());
+            TestCase.getExpectedActions().click(By.linkText("Create")); // submit modal
 
-            try {
-                Thread.sleep(500); // modal animation 
-            } catch (InterruptedException e) {
-                LOG.severe(e.getMessage());
-            }
-
-            if (IdeasStudioActions.expandAllDynatreeNodes()) {
-                waitForVisibleSelector(SELECTOR_DYNATREE);
-                testResult = getWebDriver()
-                        .findElement(By.cssSelector(SELECTOR_DYNATREE))
-                        .findElements(By.linkText(getDir1())).size() > 0;
-            }
+            waitForVisibleSelector(SELECTOR_PROJECT);
+            testResult = TestSuite.getProject().equals(getTextFromSelector(SELECTOR_PROJECT));
         }
 
         if (testResult) {
-            echoCommandApi("Directory \"" + getDir1() + "\" was successfully created.");
+            echoCommandApi("Project \"" + TestSuite.getProject() + "\" was successfully created.");
         }
         assertTrue(testResult);
 
     }
 
+    //TODO: check if project has been created on ideas repository
 }
