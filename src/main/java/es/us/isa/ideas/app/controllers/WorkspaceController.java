@@ -6,11 +6,9 @@ import es.us.isa.ideas.app.entities.Workspace;
 import es.us.isa.ideas.app.repositories.ResearcherRepository;
 import es.us.isa.ideas.app.repositories.WorkspaceRepository;
 import es.us.isa.ideas.app.security.LoginService;
-import es.us.isa.ideas.app.security.UserAccount;
 import es.us.isa.ideas.app.services.ResearcherService;
 import es.us.isa.ideas.app.services.TagService;
 import es.us.isa.ideas.app.services.WorkspaceService;
-import es.us.isa.ideas.repo.AuthenticationManagerDelegate;
 import es.us.isa.ideas.repo.IdeasRepo;
 import es.us.isa.ideas.repo.exception.AuthenticationException;
 import es.us.isa.ideas.repo.exception.BadUriException;
@@ -43,8 +41,6 @@ public class WorkspaceController extends AbstractController {
     
     @Autowired
     ResearcherService researcherService;
-
-    private static IdeasRepo repoLab = null;
     
     private static final Logger logger = Logger.getLogger(WorkspaceController.class.getName());
     
@@ -134,9 +130,7 @@ public class WorkspaceController extends AbstractController {
 
         try {
             FSFacade.deleteWorkspace(workspaceName, username);
-        } catch (AuthenticationException e) {
-            success = Boolean.FALSE;
-        } catch (BadUriException e) {
+        } catch (AuthenticationException | BadUriException e) {
             success = Boolean.FALSE;
         }
         if (success) {
