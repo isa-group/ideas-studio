@@ -41,8 +41,6 @@ public class TestCaseRegister extends TestCase {
     public void step03_googleLogin() {
         String goUser = TestProperty.getTestGoogleUser();
         String goPass = TestProperty.getTestGooglePassword();
-        System.out.println("goUser: "+goUser);
-        System.out.println("goPass: "+goPass);
         RegisterSocialGooglePage.testGoogleSocialLogin(goUser, goPass);
     }
     
@@ -54,6 +52,7 @@ public class TestCaseRegister extends TestCase {
         String emailPass = TestProperty.getTestUserEmailPassword();
         String phone = TestProperty.getTestUserPhone();
         String address = TestProperty.getTestUserAddress();
+        
         RegisterPage.testRegister(name, email, emailPass, phone, address, user);
     }
     
@@ -67,6 +66,7 @@ public class TestCaseRegister extends TestCase {
         String emailPass = TestProperty.getTestUserEmailPassword();
         String phone = TestProperty.getTestUserPhone();
         String address = TestProperty.getTestUserAddress();
+        
         RecoverPasswordPage.testRecoverPassword(email, emailPass, user);
     }
     
