@@ -9,9 +9,12 @@ package es.us.isa.ideas.test.app.editor;
 import es.us.isa.ideas.test.utils.IdeasStudioActions;
 import es.us.isa.ideas.test.utils.TestCase;
 import static es.us.isa.ideas.test.utils.TestCase.waitForVisibleSelector;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.taglibs.standard.tag.common.core.Util;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
@@ -20,6 +23,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.By;
+import org.openqa.selenium.net.Urls;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -33,6 +37,7 @@ public class TC06_PublishDemoWorkspace extends TestCase{
 
     protected static final String SELECTOR_PUBLISH_BUTTON = "#demo-ws";
     private static final String SELECTOR_DEMO_CARD_TITLE = ".demoworkspace .card__meta-content-title";
+    private static final String DEMO_URL = "#demoURL";
     
     private static boolean testResult = true;
     private static final Logger LOG = Logger.getLogger(TC06_PublishDemoWorkspace.class.getName());
@@ -74,6 +79,7 @@ public class TC06_PublishDemoWorkspace extends TestCase{
         
         // Modal window
         waitForVisibleSelector(SELECTOR_MODAL_CONTINUE);
+        String demoURL = getWebDriver().findElement(By.cssSelector(DEMO_URL)).getText();
         getJs().executeScript("jQuery('" + SELECTOR_MODAL_CONTINUE + "').click();");
         
         try {
@@ -84,9 +90,20 @@ public class TC06_PublishDemoWorkspace extends TestCase{
         
         IdeasStudioActions.goWSMPage();
           
+        boolean result= Boolean.FALSE; 
+        boolean status200= Boolean.FALSE; 
+        
         waitForVisibleSelector(SELECTOR_DEMO_CARD_TITLE);
-        testResult = getWebDriver().findElements(By.cssSelector(SELECTOR_DEMO_CARD_TITLE)).size() > 0;
-                
+        result = getWebDriver().findElements(By.cssSelector(SELECTOR_DEMO_CARD_TITLE)).size() > 0;
+         
+        try {
+            status200=TestCase.getStatusCode(demoURL.replaceAll(" ","+")).equals("200");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TC06_PublishDemoWorkspace.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        testResult  = result && status200;    
+        
         assertTrue(testResult);
     }
     
