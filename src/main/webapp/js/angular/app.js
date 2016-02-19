@@ -5,7 +5,7 @@ angular.module("mainApp", [])
         // Update editor content from model
         $scope.$watch(
             function () {
-                return angular.toJson($scope.sla);
+                return angular.toJson($scope.model);
             },
             function (newValue, oldValue) {
 
@@ -13,7 +13,7 @@ angular.module("mainApp", [])
                     var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
                     if (currentFormat === "json") {
                         $scope.slaString = newValue;
-                        newValue = angular.toJson($scope.sla, 4);
+                        newValue = angular.toJson($scope.model, 4);
                         if (newValue !== document.editor.getValue()) {
                             document.editor.setValue(newValue, -1);
                         }
@@ -36,13 +36,13 @@ angular.module("mainApp", [])
                 var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
                 if (currentFormat === "json") {
                     if ($scope.slaString !== "") {
-                        $scope.sla = JSON.parse($scope.slaString);
+                        $scope.model = JSON.parse($scope.slaString);
                     } else {
-                        $scope.sla = undefined;
+                        $scope.model = undefined;
                     }
                 } else if (currentFormat === "yaml") {
 //                    alert(jsyaml.safeLoad($scope.slaString));
-                    $scope.sla = jsyaml.safeLoad(document.editor.getValue());
+                    $scope.model = jsyaml.safeLoad(document.editor.getValue());
                 }
             } catch (err) {
                 // empty
