@@ -761,7 +761,16 @@ var DescriptionInspector = {
 						$(this).attr("data-focus-id", i);
 					}
 					i++;
+                    
+                    console.log($(this).parent());
+                    if ( true ) {
+                        // enableEditor
+                        var wrapped = $(this).wrap("<span ng-show='editorEnabled'></span>");
+                        $(this).parent().parent().prepend("<a ng-click='enableEditor()' ng-hide='editorEnabled'>{{ "+ $(this).attr("ng-model") +" }}</a>");
+                    }
 				});
+                
+                modelInspectorContentWrapper.append("<a href='#' ng-click='disableEditor($event)' ng-show='editorEnabled'>Disable editor</a>");
 
 				DescriptionInspector.tabs.angularCompileModelInspector();
 
@@ -936,7 +945,8 @@ var DescriptionInspector = {
         	buildModelTab : function() {
 
             if ( document.editor &&
-								 "json" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() &&
+								 ("json" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() ||
+                                 "yaml" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions()) &&
 					 			 DescriptionInspector.existCurrentAngularFile() ) {
                 var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
                     title = "MODEL";
@@ -948,7 +958,8 @@ var DescriptionInspector = {
 
                 var modelTab = $(DescriptionInspector.vars.selectors.inspectorModelTab);
                 modelTab.click(function() {
-									if ( EditorManager.sessionsMap[EditorManager.currentUri].current === "json" ) {
+                    var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].current;
+									if ( currentFormat === "json" || currentFormat === "yaml" ) {
                     // Hide others tabs content
                     $(".moduleInspectorContent").hide();
                     $(".moduleInspectorTab")
@@ -981,7 +992,7 @@ var DescriptionInspector = {
                             .css("background", "rgba(0,0,0,0.02)");
 									} else {
 										CommandApi
-												.echo('<span style="color:red;">Please, select a json language format.</span>');
+												.echo('<span style="color:red;">Please, select json or yaml language format.</span>');
 									}
 
                 });
@@ -1012,14 +1023,15 @@ var DescriptionInspector = {
      * Update angular model by sending a input event from editorContent element.
      */
     slaString2Model : function() {
-      if (document.editor &&
-          "json" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() ) {
+        if (document.editor &&
+            ("json" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() || 
+             "yaml" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions()) ) {
 
-					// Re-focusing element after sending input trigger
-					focusId = $(':focus').attr("data-focus-id");
-          $("#editorContent").val( document.editor.getValue() );
-          angular.element($("#editorContent")).trigger('input');
-					$(DescriptionInspector.vars.selectors.inspectorModelContent).find("input[data-focus-id='"+ focusId +"']").focus();
+			// Re-focusing element after sending input trigger
+			focusId = $(':focus').attr("data-focus-id");
+            $("#editorContent").val( document.editor.getValue() );
+            angular.element($("#editorContent")).trigger('input');
+			$(DescriptionInspector.vars.selectors.inspectorModelContent).find("input[data-focus-id='"+ focusId +"']").focus();
 
       }
     },

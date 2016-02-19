@@ -702,9 +702,14 @@ var EditorManager = {
 
 							});
 
-			if (currentFormat === "json") {
-				DescriptionInspector.tabs.activateDefaultTab();
-			}
+            if ( desiredFormat === "json" || desiredFormat === "yaml") {
+                if (!$("#editorTabs > li.modelInspectorTab").hasClass("active")) {
+                    var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorModelTab);
+                    setTimeout(function () {descriptionTab.click();},150); // wait format tab to be activated.
+                }
+			} else {
+                DescriptionInspector.tabs.activateDefaultTab();
+            }
 
 		}
 

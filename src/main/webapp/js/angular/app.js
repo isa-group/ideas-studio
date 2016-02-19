@@ -2,43 +2,70 @@
 angular.module("mainApp", [])
     .controller("MainCtrl", ["$scope", "$compile", function ($scope, $compile) {
 
-      // Update editor content from model
-      $scope.$watch(
-        function () { return angular.toJson($scope.sla); },
-        function (newValue, oldValue) {
+        // Update editor content from model
+        $scope.$watch(
+            function () {
+                return angular.toJson($scope.sla);
+            },
+            function (newValue, oldValue) {
 
-          $scope.slaString = newValue;
+                if (document.editor) {
+                    var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
+                    if (currentFormat === "json") {
+                        $scope.slaString = newValue;
+                        newValue = angular.toJson($scope.sla, 4);
+                        if (newValue !== document.editor.getValue()) {
+                            document.editor.setValue(newValue, -1);
+                        }
+                    } else if (currentFormat === "yaml") {
+                        $scope.slaString = newValue;
+                        var jsonObj = jsyaml.safeLoad(newValue);
+                        var yaml = jsyaml.safeDump(jsonObj);
+                        if (yaml !== document.editor.getValue()) {
+                            document.editor.setValue(yaml, -1);
+                        }
+                    }
+                }
 
-          if (document.editor && EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat() === "json") {
-            newValue = angular.toJson($scope.sla, 4);
-            if (newValue !== document.editor.getValue()) {
-              document.editor.setValue(newValue, -1);
             }
-          }
+        );
 
-        }
-      );
+        // Ordering a model update from ace editor
+        $scope.slaString2Model = function () {
+            try {
+                var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
+                if (currentFormat === "json") {
+                    if ($scope.slaString !== "") {
+                        $scope.sla = JSON.parse($scope.slaString);
+                    } else {
+                        $scope.sla = undefined;
+                    }
+                } else if (currentFormat === "yaml") {
+//                    alert(jsyaml.safeLoad($scope.slaString));
+                    $scope.sla = jsyaml.safeLoad(document.editor.getValue());
+                }
+            } catch (err) {
+                // empty
+            }
+        };
 
-      // Ordering a model update from ace editor
-      $scope.slaString2Model = function () {
-        try {
-          if ($scope.slaString !== "") {
-            $scope.sla = JSON.parse($scope.slaString);
-          } else {
-            $scope.sla = undefined;
-          }
-        } catch (err) {
-          // empty
-        }
-      };
+        // Ordering a model compilation from DescriptionInspector
+        $scope.compilationFlag = 0;
+        $scope.compileModel = function () {
+            if ($scope.compilationFlag == 1) {
+                $compile(document.getElementById("inspectorModelContent"))($scope);
+            }
+        };
+        
+        // editorEnable
+        $scope.editorEnabled = false;
+        $scope.enableEditor = function() {
+            $scope.editorEnabled = true;
+        };
 
-      // Ordering a model compilation from DescriptionInspector
-      $scope.compilationFlag = 0;
-      $scope.compileModel = function () {
-        if ($scope.compilationFlag == 1) {
-          console.log("compiling angular inspector");
-          $compile(document.getElementById("inspectorModelContent"))($scope);
-        }
-      };
+        $scope.disableEditor = function($event) {
+            $event.preventDefault();
+            $scope.editorEnabled = false;
+        };
 
     }]);

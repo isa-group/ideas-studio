@@ -11,16 +11,16 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>        
+    <head>
         <title>${studioConfiguration.workbenchName} | editor</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <!-- TITLE & ICON -->
         <title><tiles:insertAttribute name="title" ignore="true" /></title>
-        <link rel="shortcut icon" href="favicon.ico"/> 
+        <link rel="shortcut icon" href="favicon.ico"/>
         <!-- Other meta-information -->
         <meta name="description" content="">
         <base	href="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- STYLES        -->
         <!-- Bootstrap css -->
         <link rel="stylesheet" href="css/bootstrap.css">
@@ -35,29 +35,29 @@
         <link href="css/jquery.contextMenu.css" rel="stylesheet" type="text/css" >
         <link rel='stylesheet' type='text/css' href='css/dyntree/skin/exemplar-dynatree.css'>
         <link rel="stylesheet" href="css/ideas.css">
-        
+
         <!-- Initialization scripts -->
-        <script src="js/vendor/modernizr-2.6.2.min.js"></script>                                    
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <script type="text/javascript" src="js/vendor/jquery.js"></script>
-        <script type="text/javascript" src="js/vendor/jquery-ui.js"></script>     
-        <script type="text/javascript" src="js/vendor/jquery.ui.resizable.js"></script> 
+        <script type="text/javascript" src="js/vendor/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/vendor/jquery.ui.resizable.js"></script>
         <script src='js/vendor/jquery.cookie.js' type="text/javascript"></script>
-        <script src='js/dyntree/jquery.dynatree.js' type="text/javascript"></script> 
-       <script src="js/vendor/jquery.ui.widget.js"></script>        
-        <script src="js/vendor/jquery.iframe-transport.js"></script><!-- Iframe Transport is required for file AJAX upload 
+        <script src='js/dyntree/jquery.dynatree.js' type="text/javascript"></script>
+       <script src="js/vendor/jquery.ui.widget.js"></script>
+        <script src="js/vendor/jquery.iframe-transport.js"></script><!-- Iframe Transport is required for file AJAX upload
                                                              in browsers without support for XHR file uploads -->
         <script src="js/vendor/jquery.fileupload.js"></script>
 
         <script src="js/vendor/jquery.contextMenu-custom.js" type="text/javascript"></script>
-        
+
         <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-      
+
         <script type="text/javascript" src="js/vendor/bootstrap.js"></script>
         <script type="text/javascript" src="js/md5.js"></script>
-        
+
         <script type="text/javascript" src="js/requestHelper.js"></script>
-        <script src='js/contextAction.js' type="text/javascript"></script> 
-        
+        <script src='js/contextAction.js' type="text/javascript"></script>
+
         <script type="text/javascript" src="js/fileApi.js"></script>
         <script src="js/commandApi.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript" src="js/plugins.js"></script>
@@ -69,10 +69,11 @@
         <script src='js/vendor/FileSaver.min.js' type="text/javascript"></script>
         <script type="text/javascript" src="js/appPresenter.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
-        
+
+        <script src="js/vendor/js-yaml.min.js"></script> <!-- yaml parser -->
         <script type="text/javascript" src="js/vendor/angular.min.js"></script>
         <script type="text/javascript" src="js/angular/app.js"></script>
-                
+
     </head>
 
     <body id="appTemplateFullBody">
@@ -95,10 +96,10 @@
 		        		<tiles:insertAttribute name="body"/>
 		        	</div>
 		        </div>
-		        <tiles:insertAttribute name="footer" />	
+		        <tiles:insertAttribute name="footer" />
 	       	</div>
 	    </div>
-        
+
         <!-- Google Analytics. -->
         <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -107,7 +108,7 @@
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
         ga('create', '${studioConfiguration.googleAnalyticsID}', 'auto');
-        ga('send', 'pageview');                    
+        ga('send', 'pageview');
 
         </script>
     </body>
