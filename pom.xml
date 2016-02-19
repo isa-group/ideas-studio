@@ -481,13 +481,7 @@
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>es.us.isa.sedl</groupId>
-            <artifactId>SEDL4JSON</artifactId>
-            <version>0.1-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
+        </dependency>        
         <dependency>
             <groupId>es.us.isa.ideas</groupId>
             <artifactId>ideas-base-module</artifactId>

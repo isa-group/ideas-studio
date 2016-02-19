@@ -14,7 +14,7 @@ import org.codehaus.jackson.map.DeserializationProblemHandler;
 import org.codehaus.jackson.map.JsonDeserializer;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import es.us.isa.sedl.sedl4json.SEDLModule;
+//import es.us.isa.sedl.sedl4json.SEDLModule;
 
 
 /**
@@ -22,13 +22,13 @@ import es.us.isa.sedl.sedl4json.SEDLModule;
  * @author japarejo
  */
 public class CustomJacksonObjectMapper extends ObjectMapper {
-    SEDLModule sedlModule;
+    //SEDLModule sedlModule;
     public CustomJacksonObjectMapper()
     {
         super();
-        sedlModule=new SEDLModule();
-        registerModule(sedlModule);
-        sedlModule.configure(this);        
+        //sedlModule=new SEDLModule();
+        //registerModule(sedlModule);
+        //sedlModule.configure(this);        
         getDeserializationConfig().addHandler(new DeserializationProblemHandler() {
 
             @Override
@@ -42,8 +42,8 @@ public class CustomJacksonObjectMapper extends ObjectMapper {
     
     public void refresh()
     {
-        sedlModule.refreshExtensionPointsRegistries();
+        /*sedlModule.refreshExtensionPointsRegistries();
         registerModule(sedlModule);
-        sedlModule.configure(this);        
+        sedlModule.configure(this);        */
     }
 }
