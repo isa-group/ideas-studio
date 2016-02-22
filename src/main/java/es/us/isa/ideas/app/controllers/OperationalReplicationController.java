@@ -40,12 +40,11 @@ public class OperationalReplicationController {
     public String createOperationalReplicationLink( @RequestParam("workspace") String workspaceName,
                                                     @RequestParam("operation") String operationCode,
                                                     @RequestParam("file") String fileUri,
-                                                    @RequestParam("data") String dataUri,
-                                                    @RequestParam("params") String auxParams){
+                                                    @RequestParam("params") String[] auxParams){
         
         String operationUUID = UUID.randomUUID().toString();
         
-        OperationalReplication or = operationalReplicationService.createExperimentalExecution(operationUUID, workspaceName, operationCode, fileUri, dataUri, auxParams);
+        OperationalReplication or = operationalReplicationService.createExperimentalExecution(operationUUID, workspaceName, operationCode, fileUri, auxParams);
         
         if(or ==null){
             operationUUID="ERROR";
@@ -65,21 +64,14 @@ public class OperationalReplicationController {
         try{
             initRepoLab();
             
-            String operationCode = eExec.getOperation();
+            String operationCode = eExec.getOperationName();
             String fileContent = FSFacade.getFileContent(eExec.getFileUri(), "DemoMaster");
-            
-            String data = "";
-            if (eExec.getDataUri()!=null && !eExec.getDataUri().equals("")){
-                data = FSFacade.getFileContent(eExec.getDataUri(), "DemoMaster");
-            }
-           
-            String params = eExec.getAuxParams();
+            String[] params = eExec.getAuxParams();
             
             result.addObject("operation", operationCode);
             result.addObject("workspace", eExec.getFileUri().substring(0, eExec.getFileUri().indexOf("/")));
             result.addObject("content", fileContent);
             result.addObject("fileUri", eExec.getFileUri());
-            result.addObject("data", data);
             result.addObject("params", params);
              
         }

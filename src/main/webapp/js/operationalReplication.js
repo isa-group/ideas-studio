@@ -1,26 +1,31 @@
 var operationID = $('#helpLink').text();
-var data = $('dataTextarea').text();
 var fileUri = $('#fileUriText').text();
 var content = $('#inputAceEditor').text();
-var params = $('paramsTextarea').text();
 
 var OperationalReplication = {
     generateReplicationLink: function (name, extendedData, callback) {
+        var auxParamsArray = [];
+        auxParamsArray.push(extendedData.auxArg0,extendedData.auxArg1,extendedData.auxArg2,extendedData.auxArg3,extendedData.auxArg4);
         $.ajax("replications", {
             "type": "POST",
             "data": {
                 workspace: WorkspaceManager.getSelectedWorkspace(),
                 operation: name,
                 file: extendedData.fileUri,
-                data: extendedData.content,
-                params: extendedData.toString()
+                params: auxParamsArray.toString()
             },
             "success": function (result) {
-                CommandApi.echo("<input id=\"replicationLink\" disabled size=\"85\" value=\"" + $("base").attr('href').valueOf() + "replications/" + result + "\"></input><a id=\"replicationLinkCopyButton\" class=\"btn btn-default btn-xs\" role=\"button\"><span class=\"glyphicon glyphicon-file\"></span></a>");
+                CommandApi.echo("<input id=\"replicationLink\" +\n\
+                                        disabled size=\"85\" \n\
+                                        value=\"" + $("base").attr('href').valueOf() + "replications/" + result + "\">\n\
+                                </input>\n\
+                                <a id=\"replicationLinkCopyButton\"  class=\"btn btn-default btn-xs\" role=\"button\">\n\
+                                    <span class=\"glyphicon glyphicon-file\">\n\
+                                </span></a>");
                 CommandApi.echo("<script>" +
                         "$('#replicationLinkCopyButton').click(function() {" +
-                        "alert($('#replicationLink').valueOf());" +
-                        "});");
+                            "OperationalReplication.copyToClipboard('#replicationLink');" +
+                        "});</script>");
                 callback(result);
             },
             "error": function (result) {
@@ -127,6 +132,23 @@ var OperationalReplication = {
             callback(e);
         }
 
+    },
+    copyToClipboard: function (inputID) {
+            var urlLink = document.querySelector(inputID);  
+            var range = document.createRange();  
+            range.selectNode(urlLink);  
+            window.getSelection().addRange(range);  
+
+            try {  
+                // Now that we've selected the anchor text, execute the copy command  
+                var successful = document.execCommand('copy');  
+                var msg = successful ? 'successful' : 'unsuccessful';  
+                console.log('Copy url command was ' + msg);  
+            } 
+            catch(err) {  
+                console.log('Oops, unable to copy');  
+            }    
+            window.getSelection().removeAllRanges();  
     }
 };
 

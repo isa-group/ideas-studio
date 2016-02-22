@@ -12,25 +12,20 @@
 </div>
 <div id="auxParams">
     <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home">Data</a></li>
-        <li><a data-toggle="tab" href="#menu1">Params</a></li>
-        <li><a data-toggle="tab" href="#menu2">...</a></li>
+        <jstl:forEach items="${params}" var="param">
+            <li class="active"><a data-toggle="tab" href="#${param.key}">${param.key}</a></li>
+        </jstl:forEach>
     </ul>
     <div class="tab-content">
-        <div id="home" class="tab-pane fade in active">
-            <textarea id="dataTextarea" cols="40" rows="10">
-                <c:out value='${data}' />
-            </textarea>
-        </div>
-        <div id="menu1" class="tab-pane fade">
-            <textarea id="paramsTextarea" cols="40" rows="10">
-                <c:out value='${params}' />
-            </textarea>
-        </div>
-        <div id="menu2" class="tab-pane fade">
-            <textarea cols="40" rows="10"></textarea>
-        </div>
-    </div>     
+        <jstl:forEach items="${params}" var="param">
+            <div id="${param.key}" class="tab-pane fade">
+                <textarea id="${param.key}Data" cols="40" rows="10">
+                    <c:out value='${param.value}' />
+                </textarea>
+            </div>
+        </jstl:forEach>
+             
+    </div>
 </div>
 <div class="btn btn-primary" id="executeTest"> 
     <span class="glyphicon glyphicon-play"></span>

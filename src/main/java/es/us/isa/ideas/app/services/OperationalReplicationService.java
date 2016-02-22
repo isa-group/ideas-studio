@@ -21,7 +21,7 @@ public class OperationalReplicationService extends BusinessService<OperationalRe
     private OperationalReplicationRepository operationalReplicationRepository;
     @Inject
     private WorkspaceRepository workspaceRepository;
-    
+     
     private static final String DEMO_MASTER = "DemoMaster";
     
     
@@ -30,8 +30,7 @@ public class OperationalReplicationService extends BusinessService<OperationalRe
                                             String workspaceName, 
                                             String operationCode, 
                                             String fileUri,
-                                            String dataUri,
-                                            String params){
+                                            String[] params){
         Assert.notNull(operationUUID);
         Assert.notNull(workspaceName);
         Assert.notNull(operationCode);
@@ -47,9 +46,11 @@ public class OperationalReplicationService extends BusinessService<OperationalRe
             eExec.setUUID(operationUUID);
             eExec.setWorkspace(demoWS);
             eExec.setCreationDate(Calendar.getInstance().getTime());
-            eExec.setOperation(operationCode);
+            eExec.setOperationName(operationCode);
             eExec.setFileUri(fileUri);
-            eExec.setDataUri(dataUri);
+            if(null!=params){
+                eExec.setAuxParams(params);
+            } 
             eExec.setLaunches(0);  
             res = operationalReplicationRepository.saveAndFlush(eExec);
         }

@@ -15,10 +15,9 @@ public class OperationalReplication extends DomainEntity implements Serializable
     private String UUID;
     private Workspace workspace;
     private Date creationDate;
-    private String operation;
+    private String operationName;
     private String fileUri;
-    private String dataUri;
-    private String auxParams;
+    private String[] auxParams;
     private Integer launches;
       
     @NotNull
@@ -49,12 +48,12 @@ public class OperationalReplication extends DomainEntity implements Serializable
         this.creationDate = creationDate;
     }
 
-    public String getOperation() {
-        return operation;
+    public String getOperationName() {
+        return operationName;
     }
 
-    public void setOperation(String operation) {
-        this.operation = operation;
+    public void setOperationName(String operationName) {
+        this.operationName = operationName;
     }
 
     public String getFileUri() {
@@ -65,19 +64,11 @@ public class OperationalReplication extends DomainEntity implements Serializable
         this.fileUri = fileUri;
     }
 
-    public String getDataUri() {
-        return dataUri;
-    }
-
-    public void setDataUri(String dataUri) {
-        this.dataUri = dataUri;
-    }
-
-    public String getAuxParams() {
+    public String[] getAuxParams() {
         return auxParams;
     }
 
-    public void setAuxParams(String auxParams) {
+    public void setAuxParams(String[] auxParams) {
         this.auxParams = auxParams;
     }
 
