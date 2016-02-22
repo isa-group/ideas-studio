@@ -59,7 +59,8 @@ angular.module("mainApp", [])
         
         // editorEnable
         $scope.editorEnabled = false;
-        $scope.enableEditor = function() {
+        $scope.enableEditor = function($event) {
+            console.log("clicked", $event);
             $scope.editorEnabled = true;
         };
 

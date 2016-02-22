@@ -71,8 +71,6 @@
 		<div id="editorWrapper">
 			<div id="editorTopShadow"></div>
 			<div id="editor"></div>
-            <input id="editorContent" style="display:none;" type="text" ng-change="slaString2Model()" ng-model="slaString" />
-            <input id="compileModel" style="display:none;" type="text" ng-change="compileModel()" ng-model="compilationFlag" />
 		</div>
 
 		<div id="editorFooter">

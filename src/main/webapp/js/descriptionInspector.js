@@ -762,12 +762,11 @@ var DescriptionInspector = {
 					}
 					i++;
                     
-                    console.log($(this).parent());
-                    if ( true ) {
                         // enableEditor
-                        var wrapped = $(this).wrap("<span ng-show='editorEnabled'></span>");
-                        $(this).parent().parent().prepend("<a ng-click='enableEditor()' ng-hide='editorEnabled'>{{ "+ $(this).attr("ng-model") +" }}</a>");
-                    }
+                    $(this).wrap("<span class='editorModelElement'></span>");
+                    $(this).wrap("<span ng-show='editorEnabled'></span>");
+                    $("<a ng-click='enableEditor($event)' ng-hide='editorEnabled'>{{ "+ $(this).attr("ng-model") +" }}</a>")
+                      .insertAfter($(this).closest("span[ng-show='editorEnabled']"));
 				});
                 
                 modelInspectorContentWrapper.append("<a href='#' ng-click='disableEditor($event)' ng-show='editorEnabled'>Disable editor</a>");
@@ -1009,7 +1008,7 @@ var DescriptionInspector = {
 				},
 
 				angularCompileModelInspector : function () {
-
+                    
 					$("#compileModel").val(0);
 					angular.element($("#compileModel")).triggerHandler('input');
 
