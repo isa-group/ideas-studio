@@ -290,3 +290,22 @@ select.selectedFragment {
 }
 
 a.bulkSelectAll, a.bulkSelectNone { cursor: pointer; }
+
+/* Model inspector */
+/* reader mode */
+#inspectorModelContent span.editorModelElement a[ng-hide='editorEnabled'] {
+	background: rgba(212, 198, 54, 0.15);
+    line-height: 15px;
+    border: 0;
+    color: #333;
+}
+
+/* writer mode */
+#inspectorModelContent span.editorModelElement input[ng-model] {
+	background: rgba(212, 198, 54, 0.15);
+    line-height: 15px;
+    border: 0;
+    border-bottom: 1px dotted #888;
+    color: #333;
+    outline: none;
+}

@@ -1,6 +1,6 @@
 // AngularJS initialization
-angular.module("mainApp", [])
-    .controller("MainCtrl", ["$scope", "$compile", function ($scope, $compile) {
+angular.module("mainApp", ['puElasticInput'])
+    .controller("MainCtrl", ["$scope", "$compile", "$timeout", function ($scope, $compile, $timeout) {
 
         // Update editor content from model
         $scope.$watch(
@@ -41,7 +41,6 @@ angular.module("mainApp", [])
                         $scope.model = undefined;
                     }
                 } else if (currentFormat === "yaml") {
-//                    alert(jsyaml.safeLoad($scope.slaString));
                     $scope.model = jsyaml.safeLoad(document.editor.getValue());
                 }
             } catch (err) {
@@ -60,13 +59,20 @@ angular.module("mainApp", [])
         // editorEnable
         $scope.editorEnabled = false;
         $scope.enableEditor = function($event) {
-            console.log("clicked", $event);
             $scope.editorEnabled = true;
+            // Activate element clicked
+            $timeout(function () {
+                $event.currentTarget.focus();
+            }, 1000);
         };
 
-        $scope.disableEditor = function($event) {
-            $event.preventDefault();
-            $scope.editorEnabled = false;
+        $scope.disableEditor = function() {
+            $timeout(function () {
+                var focusElement = $(DescriptionInspector.vars.selectors.inspectorModelContent).find(":focus");
+                if (focusElement.length === 0) {
+                    $scope.editorEnabled = false;
+                }
+            }, 150);
         };
 
     }]);
