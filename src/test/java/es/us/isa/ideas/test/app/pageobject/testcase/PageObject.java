@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -41,15 +42,24 @@ public class PageObject<T> {
     }
 
     public T clickOnClickableElement(WebElement element) {
-        wait.until(ExpectedConditions.visibilityOf(element));
-        wait.until(ExpectedConditions.elementToBeClickable(element));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+        } catch (NoSuchElementException ex) {
+            // nothing
+        }
+
         element.click();
         return (T) this;
     }
 
     public T clickOnNotClickableElement(WebElement element) {
-        wait.until(ExpectedConditions.visibilityOf(element));
-        wait.until(ExpectedConditions.elementToBeClickable(element));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+        } catch (NoSuchElementException ex) {
+            // nothing
+        }
 
         try {
             Thread.sleep(3000);
@@ -64,8 +74,12 @@ public class PageObject<T> {
     }
 
     public T clickOnNotClickableLocator(By locator) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        wait.until(ExpectedConditions.elementToBeClickable(locator));
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            wait.until(ExpectedConditions.elementToBeClickable(locator));
+        } catch (NoSuchElementException ex) {
+            // nothing
+        }
 
         WebElement element = driver.findElement(locator);
 
@@ -75,13 +89,19 @@ public class PageObject<T> {
     /**
      * Sets content into element field.
      *
+     * @param element
      * @param content
      * @return
      */
     public T sendKeysWithWait(WebElement element, CharSequence... content) {
 
-        wait.until(ExpectedConditions.visibilityOf(element));
-        wait.until(ExpectedConditions.elementToBeClickable(element));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+        } catch (NoSuchElementException ex) {
+            // nothing
+        }
+
         element.clear();
         element.sendKeys(content);
 
@@ -99,7 +119,13 @@ public class PageObject<T> {
                 return (!d.getCurrentUrl().equals(previousURL));
             }
         };
-        wait.until(e);
+        
+        try {
+            wait.until(e);
+        } catch (NoSuchElementException ex) {
+            // nothing
+        }
+        
 
         return (T) this;
 
@@ -111,14 +137,14 @@ public class PageObject<T> {
      * @return
      */
     public static PageObject logout() {
-        getWebDriver().get("https://localhost:8181/IDEAS/j_spring_security_logout");
-        
+        getWebDriver().get(TestProperty.getBaseUrl() + "/j_spring_security_logout");
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
             Logger.getLogger(PageObject.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return PageFactory.initElements(driver, PageObject.class);
     }
 
