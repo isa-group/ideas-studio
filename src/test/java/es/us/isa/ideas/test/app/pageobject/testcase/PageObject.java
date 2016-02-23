@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -44,8 +45,8 @@ public class PageObject<T> {
         try {
             wait.until(ExpectedConditions.visibilityOf(element));
             wait.until(ExpectedConditions.elementToBeClickable(element));
-        } catch (Exception ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchElementException ex) {
+            // nothing
         }
 
         element.click();
@@ -56,8 +57,8 @@ public class PageObject<T> {
         try {
             wait.until(ExpectedConditions.visibilityOf(element));
             wait.until(ExpectedConditions.elementToBeClickable(element));
-        } catch (Exception ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchElementException ex) {
+            // nothing
         }
 
         try {
@@ -76,8 +77,8 @@ public class PageObject<T> {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
             wait.until(ExpectedConditions.elementToBeClickable(locator));
-        } catch (Exception ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchElementException ex) {
+            // nothing
         }
 
         WebElement element = driver.findElement(locator);
@@ -97,8 +98,8 @@ public class PageObject<T> {
         try {
             wait.until(ExpectedConditions.visibilityOf(element));
             wait.until(ExpectedConditions.elementToBeClickable(element));
-        } catch (Exception ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchElementException ex) {
+            // nothing
         }
 
         element.clear();
@@ -121,8 +122,8 @@ public class PageObject<T> {
         
         try {
             wait.until(e);
-        } catch (Exception ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchElementException ex) {
+            // nothing
         }
         
 

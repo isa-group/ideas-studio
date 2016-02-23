@@ -28,6 +28,9 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
     @FindBy(id = "allow")
     WebElement loginButton;
 
+    @FindBy(id = "goToApp")
+    WebElement goToAppButton;
+
     static final Logger LOG = Logger.getLogger(RegisterSocialTwitterPage.class.getName());
 
     public static RegisterSocialTwitterPage navigateTo() {
@@ -41,6 +44,11 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
         return PageFactory.initElements(getWebDriver(), RegisterSocialTwitterPage.class);
     }
 
+    public RegisterSocialGooglePage clickOnGoToApp() {
+        clickOnNotClickableElement(goToAppButton);
+        return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
+    }
+
     public RegisterSocialTwitterPage typeUsername(String username) {
         usernameField.sendKeys(username);
         return PageFactory.initElements(getWebDriver(), RegisterSocialTwitterPage.class);
@@ -51,12 +59,47 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
         return PageFactory.initElements(getWebDriver(), RegisterSocialTwitterPage.class);
     }
 
+    public static void testTwitterSocialRegister(String twUser, String twPass) {
+        new TwitterRegisterTestCase().testTwitterSocialRegister(twUser, twPass);
+    }
+
     public static void testTwitterSocialLogin(String twUser, String twPass) {
         new TwitterRegisterTestCase().testTwitterSocialLogin(twUser, twPass);
     }
 
     private static class TwitterRegisterTestCase extends TestCase {
 
+        public void testTwitterSocialRegister(String twUser, String twPass) {
+            RegisterSocialTwitterPage page = RegisterSocialTwitterPage.navigateTo()
+                .typeUsername(twUser)
+                .typePassword(twPass)
+                .clickOnLogin();
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterSocialTwitterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnGoToApp();
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterSocialTwitterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            TEST_RESULT = page.getCurrentUrl().contains("app/editor");
+
+            if (TEST_RESULT) {
+                new EditorPage().consoleEchoCommand("User logged with Twitter account \"" + twUser + "\".");
+            }
+
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            assertTrue(TEST_RESULT);
+
+        }
+        
         public void testTwitterSocialLogin(String twUser, String twPass) {
             RegisterSocialTwitterPage page = RegisterSocialTwitterPage.navigateTo()
                 .typeUsername(twUser)

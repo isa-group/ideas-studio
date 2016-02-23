@@ -336,14 +336,41 @@ public class WorkspaceSection extends EditorPage {
 
         public void testPublishDemoWorkspace() {
 
-            EditorPage page = EditorPage.navigateTo()
-                .clickOnWorkspacePublishDemoButton()
-                .clickOnModalContinueButton();
+            EditorPage page = EditorPage.navigateTo();
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnWorkspacePublishDemoButton();
+            
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnModalContinueButton();
+            
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-            String wsCardTitle = WorkspaceSection.navigateTo()
-                .getWorkspaceDemoCardTitle();
+            WorkspaceSection.navigateTo();
+            
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-            TEST_RESULT = !wsCardTitle.equals("");
+            TEST_RESULT = !page.getWorkspaceDemoCardTitle().equals("");
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             assertTrue(TEST_RESULT);
 
@@ -351,8 +378,15 @@ public class WorkspaceSection extends EditorPage {
 
         public void testPublishDemoWorkspaceFromDashboard() {
 
-            EditorPage page = WorkspaceSection.navigateTo()
-                .clickOnWorkspaceDashboardPublishCardButton();
+            EditorPage page = WorkspaceSection.navigateTo();
+            
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnWorkspaceDashboardPublishCardButton();
 
             try {
                 Thread.sleep(1000);
@@ -362,10 +396,13 @@ public class WorkspaceSection extends EditorPage {
 
             page.clickOnModalContinueButton();
 
-            String wsCardTitle = WorkspaceSection.navigateTo()
-                .getWorkspaceDemoCardTitle();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceSection.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-            TEST_RESULT = !wsCardTitle.equals("");
+            TEST_RESULT = !page.getWorkspaceDemoCardTitle().equals("");
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             assertTrue(TEST_RESULT);
 

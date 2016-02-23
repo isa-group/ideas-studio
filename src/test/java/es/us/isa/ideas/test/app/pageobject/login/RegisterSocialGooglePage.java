@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import static org.junit.Assert.assertTrue;
+import org.openqa.selenium.NoSuchElementException;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -31,8 +32,14 @@ public class RegisterSocialGooglePage extends PageObject<RegisterSocialGooglePag
     @FindBy(id = "signIn")
     WebElement loginButton;
 
+    @FindBy(id = "goToApp")
+    WebElement goToAppButton;
+
+    @FindBy(id = "submit_approve_access")
+    WebElement submitApproveAccessButton;
+
     static final Logger LOG = Logger.getLogger(RegisterSocialGooglePage.class.getName());
-    
+
     public static RegisterSocialGooglePage navigateTo() {
         logout();
         PageFactory.initElements(getWebDriver(), LoginPage.class).clickOnGoogle();
@@ -49,6 +56,16 @@ public class RegisterSocialGooglePage extends PageObject<RegisterSocialGooglePag
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
 
+    public RegisterSocialGooglePage clickOnGoToApp() {
+        clickOnNotClickableElement(goToAppButton);
+        return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
+    }
+
+    public RegisterSocialGooglePage clickOnSubmitApproveAccess() {
+        clickOnClickableElement(submitApproveAccessButton);
+        return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
+    }
+
     public RegisterSocialGooglePage typeUsername(CharSequence goUser) {
         sendKeysWithWait(usernameField, goUser);
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
@@ -58,30 +75,52 @@ public class RegisterSocialGooglePage extends PageObject<RegisterSocialGooglePag
         sendKeysWithWait(passwordField, goPass);
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
-    
+
+    public static void testGoogleSocialRegister(String goUser, String goPass) {
+        new GoogleRegisterTestCase().testGoogleSocialRegister(goUser, goPass);
+    }
+
     public static void testGoogleSocialLogin(String goUser, String goPass) {
         new GoogleRegisterTestCase().testGoogleSocialLogin(goUser, goPass);
     }
-    
+
     private static class GoogleRegisterTestCase extends TestCase {
 
-        public void testGoogleSocialLogin(String goUser, String goPass) {
+        public void testGoogleSocialRegister(String goUser, String goPass) {
 
             RegisterSocialGooglePage page = RegisterSocialGooglePage.navigateTo();
-            
+
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 LOG.severe(ex.getMessage());
             }
-            
+
             page.typeUsername(goUser)
-                .clickOnNext()
-                .typePassword(goPass)
-                .clickOnSignIn();
-            
+                    .clickOnNext()
+                    .typePassword(goPass)
+                    .clickOnSignIn();
+
             try {
                 Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                LOG.severe(ex.getMessage());
+            }
+
+            try {
+                page.clickOnSubmitApproveAccess();
+            } catch (NoSuchElementException ex) {
+                // nothing
+            }
+
+            try {
+                page.clickOnGoToApp();
+            } catch (NoSuchElementException ex) {
+                // nothing
+            }
+
+            try {
+                Thread.sleep(3000);
             } catch (InterruptedException ex) {
                 LOG.severe(ex.getMessage());
             }
@@ -97,6 +136,57 @@ public class RegisterSocialGooglePage extends PageObject<RegisterSocialGooglePag
 
         }
 
+        /**
+         * This method logs with an already register Google account. The only
+         * difference between this method and "testGoogleSocialRegister" is that
+         * it doesn't expect to a "goToApp" button.
+         *
+         * @param goUser
+         * @param goPass
+         */
+        public void testGoogleSocialLogin(String goUser, String goPass) {
+
+            RegisterSocialGooglePage page = RegisterSocialGooglePage.navigateTo();
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                LOG.severe(ex.getMessage());
+            }
+
+            page.typeUsername(goUser)
+                    .clickOnNext()
+                    .typePassword(goPass)
+                    .clickOnSignIn();
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                LOG.severe(ex.getMessage());
+            }
+
+            try {
+                page.clickOnSubmitApproveAccess();
+            } catch (NoSuchElementException ex) {
+                // nothing
+            }
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+                LOG.severe(ex.getMessage());
+            }
+
+            TEST_RESULT = page.getCurrentUrl().contains("app/editor");
+
+            if (TEST_RESULT) {
+                new EditorPage().consoleEchoCommand("User logged with Google account \"" + goUser + "\".");
+            }
+
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            assertTrue(TEST_RESULT);
+
+        }
     }
 
 }

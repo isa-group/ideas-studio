@@ -30,22 +30,32 @@ public class TestCaseRegister extends TestCase {
         RegisterPage.testRegisterWithErrors(name, email, phone, address);
     }
 
-    @Ignore
-    public void step02_twitterLogin() {
+    @Test
+    public void step04_twitterRegister() {
         String twUser = TestProperty.getTestTwitterUser();
         String twPass = TestProperty.getTestTwitterPassword();
-        RegisterSocialTwitterPage.testTwitterSocialLogin(twUser, twPass);
-    }
-
-    @Ignore
-    public void step03_googleLogin() {
-        String goUser = TestProperty.getTestGoogleUser();
-        String goPass = TestProperty.getTestGooglePassword();
-        RegisterSocialGooglePage.testGoogleSocialLogin(goUser, goPass);
+        RegisterSocialTwitterPage.testTwitterSocialRegister(twUser, twPass);
     }
 
     @Test
-    public void step04_register() {
+    public void step05_logout() {
+        PageObject.logout();
+    }
+
+    @Test
+    public void step06_googleRegister() {
+        String goUser = TestProperty.getTestGoogleUser();
+        String goPass = TestProperty.getTestGooglePassword();
+        RegisterSocialGooglePage.testGoogleSocialRegister(goUser, goPass);
+    }
+
+    @Test
+    public void step07_logout() {
+        PageObject.logout();
+    }
+
+    @Test
+    public void step10_register() {
         String user = TestProperty.getTestUser();
         String name = TestProperty.getTestUserName();
         String email = TestProperty.getTestUserEmail();
@@ -57,8 +67,12 @@ public class TestCaseRegister extends TestCase {
     }
 
     @Test
-    public void step05_recoverPassword() {
+    public void step11_logout() {
         PageObject.logout();
+    }
+
+    @Test
+    public void step12_recoverPassword() {
 
         String user = TestProperty.getTestUser();
         String email = TestProperty.getTestUserEmail();
