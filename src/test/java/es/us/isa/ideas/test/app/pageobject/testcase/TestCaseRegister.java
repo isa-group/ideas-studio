@@ -1,8 +1,11 @@
 package es.us.isa.ideas.test.app.pageobject.testcase;
 
+import es.us.isa.ideas.test.app.pageobject.login.RecoverPasswordPage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterPage;
+import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialGooglePage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialTwitterPage;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -23,15 +26,59 @@ public class TestCaseRegister extends TestCase {
         String email = bigString;
         String phone = bigString;
         String address = bigString;
-        
-        RegisterPage.testRegister(name, email, phone, address);
+
+        RegisterPage.testRegisterWithErrors(name, email, phone, address);
     }
-    
+
     @Test
-    public void step02_twitterRegister() {
-        String twUser = "IDEAS_ISA";
-        String twPass = "ideas.isa.us%TWITTER";
-        RegisterSocialTwitterPage.testTwitterSocialLogin(twUser, twPass);
+    public void step04_twitterRegister() {
+        String twUser = TestProperty.getTestTwitterUser();
+        String twPass = TestProperty.getTestTwitterPassword();
+        RegisterSocialTwitterPage.testTwitterSocialRegister(twUser, twPass);
     }
-    
+
+    @Test
+    public void step05_logout() {
+        PageObject.logout();
+    }
+
+    @Test
+    public void step06_googleRegister() {
+        String goUser = TestProperty.getTestGoogleUser();
+        String goPass = TestProperty.getTestGooglePassword();
+        RegisterSocialGooglePage.testGoogleSocialRegister(goUser, goPass);
+    }
+
+    @Test
+    public void step07_logout() {
+        PageObject.logout();
+    }
+
+    @Test
+    public void step10_register() {
+        String user = TestProperty.getTestUser();
+        String name = TestProperty.getTestUserName();
+        String email = TestProperty.getTestUserEmail();
+        String emailPass = TestProperty.getTestUserEmailPassword();
+        String phone = TestProperty.getTestUserPhone();
+        String address = TestProperty.getTestUserAddress();
+
+        RegisterPage.testRegister(name, email, emailPass, phone, address, user);
+    }
+
+    @Test
+    public void step11_logout() {
+        PageObject.logout();
+    }
+
+    @Test
+    public void step12_recoverPassword() {
+
+        String user = TestProperty.getTestUser();
+        String email = TestProperty.getTestUserEmail();
+        String emailPass = TestProperty.getTestUserEmailPassword();
+
+        RecoverPasswordPage.testRecoverPassword(email, emailPass, user);
+    }
+
 }

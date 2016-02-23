@@ -2,9 +2,9 @@ package es.us.isa.ideas.test.app.pageobject.login;
 
 import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
 import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
+import es.us.isa.ideas.test.app.pageobject.testcase.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.Test;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -35,10 +35,11 @@ public class LoginPage extends PageObject<LoginPage> {
     WebElement googleButton;
 
     static final Logger LOG = Logger.getLogger(LoginPage.class.getName());
+    static final String URL = TestProperty.getBaseUrl();
 
     public static LoginPage navigateTo() {
         //TODO: automatically set base url.
-        getWebDriver().get("https://localhost:8181/IDEAS");
+        getWebDriver().get(URL);
         return PageFactory.initElements(getWebDriver(), LoginPage.class);
     }
 

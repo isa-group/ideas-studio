@@ -1,6 +1,10 @@
 package es.us.isa.ideas.test.app;
 
-import es.us.isa.ideas.test.utils.TestCase;
+import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
+import es.us.isa.ideas.test.app.pageobject.testcase.TestCaseDynatree;
+import es.us.isa.ideas.test.app.pageobject.testcase.TestCaseWorkspaceDashboard;
+import es.us.isa.ideas.test.app.pageobject.testcase.TestCaseWorkspaceDemo;
+import es.us.isa.ideas.test.app.pageobject.testcase.TestCaseWorkspaceEditor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.AfterClass;
@@ -19,11 +23,10 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    es.us.isa.ideas.test.app.dynatree.TestSuite.class,
-    es.us.isa.ideas.test.app.workspaces.switching.TestSuite.class,
-    es.us.isa.ideas.test.modules.TestSuite.class,
-    es.us.isa.ideas.test.app.editor.TestSuite.class,
-    es.us.isa.ideas.test.app.dashboard.TestSuite.class
+    TestCaseDynatree.class,
+    TestCaseWorkspaceEditor.class,
+    TestCaseWorkspaceDashboard.class,
+    TestCaseWorkspaceDemo.class
 })
 public class TestSuiteCore {
 
@@ -38,7 +41,7 @@ public class TestSuiteCore {
     @AfterClass
     public static void tearDown() {
         LOG.log(Level.INFO, "#### TestSuiteCore finished");
-		TestCase.getWebDriver().close();
+		PageObject.getWebDriver().close();
     }
 
 }

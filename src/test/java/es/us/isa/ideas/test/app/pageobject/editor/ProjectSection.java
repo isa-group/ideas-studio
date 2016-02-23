@@ -6,7 +6,6 @@
 package es.us.isa.ideas.test.app.pageobject.editor;
 
 import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
-import static es.us.isa.ideas.test.utils.TestCase.echoCommandApi;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Assert;
@@ -26,8 +25,6 @@ public class ProjectSection extends EditorPage {
 
     @FindBy(css = "#projectsTree > ul > li:nth-child(1) > span > a")
     WebElement projectElement;
-    
-    static final Logger LOG = Logger.getLogger(ProjectSection.class.getName());
 
     public static void testCreateProject(String projName) {
         new ProjectTestCase().testCreateProject(projName);

@@ -27,8 +27,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  */
 public class FileSection extends EditorPage {
 
-    static final Logger LOG = Logger.getLogger(FileSection.class.getName());
-
     public static void testCreateFile(String fileName, By parentLocator) {
         new FileTestCase().testCreateFile(fileName, parentLocator);
     }
@@ -101,7 +99,7 @@ public class FileSection extends EditorPage {
 
             By fileLocator = By.linkText(targetFileName);
             ExpectedCondition<WebElement> fileCondition = ExpectedConditions.visibilityOfElementLocated(fileLocator);
-            
+
             try {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
@@ -128,21 +126,21 @@ public class FileSection extends EditorPage {
 
             EditorPage page = EditorPage.navigateTo()
                 .expandAllDynatreeNodes();
-            
+
             ExpectedCondition<WebElement> fileCondition = ExpectedConditions.visibilityOfElementLocated(fileLocator);
 
             // Edit file content
             WebElement fileElement = getWebDriverWait().until(fileCondition);
             page.clickOnNotClickableElement(fileElement)
                 .aceEditorContent(content);
-            
+
             getWebDriver().navigate().refresh();
 
             // Re-open file
             page.expandAllDynatreeNodes();
             fileElement = getWebDriverWait().until(fileCondition);
             page.clickOnClickableElement(fileElement);
-            
+
             // Check if content has been successfully saved.
             TEST_RESULT = !isAceEditorEmpty();
 
