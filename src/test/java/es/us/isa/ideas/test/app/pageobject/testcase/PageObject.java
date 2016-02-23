@@ -182,7 +182,7 @@ public class PageObject<T> {
     /**
      * Close current WebDriver.
      */
-    public void close() {
+    public static void close() {
         getWebDriver().close();
     }
 
