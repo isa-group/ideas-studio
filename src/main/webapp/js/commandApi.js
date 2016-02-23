@@ -84,12 +84,16 @@ var CommandApi = {
 					console.log(operationUri);
 					callback(result);
 					OperationMetrics.stop();  
+                                        CommandApi.echo("<script type=\"text/javascript\">"+
+                                                        "$('#replicationLinkButton').remove()"+
+                                                "</script>"); 
                                         if(WorkspaceManager.existsDemoWorkspace()){
                                            CommandApi.echo("<a id=\"replicationLinkButton\" class=\"btn btn-link btn-xs\" role=\"button\">Generate replication link</a>"+
                                                 "<script type=\"text/javascript\">"+
                                                         "$('#replicationLinkButton').click(function(e) {"+
                                                             "e.preventDefault();"+
                                                             "OperationalReplication.generateReplicationLink(\""+name+"\","+JSON.stringify(extendedData)+",function(){});"+
+                                                            "$('#replicationLinkButton').remove()"+
                                                         "});"+
                                                 "</script>"); 
                                         }

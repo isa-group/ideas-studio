@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 
@@ -12,18 +13,20 @@
 </div>
 <div id="auxParams">
     <ul class="nav nav-tabs">
-        <jstl:forEach items="${params}" var="param">
-            <li class="active"><a data-toggle="tab" href="#${param.key}">${param.key}</a></li>
-        </jstl:forEach>
+        <c:forEach items="${params}" var="param">
+            <c:if test="${fn:length(param) > 0}" >
+                <li class="active"><a data-toggle="tab" href="#${param}">${param}</a></li>
+            </c:if>
+        </c:forEach>
     </ul>
     <div class="tab-content">
-        <jstl:forEach items="${params}" var="param">
+        <c:forEach items="${params}" var="param">
             <div id="${param.key}" class="tab-pane fade">
                 <textarea id="${param.key}Data" cols="40" rows="10">
-                    <c:out value='${param.value}' />
+                    <c:out value='${param}' />
                 </textarea>
             </div>
-        </jstl:forEach>
+        </c:forEach>
              
     </div>
 </div>

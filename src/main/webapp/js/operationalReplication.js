@@ -1,6 +1,6 @@
 var operationID = $('#helpLink').text();
 var fileUri = $('#fileUriText').text();
-var content = $('#inputAceEditor').text();
+var editor = ace.edit("inputAceEditor");
 
 var OperationalReplication = {
     generateReplicationLink: function (name, extendedData, callback) {
@@ -15,6 +15,10 @@ var OperationalReplication = {
                 params: auxParamsArray.toString()
             },
             "success": function (result) {
+                CommandApi.echo("<script type=\"text/javascript\">"+
+                                                        "$('#replicationLink').remove();"+
+                                                        "$('#replicationLinkCopyButton').remove();"+ 
+                                                "</script>"); 
                 CommandApi.echo("<input id=\"replicationLink\" +\n\
                                         disabled size=\"85\" \n\
                                         value=\"" + $("base").attr('href').valueOf() + "replications/" + result + "\">\n\
@@ -57,7 +61,7 @@ var OperationalReplication = {
 
                         var extendedData = JSON.parse(JSON.stringify(operation.data));
                         extendedData.fileUri = fileUri;
-                        extendedData.content = content;
+                        extendedData.content = editor.getValue();
                         extendedData.id = operation.id;
 
 
