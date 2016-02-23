@@ -769,11 +769,15 @@ var DescriptionInspector = {
                         "pu-elastic-input-maxwidth": "none"
                     });
                     $(this).wrap("<span class='editorModelElement'></span>");
-                    $(this).wrap("<span ng-show='editorEnabled'></span>");
-                    $("<a ng-click='enableEditor($event)' ng-hide='editorEnabled'>{{ "+ $(this).attr("ng-model") +" }}</a>")
+                    var wrapperElement = $(this).wrap("<span ng-show='editorEnabled'></span>");
+                    var anchorElement = $("<a ng-click='enableEditor($event)' ng-hide='editorEnabled'>{{ "+ $(this).attr("ng-model") +" }}</a>")
                         .insertAfter(
                             $(this).closest("span[ng-show='editorEnabled']")
                         );
+                    
+                    // copy style
+                    var cssStyle = document.defaultView.getComputedStyle(anchorElement[0], "").cssText;
+                    wrapperElement.first()[0].style.cssText = cssStyle;
 				});
                 
 //                modelInspectorContentWrapper.append("<a href='#' ng-click='disableEditor($event)' ng-show='editorEnabled'>Disable editor</a>");

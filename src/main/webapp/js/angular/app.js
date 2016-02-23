@@ -62,8 +62,11 @@ angular.module("mainApp", ['puElasticInput'])
             $scope.editorEnabled = true;
             // Activate element clicked
             $timeout(function () {
-                $event.currentTarget.focus();
-            }, 1000);
+                $($event.currentTarget)
+                    .prev("span")
+                    .find("input")
+                    .select();
+            }, 150);
         };
 
         $scope.disableEditor = function() {
