@@ -8,7 +8,6 @@ package es.us.isa.ideas.test.app.pageobject.editor;
 import static es.us.isa.ideas.test.app.pageobject.testcase.PageObject.getWebDriver;
 import static es.us.isa.ideas.test.app.pageobject.testcase.PageObject.getWebDriverWait;
 import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
-import static es.us.isa.ideas.test.utils.TestCase.echoCommandApi;
 import java.util.logging.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -24,8 +23,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  * @version 1.0
  */
 public class DirectorySection extends EditorPage {
-
-    static final Logger LOG = Logger.getLogger(DirectorySection.class.getName());
 
     public static void testCreateDirectory(String dirName, By parentLocator) {
         new DirectoryTestCase(dirName, parentLocator)
@@ -67,7 +64,7 @@ public class DirectorySection extends EditorPage {
             getWebDriverWait().until(dirCondition);
 
             TEST_RESULT = getWebDriver().findElements(fileLocator).size() > 0;
-            
+
             if (TEST_RESULT) {
                 page.consoleEchoCommand("Directory \"" + dirName + "\" was successfully created.");
             }

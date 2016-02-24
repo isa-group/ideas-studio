@@ -21,144 +21,61 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
  * @version 1.0
  */
-public class RegisterPage extends PageObject<RegisterPage> {
+public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
 
     // FORM
-    @FindBy(id = "name")
-    WebElement nameField;
-
     @FindBy(id = "email")
     WebElement emailField;
 
-    @FindBy(id = "phone")
-    WebElement phoneField;
-
-    @FindBy(id = "address")
-    WebElement addressField;
-
-    @FindBy(id = "settingsSubmitChanges")
-    WebElement saveChangesButton;
+    @FindBy(id = "submit")
+    WebElement submitButton;
 
     // MODAL
-    @FindBy(css = "#loginFailPanel > div > div > div.modal-header > h4")
-    WebElement modalErrorHeaderTitle;
+    static final Logger LOG = Logger.getLogger(RecoverPasswordPage.class.getName());
+    static final String URL = TestProperty.getBaseUrl() + "/security/useraccount/resetPassword";
 
-    static final Logger LOG = Logger.getLogger(RegisterPage.class.getName());
-    static final String URL = TestProperty.getBaseUrl() + "/settings/user";
-
-    public static RegisterPage navigateTo() {
+    public static RecoverPasswordPage navigateTo() {
         getWebDriver().get(URL);
-        return PageFactory.initElements(getWebDriver(), RegisterPage.class);
+        return PageFactory.initElements(getWebDriver(), RecoverPasswordPage.class);
     }
 
     // click
-    public RegisterPage clickOnSaveChanges() {
-        saveChangesButton.click();
-        return PageFactory.initElements(getWebDriver(), RegisterPage.class);
+    public RecoverPasswordPage clickOnSubmit() {
+        clickOnNotClickableElement(submitButton);
+        return PageFactory.initElements(getWebDriver(), RecoverPasswordPage.class);
     }
 
     // sendKeys
-    public RegisterPage typeName(CharSequence name) {
-        sendKeysWithWait(nameField, name);
-        return PageFactory.initElements(getWebDriver(), RegisterPage.class);
-    }
-
-    public RegisterPage typeEmail(CharSequence email) {
-        emailField.sendKeys(email);
-        return PageFactory.initElements(getWebDriver(), RegisterPage.class);
-    }
-
-    public RegisterPage typePhone(CharSequence phone) {
-        phoneField.sendKeys(phone);
-        return PageFactory.initElements(getWebDriver(), RegisterPage.class);
-    }
-
-    public RegisterPage typeAddress(CharSequence address) {
-        addressField.sendKeys(address);
-        return PageFactory.initElements(getWebDriver(), RegisterPage.class);
-    }
-
-    // others
-    public WebElement getModalErrorHeaderTitle() {
-        return modalErrorHeaderTitle;
+    public RecoverPasswordPage typeEmail(CharSequence email) {
+        sendKeysWithWait(emailField, email);
+        return PageFactory.initElements(getWebDriver(), RecoverPasswordPage.class);
     }
 
     // Tests
-    public static void testRegisterWithErrors(CharSequence name, CharSequence email,
-        CharSequence phone, CharSequence address) {
-        new RegisterTestCase().testRegisterWithErrors(name, email, phone, address);
-    }
-
-    public static void testRegister(CharSequence name, CharSequence email, CharSequence emailPass,
-        CharSequence phone, CharSequence address, String user) {
-        new RegisterTestCase().testRegister(name, email, emailPass, phone, address, user);
+    public static void testRecoverPassword(CharSequence email, CharSequence emailPass, String user) {
+        new RegisterTestCase().testRecoverPassword(email, emailPass, user);
     }
 
     private static class RegisterTestCase extends TestCase {
+        
+        public void testRecoverPassword(CharSequence email, CharSequence emailPass, String user) {
 
-        /**
-         * This test expects to show a modal error message.
-         *
-         * @param name
-         * @param email
-         * @param phone
-         * @param address
-         */
-        public void testRegisterWithErrors(CharSequence name, CharSequence email,
-            CharSequence phone, CharSequence address) {
-
-            RegisterPage page = RegisterPage.navigateTo()
-                .typeName(name)
+            RecoverPasswordPage page = RecoverPasswordPage.navigateTo()
                 .typeEmail(email)
-                .typePhone(phone)
-                .typeAddress(address);
+                .clickOnSubmit();
 
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            page.clickOnSaveChanges();
-
-            WebElement element = page.modalErrorHeaderTitle;
-            getWebDriverWait().until(ExpectedConditions.visibilityOf(element));
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            TEST_RESULT = element.getText().equals("Sign up error");
-            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
-            Assert.assertTrue(TEST_RESULT);
-
-        }
-
-        public void testRegister(CharSequence name, CharSequence email, CharSequence emailPass,
-            CharSequence phone, CharSequence address, String user) {
-
-            RegisterPage page = RegisterPage.navigateTo()
-                .typeName(name)
-                .typeEmail(email)
-                .typePhone(phone)
-                .typeAddress(address);
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            page.clickOnSaveChanges();
 
             // Modal confirmation
-            By locator = By.id("statusPanel");
+            By locator = By.cssSelector("#pagesContent > h2");
             getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
-            
-            String statusPanelText = getWebDriver().findElement(locator).getText();
-            TEST_RESULT = !statusPanelText.contains("The email address you entered is already in use");
+
+            String result = getWebDriver().findElement(locator).getText().toLowerCase();
+            TEST_RESULT = result.contains("thank you for using e3");
             Assert.assertTrue(TEST_RESULT);
 
             // Email login
@@ -200,7 +117,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             // Delete current email
@@ -210,7 +127,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             // Go to confirmation url
@@ -246,9 +163,9 @@ public class RegisterPage extends PageObject<RegisterPage> {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             // Delete current email
             locator = By.xpath("//*[@id=\":5\"]/div[2]/div[1]/div/div[2]/div[3]/div/div");
             getWebDriver().findElement(locator).click();
@@ -256,9 +173,9 @@ public class RegisterPage extends PageObject<RegisterPage> {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             // Login with generated password
             LoginPage.testLogin(user, password);
 

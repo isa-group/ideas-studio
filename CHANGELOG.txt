@@ -1,3 +1,10 @@
+ideas-studio v0.9.1, 24/02/2016
+----------------------------------------------
+- New module: ideas-module-angular #120
+- Refactor common test methods #119
+- Error opening file after switching workspace, file seems to be empty #114
+- Incorrect demo path when publishing #110
+
 ideas-studio v0.9, 08/02/2016
 ----------------------------------------------
 - Workspace Management Integration implementation
