@@ -40,11 +40,15 @@ public class OperationalReplicationController {
     public String createOperationalReplicationLink( @RequestParam("workspace") String workspaceName,
                                                     @RequestParam("operation") String operationCode,
                                                     @RequestParam("file") String fileUri,
-                                                    @RequestParam("params") String[] auxParams){
+                                                    @RequestParam("auxArg0") String auxArg0,
+                                                    @RequestParam("auxArg1") String auxArg1,
+                                                    @RequestParam("auxArg2") String auxArg2,
+                                                    @RequestParam("auxArg3") String auxArg3,
+                                                    @RequestParam("auxArg4") String auxArg4){
         
         String operationUUID = UUID.randomUUID().toString();
         
-        OperationalReplication or = operationalReplicationService.createExperimentalExecution(operationUUID, workspaceName, operationCode, fileUri, auxParams);
+        OperationalReplication or = operationalReplicationService.createExperimentalExecution(operationUUID, workspaceName, operationCode, fileUri, auxArg0, auxArg1, auxArg2, auxArg3, auxArg4);
         
         if(or ==null){
             operationUUID="ERROR";
@@ -66,17 +70,25 @@ public class OperationalReplicationController {
             
             String operationCode = eExec.getOperationName();
             String fileContent = FSFacade.getFileContent(eExec.getFileUri(), "DemoMaster");
-            String[] params = eExec.getAuxParams();
+            String auxArg0 = eExec.getAuxArg0();
+            String auxArg1 = eExec.getAuxArg1();
+            String auxArg2 = eExec.getAuxArg2();
+            String auxArg3 = eExec.getAuxArg3();
+            String auxArg4 = eExec.getAuxArg4();
             
             result.addObject("operation", operationCode);
             result.addObject("workspace", eExec.getFileUri().substring(0, eExec.getFileUri().indexOf("/")));
             result.addObject("content", fileContent);
             result.addObject("fileUri", eExec.getFileUri());
-            result.addObject("params", params);
+            result.addObject("auxArg0", auxArg0);
+            result.addObject("auxArg1", auxArg1);
+            result.addObject("auxArg2", auxArg2);
+            result.addObject("auxArg3", auxArg3);
+            result.addObject("auxArg4", auxArg4);
              
         }
         catch (Exception e){
-            System.out.println("Error FSFACADE!!");
+            System.out.println("Error FSFACADE");
         }
             
         return result;

@@ -30,7 +30,7 @@ public class OperationalReplicationService extends BusinessService<OperationalRe
                                             String workspaceName, 
                                             String operationCode, 
                                             String fileUri,
-                                            String[] params){
+                                            String auxArg0, String auxArg1, String auxArg2, String auxArg3, String auxArg4){
         Assert.notNull(operationUUID);
         Assert.notNull(workspaceName);
         Assert.notNull(operationCode);
@@ -48,9 +48,11 @@ public class OperationalReplicationService extends BusinessService<OperationalRe
             eExec.setCreationDate(Calendar.getInstance().getTime());
             eExec.setOperationName(operationCode);
             eExec.setFileUri(fileUri);
-            if(null!=params){
-                eExec.setAuxParams(params);
-            } 
+            eExec.setAuxArg0(auxArg0);
+            eExec.setAuxArg1(auxArg1);
+            eExec.setAuxArg2(auxArg2);
+            eExec.setAuxArg3(auxArg3);
+            eExec.setAuxArg4(auxArg4);
             eExec.setLaunches(0);  
             res = operationalReplicationRepository.saveAndFlush(eExec);
         }

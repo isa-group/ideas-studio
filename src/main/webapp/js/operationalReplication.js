@@ -1,18 +1,43 @@
 var operationID = $('#helpLink').text();
 var fileUri = $('#fileUriText').text();
-var editor = ace.edit("inputAceEditor");
+var auxArg0 = $('#auxArg0Data').text();
+var auxArg1 = $('#auxArg1Data').text();
+var auxArg2 = $('#auxArg2Data').text();
+var auxArg3 = $('#auxArg3Data').text();
+var auxArg4 = $('#auxArg4Data').text();
+
+
 
 var OperationalReplication = {
     generateReplicationLink: function (name, extendedData, callback) {
-        var auxParamsArray = [];
-        auxParamsArray.push(extendedData.auxArg0,extendedData.auxArg1,extendedData.auxArg2,extendedData.auxArg3,extendedData.auxArg4);
+        
+        if(extendedData["auxArg0"]===undefined){
+            extendedData["auxArg0"]=null;
+        }
+        if(extendedData["auxArg1"]===undefined){
+            extendedData["auxArg1"]=null;
+        }
+        if(extendedData["auxArg2"]===undefined){
+            extendedData["auxArg2"]=null;
+        }
+        if(extendedData["auxArg3"]===undefined){
+            extendedData["auxArg3"]=null;
+        }
+        if(extendedData["auxArg4"]===undefined){
+            extendedData["auxArg4"]=null;
+        }
+        
         $.ajax("replications", {
             "type": "POST",
             "data": {
                 workspace: WorkspaceManager.getSelectedWorkspace(),
                 operation: name,
                 file: extendedData.fileUri,
-                params: auxParamsArray.toString()
+                auxArg0: extendedData.auxArg0,
+                auxArg1: extendedData.auxArg1,
+                auxArg2: extendedData.auxArg2,
+                auxArg3: extendedData.auxArg3,
+                auxArg4: extendedData.auxArg4
             },
             "success": function (result) {
                 CommandApi.echo("<script type=\"text/javascript\">"+
@@ -61,14 +86,13 @@ var OperationalReplication = {
 
                         var extendedData = JSON.parse(JSON.stringify(operation.data));
                         extendedData.fileUri = fileUri;
-                        extendedData.content = editor.getValue();
+                        extendedData.content = ace.edit("inputAceEditor").getValue();
                         extendedData.id = operation.id;
-
-
-
-                        for (var i = 5; i < arguments.length; i++) {
-                            extendedData["auxArg" + (i - 5)] = arguments[i];
-                        }
+                        extendedData.auxArg0 = auxArg0;
+                        extendedData.auxArg1 = auxArg1;
+                        extendedData.auxArg2 = auxArg2;
+                        extendedData.auxArg3 = auxArg3;
+                        extendedData.auxArg4 = auxArg4;
 
                         var operationUri = ModeManager.getBaseUri(languageID)
                                 + "/language/operation/" + operation.id + "/execute";
@@ -168,10 +192,12 @@ $('#helpLink').click(function () {
 
 $('#executeTest').click(function () {
     operationID = $('#helpLink').text();
-    data = $('dataTextarea').text();
     fileUri = $('#fileUriText').text();
-    content = $('#inputAceEditor').text();
-    params = $('paramsTextarea').text();
+    var auxArg0 = $('#auxArg0Data').text();
+    var auxArg1 = $('#auxArg1Data').text();
+    var auxArg2 = $('#auxArg2Data').text();
+    var auxArg3 = $('#auxArg3Data').text();
+    var auxArg4 = $('#auxArg4Data').text();
     console.log("Executing test");
     OperationalReplication.launchOperation(operationID);
 });
