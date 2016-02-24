@@ -4,6 +4,7 @@ import es.us.isa.ideas.test.app.pageobject.login.RecoverPasswordPage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterPage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialGooglePage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialTwitterPage;
+import static es.us.isa.ideas.test.app.pageobject.testcase.PageObject.getWebDriver;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -47,6 +48,11 @@ public class TestCaseRegister extends TestCase {
         String goUser = TestProperty.getTestGoogleUser();
         String goPass = TestProperty.getTestGooglePassword();
         RegisterSocialGooglePage.testGoogleSocialRegister(goUser, goPass);
+    }
+    
+    @Test
+    public void step06_googleRegisterb() {
+        RegisterSocialGooglePage.testGoogleSocialLogout();
     }
 
     @Test
