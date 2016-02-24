@@ -193,11 +193,11 @@ $('#helpLink').click(function () {
 $('#executeTest').click(function () {
     operationID = $('#helpLink').text();
     fileUri = $('#fileUriText').text();
-    var auxArg0 = $('#auxArg0Data').text();
-    var auxArg1 = $('#auxArg1Data').text();
-    var auxArg2 = $('#auxArg2Data').text();
-    var auxArg3 = $('#auxArg3Data').text();
-    var auxArg4 = $('#auxArg4Data').text();
+    auxArg0 = $('#auxArg0Data').text();
+    auxArg1 = $('#auxArg1Data').text();
+    auxArg2 = $('#auxArg2Data').text();
+    auxArg3 = $('#auxArg3Data').text();
+    auxArg4 = $('#auxArg4Data').text();
     console.log("Executing test");
     OperationalReplication.launchOperation(operationID);
 });
