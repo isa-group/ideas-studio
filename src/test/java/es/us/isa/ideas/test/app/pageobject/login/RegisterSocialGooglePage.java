@@ -9,7 +9,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import static org.junit.Assert.assertTrue;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -82,6 +84,10 @@ public class RegisterSocialGooglePage extends PageObject<RegisterSocialGooglePag
 
     public static void testGoogleSocialLogin(String goUser, String goPass) {
         new GoogleRegisterTestCase().testGoogleSocialLogin(goUser, goPass);
+    }
+    
+    public static void testGoogleSocialLogout() {
+        new GoogleRegisterTestCase().testGoogleSocialLogout();
     }
 
     private static class GoogleRegisterTestCase extends TestCase {
@@ -186,6 +192,43 @@ public class RegisterSocialGooglePage extends PageObject<RegisterSocialGooglePag
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             assertTrue(TEST_RESULT);
 
+        }
+        
+        public void testGoogleSocialLogout() {
+
+            RegisterSocialGooglePage page = RegisterSocialGooglePage.navigateTo();
+            By locator = By.xpath("//*[@id=\"gb\"]/div[1]/div[1]/div[2]/div[4]/div[1]/a/span");
+            PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(2000);  
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterSocialGooglePage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnNotClickableLocator(locator);
+            
+            locator = By.xpath("//*[@id=\"gb_71\"]");
+            PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(2000);  
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterSocialGooglePage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnNotClickableLocator(locator);
+            
+            try {
+                Thread.sleep(5000);  
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterSocialGooglePage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            TEST_RESULT = page.getCurrentUrl().contains("accounts.google.com");
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            assertTrue(TEST_RESULT);
+            
         }
     }
 

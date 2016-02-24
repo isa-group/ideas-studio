@@ -25,7 +25,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class PageObject<T> {
 
     static final WebDriver driver = new ChromeDriver();
-    static final WebDriverWait wait = new WebDriverWait(driver, 10);
+    static final WebDriverWait wait = new WebDriverWait(driver, 60);
     static final JavascriptExecutor js = (JavascriptExecutor) driver;
 
     // Getters
@@ -182,7 +182,7 @@ public class PageObject<T> {
     /**
      * Close current WebDriver.
      */
-    public void close() {
+    public static void close() {
         getWebDriver().close();
     }
 
