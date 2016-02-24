@@ -245,74 +245,65 @@ public class FileController extends AbstractController {
         }
         return res;
     }
+    
+    @RequestMapping(value = "/importDemoWorkspace", method = RequestMethod.GET)
+	@ResponseBody
+	public AppResponse importDemoWorkspace(
+			@RequestParam("demoWorkspaceName") String demoWorkspaceName,
+			@RequestParam("targetWorkspaceName") String targetWorkspaceName) {
+		AppResponse response = new AppResponse();
 
-    /* Demo (¿¿move to --> DemoController /demo/{name}/import??) */
-    @RequestMapping(value = "/importDemo", method = RequestMethod.GET)
-    @ResponseBody
-    public AppResponse importDemoWorkspace(
-            @RequestParam("demoWorkspaceName") String demoWorkspaceName,
-            @RequestParam("targetWorkspaceName") String targetWorkspaceName) {
-        
-        AppResponse response = new AppResponse();
+		String username = LoginService.getPrincipal().getUsername();
 
-        String username = LoginService.getPrincipal().getUsername();
+		FSWorkspace demoWS = new FSWorkspace(demoWorkspaceName, "DemoMaster");
+		FSWorkspace newWS = new FSWorkspace(targetWorkspaceName, username);
 
-        FSWorkspace demoWS = new FSWorkspace(demoWorkspaceName, DEMO_MASTER);
-        FSWorkspace newWS = new FSWorkspace(targetWorkspaceName, username);
+		FileController.initRepoLab();
 
-        Workspace demo = workspaceService.findByNameAndOwner(targetWorkspaceName, username);
+		boolean demoExists = true;
 
-        if (demo != null) {
-            int downloads = demo.getDownloads()+ 1;
-            demo.setDownloads(downloads);
-        }
+		// TODO: Cambiar comprobacion una vez este refactorizado. No se deberia
+		// trabajar a nivel de cadenas, sino de objetos serializables (para
+		// devolver JSON)
+		try {
+			demoExists = FSFacade.getWorkspaces("DemoMaster").contains(
+					"\"" + demoWorkspaceName + "\"");
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage());
+			demoExists = false;
+		}
 
-        initRepoLab();
+		if (demoExists) {
 
-        boolean demoExists = true;
+			try {
+				IdeasRepo.get().getRepo().delete(newWS);
+			} catch (Exception e) {
+				logger.log(Level.SEVERE,
+						"Could not remove workspace before importing.");
+			}
 
-        // TODO: Cambiar comprobacion una vez este refactorizado. No se deberia trabajar a nivel de cadenas, sino de objetos serializables (para devolver JSON)	
-        try {
-            demoExists = FSFacade.getWorkspaces(DEMO_MASTER).contains("\"" + demoWorkspaceName + "\"");
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, null , e);
-            demoExists = false;
-        }
-
-        if (demoExists) {
-
-            try {
-                IdeasRepo.get().getRepo().delete(newWS);
-            } catch (Exception e) {
-                logger.log(Level.SEVERE, "Could not remove workspace before importing.", e);
-            }
-
-            try {
-                IdeasRepo.get().getRepo().move(demoWS, newWS, true);
+			try {
+				IdeasRepo.get().getRepo().move(demoWS, newWS, true);
+				response.setMessage("Demo workspace created with name: "
+						+ targetWorkspaceName);
                 response.setStatus(AppResponse.Status.OK);
-                response.setMessage("Demo workspace created with name: " + targetWorkspaceName);
-                Workspace ws = workspaceService.findByNameAndOwner(demoWorkspaceName, DEMO_MASTER);
-                String originID = "";
-                if(ws!=null && ws.getOrigin()!=null)
-                    originID=String.valueOf(ws.getOrigin().getId());
-                workspaceService.createWorkspace(targetWorkspaceName, username, originID);
-
-            } catch (AuthenticationException e) {
-                logger.log(Level.SEVERE, "### Error creating demo WS for " + username, e);
+			} catch (AuthenticationException e) {
+				logger.log(Level.SEVERE, "Error creating demo workspace for "
+						+ username);
+				response.setMessage(e.getMessage());
                 response.setStatus(AppResponse.Status.ERROR);
-                response.setMessage(e.getMessage());
-            }
+			}
 
-        } else {
-            logger.log(Level.SEVERE, "Demo {0} do not exists!", demoWorkspaceName);
-            System.out.println();
+		} else {
+			logger.log(Level.WARNING, "There is no demo named \""
+					+ demoWorkspaceName + "\"");
+			response.setMessage("There is no Demo named " + demoWorkspaceName);
             response.setStatus(AppResponse.Status.OK_PROBLEMS);
-            response.setMessage("There is no Demo named " + demoWorkspaceName);
-        }
+		}
 
-        return response;
+		return response;
 
-    }
+	}
 
     /* CRUD Workspaces in RepoLab */
     @RequestMapping(value = "/workspaces", method = RequestMethod.GET)
@@ -435,7 +426,7 @@ public class FileController extends AbstractController {
         
         try {
             res = FSFacade.getSelectedWorkspace(LoginService.getPrincipal().getUsername());
-        } 
+            }
         catch (Exception e) {
             logger.log(Level.SEVERE, null, e);
         }

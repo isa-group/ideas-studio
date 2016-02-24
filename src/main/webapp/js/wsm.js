@@ -1,4 +1,4 @@
-    var tagfilter=[]
+    var tagfilter=[];
     var sPageURL = window.location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
     for (var i = 0; i < sURLVariables.length; i++) 

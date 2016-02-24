@@ -6,7 +6,7 @@
 
     <groupId>es.us.isa</groupId>
     <artifactId>ideas-studio</artifactId>
-    <version>0.9</version>
+    <version>0.9.1</version>
 
     <name>ideas-studio</name>
     <url>http://maven.apache.org</url>
@@ -19,8 +19,14 @@
         <repo_base_uri>${settings.repo_base_uri}</repo_base_uri>
         <test.tw.user>${settings.test.tw.user}</test.tw.user>
         <test.tw.pass>${settings.test.tw.pass}</test.tw.pass>
-        <test.register.user.email>${settings.test.register.user.email}</test.register.user.email>
-        <test.register.user.email.pass>${settings.test.register.user.email.pass}</test.register.user.email.pass>
+        <test.go.user>${settings.test.go.user}</test.go.user>
+        <test.go.pass>${settings.test.go.pass}</test.go.pass>
+        <test.user>${settings.test.user}</test.user>
+        <test.user.name>${settings.test.user.name}</test.user.name>
+        <test.user.email>${settings.test.user.email}</test.user.email>
+        <test.user.email.pass>${settings.test.user.email.pass}</test.user.email.pass>
+        <test.user.phone>${settings.test.user.phone}</test.user.phone>
+        <test.user.address>${settings.test.user.address}</test.user.address>
 
         <!-- MySQL properties -->
         <application.mysqlDB>${settings.mysqlDB}</application.mysqlDB>
@@ -189,7 +195,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
         </dependency>
 
         <!-- Spring framework -->
@@ -1037,18 +1043,17 @@
                     <!-- Includes integration tests on integration phase -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.18.1</version>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.19.1</version>
                         <configuration>
                             <skipTests>${skip.integration.tests}</skipTests>
                         </configuration>
                         <executions>
                             <execution>
                                 <id>integration-tests</id>
-                                <phase>integration-test</phase>
+                                <phase>test</phase>
                                 <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
+                                    <goal>test</goal>
                                 </goals>
                                 <configuration>
                                     <includes>
@@ -1061,7 +1066,7 @@
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-report-plugin</artifactId>
+                        <artifactId>maven-surefire-report-plugin</artifactId>
                         <version>2.18.1</version>
                         <configuration>
                             <outputName>000-testresult</outputName>

@@ -16,13 +16,6 @@
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <validation-mode>NONE</validation-mode>
     <properties>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ideas"/>
-      <property name="javax.persistence.jdbc.user" value="ideasAdmin"/>
-      <property name="javax.persistence.jdbc.password" value="1d3454dm1n"/>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
-      <property name="hibernate.show_sql" value="true"/>
-      <property name="hibernate.format_sql" value="true"/>
       <!-- Schema generation -->
       <!--            <property name="javax.persistence.schema-generation.database.action" value="create"/>  -->
       <!--             <property name="eclipselink.ddl-generation" value="create-tables"/>       -->
