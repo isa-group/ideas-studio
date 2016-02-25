@@ -61,7 +61,7 @@
 
 #inspectorModelContent {
 	padding-top: 30px;
-	white-space: nowrap;
+	white-space: normal;
 }
 
 #inspectorModelContent div {
@@ -298,4 +298,27 @@ a.bulkSelectAll, a.bulkSelectNone { cursor: pointer; }
     line-height: 15px;
     border: 0;
     color: #333;
+}
+
+/* add sla button */
+.modelInspectorContent > .add-sla-btn  {
+	width: 32px;
+    height: 33px;
+    border-radius: 0;
+    font-size: 28px;
+    padding: 0px;
+    line-height: 1;
+    border: 0;
+    position: absolute;
+    z-index: 10;
+    bottom: 0;
+    right: 0;
+    background: rgb(187, 222, 251) !important;
+    margin: 20px;
+}
+
+.add-sla-btn:hover,
+.add-sla-btn:focus,
+.add-sla-btn:active {
+	background: rgb(187, 222, 251) !important;
 }

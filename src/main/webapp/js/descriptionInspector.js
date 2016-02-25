@@ -162,7 +162,6 @@ var DescriptionInspector = {
 
 		} else {
 			_this.loaders.descriptionFileCreator(inspectorLoader);
-			_this.loaders.descriptionFileCreatorFromModel();
 		}
 
         if (_this.existCurrentAngularFile()) {
@@ -1007,41 +1006,71 @@ var DescriptionInspector = {
 
                 });
 
-                $("#editorInspectorLoader .modelInspectorContent").html("<article id='inspectorModelContent' style='display:none;' />");
+                $("#editorInspectorLoader .modelInspectorContent").html(
+                    '<article id="inspectorModelContent" style="display:none;" />'+
+                    '<div class="btn btn-primary dropdown-toggle add-sla-btn" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>');
 
             }
         },
 
-				activateDefaultTab : function () {
-					// Activate description tab by default
-					var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab);
-					descriptionTab.click();
-				},
+        activateDefaultTab : function () {
+            // Activate description tab by default
+            var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab);
+            descriptionTab.click();
+        },
 
-				angularCompileModelInspector : function () {
-                    
-					$("#compileModel").val(0);
-					angular.element($("#compileModel")).triggerHandler('input');
+        angularCompileModelInspector : function () {
 
-					$("#compileModel").val(1);
-					angular.element($("#compileModel")).triggerHandler('input');
+            $("#compileModel").val(0);
+            angular.element($("#compileModel")).triggerHandler('input');
 
-				},
+            $("#compileModel").val(1);
+            angular.element($("#compileModel")).triggerHandler('input');
+
+        },
+        
+        saveFileFromOtherFormat : function () {
+            var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
+            var baseFormat = EditorManager.sessionsMap[EditorManager.currentUri].getBaseFormat();
+            var currentUri = EditorManager.currentUri;
+            var content = document.editor.getValue();
+            var converterUri = ModeManager.getConverter(ModeManager
+                .calculateLanguageIdFromExt(ModeManager
+                    .calculateExtFromFileUri(EditorManager.currentUri)));
+                  
+            CommandApi.callConverter(
+                currentFormat, baseFormat, currentUri, content, converterUri,
+                function(result) {
+                    var convertedContent = result.data;
+                    // Save content
+                    EditorManager.saveFile(currentUri, convertedContent);
+                    // Upload session
+                    EditorManager.sessionsMap[currentUri].getBaseSession().setValue(convertedContent);
+                }
+            );
+        }
     },
 
     /**
      * Update angular model by sending a input event from editorContent element.
      */
     slaString2Model : function() {
+        
+        var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
         if (document.editor &&
             ("json" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() || 
              "yaml" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions()) ) {
 
 			// Re-focusing element after sending input trigger
 			focusId = $(':focus').attr("data-focus-id");
+            // Update slaString model value
             $("#editorContent").val( document.editor.getValue() );
             angular.element($("#editorContent")).trigger('input');
 			$(DescriptionInspector.vars.selectors.inspectorModelContent).find("input[data-focus-id='"+ focusId +"']").focus();
+            
+            if (currentFormat === "json" || currentFormat === "yaml") {
+                DescriptionInspector.tabs.saveFileFromOtherFormat();
+            }
 
       }
     },
@@ -2936,7 +2965,6 @@ var DescriptionInspector = {
 				loaders.onEditorChangeBindingValue();
 				loaders.customEvents();
 			}
-
 		},
 
 		/**
@@ -3566,33 +3594,6 @@ var DescriptionInspector = {
 
 							});
 		},
-        
-        descriptionFileCreatorFromModel : function () {
-            if (DescriptionInspector.existCurrentAngularFile()) {
-                $("#inspectorContent").append("" +
-                  "<a class='btn descriptionFileCreatorFromAngular emptyMsg' style='color: rgb(66, 139, 202); margin-left: 0px;'>"+
-                  "  Generate it from model"+
-                  "</a>");
-                
-                var $this = $("#editorInspector a.descriptionFileCreatorFromAngular");
-                $this.click(function() {
-                        var fileUri = DescriptionInspector.getCurrentDescriptionFileUri(),
-                            fileName = fileUri.split("/")[2].split(".")[0],
-                            fileContent = $("#inspectorModelContent").html();
-
-                        EditorManager.createNode(fileUri, fileName, ".html",
-                            function() {
-                                FileApi.saveFileContents(fileUri,
-                                    fileContent, function() {
-                                        currentSelectedNode.getParent().sortChildren();
-                                        CommandApi.openFile(fileUri,
-                                            function() {
-                                            });
-                                    });
-                            });
-                    });
-            }
-        },
 
 		/**
 		 * Crea un fichero descriptor asociado al fichero actual de forma
