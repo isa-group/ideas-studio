@@ -137,7 +137,7 @@ var DescriptionInspector = {
 	 */
 	loader : function(inspectorLoader) {
 		var _this = DescriptionInspector;
-
+ 
 		if (_this.existCurrentDescriptionFile()) {
 			_this.setInspectorDescriptionContent(inspectorLoader, _this
 					.getDescriptionFileContent());
@@ -161,13 +161,20 @@ var DescriptionInspector = {
 //			_this.preventBackspaceKeyPress();
 
 		} else {
-			_this.loaders.descriptionFileCreator(inspectorLoader);
+			// nothing
 		}
 
         if (_this.existCurrentAngularFile()) {
-            _this.setInspectorModelContent();
+            _this.setInspectorModelContent(
+                $(DescriptionInspector.vars.selectors.inspectorModelContent),
+				function () {
+                    DescriptionInspector.tabs.angularCompileModelInspector();
+                }
+            );
+            _this.loaders.angularFormatView();
+           
         } else {
-            // nothing yet
+            _this.loaders.buildExampleFormCreator();
         }
 	},
 
@@ -178,14 +185,13 @@ var DescriptionInspector = {
 	 * @returns {boolean}
 	 */
 	existCurrentDescriptionFile : function() {
-		return getNodeByFileUri(this.getCurrentDescriptionFileUri()) ? true
-				: false;
+		var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
+        return getNodeByFileUri(fileUriWithoutExt + ".html") ? true : false;
 	},
 
     existCurrentAngularFile : function () {
         var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
-        return getNodeByFileUri(fileUriWithoutExt + ".ang") ? true
-				: false;
+        return getNodeByFileUri(fileUriWithoutExt + ".ang") ? true : false;
     },
 
 	/**
@@ -743,45 +749,53 @@ var DescriptionInspector = {
 		}
 	},
 
-    setInspectorModelContent : function () {
-
-        var modelInspectorContentWrapper = $(DescriptionInspector.vars.selectors.inspectorModelContent),
-            content = DescriptionInspector.getModelFileContent();
+    setInspectorModelContent : function (htmlObj, extraContent, callback) {
+        
+        var modelInspectorContentWrapper = htmlObj,
+            content = DescriptionInspector.getModelFileContent(),
+            extra;
+        
+        if (typeof arguments[1] === "function") {
+            callback = arguments[1];
+        } else {
+            extra = extraContent || "";
+        }
 
         modelInspectorContentWrapper.html(content);
+        modelInspectorContentWrapper.parent().append(extra);
         
-				var i = 0;
-				modelInspectorContentWrapper.find("input[ng-model]").each(function () {
-                    // Establish a temporary id for input elements in order to re-focus them after modification
-					if ( $(this).parentsUntil(DescriptionInspector.vars.selectors.inspectorModelContent, "[ng-repeat]").length > 0 ) {
-						$(this).attr("data-focus-id", "{{$index}}," + i );
-					} else {
-						$(this).attr("data-focus-id", i);
-					}
-					i++;
-                    
-                    // enableEditor
-                    $(this).attr({
-                        "ng-blur": "disableEditor()",
-                        "pu-elastic-input": "",
-                        "pu-elastic-input-minwidth": "10px",
-                        "pu-elastic-input-maxwidth": "none"
-                    });
-                    $(this).wrap("<span class='editorModelElement'></span>");
-                    var wrapperElement = $(this).wrap("<span ng-show='editorEnabled'></span>");
-                    var anchorElement = $("<a ng-click='enableEditor($event)' ng-hide='editorEnabled'>{{ "+ $(this).attr("ng-model") +" }}</a>")
-                        .insertAfter(
-                            $(this).closest("span[ng-show='editorEnabled']")
-                        );
-                    
-                    // copy style
-                    var cssStyle = document.defaultView.getComputedStyle(anchorElement[0], "").cssText;
-                    wrapperElement.first()[0].style.cssText = cssStyle;
-				});
-                
-//                modelInspectorContentWrapper.append("<a href='#' ng-click='disableEditor($event)' ng-show='editorEnabled'>Disable editor</a>");
+        var i = 0;
+        modelInspectorContentWrapper.find("input[ng-model]").each(function () {
+            // Establish an id for input elements from the model in order to re-focus them after modification
+            if ($(this).parentsUntil(DescriptionInspector.vars.selectors.inspectorModelContent, "[ng-repeat]").length > 0) {
+                $(this).attr("data-focus-id", "{{$index}}," + i);
+            } else {
+                $(this).attr("data-focus-id", i);
+            }
+            i++;
 
-				DescriptionInspector.tabs.angularCompileModelInspector();
+            // enableEditor
+            $(this).attr({
+                "ng-blur": "disableEditor()",
+                "pu-elastic-input": "",
+                "pu-elastic-input-minwidth": "10px",
+                "pu-elastic-input-maxwidth": "none",
+                "ng-keyup": "modelKeyPress($event)"
+            });
+            $(this).wrap("<span class='editorModelElement'></span>");
+            var wrapperElement = $(this).wrap("<span ng-show='editorEnabled'></span>");
+            var anchorElement = $("<a ng-click='enableEditor($event)' ng-hide='editorEnabled'>{{ " + $(this).attr("ng-model") + " }}</a>")
+                .insertAfter(
+                    $(this).closest("span[ng-show='editorEnabled']")
+                );
+
+            // Copy anchor style to input element
+            var cssStyle = document.defaultView.getComputedStyle(anchorElement[0], "").cssText;
+            wrapperElement.first()[0].style.cssText = cssStyle;
+        });
+//                modelInspectorContentWrapper.append("<a href='#' ng-click='disableEditor($event)' ng-show='editorEnabled'>Disable editor</a>");
+        if (callback)
+            callback();
 
     },
 
@@ -910,65 +924,64 @@ var DescriptionInspector = {
 
             var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
                 title = "DESCRIPTION";
+            
+            if (DescriptionInspector.existCurrentDescriptionFile()) {
+                inspectorTabs.append('\
+                    <li class="descriptionInspectorTab" style="bottom: 0px; max-width: 100%;"> \
+                        <a class="editorTab" style="padding:4px 10px;">'+ title +'</a> \
+                    </li>');
 
-            inspectorTabs.append('\
-                <li class="descriptionInspectorTab" style="bottom: 0px; max-width: 100%;"> \
-                    <a class="editorTab" style="padding:4px 10px;">'+ title +'</a> \
-                </li>');
+                var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab);
 
-            var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab);
+                descriptionTab.click(function() {
+                    // Hide others tabs content
+                    $(".moduleInspectorContent").hide();
+                    $(".moduleInspectorTab")
+                        .removeClass("active")
+                        .find("a")
+                        .css({
+                            "background": "#fff",
+                            "border-bottom": "none"
+                        });
 
-            descriptionTab.click(function() {
-                // Hide others tabs content
-                $(".moduleInspectorContent").hide();
-                $(".moduleInspectorTab")
-                    .removeClass("active")
-                    .find("a")
-                    .css({
-                        "background": "#fff",
-                        "border-bottom": "none"
-                    });
+                    $(".modelInspectorContent").hide();
+                    $(".modelInspectorTab")
+                        .removeClass("active")
+                        .find("a")
+                        .css({
+                            "background": "#fff",
+                            "border-bottom": "none"
+                        });
 
-                $(".modelInspectorContent").hide();
-                $(".modelInspectorTab")
-                    .removeClass("active")
-                    .find("a")
-                    .css({
-                        "background": "#fff",
-                        "border-bottom": "none"
-                    });
+                    $(".descriptionInspectorContent").show();
+                    $(".descriptionInspectorTab")
+                        .addClass("active")
+                        .find("a")
+                        .css("background", "rgba(0,0,0,0.02)");
 
-                $(".descriptionInspectorContent").show();
-                $(".descriptionInspectorTab")
-                    .addClass("active")
-                    .find("a")
-                    .css("background", "rgba(0,0,0,0.02)");
+                });
+            }
 
-            });
-
+            return this;
+            
         },
 
         /**
          * @memberof DescriptionInspector.tabs
          */
-        	buildModelTab : function() {
-
-            if ( document.editor &&
-								 ("json" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() ||
-                                 "yaml" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions()) &&
-					 			 DescriptionInspector.existCurrentAngularFile() ) {
+        buildFormTab : function() {
+            
+            var formatsSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions();
+            if ("json" in formatsSessions || "yaml" in formatsSessions ) {
                 var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
-                    title = "MODEL";
+                    title = "FORM";
 
                 inspectorTabs.append('\
                     <li class="modelInspectorTab" style="bottom: 0px; max-width: 100%;"> \
                         <a class="editorTab" style="padding:4px 10px;">'+ title +'</a> \
                     </li>');
 
-                var modelTab = $(DescriptionInspector.vars.selectors.inspectorModelTab);
-                modelTab.click(function() {
-                    var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].current;
-									if ( currentFormat === "json" || currentFormat === "yaml" ) {
+                $(DescriptionInspector.vars.selectors.inspectorModelTab).click(function() {
                     // Hide others tabs content
                     $(".moduleInspectorContent").hide();
                     $(".moduleInspectorTab")
@@ -989,34 +1002,44 @@ var DescriptionInspector = {
                         });
 
                     $(".modelInspectorContent").show();
-                    $("#inspectorModelContent")
-											.show()
-											.height(
-											  $("#editorInspectorLoader").height() - $("#appFooter").height() - $("ul#editorTabs.inspectorTabs").height() - 12
-											);
+                    $("#inspectorModelContent").show().height(
+                        $("#editorInspectorLoader").height() - $("#appFooter").height() - $("ul#editorTabs.inspectorTabs").height() - 12
+                    );
 										// .css("height", $("#inspectorModelContent").height()/2);
                     $(".modelInspectorTab")
-                            .addClass("active")
-                            .find("a")
-                            .css("background", "rgba(0,0,0,0.02)");
-									} else {
-										CommandApi
-												.echo('<span style="color:red;">Please, select json or yaml language format.</span>');
-									}
+                        .addClass("active")
+                        .find("a")
+                        .css("background", "rgba(0,0,0,0.02)");
 
                 });
 
-                $("#editorInspectorLoader .modelInspectorContent").html(
-                    '<article id="inspectorModelContent" style="display:none;" />'+
-                    '<div class="btn btn-primary dropdown-toggle add-sla-btn" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>');
+                if (DescriptionInspector.existCurrentAngularFile()) {
+                    $("#editorInspectorLoader .modelInspectorContent").html(
+                        '<article id="inspectorModelContent" style="display:none;" />' +
+                        '<div class="btn btn-primary dropdown-toggle add-sla-btn" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>');
+                } else {
+                    $("#editorInspectorLoader .modelInspectorContent").html(
+                        '<div class="btn btn-primary dropdown-toggle add-sla-btn" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>');
+                }
+                
+                return this;
 
             }
         },
 
         activateDefaultTab : function () {
+            
             // Activate description tab by default
-            var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab);
-            descriptionTab.click();
+            var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab),
+                formInspectorTab = $(DescriptionInspector.vars.selectors.inspectorModelTab);
+            
+            // Wait for tab build
+            setTimeout(function () {
+                descriptionTab.length ? descriptionTab.click() : formInspectorTab.click();
+            }, 100);
+            
+            return this;
+            
         },
 
         angularCompileModelInspector : function () {
@@ -1026,28 +1049,52 @@ var DescriptionInspector = {
 
             $("#compileModel").val(1);
             angular.element($("#compileModel")).triggerHandler('input');
+            
+            return this;
 
         },
         
-        saveFileFromOtherFormat : function () {
-            var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
+        angularCompileModelInspectorFormatView : function () {
+
+            $("#compileModelFormatView").val(0);
+            angular.element($("#compileModelFormatView")).triggerHandler('input');
+
+            $("#compileModelFormatView").val(1);
+            angular.element($("#compileModelFormatView")).triggerHandler('input');
+            
+            return this;
+
+        },
+        
+        /**
+         * Save file by editing it from a non base format.
+         * @param {type} currentFormat
+         * @returns {undefined}
+         */
+        saveFileFromOtherFormat : function (currentFormat) {
+            
+            var originFormat = currentFormat || EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
             var baseFormat = EditorManager.sessionsMap[EditorManager.currentUri].getBaseFormat();
             var currentUri = EditorManager.currentUri;
             var content = document.editor.getValue();
             var converterUri = ModeManager.getConverter(ModeManager
                 .calculateLanguageIdFromExt(ModeManager
                     .calculateExtFromFileUri(EditorManager.currentUri)));
-                  
-            CommandApi.callConverter(
-                currentFormat, baseFormat, currentUri, content, converterUri,
-                function(result) {
-                    var convertedContent = result.data;
-                    // Save content
-                    EditorManager.saveFile(currentUri, convertedContent);
-                    // Upload session
-                    EditorManager.sessionsMap[currentUri].getBaseSession().setValue(convertedContent);
-                }
-            );
+            
+            if (originFormat !== baseFormat) {
+                CommandApi.callConverter(
+                    originFormat, baseFormat, currentUri, content, converterUri,
+                    function (result) {
+                        var convertedContent = result.data;
+                        // Save content
+                        EditorManager.saveFile(currentUri, convertedContent);
+                        // Upload session
+                        EditorManager.sessionsMap[currentUri].getBaseSession().setValue(convertedContent);
+
+                        return DescriptionInspector.tabs;
+                    }
+                );
+            }
         }
     },
 
@@ -1056,23 +1103,25 @@ var DescriptionInspector = {
      */
     slaString2Model : function() {
         
-        var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
-        if (document.editor &&
-            ("json" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() || 
-             "yaml" in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions()) ) {
-
+        var session = EditorManager.sessionsMap[EditorManager.currentUri],
+            formatsSessions = session.getFormatsSessions(),
+            currentFormat = session.getCurrentFormat(),
+            baseFormat = session.getBaseFormat();
+        
+        if (document.editor && ("json" in formatsSessions || "yaml" in formatsSessions)) {
 			// Re-focusing element after sending input trigger
-			focusId = $(':focus').attr("data-focus-id");
-            // Update slaString model value
-            $("#editorContent").val( document.editor.getValue() );
-            angular.element($("#editorContent")).trigger('input');
-			$(DescriptionInspector.vars.selectors.inspectorModelContent).find("input[data-focus-id='"+ focusId +"']").focus();
-            
-            if (currentFormat === "json" || currentFormat === "yaml") {
-                DescriptionInspector.tabs.saveFileFromOtherFormat();
-            }
+            var focusId = $(':focus').attr("data-focus-id"),
+                parent = $(":focus").closest("#inspectorModelContent").length > 0 ?
+                    $("#inspectorModelContent") : $("#modelBoardContent");
 
-      }
+            // Update slaString model value
+            $("#editorContent").val(document.editor.getValue());
+            angular.element($("#editorContent")).trigger('input');
+            parent.find("input[data-focus-id='" + focusId + "']").focus();
+
+            DescriptionInspector.tabs.saveFileFromOtherFormat();
+            
+        }
     },
 
 	expandableMenu : {
@@ -2572,7 +2621,10 @@ var DescriptionInspector = {
 
 		mayBuild : function() {
 			// TODO: comprueba que existe un fichero descriptor relacionado.
-			return this.getHtmlObj().length === 0
+            var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri);
+            return this.getHtmlObj().length === 0
+                    && DescriptionInspector.angularFormatView.getHtmlObj() === 0
+                    && currentExt !== "ang" && currentExt !== "html"
 					&& DescriptionInspector.existCurrentDescriptionFile()
 					&& DescriptionInspector.isEditorMode();
 		},
@@ -2870,22 +2922,265 @@ var DescriptionInspector = {
 			 */
 			onClick : function() {
 
-				var fullView = DescriptionInspector.descriptionFormatView, _this = this;
+				var descView = DescriptionInspector.descriptionFormatView,
+                    angView = DescriptionInspector.angularFormatView;
 
 				this.getHtmlObj().unbind("click").click(function() {
-					if (!$(this).hasClass("active")) {
-						fullView.init();
-					}
+//					if (!$(this).hasClass("active")) {
+						angView.hide();
+//                        descView.formatTab.activate();
+                        descView.init();
+//					}
 				});
 
 				this.getOthersHtmlObj().click(function() {
 					// _this.getHtmlObj().removeClass("active");
 					// if ( !$(this).hasClass("active") ) {
-					fullView.hide();
+					descView.hide();
 					// }
 				});
 				// TODO: si selecciona otro formatTab, desactiva fullView
 				// TODO: si abre/cierra fichero
+			}
+		}
+	},
+    
+    /**
+	 * @namespace DescriptionInspector.angularFormatView
+	 */
+	angularFormatView : {
+
+		/**
+		 * Inicializa todo el ecosistema de angularFormatView y su
+		 * contenido.
+		 *
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
+		init : function() {
+
+			var _this = this;
+
+			setTimeout(function() {
+
+				if (_this.mayBuild()) {
+
+					_this.build();
+					_this.formatTab.build();
+
+					_this.show();
+
+//					_this.customEvents();
+                    var slaAddBtn = '<div class="btn btn-primary dropdown-toggle add-sla-btn"'+
+                            ' data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>';
+                    DescriptionInspector.setInspectorModelContent(
+                        $("#modelBoardContent"),
+                        slaAddBtn,
+                        function () {
+                            DescriptionInspector.tabs.angularCompileModelInspectorFormatView();
+                        }
+                    );
+
+					// CommandApi.echo("Description file content loaded");
+
+				}
+
+			}, 100);
+
+		},
+
+		mayBuild : function() {
+			// TODO: comprueba que existe un fichero descriptor relacionado.
+            var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri);
+			return this.getHtmlObj().length === 0
+                    && currentExt !== "ang" && currentExt !== "html"
+					&& DescriptionInspector.existCurrentAngularFile();
+		},
+
+		build : function() {
+			this.setDefaultStructure();
+//			this.setDefaultContent();
+		},
+
+		/**
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
+		getHtmlObj : function() {
+			return $("#modelBoardContent");
+		},
+
+		/**
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
+		setDefaultStructure : function() {
+			if (this.getHtmlObj().length === 0) {
+				$("#editorWrapper").append(
+					'<div id="modelBoardContent"></div>');
+			}
+		},
+
+		/**
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
+		setDefaultContent : function() {
+			
+            var content = DescriptionInspector.getModelFileContent();
+            var addSlaTemplateBtn = $("#editorInspectorLoader .modelInspectorContent .add-sla-btn");
+            var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri);
+            
+			if (content) {
+                if (addSlaTemplateBtn.length > 0 &&
+                    currentExt === "at") {
+                    content += ''+
+                        '<div class="btn btn-primary dropdown-toggle add-sla-btn"'+
+                        '     data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>';
+//                    content += $("#editorInspectorLoader .modelInspectorContent .add-sla-btn")[0].outerHTML;
+                }
+				return this.getHtmlObj().html(content);
+			}
+		},
+
+		/**
+		 * Comprueba si el estamos en la situación de mostrar el
+		 * DescriptionFullView: el inspector está oculto
+		 *
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
+		mayShow : function() {
+			return this.getHtmlObj().length === 1
+					&& this.formatTab.getHtmlObj().length === 1;
+		},
+
+		/**
+		 * Activa el angularFormatView
+		 *
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
+		show : function() {
+
+			if (!EditorManager.currentDocumentHasProblems()) {
+
+				if (this.mayShow()) {
+//					setTimeout(function() {
+//						EditorManager.changeFormat(EditorManager.currentUri, "json");
+//					}, 1);
+
+					setTimeout(function() {
+						if (!$("#editorInspector").hasClass("hdd")) {
+							$("#editorToggleInspector").click();
+						}
+					}, 100);
+                    
+					this.getHtmlObj().fadeIn();
+                    $("#editorWrapper .add-sla-btn").fadeIn();
+					this.formatTab.activate();
+
+				} else {
+					this.hide();
+				}
+
+			} else {
+				CommandApi.echo('<span style="color:red;">Cannot show angular main view while editor contains syntax errors.</span>');
+			}
+
+		},
+
+		/**
+		 * Oculta el DescriptionFullView
+		 *
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
+		hide : function() {
+            this.getHtmlObj().hide();
+            $("#editorWrapper .add-sla-btn").hide();
+		},
+
+		/**
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
+		destroy : function() {
+			this.getHtmlObj().remove();
+			this.formatTab.getHtmlObj().remove();
+		},
+
+		/**
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
+		customEvents : function() {
+			var _this = this, inspector = $("#editorInspector");
+
+			/*
+			 * inspector.bind("inspectorChangeState", function (e, open) { if
+			 * (open) { _this.hide(); } });
+			 */
+		},
+
+		/**
+		 * @namespace DescriptionInspector.angularFormatView.formatTab
+		 */
+		formatTab : {
+
+			/**
+			 * @memberof DescriptionInspector.angularFormatView.formatTab
+			 */
+			build : function() {
+				if (this.getHtmlObj().length === 0) {
+					$("#editorFormats").append(this.getDefaultContent());
+					this.onClick();
+				}
+			},
+
+			/**
+			 * @memberof DescriptionInspector.angularFormatView.formatTab
+			 */
+			getHtmlObj : function() {
+				return $("#editorFormats li.formatTab.angular");
+			},
+
+			/**
+			 * Obtiene la lista de los demás formatos disponibles en lista de
+			 * objetos html.
+			 */
+			getOthersHtmlObj : function() {
+				return $("#editorFormats li.formatTab").not(".angular");
+			},
+
+			/**
+			 * @memberof DescriptionInspector.angularFormatView.formatTab
+			 */
+			getDefaultContent : function() {
+				return '<li class="formatTab angular"><a>FORM</a></li>';
+			},
+
+			/**
+			 * @memberof DescriptionInspector.angularFormatView.formatTab
+			 */
+			activate : function() {
+				this.getHtmlObj().addClass("active");
+				this.getOthersHtmlObj().removeClass("active");
+			},
+
+			/**
+			 * @memberof DescriptionInspector.angularFormatView.formatTab
+			 */
+			onClick : function() {
+
+				var descView = DescriptionInspector.descriptionFormatView,
+                    formatTab = this;
+
+				this.getHtmlObj().unbind("click").click(function() {
+//					if (!$(this).hasClass("active")) {
+						DescriptionInspector.angularFormatView.show();
+                        formatTab.activate();
+                        if (!$("#editorInspector").hasClass("hdd")) {
+							$("#editorToggleInspector").click();
+						}
+//                        descView.hide();
+//					}
+				});
+
+				this.getOthersHtmlObj().click(function() {
+					DescriptionInspector.angularFormatView.hide();
+				});
 			}
 		}
 	},
@@ -2908,8 +3203,11 @@ var DescriptionInspector = {
 							if (document.editor) {
 								DescriptionInspector.highlightAllBindings();
                             }
-							if (DescriptionInspector.descriptionFormatView.getHtmlObj().length > 0) {
-								DescriptionInspector.descriptionFormatView.hide();
+							if (DescriptionInspector.angularFormatView.getHtmlObj().is(":visible")) {
+//								DescriptionInspector.descriptionFormatView.hide();
+								DescriptionInspector.angularFormatView.hide();
+                                var baseFormat = EditorManager.sessionsMap[EditorManager.currentUri].getBaseFormat();
+                                $("#editorFormats li:contains('"+ baseFormat.toUpperCase() +"')").click();
                             }
 
 						} else {
@@ -2929,6 +3227,9 @@ var DescriptionInspector = {
 		descriptionFormatView : function() {
 			DescriptionInspector.descriptionFormatView.init();
 		},
+		angularFormatView : function() {
+			DescriptionInspector.angularFormatView.init();
+		},
 
 		/**
 		 * Código a ejecutar cuando se abre un fichero.
@@ -2937,11 +3238,12 @@ var DescriptionInspector = {
 		 */
 		onEditorOpenFile : function() {
 			DescriptionInspector.descriptionFormatView.destroy();
+			DescriptionInspector.angularFormatView.destroy();
 			setTimeout(function() {
 				DescriptionInspector.highlightAllBindings();
 			}, 100);
 
-            DescriptionInspector.slaString2Model();
+//            DescriptionInspector.slaString2Model();
 		},
 
 		/**
@@ -2952,6 +3254,7 @@ var DescriptionInspector = {
 		onEditorCloseFile : function() {
 			DescriptionInspector.empty();
 			DescriptionInspector.descriptionFormatView.destroy();
+			DescriptionInspector.angularFormatView.destroy();
 		},
 
 		/**
@@ -3121,27 +3424,25 @@ var DescriptionInspector = {
 		 *
 		 * @memberof DescriptionInspector.loaders
 		 */
-		loadInspectorTabs : function() {
+		buildInspectorTabs : function() {
 
-			var inspectorLoader = $(DescriptionInspector.vars.selectors.inspectorLoader);
-
-            inspectorLoader
-					.append('\
-					<!-- Inspector tabs --> \
-					<div id="editorHeader" style="position:relative"> \
-						<div id="editorTabsContainer"> \
-							<ul id="editorTabs" class="nav nav-tabs inspectorTabs" style="width:100%;display:inline-block;"> \
-								\
-							</ul> \
-						</div> \
-					</div> \
-					<div class="descriptionInspectorContent"></div> \
-                    <div class="modelInspectorContent"></div> \
-					<div class="moduleInspectorContent"></div>');
+            // html content
+			$(DescriptionInspector.vars.selectors.inspectorLoader).append(''+
+                // Inspector tabs
+                '<div id="editorHeader" style="position:relative">'+
+                '  <div id="editorTabsContainer">'+
+                '    <ul id="editorTabs" class="nav nav-tabs inspectorTabs" style="width:100%;display:inline-block;">'+
+                '    </ul>'+
+                '  </div>'+
+                '</div>'+
+                // Content container
+                '<div class="descriptionInspectorContent"></div>'+
+                '<div class="modelInspectorContent"></div>'+
+                '<div class="moduleInspectorContent"></div>');
 
             DescriptionInspector.tabs.buildDescriptionTab();
-            DescriptionInspector.tabs.buildModelTab();
-						DescriptionInspector.tabs.activateDefaultTab();
+            DescriptionInspector.tabs.buildFormTab();
+            DescriptionInspector.tabs.activateDefaultTab();
 
 		},
 
@@ -3595,42 +3896,39 @@ var DescriptionInspector = {
 							});
 		},
 
-		/**
-		 * Crea un fichero descriptor asociado al fichero actual de forma
-		 * automática, y establece una plantilla.
-		 *
-		 * @memberof DescriptionInspector.loaders
-		 * @param {jQuery}
-		 *            inspectorLoader - Contenedor del inspector de descripción.
-		 */
-		descriptionFileCreator : function(inspectorLoader) {
-			inspectorLoader
-					.append('\
-				<article id="inspectorContent"><a class="btn descriptionFileCreator emptyMsg" style=" \
-					color: #428bca; \
-					top: 50%; \
-					margin-top: 40%; \
-				">Create a description file</a></article>');
+		buildExampleFormCreator : function() {
+            // Config button
+            var selectorId = "inspectorModelContent",
+                buttonClass = "buildExampleFormCreator",
+                buttonText = "Create a form file";
+            
+            // html content
+			$("#editorInspector .modelInspectorContent").append(''+
+				'<article id="'+ selectorId +'">'+
+                '  <a class="btn '+ buttonClass +' emptyMsg" style="color: #428bca;">'+ buttonText + '</a>'+
+                '</article>');
 
-			var $this = $("#editorInspector a.descriptionFileCreator");
-            $this.css("margin-left", "-".concat(($this.width() / 2).toString()))
-                .css("margin-top", "-".concat(($this.height() / 2).toString()))
-                .click(function() {
-                    var fileUri = DescriptionInspector
-                        .getCurrentDescriptionFileUri(), fileName = fileUri
-                        .split("/")[2].split(".")[0], fileContent = '<!doctype html>\n<html>\n\t<body>\n\t\t<h4>Description</h4>\n\t</body>\n</html>';
+			var buttonElement = $("#editorInspector a." + buttonClass);
+            buttonElement
+                .css({
+                    // Centering button
+                    "margin-left": "-".concat((buttonElement.width() / 2).toString()),
+                    "margin-top": "-".concat((buttonElement.height() / 2).toString())
+                }).click(function() {
+                    // Config form
+                    var modelFileUri = DescriptionInspector.getCurrentModelFileUri(),
+                        fileName = modelFileUri.replace(/\.[^/.]+$/, "").split("/").pop(),
+                        content = '<div ng-repeat="key in model.creationConstraints" class="ag-template">\n\t<ul>\n\t\t<li>\n\t\t\t<h4>\n\t\t\t\t<input ng-bind="key.slo.expression.properties.exp.properties.exp2.properties.exp2.properties.value" ng-model="key.slo.expression.properties.exp.properties.exp2.properties.exp2.properties.value" /> € / mo</h4>\n\t\t\t</h4>\n\t\t</li>\n\t\t<li>\n\t\t\t<input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp1.properties.exp2.properties.value" /> requests</em> allowed</li>\n\t\t</li>\n\t\t<li>\n\t\t\t<input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp2.properties.exp2.properties.value" /> ms</em> guaranteed response time </li>\n\t\t</li>\n\t</ul>\n</div>';
 
-                    EditorManager.createNode(fileUri, fileName, ".html",
-                        function() {
-                            FileApi.saveFileContents(fileUri,
-                                fileContent, function() {
-                                    currentSelectedNode.getParent().sortChildren();
-                                    CommandApi.openFile(fileUri,
-                                        function() {
-                                        });
-                                });
+                    // Create new file
+                    EditorManager.createNode(modelFileUri, fileName, ".ang", function() {
+                        FileApi.saveFileContents(modelFileUri, content, function() {
+                                currentSelectedNode.getParent().sortChildren();
+                                CommandApi.openFile(modelFileUri, function() {});
+                            });
                         });
-                });
+                    }
+                );
 		},
 
 		/**

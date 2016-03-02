@@ -1,6 +1,7 @@
 /* DescriptionInspector Menu */
 
-#ideasBinding-descriptionBoardContent {
+#ideasBinding-descriptionBoardContent,
+#modelBoardContent {
 	position: absolute;
 	top: 0px;
 	right: 0px;
@@ -291,34 +292,96 @@ select.selectedFragment {
 
 a.bulkSelectAll, a.bulkSelectNone { cursor: pointer; }
 
+/*#modelBoardContent {
+	position: absolute;
+	background: white url('../img/ideas/loading1_big_lgbg.gif') center
+		no-repeat;
+	background-size: 40px;
+}*/
+
 /* Model inspector */
 /* reader mode */
-#inspectorModelContent span.editorModelElement a[ng-hide='editorEnabled'] {
-	background: rgba(212, 198, 54, 0.25);
-    line-height: 15px;
-    border: 0;
-    color: #333;
+#inspectorModelContent span.editorModelElement a[ng-hide='editorEnabled'],
+#editorWrapper span.editorModelElement a[ng-hide='editorEnabled'] {
+	line-height: 15px;
+	border: 0;
+	border-bottom: 1px dotted;
+	color: #333;
+	text-decoration: none;
 }
 
+
 /* add sla button */
-.modelInspectorContent > .add-sla-btn  {
+.modelInspectorContent > .add-sla-btn,
+#editorWrapper .add-sla-btn {
 	width: 32px;
-    height: 33px;
-    border-radius: 0;
-    font-size: 28px;
-    padding: 0px;
-    line-height: 1;
-    border: 0;
-    position: absolute;
-    z-index: 10;
-    bottom: 0;
-    right: 0;
-    background: rgb(187, 222, 251) !important;
-    margin: 20px;
+	height: 33px;
+	border-radius: 0;
+	font-size: 28px;
+	padding: 0px;
+	line-height: 1;
+	border: 0;
+	position: absolute;
+	z-index: 10;
+	bottom: 0;
+	right: 0;
+	background: rgb(187, 222, 251) !important;
+	margin: 20px 40px;
 }
 
 .add-sla-btn:hover,
 .add-sla-btn:focus,
 .add-sla-btn:active {
 	background: rgb(187, 222, 251) !important;
+}
+
+/* Agreement template */
+div.ag-template {
+	position: relative;
+	display: inline-flex;
+	color: rgb(38, 50, 56);
+	text-align: center;
+	font: normal normal normal normal 14px / 20px HelveticaNeue-Light, 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
+	margin: 20px;
+	overflow: hidden;
+	max-width: 300px;
+	min-width: 100px;
+	border-radius: 2px 2px 2px 2px;
+	border: 1px solid rgb(227, 242, 253);
+}
+
+div.ag-template > ul {
+	list-style-type: none;
+	padding: 0px;
+}
+
+div.ag-template > ul > li {
+	box-sizing: border-box;
+	margin: 0px 0px 10px;
+	width: 100%;
+	background: rgb(227, 242, 253) none repeat scroll 0% 0% / auto padding-box border-box;
+	padding: 10px 20px;
+}
+
+div.ag-template > ul > li > h4 {
+	font-weight: bold;
+}
+
+/* agreement price */
+div.ag-template > ul > li:nth-child(1) {
+	font-size: 2.28rem;
+	line-height: 20%;
+	margin: 1.14rem 0 0.912rem 0;
+}
+
+/* agreement constraint */
+div.ag-template > ul > li:nth-child(2) {
+	background: rgb(187, 222, 251) none repeat scroll 0% 0% / auto padding-box border-box !important;
+}
+
+/* agreement guarantee */
+div.ag-template > ul > li:nth-child(3) {}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }

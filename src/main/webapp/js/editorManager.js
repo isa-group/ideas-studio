@@ -136,30 +136,30 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 		initAceEditor();
 
 		document.editor
-				.on(
-						"change",
-						function(changesDeltas) {
-							if (checkerTimer)
-								clearTimeout(checkerTimer);
+            .on(
+                "change",
+                function (changesDeltas) {
+                    if (checkerTimer)
+                        clearTimeout(checkerTimer);
 
-							checkerTimer = setTimeout(
-									function() {
-										if (fileUri != "") {
+                    checkerTimer = setTimeout(
+                        function () {
+                            if (fileUri != "") {
 
-											var content = EditorManager.sessionsMap[EditorManager.currentUri]
-													.getBaseSession()
-													.getValue();
-											EditorManager.saveFile(
-													EditorManager.currentUri,
-													content);
-										}
+                                var content = EditorManager.sessionsMap[EditorManager.currentUri]
+                                    .getBaseSession()
+                                    .getValue();
+                                EditorManager.saveFile(
+                                    EditorManager.currentUri,
+                                    content);
+                            }
 
-										mayCheckLanguageSyntax(EditorManager.currentUri);
-										DescriptionInspector.slaString2Model();
+                            mayCheckLanguageSyntax(EditorManager.currentUri);
+                            DescriptionInspector.slaString2Model();
 
-									}, 1000);
+                        }, 1000);
 
-						});
+                });
 
 		DescriptionInspector.loaders.onInitAceEditor();
 
@@ -169,10 +169,10 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 
 	if (EditorManager.currentUri != null) {
 		$(EditorManager.tabsMap[EditorManager.currentUri])
-				.removeClass("active");
+            .removeClass("active");
 	}
 
-        oldUri=EditorManager.currentUri;
+    oldUri = EditorManager.currentUri;
 
 	EditorManager.currentUri = fileUri;
 
@@ -497,7 +497,7 @@ var EditorManager = {
 
 		if (loader || descriptionLoader) {
 
-			DescriptionInspector.loaders.loadInspectorTabs();
+			DescriptionInspector.loaders.buildInspectorTabs();
 
 			if (loader) {
 				var loadFn = loader(editorInspector.find(".moduleInspectorContent"), format);

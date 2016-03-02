@@ -70,9 +70,9 @@
         <script type="text/javascript" src="js/appPresenter.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
 
-        <script src="js/vendor/js-yaml.min.js"></script> <!-- yaml parser -->
+        <script type="text/javascript" src="js/vendor/js-yaml.min.js"></script> <!-- yaml parser -->
         <script type="text/javascript" src="js/vendor/angular.min.js"></script>
-        <script src="js/vendor/angular-elastic-input.min.js"></script>
+        <script type="text/javascript" src="js/vendor/angular-elastic-input.min.js"></script>
         <script type="text/javascript" src="js/angular/app.js"></script>
 
     </head>
@@ -94,6 +94,7 @@
 		        <div id="appBody" ng-app="mainApp" ng-controller="MainCtrl">
                     <input id="editorContent" style="display:none;" type="text" ng-change="slaString2Model()" ng-model="slaString" />
                     <input id="compileModel" style="display:none;" type="text" ng-change="compileModel()" ng-model="compilationFlag" />
+                    <input id="compileModelFormatView" style="display:none;" type="text" ng-change="compileModelFormatView()" ng-model="compilationFlagFormatView" />
 		        	<div id="appBodyBlocker"></div>
 		        	<div id="appBodyLoader">
 		        		<tiles:insertAttribute name="body"/>
