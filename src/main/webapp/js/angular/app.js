@@ -1,18 +1,17 @@
 // AngularJS initialization
 angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
-    .controller("MainCtrl", ["$scope", "$compile", "$timeout", function ($scope, $compile, $timeout) {
+    .controller("MainCtrl", ["$scope", "$compile", "$timeout", "$q", function ($scope, $compile, $timeout, $q) {
 
         $scope.model = {};
 
         // Update editor content from model
         $scope.$watch(
             function () {
-                // Should use toJson to catch objects declared inside the model.
                 return $scope.model;
             },
             function (newValue, oldValue) {
                 
-                if (document.editor && newValue && oldValue && newValue !== oldValue) {
+                if ( document.editor && newValue && oldValue && !compareObjects(newValue, oldValue) ) {
                     
                     var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
                         prevPos = document.editor.renderer.scrollBarV.scrollTop, // previous cursos position
@@ -41,18 +40,18 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
                         
                         var baseFormat = EditorManager.sessionsMap[EditorManager.currentUri].getBaseFormat();
 
-                        if ( !compareObjects(newValue, oldValue) ) {
+                        var currentUri = EditorManager.currentUri,
+                            converterUri = ModeManager.getConverter(ModeManager
+                                .calculateLanguageIdFromExt(ModeManager
+                                    .calculateExtFromFileUri(currentUri)));
+                                
+                        if ( $(document.activeElement).closest("#editorWrapper").length === 0 ) { // editor is not focused
                             
-                            var currentUri = EditorManager.currentUri,
-                                converterUri = ModeManager.getConverter(ModeManager
-                                    .calculateLanguageIdFromExt(ModeManager
-                                        .calculateExtFromFileUri(currentUri)));
-
                             // Convert json to currentFormat
                             CommandApi.callConverter("json", currentFormat, currentUri, angular.toJson(newValue), converterUri,
-                                function(result) {
-                                    
-                                    if (result.data) {
+                                function (result) {
+
+                                    if (result.data !== document.editor.getValue()) {
                                         document.editor.setValue(result.data, -1);
                                         // Update editor to previous view
                                         document.editor.selection.setRange(prevRange);
@@ -61,6 +60,7 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
                                 }
                             );
                         }
+
                     }   
                 }
             }, true
@@ -76,7 +76,6 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
             try {
                 
                 var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
-                    currentUri = EditorManager.currentUri,
                     editorContent = document.editor.getValue();
                 
                 if (currentFormat === "json") {
@@ -90,23 +89,25 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
                     $scope.model = jsyaml.safeLoad(editorContent);
                     
                 } else {
-                    //debugger;
+                    
                     // Convert current format to json
                     var converterUri = ModeManager.getConverter(ModeManager
                             .calculateLanguageIdFromExt(ModeManager
-                                .calculateExtFromFileUri(currentUri)));
-
-                                flag=true;
-
-                    // Convert current editor content to json
-                    CommandApi.callConverter(currentFormat, "json", currentUri, editorContent, converterUri,
-                        function(result) {
-                            if (!compareObjects(JSON.parse(result.data), $scope.model)) {
-                                $scope.model = JSON.parse(result.data);
+                                .calculateExtFromFileUri(EditorManager.currentUri)));
+                            
+                    var promise = $q(function (resolve, reject) {
+                        CommandApi.callConverter(currentFormat, "json", EditorManager.currentUri, editorContent, converterUri,
+                            function(result) {
+                                if (result.data) {
+                                    resolve( JSON.parse(result.data) );
+                                }
                             }
-
-                        }
-                    );
+                        );
+                    });
+                    promise.then(function (result) {
+                        $scope.model = result;
+                    });
+                        
                 }
                 
             } catch (err) {
