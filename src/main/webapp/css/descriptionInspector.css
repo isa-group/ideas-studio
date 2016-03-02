@@ -369,18 +369,30 @@ div.ag-template > ul > li > h4 {
 
 /* agreement price */
 div.ag-template > ul > li:nth-child(1) {
-	font-size: 2.28rem;
-	line-height: 20%;
-	margin: 1.14rem 0 0.912rem 0;
+	background: none;
+    margin: 0;
+    opacity: 0.5;
 }
 
-/* agreement constraint */
+/* agreement price */
 div.ag-template > ul > li:nth-child(2) {
 	background: rgb(187, 222, 251) none repeat scroll 0% 0% / auto padding-box border-box !important;
 }
 
-/* agreement guarantee */
+/* agreement constraint */
 div.ag-template > ul > li:nth-child(3) {}
+
+/* agreement guarantee */
+div.ag-template > ul > li:nth-child(4) {
+}
+
+/* agreement remover */
+div.ag-template > ul > li:nth-child(5) {
+	background: none;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+}
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;

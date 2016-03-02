@@ -18,16 +18,14 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
                         prevRange = document.editor.selection.getRange();
                         
                     if (currentFormat === "json") {
-//                        newValue = angular.toJson($scope.model, 4);
                         if (newValue !== document.editor.getValue()) {
-                            document.editor.setValue(angular.toJson($scope.model, 4), -1);
+                            document.editor.setValue(angular.toJson(newValue, 4), -1);
                             // Update editor to previous view
                             document.editor.selection.setRange(prevRange);
                             document.editor.renderer.scrollToY(prevPos);
                         }
                         
                     } else if (currentFormat === "yaml") {
-//                        var jsonObj = jsyaml.safeLoad(newValue);
                         var yaml = jsyaml.safeDump(newValue);
                         if (yaml !== document.editor.getValue()) {
                             document.editor.setValue(yaml, -1);
@@ -89,7 +87,6 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
                     $scope.model = jsyaml.safeLoad(editorContent);
                     
                 } else {
-                    
                     // Convert current format to json
                     var converterUri = ModeManager.getConverter(ModeManager
                             .calculateLanguageIdFromExt(ModeManager
@@ -107,7 +104,6 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
                     promise.then(function (result) {
                         $scope.model = result;
                     });
-                        
                 }
                 
             } catch (err) {
@@ -293,6 +289,13 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
             if ($event.which === 13 || event.which === 27) { // 13,27: ENTER,ESC key
                 var element = $event.target;
                 element.blur();
+            }
+        };
+        
+        // Remove model element
+        $scope.removeModel = function (modelId) {
+            if (modelId in getCreationConstraints()) {
+                delete getCreationConstraints()[modelId];
             }
         };
 

@@ -1104,9 +1104,7 @@ var DescriptionInspector = {
     slaString2Model : function() {
         
         var session = EditorManager.sessionsMap[EditorManager.currentUri],
-            formatsSessions = session.getFormatsSessions(),
-            currentFormat = session.getCurrentFormat(),
-            baseFormat = session.getBaseFormat();
+            formatsSessions = session.getFormatsSessions();
         
         if (document.editor && ("json" in formatsSessions || "yaml" in formatsSessions)) {
 			// Re-focusing element after sending input trigger
@@ -2227,10 +2225,11 @@ var DescriptionInspector = {
 			 */
 			stepForwardManager : function() {
 
-				var binding = DescriptionInspector.vars.progressBar.step1, contentToBind = this
-						.getSelectedHtml(DescriptionInspector.vars.progressBar.step2), regex = /(<([^>]+)>)/ig, typeOfBinding = $(
-						"#selectBindingType").val(), textNote = $(
-						"#bindingNote").val();
+				var binding = DescriptionInspector.vars.progressBar.step1,
+                    contentToBind = this.getSelectedHtml(DescriptionInspector.vars.progressBar.step2),
+                    regex = /(<([^>]+)>)/ig,
+                    typeOfBinding = $("#selectBindingType").val(),
+                    textNote = $("#bindingNote").val();
 
 				if (typeOfBinding != "span" && typeOfBinding != "a"
 						&& typeOfBinding != "div" && typeOfBinding != "button") {
@@ -2325,8 +2324,6 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 */
 		start : function() {
-			// console.log("starting removeBindingInspector");
-
 			this.setDefaultContent();
 			this.onCancel();
 
@@ -2358,9 +2355,10 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.removeBindingInspector
 		 */
 		_unhighlightBindingsToRemove : function(callback) {
-			$("#inspectorContent .to-remove").addClass("ideas-binding")
-					.removeClass("to-remove highlighted-fragment").unbind(
-							"click");
+			$("#inspectorContent .to-remove")
+                .addClass("ideas-binding")
+                .removeClass("to-remove highlighted-fragment")
+                .unbind("click");
 
 			DescriptionInspector.loaders.bindings();
 
@@ -2375,8 +2373,6 @@ var DescriptionInspector = {
 		 * @returns {jQuery} $obj
 		 */
 		unwrap : function($obj) {
-			// console.log("unwrapping binding:", $obj);
-
 			return $obj.contents().unwrap()
 		},
 
@@ -2438,43 +2434,42 @@ var DescriptionInspector = {
 
 			// List of bindings to remove
 			$("#inspectorContent .to-remove")
-					.each(
-							function(index) {
-								var bindObj = Binding.getBinding($(this));
-								$listContainer
-										.append("<div title='"
-												+ bindObj.startRows[0]
-												+ ": "
-												+ bindObj.getTargetText()
-												+ "'><input id='bulkremove"
-												+ index
-												+ "' class='to-bulkremove' name='checkboxBulkRemover' data-id-remover='"
-												+ index
-												+ "' type='checkbox' />"
-												+ "<label for='bulkremove"
-												+ index + "'>"
-												+ bindObj.textNote
-												+ "</label></div>");
-							});
+                .each(
+                    function (index) {
+                        var bindObj = Binding.getBinding($(this));
+                        $listContainer
+                            .append("<div title='"
+                                + bindObj.startRows[0]
+                                + ": "
+                                + bindObj.getTargetText()
+                                + "'><input id='bulkremove"
+                                + index
+                                + "' class='to-bulkremove' name='checkboxBulkRemover' data-id-remover='"
+                                + index
+                                + "' type='checkbox' />"
+                                + "<label for='bulkremove"
+                                + index + "'>"
+                                + bindObj.textNote
+                                + "</label></div>");
+                    });
 
-			// Modal content
-			var title = "Delete bindings", primaryText = "OK", content = ($listContainer
-					.find("div").length > 0) ? '<div class="bulkRemover">'
-					+ $listContainer.html()
-					+ '<div style="float:right;"><a class="bulkSelectAll">All</a> | <a class="bulkSelectNone">None</a></div>'
-					+ '</div>'
-					+ '<script>'
-					+ '$(document).ready(function () {$(".bulkRemover a.bulkSelectAll").unbind("click").on("click", function (e) {'
-					+ 'e.preventDefault();'
-					+ '$(".bulkRemover input").prop("checked", true);' + '});' +
-
-					'$(".bulkRemover a.bulkSelectNone").unbind("click").on("click", function (e) {'
-					+ 'e.preventDefault();'
-					+ '$(".bulkRemover input").prop("checked", false);'
-					+ '});});' + '</script>'
-					:
-
-					'<span>No binds to delete</span>';
+            // Modal content
+            var title = "Delete bindings",
+                primaryText = "OK",
+                content = ($listContainer.find("div").length > 0) ? '<div class="bulkRemover">'
+                + $listContainer.html()
+                + '<div style="float:right;"><a class="bulkSelectAll">All</a> | <a class="bulkSelectNone">None</a></div>'
+                + '</div>'
+                + '<script>'
+                + '$(document).ready(function () {$(".bulkRemover a.bulkSelectAll").unbind("click").on("click", function (e) {'
+                + 'e.preventDefault();'
+                + '$(".bulkRemover input").prop("checked", true);' + '});' +
+                '$(".bulkRemover a.bulkSelectNone").unbind("click").on("click", function (e) {'
+                + 'e.preventDefault();'
+                + '$(".bulkRemover input").prop("checked", false);'
+                + '});});' + '</script>'
+                :
+                '<span>No binds to delete</span>';
 
 			showModal(title, content, primaryText, function() {
 
@@ -2984,7 +2979,7 @@ var DescriptionInspector = {
 
 				}
 
-			}, 100);
+			}, 250);
 
 		},
 
@@ -3028,12 +3023,11 @@ var DescriptionInspector = {
             var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri);
             
 			if (content) {
-                if (addSlaTemplateBtn.length > 0 &&
-                    currentExt === "at") {
+                if (addSlaTemplateBtn.length > 0) {
                     content += ''+
                         '<div class="btn btn-primary dropdown-toggle add-sla-btn"'+
                         '     data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>';
-//                    content += $("#editorInspectorLoader .modelInspectorContent .add-sla-btn")[0].outerHTML;
+                    content += $("#editorInspectorLoader .modelInspectorContent .add-sla-btn")[0].outerHTML;
                 }
 				return this.getHtmlObj().html(content);
 			}
@@ -3060,9 +3054,9 @@ var DescriptionInspector = {
 			if (!EditorManager.currentDocumentHasProblems()) {
 
 				if (this.mayShow()) {
-//					setTimeout(function() {
-//						EditorManager.changeFormat(EditorManager.currentUri, "json");
-//					}, 1);
+					setTimeout(function() {
+						EditorManager.changeFormat(EditorManager.currentUri, "json");
+					}, 1);
 
 					setTimeout(function() {
 						if (!$("#editorInspector").hasClass("hdd")) {
