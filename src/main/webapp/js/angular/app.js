@@ -1,9 +1,9 @@
 // AngularJS initialization
-angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
+angular.module("mainApp", ['puElasticInput'])
     .controller("MainCtrl", ["$scope", "$compile", "$timeout", "$q", function ($scope, $compile, $timeout, $q) {
 
         $scope.model = {};
-
+    
         // Update editor content from model
         $scope.$watch(
             function () {
@@ -19,7 +19,7 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
                         
                     if (currentFormat === "json") {
                         if (newValue !== document.editor.getValue()) {
-                            document.editor.setValue(angular.toJson(newValue, 4), -1);
+                            document.editor.setValue(angular.toJson(newValue, 2), -1);
                             // Update editor to previous view
                             document.editor.selection.setRange(prevRange);
                             document.editor.renderer.scrollToY(prevPos);
@@ -70,28 +70,26 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
          * @returns {undefined}
          */
         $scope.slaString2Model = function () {
-            
-            try {
-                
-                var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
-                    editorContent = document.editor.getValue();
-                
+            var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
+                editorContent = document.editor.getValue();
+
+            if (editorContent) {
                 if (currentFormat === "json") {
                     if ($scope.slaString !== "") {
                         $scope.model = JSON.parse(editorContent);
                     } else {
                         $scope.model = undefined;
                     }
-                    
+
                 } else if (currentFormat === "yaml") {
                     $scope.model = jsyaml.safeLoad(editorContent);
-                    
+
                 } else {
                     // Convert current format to json
                     var converterUri = ModeManager.getConverter(ModeManager
                             .calculateLanguageIdFromExt(ModeManager
                                 .calculateExtFromFileUri(EditorManager.currentUri)));
-                            
+
                     var promise = $q(function (resolve, reject) {
                         CommandApi.callConverter(currentFormat, "json", EditorManager.currentUri, editorContent, converterUri,
                             function(result) {
@@ -105,9 +103,8 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
                         $scope.model = result;
                     });
                 }
-                
-            } catch (err) {
-                console.error(err);
+            } else {
+                $scope.model = {};
             }
         };
 
@@ -165,18 +162,25 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
             var i = 1;
             var const_i = "";
             
-            while (constraintName === "") {
-                const_i = "C"+i;
-                if ( !(const_i in getCreationConstraints()) ) {
-                    constraintName += const_i;
-                    break;
+            if ( getCreationConstraints() ) {
+                
+                while (constraintName === "") {
+                    const_i = "C"+i;
+                    if ( !(const_i in getCreationConstraints()) ) {
+                        constraintName += const_i;
+                        break;
+                    }
+                    i++;
                 }
-                i++;
+
+                if (constraintName !== "") {
+                    getCreationConstraints()[const_i] = creationConstraintStructureWithId(const_i);
+                }
+                
+            } else {
+                console.log("No creation constraint to add");
             }
             
-            if (constraintName !== "") {
-                getCreationConstraints()[const_i] = creationConstraintStructureWithId(const_i);
-            }
         };
       
         // SLA getters
@@ -293,10 +297,30 @@ angular.module("mainApp", ['puElasticInput', 'ngAnimate'])
         };
         
         // Remove model element
-        $scope.removeModel = function (modelId) {
-            if (modelId in getCreationConstraints()) {
-                delete getCreationConstraints()[modelId];
+        $scope.removeModel = function (modelId, $event) {
+            
+            var element = $event ? $($event.currentTarget) : undefined;
+            if (element) {
+                var parentSelector = "#editorWrapper",
+                    isFormatView = element.closest(parentSelector) ? element.closest(parentSelector).length > 0 : false;
+                if (isFormatView) {
+                    $(element).closest("[ng-repeat]").animate({width: 'toggle'}); 
+                } else {
+                    $(element).closest("[ng-repeat]").slideUp();
+                }
+                
+                $timeout(function () {
+                if (modelId in getCreationConstraints()) {
+                        delete getCreationConstraints()[modelId];
+                    }
+                }, 500);
+                
+            } else {
+                if (modelId in getCreationConstraints()) {
+                    delete getCreationConstraints()[modelId];
+                }
             }
+            
         };
 
     }]);

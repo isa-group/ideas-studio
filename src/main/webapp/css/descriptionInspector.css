@@ -312,8 +312,8 @@ a.bulkSelectAll, a.bulkSelectNone { cursor: pointer; }
 
 
 /* add sla button */
-.modelInspectorContent > .add-sla-btn,
-#editorWrapper .add-sla-btn {
+.modelInspectorContent > .addSlaButton,
+#editorWrapper .addSlaButton {
 	width: 32px;
 	height: 33px;
 	border-radius: 0;
@@ -326,12 +326,13 @@ a.bulkSelectAll, a.bulkSelectNone { cursor: pointer; }
 	bottom: 0;
 	right: 0;
 	background: rgb(187, 222, 251) !important;
-	margin: 20px 40px;
+	margin: 0 40px 30px 0;
+	display: none;
 }
 
-.add-sla-btn:hover,
-.add-sla-btn:focus,
-.add-sla-btn:active {
+.addSlaButton:hover,
+.addSlaButton:focus,
+.addSlaButton:active {
 	background: rgb(187, 222, 251) !important;
 }
 
@@ -344,10 +345,11 @@ div.ag-template {
 	font: normal normal normal normal 14px / 20px HelveticaNeue-Light, 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
 	margin: 20px;
 	overflow: hidden;
-	max-width: 300px;
-	min-width: 100px;
+	max-width: 250px;
+	min-height: 0px;
 	border-radius: 2px 2px 2px 2px;
 	border: 1px solid rgb(227, 242, 253);
+	background: rgba(227,242,253,0.25) none repeat scroll 0% 0% / auto padding-box border-box;
 }
 
 div.ag-template > ul {
@@ -370,8 +372,8 @@ div.ag-template > ul > li > h4 {
 /* agreement price */
 div.ag-template > ul > li:nth-child(1) {
 	background: none;
-    margin: 0;
-    opacity: 0.5;
+	margin: 0;
+	opacity: 0.75;
 }
 
 /* agreement price */
@@ -392,6 +394,14 @@ div.ag-template > ul > li:nth-child(5) {
 	margin: 0;
 	padding: 0;
 	cursor: pointer;
+}
+
+div.ag-template > ul > li:nth-child(5) > a {
+    position: absolute;
+    top: -2px;
+    right: 5px;
+    font-size: 20px;
+    color: rgb(203, 218, 228);
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {

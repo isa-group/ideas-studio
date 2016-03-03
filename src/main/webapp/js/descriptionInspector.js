@@ -422,10 +422,10 @@ var DescriptionInspector = {
 				url : urlReq,
 				async : false,
 				success : function(content) {
-					if (content) {
+					if (content !== "") {
 						descriptionData = content;
 					} else {
-						console.error("No model file content");
+						console.log("Form file is empty");
 					}
 				}
 			});
@@ -918,6 +918,7 @@ var DescriptionInspector = {
     tabs : {
 
         /**
+         * This method creates "DESCRIPTION" inspector tab when you open a new file.
          * @memberof DescriptionInspector.tabs
          */
         buildDescriptionTab : function () {
@@ -967,20 +968,26 @@ var DescriptionInspector = {
         },
 
         /**
+         * This method creates "FORM" inspector tab when you open a new file.
          * @memberof DescriptionInspector.tabs
          */
         buildFormTab : function() {
             
-            var formatsSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions();
+            var formatsSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions(),
+                currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
+            
             if ("json" in formatsSessions || "yaml" in formatsSessions ) {
+                
                 var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
                     title = "FORM";
 
+                // Tab structure
                 inspectorTabs.append('\
                     <li class="modelInspectorTab" style="bottom: 0px; max-width: 100%;"> \
                         <a class="editorTab" style="padding:4px 10px;">'+ title +'</a> \
                     </li>');
 
+                // Click tab functionality
                 $(DescriptionInspector.vars.selectors.inspectorModelTab).click(function() {
                     // Hide others tabs content
                     $(".moduleInspectorContent").hide();
@@ -1005,7 +1012,6 @@ var DescriptionInspector = {
                     $("#inspectorModelContent").show().height(
                         $("#editorInspectorLoader").height() - $("#appFooter").height() - $("ul#editorTabs.inspectorTabs").height() - 12
                     );
-										// .css("height", $("#inspectorModelContent").height()/2);
                     $(".modelInspectorTab")
                         .addClass("active")
                         .find("a")
@@ -1013,13 +1019,13 @@ var DescriptionInspector = {
 
                 });
 
+                // Default structure for tab content
                 if (DescriptionInspector.existCurrentAngularFile()) {
                     $("#editorInspectorLoader .modelInspectorContent").html(
+                        // Content container
                         '<article id="inspectorModelContent" style="display:none;" />' +
-                        '<div class="btn btn-primary dropdown-toggle add-sla-btn" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>');
-                } else {
-                    $("#editorInspectorLoader .modelInspectorContent").html(
-                        '<div class="btn btn-primary dropdown-toggle add-sla-btn" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>');
+                        // Model add button
+                        '<div class="btn btn-primary dropdown-toggle addSlaButton" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>');
                 }
                 
                 return this;
@@ -1106,7 +1112,8 @@ var DescriptionInspector = {
         var session = EditorManager.sessionsMap[EditorManager.currentUri],
             formatsSessions = session.getFormatsSessions();
         
-        if (document.editor && ("json" in formatsSessions || "yaml" in formatsSessions)) {
+        if (!EditorManager.currentDocumentHasProblems() &&
+            document.editor && ("json" in formatsSessions || "yaml" in formatsSessions)) {
 			// Re-focusing element after sending input trigger
             var focusId = $(':focus').attr("data-focus-id"),
                 parent = $(":focus").closest("#inspectorModelContent").length > 0 ?
@@ -1120,6 +1127,30 @@ var DescriptionInspector = {
             DescriptionInspector.tabs.saveFileFromOtherFormat();
             
         }
+    },
+    
+    /**
+     * Reset model content
+     * @returns {undefined}
+     */
+    resetModel : function () {
+        
+//        setTimeout(function () {
+            var prevFocus = $(':focus'),
+                modelEndPoint = $("#editorContent");
+            
+            // Send empty value to angular model
+            if (modelEndPoint.val() === "") {
+                modelEndPoint.val("{}");
+                angular.element(modelEndPoint).trigger('input');
+            }
+            modelEndPoint.val("");
+            angular.element(modelEndPoint).trigger('input');
+
+            // Re-focus element
+            prevFocus.focus();
+//        }, 2000);
+        
     },
 
 	expandableMenu : {
@@ -2946,61 +2977,57 @@ var DescriptionInspector = {
 	angularFormatView : {
 
 		/**
-		 * Inicializa todo el ecosistema de angularFormatView y su
-		 * contenido.
-		 *
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		init : function() {
 
-			var _this = this;
+			var angularFormatView = this,
+                tabs = DescriptionInspector.tabs;
 
 			setTimeout(function() {
 
-				if (_this.mayBuild()) {
-
-					_this.build();
-					_this.formatTab.build();
-
-					_this.show();
-
-//					_this.customEvents();
-                    var slaAddBtn = '<div class="btn btn-primary dropdown-toggle add-sla-btn"'+
-                            ' data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>';
+				if (angularFormatView.mayBuild()) {
+					angularFormatView.build();
+					angularFormatView.formatTab.build();
+					angularFormatView.show();
+                    
+                    var slaAddBtn = '<div class="btn btn-primary dropdown-toggle addSlaButton" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>';
                     DescriptionInspector.setInspectorModelContent(
-                        $("#modelBoardContent"),
-                        slaAddBtn,
+                        $("#modelBoardContent"), slaAddBtn,
                         function () {
-                            DescriptionInspector.tabs.angularCompileModelInspectorFormatView();
+                            if (!EditorManager.currentDocumentHasProblems()) {
+                                $(".addSlaButton").show();
+                            }
+                            tabs.angularCompileModelInspectorFormatView();
                         }
                     );
-
-					// CommandApi.echo("Description file content loaded");
-
 				}
-
 			}, 250);
-
 		},
 
+		/**
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
 		mayBuild : function() {
-			// TODO: comprueba que existe un fichero descriptor relacionado.
             var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri);
+            
 			return this.getHtmlObj().length === 0
                     && currentExt !== "ang" && currentExt !== "html"
 					&& DescriptionInspector.existCurrentAngularFile();
 		},
 
+		/**
+		 * @memberof DescriptionInspector.angularFormatView
+		 */
 		build : function() {
 			this.setDefaultStructure();
-//			this.setDefaultContent();
 		},
 
 		/**
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		getHtmlObj : function() {
-			return $("#modelBoardContent");
+			return $("#modelBoardContent, #editorWrapper .addSlaButton");
 		},
 
 		/**
@@ -3008,35 +3035,11 @@ var DescriptionInspector = {
 		 */
 		setDefaultStructure : function() {
 			if (this.getHtmlObj().length === 0) {
-				$("#editorWrapper").append(
-					'<div id="modelBoardContent"></div>');
+				$("#editorWrapper").append('<div id="modelBoardContent"/>');
 			}
 		},
 
 		/**
-		 * @memberof DescriptionInspector.angularFormatView
-		 */
-		setDefaultContent : function() {
-			
-            var content = DescriptionInspector.getModelFileContent();
-            var addSlaTemplateBtn = $("#editorInspectorLoader .modelInspectorContent .add-sla-btn");
-            var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri);
-            
-			if (content) {
-                if (addSlaTemplateBtn.length > 0) {
-                    content += ''+
-                        '<div class="btn btn-primary dropdown-toggle add-sla-btn"'+
-                        '     data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>';
-                    content += $("#editorInspectorLoader .modelInspectorContent .add-sla-btn")[0].outerHTML;
-                }
-				return this.getHtmlObj().html(content);
-			}
-		},
-
-		/**
-		 * Comprueba si el estamos en la situación de mostrar el
-		 * DescriptionFullView: el inspector está oculto
-		 *
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		mayShow : function() {
@@ -3045,47 +3048,39 @@ var DescriptionInspector = {
 		},
 
 		/**
-		 * Activa el angularFormatView
-		 *
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		show : function() {
 
 			if (!EditorManager.currentDocumentHasProblems()) {
 
-				if (this.mayShow()) {
-					setTimeout(function() {
-						EditorManager.changeFormat(EditorManager.currentUri, "json");
-					}, 1);
+                setTimeout(function() {
+//                    EditorManager.changeFormat(EditorManager.currentUri, "json");
+                }, 1);
 
-					setTimeout(function() {
-						if (!$("#editorInspector").hasClass("hdd")) {
-							$("#editorToggleInspector").click();
-						}
-					}, 100);
-                    
-					this.getHtmlObj().fadeIn();
-                    $("#editorWrapper .add-sla-btn").fadeIn();
-					this.formatTab.activate();
+                setTimeout(function() {
+                    if (!$("#editorInspector").hasClass("hdd")) {
+                        $("#editorToggleInspector").click();
+                    }
+                }, 100);
 
-				} else {
-					this.hide();
-				}
+                this.getHtmlObj().fadeIn();
+                $("#editorWrapper .addSlaButton").fadeIn();
+                this.formatTab.activate();
 
 			} else {
-				CommandApi.echo('<span style="color:red;">Cannot show angular main view while editor contains syntax errors.</span>');
+//				CommandApi.echo('<span style="color:red;">Cannot show form view while editor contains syntax errors.</span>');
+                this.hide();
 			}
 
 		},
 
 		/**
-		 * Oculta el DescriptionFullView
-		 *
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		hide : function() {
             this.getHtmlObj().hide();
-            $("#editorWrapper .add-sla-btn").hide();
+            $("#editorWrapper .addSlaButton").hide();
 		},
 
 		/**
@@ -3094,18 +3089,6 @@ var DescriptionInspector = {
 		destroy : function() {
 			this.getHtmlObj().remove();
 			this.formatTab.getHtmlObj().remove();
-		},
-
-		/**
-		 * @memberof DescriptionInspector.angularFormatView
-		 */
-		customEvents : function() {
-			var _this = this, inspector = $("#editorInspector");
-
-			/*
-			 * inspector.bind("inspectorChangeState", function (e, open) { if
-			 * (open) { _this.hide(); } });
-			 */
 		},
 
 		/**
@@ -3162,14 +3145,20 @@ var DescriptionInspector = {
                     formatTab = this;
 
 				this.getHtmlObj().unbind("click").click(function() {
-//					if (!$(this).hasClass("active")) {
+                    if (!EditorManager.currentDocumentHasProblems()) {
 						DescriptionInspector.angularFormatView.show();
                         formatTab.activate();
                         if (!$("#editorInspector").hasClass("hdd")) {
 							$("#editorToggleInspector").click();
 						}
 //                        descView.hide();
-//					}
+					} else {
+                        CommandApi.echo(
+                            '<span style="color:red;">'+
+                            '   Can not show form view while errors exist.'+
+                            '</span>'
+                        );
+                    }
 				});
 
 				this.getOthersHtmlObj().click(function() {
@@ -3231,13 +3220,18 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.loaders
 		 */
 		onEditorOpenFile : function() {
+            // FormatView
 			DescriptionInspector.descriptionFormatView.destroy();
 			DescriptionInspector.angularFormatView.destroy();
+            
+            // Highlight description binding
 			setTimeout(function() {
 				DescriptionInspector.highlightAllBindings();
 			}, 100);
-
-//            DescriptionInspector.slaString2Model();
+            
+            // Model
+            $("#editorWrapper .addSlaButton").hide();
+            DescriptionInspector.resetModel();
 		},
 
 		/**
@@ -3247,8 +3241,13 @@ var DescriptionInspector = {
 		 */
 		onEditorCloseFile : function() {
 			DescriptionInspector.empty();
+            
+            // FormatView
 			DescriptionInspector.descriptionFormatView.destroy();
 			DescriptionInspector.angularFormatView.destroy();
+            
+            // Model
+            $(".addSlaButton").remove();
 		},
 
 		/**
@@ -3897,10 +3896,16 @@ var DescriptionInspector = {
                 buttonText = "Create a form file";
             
             // html content
-			$("#editorInspector .modelInspectorContent").append(''+
-				'<article id="'+ selectorId +'">'+
-                '  <a class="btn '+ buttonClass +' emptyMsg" style="color: #428bca;">'+ buttonText + '</a>'+
-                '</article>');
+			var modelInspector = $("#editorInspector .modelInspectorContent")
+                .append(''+
+                    '<article id="'+ selectorId +'">'+
+                    '  <a class="btn '+ buttonClass +' emptyMsg" style="color: #428bca;">'+ buttonText + '</a>'+
+                    '</article>'
+                );
+            
+            if (modelInspector.find(".addSlaButton").length > 0) {
+                modelInspector.find(".addSlaButton").remove();
+            }
 
 			var buttonElement = $("#editorInspector a." + buttonClass);
             buttonElement
@@ -4119,7 +4124,7 @@ var DescriptionInspector = {
 				}
 			}
 		} else {
-			console.log("No binding found to displace.");
+//			console.log("No binding found to displace.");
 		}
 	},
 
@@ -4159,7 +4164,7 @@ var DescriptionInspector = {
 
 			}
 		} else {
-			console.log("Row not found on map", row);
+//			console.log("Row not found on map", row);
 		}
 
 		return ret;

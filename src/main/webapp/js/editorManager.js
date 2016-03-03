@@ -623,7 +623,8 @@ var EditorManager = {
 			delete EditorManager.sessionsMap[fileUri];
 			delete EditorManager.tabsMap[fileUri];
 
-			if (DescriptionInspector) DescriptionInspector.loaders.onEditorCloseFile();
+			if (DescriptionInspector)
+                DescriptionInspector.loaders.onEditorCloseFile();
 		});
 	},
 
@@ -637,7 +638,7 @@ var EditorManager = {
 		} catch (Exception) {
 			console.log("#editor was empty");
 		}
-		$("#editorWrapper").append('<div id="editor" ui-ace="slaString"></div>');
+		$("#editorWrapper").append('<div id="editor"></div>');
 		try {
 			$("#projectsTree").dynatree("getRoot").visit(function(node) {
 				node.deactivate();
@@ -673,44 +674,32 @@ var EditorManager = {
 		if (desiredFormat in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() &&
 			currentFormat !== desiredFormat) {
 
-			CommandApi
-					.callConverter(
-							currentFormat,
-							desiredFormat,
-							fileUri,
-							actualContent,
-							converterUri,
-							function(result) {
-								var appResponse = result;
-								console.log("Converter resp:");
-								console.log(appResponse);
-								if (appResponse.data == "ERROR!")
-									CommandApi
-											.echo("<p style='color: red'>Can no change to "
-													+ desiredFormat
-													+ " format, the file contains fails.</p>");
-								else {
-									EditorManager.sessionsMap[EditorManager.currentUri]
-											.setCurrentFormat(desiredFormat);
-									document.editor
-											.setSession(EditorManager.sessionsMap[EditorManager.currentUri]
-													.getCurrentSession());
-									EditorManager.sessionsMap[EditorManager.currentUri]
-											.getCurrentSession().setValue(
-													appResponse.data);
-								}
-
-							});
-
-            if ( desiredFormat === "json" || desiredFormat === "yaml") {
-                if (!$("#editorTabs > li.modelInspectorTab").hasClass("active")) {
-                    var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorModelTab);
-                    setTimeout(function () {descriptionTab.click();},150); // wait format tab to be activated.
-                }
-			} else {
-                DescriptionInspector.tabs.activateDefaultTab();
-            }
-
+			CommandApi.callConverter(
+                currentFormat,
+                desiredFormat,
+                fileUri,
+                actualContent,
+                converterUri,
+                function (result) {
+                    var appResponse = result;
+                    console.log("Converter resp:");
+                    console.log(appResponse);
+                    if (appResponse.data == "ERROR!")
+                        CommandApi.echo(
+                            "<p style='color: red'>"+
+                            "Cannot change to " + desiredFormat + " format, the file contains fails."+
+                            "</p>");
+                    else {
+                        EditorManager.sessionsMap[EditorManager.currentUri]
+                            .setCurrentFormat(desiredFormat);
+                        document.editor
+                            .setSession(EditorManager.sessionsMap[EditorManager.currentUri]
+                                .getCurrentSession());
+                        EditorManager.sessionsMap[EditorManager.currentUri]
+                            .getCurrentSession().setValue(
+                            appResponse.data);
+                    }
+                });
 		}
 
 	},
