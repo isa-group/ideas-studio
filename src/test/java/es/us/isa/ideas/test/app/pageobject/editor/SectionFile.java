@@ -5,16 +5,18 @@
  */
 package es.us.isa.ideas.test.app.pageobject.editor;
 
-import static es.us.isa.ideas.test.app.pageobject.testcase.PageObject.getJs;
-import static es.us.isa.ideas.test.app.pageobject.testcase.PageObject.getWebDriver;
-import static es.us.isa.ideas.test.app.pageobject.testcase.PageObject.getWebDriverWait;
-import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
+import static es.us.isa.ideas.test.app.pageobject.PageObject.getJs;
+import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriver;
+import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriverWait;
+import es.us.isa.ideas.test.app.pageobject.TestCase;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -25,7 +27,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
  * @version 1.0
  */
-public class FileSection extends EditorPage {
+public class SectionFile extends EditorPage {
+    
+    @FindBy(css = "#projectsTree > ul > li:nth-child(1) > span > a")
+    WebElement projectElement;
+    
+    // File tests
 
     public static void testCreateFile(String fileName, By parentLocator) {
         new FileTestCase().testCreateFile(fileName, parentLocator);
@@ -38,9 +45,25 @@ public class FileSection extends EditorPage {
     public static void testEditFile(By fileLocator, String content) {
         new FileTestCase().testEditFile(fileLocator, content);
     }
+    
+    // Directory tests
+    
+    public static void testCreateDirectory(String dirName, By parentLocator) {
+        new DirectoryTestCase().testCreateDirectory(dirName, parentLocator);
+    }
+    
+    // Project tests
+    
+    public static void testCreateProject(String projName) {
+        new ProjectTestCase().testCreateProject(projName);
+    }
+
+    public WebElement getProjectElement() {
+        return PageFactory.initElements(getWebDriver(), SectionFile.class).projectElement;
+    }
 
     /**
-     * This class implements all tests available in EditorPage.
+     * This class implements all tests related to files management.
      */
     private static class FileTestCase extends TestCase {
 
@@ -62,7 +85,7 @@ public class FileSection extends EditorPage {
 
         public void testCreateFile(String fileName, By parentLocator) {
 
-            EditorPage page = FileSection.navigateTo()
+            EditorPage page = SectionFile.navigateTo()
                 .expandAllDynatreeNodes()
                 .clickOnNotClickableLocator(parentLocator)
                 .clickOnProjectAddButton()
@@ -91,7 +114,7 @@ public class FileSection extends EditorPage {
 
         public void testRenameFile(String originFileName, String targetFileName) {
 
-            EditorPage page = FileSection.navigateTo()
+            EditorPage page = SectionFile.navigateTo()
                 .expandAllDynatreeNodes()
                 .activateDynatreeContextMenuByNodeTitle(originFileName)
                 .clickOnContextMenuEditAnchor()
@@ -103,7 +126,7 @@ public class FileSection extends EditorPage {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
-                Logger.getLogger(FileSection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
             }
 
 //            getWebDriverWait().until(fileCondition);
@@ -153,4 +176,76 @@ public class FileSection extends EditorPage {
         }
     }
 
+    /**
+     * This class implements all tests related to directories management.
+     */
+    private static class DirectoryTestCase extends TestCase {
+
+        public void testCreateDirectory(String dirName, By parentLocator) {
+
+            EditorPage page = SectionFile.navigateTo()
+                .expandAllDynatreeNodes()
+                .clickOnNotClickableLocator(parentLocator)
+                .expandAllDynatreeNodes()
+                .clickOnProjectAddButton()
+                .clickOnCreateDirectoryAnchor()
+                .typeDirectoryName(dirName)
+                .clickOnModalContinueButton()
+                .expandAllDynatreeNodes();
+
+            By fileLocator = By.linkText(dirName);
+            ExpectedCondition<WebElement> dirCondition = ExpectedConditions.visibilityOfElementLocated(fileLocator);
+
+            getWebDriverWait().until(dirCondition);
+            getWebDriver().navigate().refresh();
+
+            page.expandAllDynatreeNodes();
+            getWebDriverWait().until(dirCondition);
+
+            TEST_RESULT = getWebDriver().findElements(fileLocator).size() > 0;
+
+            if (TEST_RESULT) {
+                page.consoleEchoCommand("Directory \"" + dirName + "\" was successfully created.");
+            }
+
+            Assert.assertTrue(TEST_RESULT);
+
+        }
+    }
+    
+    /**
+     * This class implements all tests related to projects management.
+     */
+    private static class ProjectTestCase extends TestCase {
+
+        public void testCreateProject(String projName) {
+
+            EditorPage page = EditorPage.navigateTo()
+                .clickOnProjectAddButton()
+                .clickOnCreateProjectAnchor()
+                .typeProjectName(projName)
+                .clickOnModalContinueButton();
+
+            getWebDriver().navigate().refresh();
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            WebElement element = getWebDriverWait().until(ExpectedConditions.visibilityOf(new SectionFile().getProjectElement()));
+
+            TEST_RESULT = element.getText().equals(projName);
+
+            if (TEST_RESULT) {
+                page.consoleEchoCommand("Project \"" + projName + "\" was successfully created.");
+            }
+
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            Assert.assertTrue(TEST_RESULT);
+
+        }
+    }
+    
 }

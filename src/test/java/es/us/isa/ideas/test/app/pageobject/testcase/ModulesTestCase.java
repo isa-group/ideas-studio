@@ -1,18 +1,17 @@
 package es.us.isa.ideas.test.app.pageobject.testcase;
 
-import es.us.isa.ideas.test.app.pageobject.editor.DirectorySection;
+import es.us.isa.ideas.test.app.pageobject.TestCase;
+import es.us.isa.ideas.test.app.pageobject.PageObject;
 import es.us.isa.ideas.test.app.pageobject.editor.EditorPage;
-import es.us.isa.ideas.test.app.pageobject.editor.FileSection;
-import es.us.isa.ideas.test.app.pageobject.editor.ProjectSection;
-import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceSection;
 import es.us.isa.ideas.test.app.pageobject.login.LoginPage;
-import static org.junit.Assert.assertTrue;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -22,7 +21,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestCaseModules extends TestCase {
+public class ModulesTestCase extends TestCase {
 
     @Test
     public void step01_login() {

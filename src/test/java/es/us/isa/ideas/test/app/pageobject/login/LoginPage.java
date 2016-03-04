@@ -1,8 +1,8 @@
 package es.us.isa.ideas.test.app.pageobject.login;
 
-import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
-import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
-import es.us.isa.ideas.test.app.pageobject.testcase.TestProperty;
+import es.us.isa.ideas.test.app.pageobject.PageObject;
+import es.us.isa.ideas.test.app.pageobject.TestCase;
+import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.WebElement;

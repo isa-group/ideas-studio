@@ -1,6 +1,7 @@
-package es.us.isa.ideas.test.app.pageobject.testcase;
+package es.us.isa.ideas.test.app.pageobject;
 
 import es.us.isa.ideas.test.app.pageobject.editor.EditorPage;
+import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.By;

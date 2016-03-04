@@ -1,10 +1,10 @@
 package es.us.isa.ideas.test.app;
 
-import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
-import es.us.isa.ideas.test.app.pageobject.testcase.TestCaseDynatree;
-import es.us.isa.ideas.test.app.pageobject.testcase.TestCaseWorkspaceDashboard;
-import es.us.isa.ideas.test.app.pageobject.testcase.TestCaseWorkspaceDemo;
-import es.us.isa.ideas.test.app.pageobject.testcase.TestCaseWorkspaceEditor;
+import es.us.isa.ideas.test.app.pageobject.PageObject;
+import es.us.isa.ideas.test.app.pageobject.testcase.DynatreeTestCase;
+import es.us.isa.ideas.test.app.pageobject.testcase.WorkspaceDashboardTestCase;
+import es.us.isa.ideas.test.app.pageobject.testcase.WorkspaceDemoTestCase;
+import es.us.isa.ideas.test.app.pageobject.testcase.WorkspaceEditorTestCase;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.AfterClass;
@@ -23,10 +23,10 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    TestCaseDynatree.class,
-    TestCaseWorkspaceEditor.class,
-    TestCaseWorkspaceDashboard.class,
-    TestCaseWorkspaceDemo.class
+    DynatreeTestCase.class,
+    WorkspaceEditorTestCase.class,
+    WorkspaceDashboardTestCase.class,
+    WorkspaceDemoTestCase.class
 })
 public class TestSuiteCore {
 

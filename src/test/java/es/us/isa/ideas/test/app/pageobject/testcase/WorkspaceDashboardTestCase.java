@@ -1,6 +1,6 @@
 package es.us.isa.ideas.test.app.pageobject.testcase;
 
-import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceSection;
+import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceManagerPage;
 import es.us.isa.ideas.test.app.pageobject.login.LoginPage;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.junit.runners.MethodSorters;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestCaseWorkspaceDashboard extends TestCase {
+public class WorkspaceDashboardTestCase {
 
     static String originWSName = "NewWorkspaceCard";
     static String originWSDesc = "Selemium Test";
@@ -28,95 +28,95 @@ public class TestCaseWorkspaceDashboard extends TestCase {
 
     @Test
     public void step01_loginGuest() {
-        WorkspaceSection.logout();
+        WorkspaceManagerPage.logout();
         LoginPage.testLogin("guest", "guest");
     }
 
     @Test
     public void step02_createGuestWorkspace() {
-        WorkspaceSection.testCreateWorkspace(demoWSName, "", "");
+        WorkspaceManagerPage.testCreateWorkspace(demoWSName, "", "");
     }
 
     @Test
     public void step03_publishDemoWorkspace() {
-        WorkspaceSection.testPublishDemoWorkspace();
+        WorkspaceManagerPage.testPublishDemoWorkspace();
     }
 
     @Test
     public void step04_loginAutoTester() {
-        WorkspaceSection.logout();
+        WorkspaceManagerPage.logout();
         LoginPage.testLogin("autotester", "autotester");
     }
     
     @Test
     public void step05_createAutoTesterWorkspace() {
-        WorkspaceSection.testCreateWorkspace(originWSName, originWSDesc, originWSTags);
+        WorkspaceManagerPage.testCreateWorkspace(originWSName, originWSDesc, originWSTags);
     }
     
     @Test
     public void step06_openAutoTesterWorkspaceFromDashboard() {
-        WorkspaceSection.testOpenWorkspaceFromDashboard();
+        WorkspaceManagerPage.testOpenWorkspaceFromDashboard();
     }
     
     @Test
     public void step07_downloadWorkspaceFromDashboard() {
-        WorkspaceSection.testDownloadWorkspaceFromDashboard();
+        WorkspaceManagerPage.testDownloadWorkspaceFromDashboard();
     }
     
     @Test
     public void step08_editWorkspaceFromDashboard() {
-        WorkspaceSection.testEditWorkspaceFromDashboard(targetWSName, targetWSDesc);
+        WorkspaceManagerPage.testEditWorkspaceFromDashboard(targetWSName, targetWSDesc);
     }
     
     @Test
     public void step09_publishDemoWorkspaceFromDashboard() {
-        WorkspaceSection.testPublishDemoWorkspaceFromDashboard();
+        WorkspaceManagerPage.testPublishDemoWorkspaceFromDashboard();
     }
     
     @Test
     public void step10_updateDemoWorkspaceFromDashboard() {
-        WorkspaceSection.testUpdateDemoWorkspaceFromDashboard();
+        WorkspaceManagerPage.testUpdateDemoWorkspaceFromDashboard();
     }
     
     @Test
     public void step11_depublishDemoWorkspaceFromDashboard() {
-        WorkspaceSection.testDepublishDemoWorkspaceFromDashboard(demoWSName);
+        WorkspaceManagerPage.testDepublishDemoWorkspaceFromDashboard(demoWSName);
     }
     
     @Test
     public void step12_deleteWorkspaceFromDashboard() {
-        WorkspaceSection.testDeleteWorkspaceFromDashboard(targetWSName);
+        WorkspaceManagerPage.testDeleteWorkspaceFromDashboard(targetWSName);
     }
     
     @Test
     public void step13_clonePublicDemoFromDashboard() {
-        WorkspaceSection.testClonePublicDemoFromDashboard(demoWSName);
+        WorkspaceManagerPage.testClonePublicDemoFromDashboard(demoWSName);
     }
     
     @Test
     public void step14_deleteCloneDemoFromDashboard() {
-        WorkspaceSection.testDeleteCloneDemoFromDashboard(targetWSName);
+        WorkspaceManagerPage.testDeleteCloneDemoFromDashboard(targetWSName);
     }
     
     @Test
     public void step15_loginGuest() {
-        WorkspaceSection.logout();
+        WorkspaceManagerPage.logout();
         LoginPage.testLogin("guest", "guest");
     }
     
     @Test
     public void step16_deleteGuestPublicDemoFromDashboard() {
-        WorkspaceSection.testDeleteCloneDemoFromDashboard(demoWSName);
+        WorkspaceManagerPage.testDeleteCloneDemoFromDashboard(demoWSName);
     }
     
     @Test
     public void step17_loginDemoMaster() {
-        WorkspaceSection.logout();
+        WorkspaceManagerPage.logout();
         LoginPage.testLogin("DemoMaster", "DemoMaster");
     }
     
     @Test
     public void step18_deleteDemoMasterWorkspace() {
-        WorkspaceSection.testDeleteCloneDemoFromDashboard(demoWSName);
+        WorkspaceManagerPage.testDeleteCloneDemoFromDashboard(demoWSName);
     }
 }

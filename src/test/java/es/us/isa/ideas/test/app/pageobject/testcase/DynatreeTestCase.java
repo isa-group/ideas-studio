@@ -1,9 +1,7 @@
 package es.us.isa.ideas.test.app.pageobject.testcase;
 
-import es.us.isa.ideas.test.app.pageobject.editor.DirectorySection;
-import es.us.isa.ideas.test.app.pageobject.editor.FileSection;
-import es.us.isa.ideas.test.app.pageobject.editor.ProjectSection;
-import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceSection;
+import es.us.isa.ideas.test.app.pageobject.editor.SectionFile;
+import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceManagerPage;
 import es.us.isa.ideas.test.app.pageobject.login.LoginPage;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -18,7 +16,7 @@ import org.openqa.selenium.By;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestCaseDynatree extends TestCase {
+public class DynatreeTestCase {
 
     static String wsName = "wsTest";
     static String wsDesc = "descTest";
@@ -45,12 +43,12 @@ public class TestCaseDynatree extends TestCase {
      */
     @Test
     public void step02_createWorkspace() {
-        WorkspaceSection.testCreateWorkspace(wsName, wsDesc, wsTags);
+        WorkspaceManagerPage.testCreateWorkspace(wsName, wsDesc, wsTags);
     }
 
     @Test
     public void step03_createProject() {
-        ProjectSection.testCreateProject(projName);
+        SectionFile.testCreateProject(projName);
     }
 
     /**
@@ -60,7 +58,7 @@ public class TestCaseDynatree extends TestCase {
     public void step04_createFile() {
         By parentLocator = By.linkText(projName);
         String fileName = originFileName;
-        FileSection.testCreateFile(fileName, parentLocator);
+        SectionFile.testCreateFile(fileName, parentLocator);
     }
 
     /**
@@ -69,7 +67,7 @@ public class TestCaseDynatree extends TestCase {
     @Test
     public void step05_createDirectory() {
         By parentLocator = By.linkText(projName);
-        DirectorySection.testCreateDirectory(dir1, parentLocator);
+        SectionFile.testCreateDirectory(dir1, parentLocator);
     }
 
     /**
@@ -78,7 +76,7 @@ public class TestCaseDynatree extends TestCase {
     @Test
     public void step06_createDirectory2L() {
         By parentLocator = By.linkText(dir1);
-        DirectorySection.testCreateDirectory(dir2, parentLocator);
+        SectionFile.testCreateDirectory(dir2, parentLocator);
     }
 
     /**
@@ -88,29 +86,29 @@ public class TestCaseDynatree extends TestCase {
     public void step07_createFile2L() {
         By parentLocator = By.linkText(dir2);
         String fileName = originFile2LName;
-        FileSection.testCreateFile(fileName, parentLocator);
+        SectionFile.testCreateFile(fileName, parentLocator);
     }
 
     @Test
     public void step08_renameFile() {
-        FileSection.testRenameFile(originFileName + fileNameExtension,
+        SectionFile.testRenameFile(originFileName + fileNameExtension,
             targetFileName + fileNameExtension);
     }
 
     @Test
     public void step09_editFile2L() {
         By fileLocator = By.linkText(originFile2LName + fileNameExtension);
-        FileSection.testEditFile(fileLocator, "Hello world!");
+        SectionFile.testEditFile(fileLocator, "Hello world!");
     }
 
     @Test
     public void step10_renameFile2L() {
-        FileSection.testRenameFile(originFile2LName + fileNameExtension,
+        SectionFile.testRenameFile(originFile2LName + fileNameExtension,
             targetFile2LName + fileNameExtension);
     }
 
     @Test
     public void step11_deleteWorkspace() {
-        WorkspaceSection.testDeleteWorkspace(wsName);
+        WorkspaceManagerPage.testDeleteWorkspace(wsName);
     }
 }

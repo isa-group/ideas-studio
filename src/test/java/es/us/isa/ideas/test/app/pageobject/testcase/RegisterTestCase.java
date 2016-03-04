@@ -1,12 +1,12 @@
 package es.us.isa.ideas.test.app.pageobject.testcase;
 
+import es.us.isa.ideas.test.app.utils.TestProperty;
+import es.us.isa.ideas.test.app.pageobject.PageObject;
 import es.us.isa.ideas.test.app.pageobject.login.RecoverPasswordPage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterPage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialGooglePage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialTwitterPage;
-import static es.us.isa.ideas.test.app.pageobject.testcase.PageObject.getWebDriver;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -18,7 +18,7 @@ import org.junit.runners.MethodSorters;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestCaseRegister extends TestCase {
+public class RegisterTestCase {
 
     @Test
     public void step01_registerFormFieldMaxLength() {
