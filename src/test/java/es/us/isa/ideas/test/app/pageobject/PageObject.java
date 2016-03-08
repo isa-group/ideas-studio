@@ -26,7 +26,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class PageObject<T> {
 
     static final WebDriver driver = new ChromeDriver();
-    static final WebDriverWait wait = new WebDriverWait(driver, 60);
+    static final WebDriverWait wait = new WebDriverWait(driver, 30);
     static final JavascriptExecutor js = (JavascriptExecutor) driver;
 
     // Getters
@@ -40,6 +40,18 @@ public class PageObject<T> {
 
     public static JavascriptExecutor getJs() {
         return js;
+    }
+
+    // Functionalities
+    public static void navigateTo(String relativeUrl) {
+        
+        String absoluteUrl = TestProperty.getBaseUrl() + relativeUrl;
+        String currentUrl = getWebDriver().getCurrentUrl();
+        
+        if (!currentUrl.contains(absoluteUrl)) {
+            getWebDriver().get(absoluteUrl);
+        }
+        
     }
 
     public T clickOnClickableElement(WebElement element) {
@@ -120,13 +132,12 @@ public class PageObject<T> {
                 return (!d.getCurrentUrl().equals(previousURL));
             }
         };
-        
+
         try {
             wait.until(e);
         } catch (NoSuchElementException ex) {
             // nothing
         }
-        
 
         return (T) this;
 

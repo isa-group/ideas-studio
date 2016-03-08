@@ -3,6 +3,7 @@ package es.us.isa.ideas.test.app.pageobject.testcase;
 import es.us.isa.ideas.test.app.pageobject.editor.SectionFile;
 import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceManagerPage;
 import es.us.isa.ideas.test.app.pageobject.login.LoginPage;
+import es.us.isa.ideas.test.app.utils.FileType;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -26,7 +27,7 @@ public class WorkspaceSwitchTestCase {
     
     static String fileName1 = "file1";
     static String fileName2 = "file2";
-    static String fileNameExtension = ".txt";
+    static FileType fileType = FileType.PLAINTEXT;
 
     @Test
     public void step01_login() {
@@ -46,7 +47,7 @@ public class WorkspaceSwitchTestCase {
     @Test
     public void step04_createFile() {
         By parentLocator = By.linkText(projName1);
-        SectionFile.testCreateFile(fileName1, parentLocator);
+        SectionFile.testCreateFile(fileName1, fileType, parentLocator);
     }
     
     @Test
@@ -62,12 +63,12 @@ public class WorkspaceSwitchTestCase {
     @Test
     public void step07_createFile2() {
         By parentLocator = By.linkText(projName2);
-        SectionFile.testCreateFile(fileName2, parentLocator);
+        SectionFile.testCreateFile(fileName2, fileType, parentLocator);
     }
     
     @Test
     public void step08_editFile2() {
-        By fileLocator = By.linkText(fileName2 + fileNameExtension);
+        By fileLocator = By.linkText(fileName2 + fileType.toString());
         SectionFile.testEditFile(fileLocator, "Hello world!");
     }
 
@@ -78,7 +79,7 @@ public class WorkspaceSwitchTestCase {
     
     @Test
     public void step10_editFile1() {
-        By fileLocator = By.linkText(fileName1 + fileNameExtension);
+        By fileLocator = By.linkText(fileName1 + fileType.toString());
         SectionFile.testEditFile(fileLocator, "Hello world!");
     }
 

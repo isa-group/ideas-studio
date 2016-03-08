@@ -5,6 +5,7 @@
  */
 package es.us.isa.ideas.test.app.pageobject.editor;
 
+import es.us.isa.ideas.test.app.utils.FileType;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getJs;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriver;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriverWait;
@@ -33,9 +34,13 @@ public class SectionFile extends EditorPage {
     WebElement projectElement;
     
     // File tests
-
-    public static void testCreateFile(String fileName, By parentLocator) {
-        new FileTestCase().testCreateFile(fileName, parentLocator);
+    
+    public static void testOpenFile(By fileLocator) {
+        new FileTestCase().testOpenFile(fileLocator);
+    }
+    
+    public static void testCreateFile(String fileName, FileType fileType, By parentLocator) {
+        new FileTestCase().testCreateFile(fileName, fileType, parentLocator);
     }
 
     public static void testRenameFile(String originFileName, String targetFileName) {
@@ -58,6 +63,8 @@ public class SectionFile extends EditorPage {
         new ProjectTestCase().testCreateProject(projName);
     }
 
+    // Others
+    
     public WebElement getProjectElement() {
         return PageFactory.initElements(getWebDriver(), SectionFile.class).projectElement;
     }
@@ -83,17 +90,47 @@ public class SectionFile extends EditorPage {
 
         }
 
-        public void testCreateFile(String fileName, By parentLocator) {
+        /**
+         * Checks if the click on fileLocator param activates a tab named like it.
+         * @param fileLocator 
+         */
+        public void testOpenFile(By fileLocator) {
+
+            EditorPage page = EditorPage.navigateTo().expandAllDynatreeNodes();
+            ExpectedCondition<WebElement> fileCondition = ExpectedConditions.visibilityOfElementLocated(fileLocator);
+
+            // Open file
+            WebElement fileElement = getWebDriverWait().until(fileCondition);
+            page.clickOnNotClickableElement(fileElement);
+
+            TEST_RESULT = page.isFileTabActivatedByLocator(fileLocator);
+
+            if (TEST_RESULT) {
+                page.consoleEchoCommand("File \"" + fileElement.getText() + "\" was successfully opened.");
+            }
+
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            Assert.assertTrue(TEST_RESULT);
+
+        }
+
+        /**
+         * Check if a new file persists after a page refresh.
+         * @param fileName
+         * @param fileType
+         * @param parentLocator 
+         */
+        public void testCreateFile(String fileName, FileType fileType, By parentLocator) {
 
             EditorPage page = SectionFile.navigateTo()
                 .expandAllDynatreeNodes()
                 .clickOnNotClickableLocator(parentLocator)
                 .clickOnProjectAddButton()
-                .clickOnCreateTxtFileAnchor()
+                .clickOnCreateFile(fileType)
                 .typeFileName(fileName)
                 .clickOnModalContinueButton();
 
-            By fileLocator = By.linkText(fileName + ".txt");
+            By fileLocator = By.linkText(fileName + fileType.toString());
             ExpectedCondition<WebElement> fileCondition = ExpectedConditions.visibilityOfElementLocated(fileLocator);
 
             getWebDriverWait().until(fileCondition);
@@ -105,9 +142,10 @@ public class SectionFile extends EditorPage {
             TEST_RESULT = getWebDriver().findElements(fileLocator).size() > 0;
 
             if (TEST_RESULT) {
-                page.consoleEchoCommand("File \"" + fileName + ".txt\" was successfully created.");
+                page.consoleEchoCommand("File \"" + fileName + fileType.toString() + "\" was successfully created.");
             }
 
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
         }
@@ -141,6 +179,7 @@ public class SectionFile extends EditorPage {
                 page.consoleEchoCommand("File \"" + originFileName + "\" was successfully renamed to \"" + targetFileName + "\".");
             }
 
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
         }
@@ -168,9 +207,10 @@ public class SectionFile extends EditorPage {
             TEST_RESULT = !isAceEditorEmpty();
 
             if (TEST_RESULT) {
-                page.consoleEchoCommand("File was successfully edited.");
+                page.consoleEchoCommand("File \"" + fileElement.getText() + "\" was successfully edited.");
             }
 
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
         }
@@ -208,6 +248,7 @@ public class SectionFile extends EditorPage {
                 page.consoleEchoCommand("Directory \"" + dirName + "\" was successfully created.");
             }
 
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
         }

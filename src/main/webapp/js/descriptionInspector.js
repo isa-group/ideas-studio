@@ -3917,7 +3917,43 @@ var DescriptionInspector = {
                     // Config form
                     var modelFileUri = DescriptionInspector.getCurrentModelFileUri(),
                         fileName = modelFileUri.replace(/\.[^/.]+$/, "").split("/").pop(),
-                        content = '<div ng-repeat="key in model.creationConstraints" class="ag-template">\n\t<ul>\n\t\t<li>\n\t\t\t<h4>\n\t\t\t\t<input ng-bind="key.slo.expression.properties.exp.properties.exp2.properties.exp2.properties.value" ng-model="key.slo.expression.properties.exp.properties.exp2.properties.exp2.properties.value" /> € / mo</h4>\n\t\t\t</h4>\n\t\t</li>\n\t\t<li>\n\t\t\t<input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp1.properties.exp2.properties.value" /> requests</em> allowed</li>\n\t\t</li>\n\t\t<li>\n\t\t\t<input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp2.properties.exp2.properties.value" /> ms</em> guaranteed response time </li>\n\t\t</li>\n\t</ul>\n</div>';
+                        content = ''+
+                            '<span style="display: block;font-size: 16px;font-family: serif, Arial;">\n'+
+                            '    This is a sample content for a <strong>FORM</strong> file.\n'+
+                            '    You can make angular references based on your <strong>JSON</strong> description.\n'+
+                            '    All references hang from <strong>$scope.model</strong>.\n'+
+                            '    Assuming your <strong>JSON</strong> content is:\n'+
+                            '</span>\n'+
+                            '<xmp style="background: rgb(254, 254, 254);padding: 20px;border: 1px solid rgb(247, 247, 247);overflow-x: auto;">{\n'+
+                            '  "creationConstraints": {\n'+
+                            '    "C3": {\n'+
+                            '      "slo": {\n'+
+                            '        "expression": {"_type": "ParenthesisExpression",\n'+
+                            '          "properties": {\n'+
+                            '            "exp": {\n'+
+                            '              "_type": "LogicalExpression",\n'+
+                            '                "properties": {\n'+
+                            '                  ...\n'+
+                            '                }\n'+
+                            '      ...\n'+
+                            '}</xmp>\n'+
+                            '<span style="display: block;font-size: 16px;font-family: serif, Arial;">Here is a <strong>FORM</strong> example:</span>\n'+
+                            '<xmp style="background: rgb(254, 254, 254);padding: 20px;border: 1px solid rgb(247, 247, 247);overflow-x: auto;"><div ng-repeat="key in model.creationConstraints" class="ag-template">\n'+
+                            '  <ul>\n'+
+                            '    <li>\n'+
+                            '      <h4>\n'+
+                            '        <input ng-bind="key.slo.expression.properties.exp.properties.exp2.properties.exp2.properties.value" \n'+
+                            '               ng-model="key.slo.expression.properties.exp.properties.exp2.properties.exp2.properties.value" /> € / mo\n'+
+                            '      </h4>\n'+
+                            '    </li>\n'+
+                            '    <li>\n'+
+                            '      <input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp1.properties.exp2.properties.value" /> requests allowed\n'+
+                            '    </li>\n'+
+                            '    <li>\n'+
+                            '      <input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp2.properties.exp2.properties.value" /> ms guaranteed response time\n'+
+                            '    </li>\n'+
+                            '  </ul>\n'+
+                            '</div></xmp>';
 
                     // Create new file
                     EditorManager.createNode(modelFileUri, fileName, ".ang", function() {

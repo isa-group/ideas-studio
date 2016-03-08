@@ -72,40 +72,50 @@ angular.module("mainApp", ['puElasticInput'])
         $scope.slaString2Model = function () {
             var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
                 editorContent = document.editor.getValue();
+            
+            // Try-catch block for bad JSON parsing.
+            try {
+                
+                if (editorContent) {
 
-            if (editorContent) {
-                if (currentFormat === "json") {
-                    if ($scope.slaString !== "") {
-                        $scope.model = JSON.parse(editorContent);
+                    //TODO: check if it's a "JSONable" content
+
+                    if (currentFormat === "json") {
+                        if ($scope.slaString !== "") {
+                            $scope.model = JSON.parse(editorContent);
+                        } else {
+                            $scope.model = undefined;
+                        }
+
+                    } else if (currentFormat === "yaml") {
+                        $scope.model = jsyaml.safeLoad(editorContent);
+
                     } else {
-                        $scope.model = undefined;
-                    }
+                        // Convert current format to json
+                        var converterUri = ModeManager.getConverter(ModeManager
+                                .calculateLanguageIdFromExt(ModeManager
+                                    .calculateExtFromFileUri(EditorManager.currentUri)));
 
-                } else if (currentFormat === "yaml") {
-                    $scope.model = jsyaml.safeLoad(editorContent);
-
-                } else {
-                    // Convert current format to json
-                    var converterUri = ModeManager.getConverter(ModeManager
-                            .calculateLanguageIdFromExt(ModeManager
-                                .calculateExtFromFileUri(EditorManager.currentUri)));
-
-                    var promise = $q(function (resolve, reject) {
-                        CommandApi.callConverter(currentFormat, "json", EditorManager.currentUri, editorContent, converterUri,
-                            function(result) {
-                                if (result.data) {
-                                    resolve( JSON.parse(result.data) );
+                        var promise = $q(function (resolve, reject) {
+                            CommandApi.callConverter(currentFormat, "json", EditorManager.currentUri, editorContent, converterUri,
+                                function(result) {
+                                    if (result.data) {
+                                        resolve( JSON.parse(result.data) );
+                                    }
                                 }
-                            }
-                        );
-                    });
-                    promise.then(function (result) {
-                        $scope.model = result;
-                    });
+                            );
+                        });
+                        promise.then(function (result) {
+                            $scope.model = result;
+                        });
+                    }
+                } else {
+                    $scope.model = {};
                 }
-            } else {
-                $scope.model = {};
+            } catch (err) {
+                // nothing
             }
+            
         };
 
         // Compile model from model inspector
@@ -178,7 +188,7 @@ angular.module("mainApp", ['puElasticInput'])
                 }
                 
             } else {
-                console.log("No creation constraint to add");
+                console.log("Please, define a 'creationConstraint' in the model");
             }
             
         };

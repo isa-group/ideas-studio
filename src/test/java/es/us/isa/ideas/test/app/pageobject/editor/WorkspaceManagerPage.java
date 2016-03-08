@@ -5,7 +5,7 @@
  */
 package es.us.isa.ideas.test.app.pageobject.editor;
 
-import static es.us.isa.ideas.test.app.pageobject.editor.EditorPage.LOG;
+import es.us.isa.ideas.test.app.pageobject.PageObject;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriver;
 import es.us.isa.ideas.test.app.pageobject.TestCase;
 import es.us.isa.ideas.test.app.utils.TestProperty;
@@ -16,6 +16,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -139,12 +140,9 @@ public class WorkspaceManagerPage extends EditorPage {
         public void testCreateWorkspace(String wsName, String wsDescription, String wsTags) {
 
             EditorPage page = EditorPage.navigateTo();
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
+            // Implicit wait
+            PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOf(page.wsMenuTogglerButton));
 
             page.clickOnMenuTogglerButton()
                 .clickOnWorkspaceAddButton()
@@ -154,12 +152,6 @@ public class WorkspaceManagerPage extends EditorPage {
                 .clickOnModalContinueButton();
 
             getWebDriver().navigate().refresh();
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
 
             String targetWsName = page.getProjCurrentWSText();
 
@@ -177,10 +169,14 @@ public class WorkspaceManagerPage extends EditorPage {
         public void testOpenWorkspace(String wsName) {
             
             EditorPage page = PageFactory.initElements(getWebDriver(), EditorPage.class);
+
+            // Implicit wait
+            PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOf(page.wsMenuTogglerButton));
+            
             page.clickOnMenuTogglerButton();
             
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000); // toggler animation
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -190,7 +186,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnClickableElement(element);
             
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000); // modal animation
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -198,7 +194,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnMenuTogglerButton();
             
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000); // toggler animation
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }

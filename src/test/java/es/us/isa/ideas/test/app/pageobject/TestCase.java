@@ -5,7 +5,10 @@
  */
 package es.us.isa.ideas.test.app.pageobject;
 
+import es.us.isa.ideas.test.app.utils.TestProperty;
+import java.util.logging.Logger;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.Timeout;
 
@@ -19,12 +22,18 @@ import org.junit.rules.Timeout;
 public class TestCase {
 
     protected static boolean TEST_RESULT;
-    
+    protected static final Logger LOG = Logger.getLogger(TestCase.class.getName());
+
     @Rule
     public Timeout globalTimeout = Timeout.seconds(30000); // 30 seconds max per method tested
 
+    @BeforeClass
+    public static void beforeClass() {
+        LOG.info(TestProperty.getTestProperties().getProperty("test.environment"));
+    }
+
     @Before
-    public void testResult() {
+    public void before() {
         TEST_RESULT = false;
     }
 
