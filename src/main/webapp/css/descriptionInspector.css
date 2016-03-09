@@ -310,6 +310,8 @@ a.bulkSelectAll, a.bulkSelectNone { cursor: pointer; }
 	text-decoration: none;
 }
 
+.modelInspectorContent {
+}
 
 /* add sla button */
 .modelInspectorContent > .addSlaButton,

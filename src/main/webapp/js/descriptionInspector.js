@@ -493,7 +493,6 @@ var DescriptionInspector = {
 			if (zoom > 0 && width > 0 && height > 0) {
 				$inspector.css("width", width * zoom + "px");
 				$inspector.css("height", height * zoom + "px");
-
 				return true;
 			} else {
 				return false;
@@ -3949,6 +3948,9 @@ var DescriptionInspector = {
                             '    </li>\n'+
                             '    <li>\n'+
                             '      <input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp2.properties.exp2.properties.value" /> ms guaranteed response time\n'+
+                            '    </li>\n'+
+                            '    <li>\n'+
+                            '      <a ng-click="removeModel(key.id, $event)">&times;</a>\n'+
                             '    </li>\n'+
                             '  </ul>\n'+
                             '</div></xmp>';

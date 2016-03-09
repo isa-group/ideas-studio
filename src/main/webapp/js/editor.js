@@ -275,8 +275,13 @@ var toggleMaximization = function () {
     var editorMainPanel = $("#editorMainPanel");
     var max_min = $("#editorMaximize");
 
+    // Fit inspector content
     setTimeout(function () {
         DescriptionInspector.inspectorContent.resize();
+        // Model tab content
+        $("#inspectorModelContent").show().height(
+            $("#editorInspectorLoader").height() - $("#appFooter").height() - $("ul#editorTabs.inspectorTabs").height() - 12
+        );
     }, 500);
 
     if (appMainContent.hasClass("maximizedEditor")) {
