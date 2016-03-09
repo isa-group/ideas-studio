@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package es.us.isa.ideas.test.app.pageobject.testcase;
+package es.us.isa.ideas.test.app.utils;
 
+import es.us.isa.ideas.test.app.pageobject.TestCase;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

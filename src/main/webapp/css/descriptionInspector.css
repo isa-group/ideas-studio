@@ -1,6 +1,7 @@
 /* DescriptionInspector Menu */
 
-#ideasBinding-descriptionBoardContent {
+#ideasBinding-descriptionBoardContent,
+#modelBoardContent {
 	position: absolute;
 	top: 0px;
 	right: 0px;
@@ -47,17 +48,29 @@
 	float: left;
 }
 
-#inspectorContent {
+#inspectorContent, #inspectorModelContent {
 	position: relative;
 	padding: 10px 35px;
 	overflow: auto;
 	height: 100%;
 	width: 100%;
 	bottom: 0;
-  	
 	white-space: normal;
 	margin: 0;
 	-webkit-user-select: initial;
+}
+
+#inspectorModelContent {
+	padding-top: 30px;
+	white-space: normal;
+}
+
+#inspectorModelContent div {
+	margin-bottom: 20px;
+}
+
+#inspectorModelContent li {
+	margin-bottom: 10px;
 }
 
 #editorInspector a.editorTab {
@@ -278,3 +291,121 @@ select.selectedFragment {
 }
 
 a.bulkSelectAll, a.bulkSelectNone { cursor: pointer; }
+
+/*#modelBoardContent {
+	position: absolute;
+	background: white url('../img/ideas/loading1_big_lgbg.gif') center
+		no-repeat;
+	background-size: 40px;
+}*/
+
+/* Model inspector */
+/* reader mode */
+#inspectorModelContent span.editorModelElement a[ng-hide='editorEnabled'],
+#editorWrapper span.editorModelElement a[ng-hide='editorEnabled'] {
+	line-height: 15px;
+	border: 0;
+	border-bottom: 1px dotted;
+	color: #333;
+	text-decoration: none;
+}
+
+.modelInspectorContent {
+}
+
+/* add sla button */
+.modelInspectorContent > .addSlaButton,
+#editorWrapper .addSlaButton {
+	width: 32px;
+	height: 33px;
+	border-radius: 0;
+	font-size: 28px;
+	padding: 0px;
+	line-height: 1;
+	border: 0;
+	position: absolute;
+	z-index: 10;
+	bottom: 0;
+	right: 0;
+	background: rgb(187, 222, 251) !important;
+	margin: 0 40px 30px 0;
+	display: none;
+}
+
+.addSlaButton:hover,
+.addSlaButton:focus,
+.addSlaButton:active {
+	background: rgb(187, 222, 251) !important;
+}
+
+/* Agreement template */
+div.ag-template {
+	position: relative;
+	display: inline-flex;
+	color: rgb(38, 50, 56);
+	text-align: center;
+	font: normal normal normal normal 14px / 20px HelveticaNeue-Light, 'Helvetica Neue Light', Helvetica, Arial, sans-serif;
+	margin: 20px;
+	overflow: hidden;
+	max-width: 250px;
+	min-height: 0px;
+	border-radius: 2px 2px 2px 2px;
+	border: 1px solid rgb(227, 242, 253);
+	background: rgba(227,242,253,0.25) none repeat scroll 0% 0% / auto padding-box border-box;
+}
+
+div.ag-template > ul {
+	list-style-type: none;
+	padding: 0px;
+}
+
+div.ag-template > ul > li {
+	box-sizing: border-box;
+	margin: 0px 0px 10px;
+	width: 100%;
+	background: rgb(227, 242, 253) none repeat scroll 0% 0% / auto padding-box border-box;
+	padding: 10px 20px;
+}
+
+div.ag-template > ul > li > h4 {
+	font-weight: bold;
+}
+
+/* agreement price */
+div.ag-template > ul > li:nth-child(1) {
+	background: none;
+	margin: 0;
+	opacity: 0.75;
+}
+
+/* agreement price */
+div.ag-template > ul > li:nth-child(2) {
+	background: rgb(187, 222, 251) none repeat scroll 0% 0% / auto padding-box border-box !important;
+}
+
+/* agreement constraint */
+div.ag-template > ul > li:nth-child(3) {}
+
+/* agreement guarantee */
+div.ag-template > ul > li:nth-child(4) {
+}
+
+/* agreement remover */
+div.ag-template > ul > li:nth-child(5) {
+	background: none;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+}
+
+div.ag-template > ul > li:nth-child(5) > a {
+    position: absolute;
+    top: -2px;
+    right: 5px;
+    font-size: 20px;
+    color: rgb(203, 218, 228);
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}

@@ -1,6 +1,6 @@
 package es.us.isa.ideas.test.app.pageobject.testcase;
 
-import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceSection;
+import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceManagerPage;
 import es.us.isa.ideas.test.app.pageobject.login.LoginPage;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -14,30 +14,30 @@ import org.junit.runners.MethodSorters;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestCaseWorkspaceDemo extends TestCase {
+public class WorkspaceDemoTestCase {
     
     static String demoWSName = "DemoWorkspace";
 
     @Test
     public void step01_loginGuest() {
-        WorkspaceSection.logout();
+        WorkspaceManagerPage.logout();
         LoginPage.testLogin("guest", "guest");
     }
 
     @Test
     public void step02_createGuestWorkspace() {
-        WorkspaceSection.testCreateWorkspace(demoWSName, "", "");
+        WorkspaceManagerPage.testCreateWorkspace(demoWSName, "", "");
     }
 
     @Test
     public void step03_publishDemoWorkspace() {
-        WorkspaceSection.testPublishDemoWorkspace();
+        WorkspaceManagerPage.testPublishDemoWorkspace();
     }
 
     @Test
     public void step04_viewDemo() {
-        WorkspaceSection.logout();
-        WorkspaceSection.testDemoView(demoWSName);
+        WorkspaceManagerPage.logout();
+        WorkspaceManagerPage.testDemoView(demoWSName);
     }
     
     @Test
@@ -47,6 +47,6 @@ public class TestCaseWorkspaceDemo extends TestCase {
     
     @Test
     public void step06_deleteGuestDemoFromDashboard() {
-        WorkspaceSection.testDeleteCloneDemoFromDashboard(demoWSName);
+        WorkspaceManagerPage.testDeleteCloneDemoFromDashboard(demoWSName);
     }
 }
