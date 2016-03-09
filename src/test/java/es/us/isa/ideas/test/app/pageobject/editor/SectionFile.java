@@ -201,7 +201,7 @@ public class SectionFile extends EditorPage {
             // Re-open file
             page.expandAllDynatreeNodes();
             fileElement = getWebDriverWait().until(fileCondition);
-            page.clickOnClickableElement(fileElement);
+            page.clickOnNotClickableElement(fileElement);
 
             // Check if content has been successfully saved.
             TEST_RESULT = !isAceEditorEmpty();

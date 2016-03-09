@@ -19,7 +19,8 @@ import org.openqa.selenium.By;
  * Applied Software Engineering Research Group (ISA Group) University of
  * Sevilla, Spain.
  * 
- * This test case needs HTML, JSON, YAML and ANGULAR modules deployed.
+ * This test case needs HTML, JSON, YAML, IAGREE-TEMPLATE and ANGULAR 
+ * modules deployed.
  *
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
  * @version 1.0
@@ -135,7 +136,7 @@ public class BindingFormTestCase {
      * Create by pressing inspector creator button.
      */
     @Test
-    public void step03_testBuildExampleForm() {
+    public void step02_testBuildExampleForm() {
         SectionInspector.testOpenInspector();
         By fileLocator = By.linkText(jsonFileName + jsonFileType.toString());
         SectionFile.testOpenFile(fileLocator);
@@ -146,7 +147,7 @@ public class BindingFormTestCase {
      * Open JSON file and check if formatView.
      */
     @Test
-    public void step04_testFormatViewForm() {
+    public void step03_testFormatViewForm() {
         By fileLocator = By.linkText(jsonFileName + jsonFileType.toString());
         SectionFile.testOpenFile(fileLocator);
         SectionEditorFormatTab.testIsEditorFormatActivated("FORM");
@@ -157,7 +158,7 @@ public class BindingFormTestCase {
      * It should show formatView content in the inspector.
      */
     @Test
-    public void step05_openInspectorWithSampleForm() {
+    public void step04_openInspectorWithSampleForm() {
         SectionInspector.testOpenInspector();
         String sampleContent = "This is a sample content for a FORM file.";
         SectionInspector.testInspectorFormTabContentContains(sampleContent);
@@ -165,7 +166,7 @@ public class BindingFormTestCase {
     }
     
     @Test
-    public void step06_createIAgreeEnvironment() {
+    public void step05_createIAgreeEnvironment() {
         By parentLocator = By.linkText(projName);
         SectionFile.testCreateFile(templateFileName, templateFileType, parentLocator);
         By fileLocator = By.linkText(templateFileName + templateFileType.toString());
@@ -178,7 +179,7 @@ public class BindingFormTestCase {
      * with different extension. #133
      */
     @Ignore
-    public void step07_testBuildFormFromScratch() {
+    public void step06_testBuildFormFromScratch() {
         By parentLocator = By.linkText(projName);
         SectionFile.testCreateFile(templateFileName, FileType.ANGULAR, parentLocator);
         By fileLocator = By.linkText(templateFileName + FileType.ANGULAR.toString());
@@ -186,7 +187,7 @@ public class BindingFormTestCase {
     }
     
     @Test
-    public void step07_testBuildExampleForm() {
+    public void step06_testBuildExampleForm() {
         
         // Create form file from inspector
         SectionInspector.testOpenInspector();
@@ -209,14 +210,14 @@ public class BindingFormTestCase {
      * constraint. 
      */
     @Test
-    public void step08_testFormatViewAddSlaButton() {
+    public void step07_testFormatViewAddSlaButton() {
         SectionBindingForm.testFormatViewAddSlaButton();
         SectionBindingForm.testNumberOfCreationConstraints(2);
         SectionEditorFormatTab.testActivateFormatTab("JSON");
     }
     
     @Test
-    public void step09_testUpdateModelFromIAgreeFormat() {
+    public void step08_testUpdateModelFromIAgreeFormat() {
         SectionEditorFormatTab.testActivateFormatTab("IAGREE");
         SectionInspector.testOpenInspector();
         
@@ -276,8 +277,8 @@ public class BindingFormTestCase {
         SectionBindingForm.testNumberInspectorConstraintCards(3);
     }
 
-    @Ignore
-    public void step11_deleteWorkspace() {
+    @Test
+    public void step09_deleteWorkspace() {
         WorkspaceManagerPage.testDeleteWorkspace(wsName);
     }
 }
