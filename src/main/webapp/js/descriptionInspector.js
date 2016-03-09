@@ -2995,9 +2995,6 @@ var DescriptionInspector = {
                     DescriptionInspector.setInspectorModelContent(
                         $("#modelBoardContent"), slaAddBtn,
                         function () {
-                            if (!EditorManager.currentDocumentHasProblems()) {
-                                $(".addSlaButton").show();
-                            }
                             tabs.angularCompileModelInspectorFormatView();
                         }
                     );
@@ -3065,7 +3062,10 @@ var DescriptionInspector = {
                 }, 100);
 
                 this.getHtmlObj().fadeIn();
-                $("#editorWrapper .addSlaButton").fadeIn();
+                var model = angular.element(document.getElementById("editorWrapper")).scope().model;
+                if (model && "creationConstraints" in model) {
+                    $("#editorWrapper .addSlaButton").fadeIn();
+                }
                 this.formatTab.activate();
 
 			} else {
@@ -3080,7 +3080,6 @@ var DescriptionInspector = {
 		 */
 		hide : function() {
             this.getHtmlObj().hide();
-            $("#editorWrapper .addSlaButton").hide();
 		},
 
 		/**
@@ -3230,7 +3229,6 @@ var DescriptionInspector = {
 			}, 100);
             
             // Model
-            $("#editorWrapper .addSlaButton").hide();
             DescriptionInspector.resetModel();
 		},
 

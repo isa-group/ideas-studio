@@ -109,12 +109,30 @@ angular.module("mainApp", ['puElasticInput'])
                             $scope.model = result;
                         });
                     }
+                    
                 } else {
                     $scope.model = {};
                 }
+                
             } catch (err) {
                 // nothing
             }
+            
+            // Show/hide addSlaButton
+            $timeout(function () {
+                console.log("scope.model : ", $scope.model);
+                if ($scope.model && $scope.model.creationConstraints) {
+                    if ($("#editorFormats .formatTab.active").text() === "FORM") {
+                        $(".addSlaButton").fadeIn();
+                    } else {
+                        $("#editorInspectorLoader .modelInspectorContent .addSlaButton").fadeIn();
+                    }
+
+                } else {
+                    $(".addSlaButton").hide();
+                } 
+
+            }, 500);
             
         };
 
