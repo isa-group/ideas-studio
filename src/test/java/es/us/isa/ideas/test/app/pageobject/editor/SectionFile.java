@@ -195,8 +195,20 @@ public class SectionFile extends EditorPage {
             WebElement fileElement = getWebDriverWait().until(fileCondition);
             page.clickOnNotClickableElement(fileElement)
                 .aceEditorContent(content);
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             getWebDriver().navigate().refresh();
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             // Re-open file
             page.expandAllDynatreeNodes();

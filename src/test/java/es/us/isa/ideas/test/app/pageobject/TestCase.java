@@ -25,7 +25,7 @@ public class TestCase {
     protected static final Logger LOG = Logger.getLogger(TestCase.class.getName());
 
     @Rule
-    public Timeout globalTimeout = Timeout.seconds(30000); // 30 seconds max per method tested
+    public Timeout globalTimeout = Timeout.seconds(120); // 30 seconds max per method tested
 
     @BeforeClass
     public static void beforeClass() {

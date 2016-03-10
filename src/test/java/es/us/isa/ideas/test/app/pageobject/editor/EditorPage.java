@@ -41,7 +41,7 @@ public class EditorPage extends PageObject<EditorPage> {
     @FindBy(id = "demo-ws")
     WebElement wsPublishDemoButton;
 
-    @FindBy(css = ".demoworkspace .card__meta-content-title")
+    @FindBy(css = "#wsmWorkspaces > div.col-xs-12.cards > div > div > div.card__meta > div > p.card__meta-content-title")
     WebElement wsDemoCardTitle;
 
     @FindBy(css = ".publicdemo  .card__meta-content-title")
@@ -82,10 +82,10 @@ public class EditorPage extends PageObject<EditorPage> {
     WebElement wsDashboardDeleteCardButton;
 
     // MODAL
-    @FindBy(css = "#appGenericModal > div > div > div.modal-footer > a.btn.btn-primary.continue")
+    @FindBy(css = "#appGenericModal div.modal-footer > a.btn.btn-primary.continue")
     WebElement modalContinueButton;
 
-    @FindBy(css = "#appGenericModal > div > div > div.modal-footer > a.btn.dismiss")
+    @FindBy(css = "#appGenericModal div.modal-footer > a.btn.dismiss")
     WebElement modalCloseButton;
 
     @FindBy(css = "#modalCreationField > input")
@@ -188,7 +188,7 @@ public class EditorPage extends PageObject<EditorPage> {
     }
 
     public EditorPage clickOnWorkspacePublishDemoButton() {
-        clickOnNotClickableElement(wsPublishDemoButton);
+        clickOnClickableElement(wsPublishDemoButton);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
@@ -250,7 +250,7 @@ public class EditorPage extends PageObject<EditorPage> {
 
     // click - modal
     public EditorPage clickOnModalContinueButton() {
-        clickOnClickableElement(modalContinueButton);
+        clickOnNotClickableElement(modalContinueButton);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
@@ -369,12 +369,12 @@ public class EditorPage extends PageObject<EditorPage> {
     }
 
     public EditorPage typeWorkspaceDescription(CharSequence... wsDescription) {
-        modalWSDescriptionField.sendKeys(wsDescription);
+        sendKeysWithWait(modalWSDescriptionField, wsDescription);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
     public EditorPage typeWorkspaceTags(CharSequence... wsTags) {
-        modalWSTagsField.sendKeys(wsTags);
+        sendKeysWithWait(modalWSTagsField, wsTags);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 

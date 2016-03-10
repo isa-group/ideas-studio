@@ -169,32 +169,23 @@ public class WorkspaceManagerPage extends EditorPage {
         public void testOpenWorkspace(String wsName) {
             
             EditorPage page = PageFactory.initElements(getWebDriver(), EditorPage.class);
-
-            // Implicit wait
-            PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOf(page.wsMenuTogglerButton));
-            
             page.clickOnMenuTogglerButton();
             
             try {
-                Thread.sleep(1000); // toggler animation
+                Thread.sleep(5000); // toggler animation
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            // Open workspace
             By locator = By.linkText(wsName);
-            WebElement element = page.wsMenuListContainer.findElement(locator);
+            WebElement element = PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
             page.clickOnClickableElement(element);
             
-            try {
-                Thread.sleep(1000); // modal animation
-            } catch (InterruptedException ex) {
-                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            page.clickOnMenuTogglerButton();
+            PageObject.getWebDriver().navigate().refresh();
             
             try {
-                Thread.sleep(1000); // toggler animation
+                Thread.sleep(5000); // toggler animation
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -210,7 +201,7 @@ public class WorkspaceManagerPage extends EditorPage {
             EditorPage page = WorkspaceManagerPage.navigateTo();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -218,7 +209,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnWorkspaceDashboardOpenCardButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -240,7 +231,7 @@ public class WorkspaceManagerPage extends EditorPage {
             getWebDriver().navigate().refresh();
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -260,16 +251,29 @@ public class WorkspaceManagerPage extends EditorPage {
 
         public void testEditWorkspaceFromDashboard(String wsName, String wsDescription) {
 
-            EditorPage page = WorkspaceManagerPage.navigateTo()
-                .clickOnWorkspaceDashboardEditCardButton()
+            EditorPage page = WorkspaceManagerPage.navigateTo();
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnWorkspaceDashboardEditCardButton()
                 .typeWorkspaceName(wsName)
                 .typeWorkspaceDescription(wsDescription)
                 .clickOnModalContinueButton();
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             getWebDriver().navigate().refresh();
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -289,8 +293,17 @@ public class WorkspaceManagerPage extends EditorPage {
         }
 
         public void testDownloadWorkspaceFromDashboard() {
-            WorkspaceManagerPage.navigateTo()
-                .clickOnWorkspaceDashboardDownloadCardButton();
+            
+            WorkspaceManagerPage page = WorkspaceManagerPage.navigateTo();
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnWorkspaceDashboardDownloadCardButton();
+            
             assertTrue(true); // copied by previous version of this test
         }
 
@@ -304,7 +317,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnWorkspaceDeleteButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -312,7 +325,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnModalContinueButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -322,7 +335,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnMenuTogglerButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -343,7 +356,7 @@ public class WorkspaceManagerPage extends EditorPage {
             EditorPage page = EditorPage.navigateTo();
             
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -352,7 +365,7 @@ public class WorkspaceManagerPage extends EditorPage {
             
             
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -361,7 +374,7 @@ public class WorkspaceManagerPage extends EditorPage {
             
             
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -369,7 +382,7 @@ public class WorkspaceManagerPage extends EditorPage {
             WorkspaceManagerPage.navigateTo();
             
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -385,7 +398,7 @@ public class WorkspaceManagerPage extends EditorPage {
             EditorPage page = WorkspaceManagerPage.navigateTo();
             
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -393,7 +406,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnWorkspaceDashboardPublishCardButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -401,7 +414,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnModalContinueButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -414,11 +427,18 @@ public class WorkspaceManagerPage extends EditorPage {
 
         public void testUpdateDemoWorkspaceFromDashboard() {
 
-            EditorPage page = WorkspaceManagerPage.navigateTo()
-                .clickOnWorkspaceDashboardUpdateDemoCardButton();
+            WorkspaceManagerPage page = WorkspaceManagerPage.navigateTo();
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnWorkspaceDashboardUpdateDemoCardButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -428,7 +448,7 @@ public class WorkspaceManagerPage extends EditorPage {
             WorkspaceManagerPage.navigateTo();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -443,11 +463,18 @@ public class WorkspaceManagerPage extends EditorPage {
 
         public void testDepublishDemoWorkspaceFromDashboard(String wsName) {
 
-            EditorPage page = WorkspaceManagerPage.navigateTo()
-                .clickOnWorkspaceDashboardDeleteDemoCardButton();
+            WorkspaceManagerPage page = WorkspaceManagerPage.navigateTo();
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnWorkspaceDashboardDeleteDemoCardButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -457,7 +484,7 @@ public class WorkspaceManagerPage extends EditorPage {
             WorkspaceManagerPage.navigateTo();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -465,7 +492,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnMenuTogglerButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -478,11 +505,18 @@ public class WorkspaceManagerPage extends EditorPage {
 
         public void testDeleteWorkspaceFromDashboard(String wsName) {
 
-            EditorPage page = WorkspaceManagerPage.navigateTo()
-                .clickOnWorkspaceDashboardDeleteCardButton();
+            EditorPage page = WorkspaceManagerPage.navigateTo();
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnWorkspaceDashboardDeleteCardButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -490,7 +524,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnModalContinueButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -498,7 +532,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnModalContinueButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -506,7 +540,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnMenuTogglerButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -522,7 +556,7 @@ public class WorkspaceManagerPage extends EditorPage {
             EditorPage page = WorkspaceManagerPage.navigateTo();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -530,7 +564,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnWorkspaceDashboardClonePublicDemoCardButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -539,7 +573,7 @@ public class WorkspaceManagerPage extends EditorPage {
             WorkspaceManagerPage.navigateTo();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -557,7 +591,7 @@ public class WorkspaceManagerPage extends EditorPage {
             EditorPage page = WorkspaceManagerPage.navigateTo();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -565,7 +599,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnWorkspaceDashboardDeleteCardButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -573,7 +607,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnModalContinueButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -581,7 +615,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnModalContinueButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -589,7 +623,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnMenuTogglerButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -606,7 +640,7 @@ public class WorkspaceManagerPage extends EditorPage {
                 .executeCommand("deleteWorkspace " + wsName, Keys.RETURN);
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -614,7 +648,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnModalContinueButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -622,7 +656,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnModalContinueButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -632,7 +666,7 @@ public class WorkspaceManagerPage extends EditorPage {
             page.clickOnMenuTogglerButton();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -650,29 +684,25 @@ public class WorkspaceManagerPage extends EditorPage {
 
         public void testDemoView(String wsName) {
 
-            EditorPage page = WorkspaceManagerPage.navigateTo()
-                .clickOnWorkspaceViewDemoButton();
-
+            WorkspaceManagerPage page = WorkspaceManagerPage.navigateTo();
+            
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+            page.clickOnWorkspaceViewDemoButton();
 
-            page.clickOnModalContinueButton();
-
+            // User is redirected to IDEAS in demo mode.
+            
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             TEST_RESULT = page.getProjCurrentWSText().equals(wsName);
-
-            if (TEST_RESULT) {
-                page.consoleEchoCommand("Demo Workspace \"" + wsName + "\" is ready.");
-            }
-
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             assertTrue(TEST_RESULT);
 

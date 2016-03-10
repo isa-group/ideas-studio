@@ -1,3 +1,7 @@
+ideas-studio v0.9.2, 09/03/2016
+----------------------------------------------
+- AngularJS description inspector #93
+
 ideas-studio v0.9.1, 24/02/2016
 ----------------------------------------------
 - New module: ideas-module-angular #120
