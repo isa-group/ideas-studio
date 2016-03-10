@@ -42,22 +42,23 @@ angular.module("mainApp", ['puElasticInput'])
                             converterUri = ModeManager.getConverter(ModeManager
                                 .calculateLanguageIdFromExt(ModeManager
                                     .calculateExtFromFileUri(currentUri)));
-                                
-                        if ( $(document.activeElement).closest("#editorWrapper").length === 0 ) { // editor is not focused
                             
-                            // Convert json to currentFormat
+                        // Convert json to currentFormat
+                        var promise = $q(function (resolve, reject) {
                             CommandApi.callConverter("json", currentFormat, currentUri, angular.toJson(newValue), converterUri,
-                                function (result) {
-
-                                    if (result.data !== document.editor.getValue()) {
-                                        document.editor.setValue(result.data, -1);
-                                        // Update editor to previous view
-                                        document.editor.selection.setRange(prevRange);
-                                        document.editor.renderer.scrollToY(prevPos);
-                                    }
+                                function(result) {
+                                    resolve(result.data);
                                 }
                             );
-                        }
+                        });
+                        promise.then(function (result) {
+                            if (result !== document.editor.getValue()) {
+                                document.editor.setValue(result, -1);
+                                // Update editor to previous view
+                                document.editor.selection.setRange(prevRange);
+                                document.editor.renderer.scrollToY(prevPos);
+                            }
+                        });
 
                     }   
                 }
