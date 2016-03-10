@@ -84,8 +84,6 @@ angular.module("mainApp", ['puElasticInput'])
                     if (currentFormat === "json") {
                         if ($scope.slaString !== "") {
                             $scope.model = JSON.parse(editorContent);
-                        } else {
-                            $scope.model = undefined;
                         }
 
                     } else if (currentFormat === "yaml") {
