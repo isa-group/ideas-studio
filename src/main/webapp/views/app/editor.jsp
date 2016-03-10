@@ -20,12 +20,12 @@
 <link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css" media="screen" />
 
 <script>
-        $(document).ready(initializeEditor);	
+        $(document).ready(initializeEditor);
 </script>
 
 <div id="editorSidePanel" class="ui-widget-content">
 	<div id="editorSidePanelHeader">
-		<span id="editorSidePanelHeaderWorkspaceInfo"></span> 
+		<span id="editorSidePanelHeaderWorkspaceInfo"></span>
 		<div id="editorSidePanelHeaderAddProject">
 			<div class="btn-group">
 			  <div class="btn btn-primary dropdown-toggle" data-toggle="dropdown">+</div>
@@ -67,12 +67,12 @@
 <!-- 				<span id="editorSocial"></span> -->
 			</div>
 		</div>
-		
+
 		<div id="editorWrapper">
 			<div id="editorTopShadow"></div>
 			<div id="editor"></div>
 		</div>
-		
+
 		<div id="editorFooter">
 			<ul id="editorFormats" class="nav nav-tabs">
 			</ul>
@@ -90,8 +90,8 @@
 		</div>
 		<div id="editorBottomPanelContentLoader" class="light">
 			<div id="consoleWrapper">
-				<div id="gcli-root">				
-                                    
+				<div id="gcli-root">
+
 				</div>
 			</div>
 		</div>
@@ -100,7 +100,7 @@
 
 <div id="editorInspector" class="ui-widget-content hdd">
 	<div id="editorInspectorLoader">
-		
+
 	</div>
 </div>
 <!-- script require for the internationalizaton of the menus -->
@@ -114,7 +114,7 @@
 <div id="shareDocumentModal">
 	<div class="modal-header">
 	    <h4 class="modal-title">Share Document</h4>
-	</div>                       
+	</div>
 	<div id="modalCreationMail" >
 		<div>
 			<span class="spn">To:</span>
@@ -124,7 +124,7 @@
 			<span class="spn">Mail:</span>
 			<textarea class="form-control input-share" id="mailContent"></textarea>
 		</div>
-	</div>	
+	</div>
 	<div id="footer">
 	    <a id="shareDocClosed" class="btn btn-primary">Cancel</a>
 	    <a id="sendMail" class="btn btn-primary continue">Send</a>
