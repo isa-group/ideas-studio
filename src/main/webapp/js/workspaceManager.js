@@ -299,7 +299,7 @@ var WorkspaceManager = {
             FileApi.currentWSAsDemoWS(workspaceName, callback);
             hideModal();
         };
-        showModal("Confirm publication as demo", "A demo for the workspace <b>'" + workspaceName + "'</b> will be published. \n\\n\
+        showModal("Confirm publication as demo", "A demo for the workspace <b>'" + workspaceName + "'</b> will be published. \n\
                     <BR/> All data will be accessible from:\n\
                     <BR/><BR/><span id=\"demoURL\">" + $("base").attr('href').valueOf() + "demo/" + workspaceName + "</span>\n\
                     <BR/><BR/><b>Do you want to create a demo for the existing workspace?</b><BR/></i>",

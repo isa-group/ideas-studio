@@ -80,26 +80,26 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
 
             // Email login
             getWebDriver().get("https://www.gmail.com");
-            locator = By.id("Email");
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                LOG.severe(ex.getMessage());
-            }
-            PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class)
-                .typeUsername(email)
-                .clickOnNext()
-                .typePassword(emailPass)
-                .clickOnSignIn();
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                LOG.severe(ex.getMessage());
-            }
-            TEST_RESULT = getWebDriver().getCurrentUrl().contains("mail.google.com");
-            Assert.assertTrue(TEST_RESULT);
+//            locator = By.id("Email");
+//            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException ex) {
+//                LOG.severe(ex.getMessage());
+//            }
+//            PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class)
+//                .typeUsername(email)
+//                .clickOnNext()
+//                .typePassword(emailPass)
+//                .clickOnSignIn();
+//
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException ex) {
+//                LOG.severe(ex.getMessage());
+//            }
+//            TEST_RESULT = getWebDriver().getCurrentUrl().contains("mail.google.com");
+//            Assert.assertTrue(TEST_RESULT);
 
             // Open email
             String selectorConfirmationEmail = "#\\3a 2 > div > div > div.UI tbody tr:first-child td:nth-child(4)";

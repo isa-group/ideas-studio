@@ -46,17 +46,17 @@ public class LoginPage extends PageObject<LoginPage> {
 
     // click
     public LoginPage clickOnLogin() {
-        loginButton.click();
+        clickOnClickableElement(loginButton);
         return PageFactory.initElements(getWebDriver(), LoginPage.class);
     }
 
     public RegisterSocialTwitterPage clickOnTwitter() {
-        twitterButton.click();
+        clickOnClickableElement(twitterButton);
         return PageFactory.initElements(getWebDriver(), RegisterSocialTwitterPage.class);
     }
 
     public RegisterSocialGooglePage clickOnGoogle() {
-        googleButton.click();
+        clickOnClickableElement(googleButton);
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
 
@@ -67,7 +67,7 @@ public class LoginPage extends PageObject<LoginPage> {
     }
 
     public LoginPage typePassword(CharSequence password) {
-        passwordField.sendKeys(password);
+        sendKeysWithWait(passwordField, password);
         return PageFactory.initElements(getWebDriver(), LoginPage.class);
     }
 
@@ -93,6 +93,8 @@ public class LoginPage extends PageObject<LoginPage> {
         public void testLogin(String username, String password) {
 
             LoginPage page = LoginPage.navigateTo();
+            
+            PageObject.alertWindowConfirm(3);
 
             try {
                 Thread.sleep(2000);

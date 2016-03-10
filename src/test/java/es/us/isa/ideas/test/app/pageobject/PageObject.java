@@ -4,9 +4,12 @@ import es.us.isa.ideas.test.app.pageobject.editor.EditorPage;
 import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -26,8 +29,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class PageObject<T> {
 
     static final WebDriver driver = new ChromeDriver();
-    static final WebDriverWait wait = new WebDriverWait(driver, 30);
+    static final WebDriverWait wait = new WebDriverWait(driver, 60);
     static final JavascriptExecutor js = (JavascriptExecutor) driver;
+    
+    private static final Logger LOG = Logger.getLogger(TestProperty.class.getName());
 
     // Getters
     public static WebDriver getWebDriver() {
@@ -49,6 +54,7 @@ public class PageObject<T> {
         String currentUrl = getWebDriver().getCurrentUrl();
         
         if (!currentUrl.contains(absoluteUrl)) {
+            System.out.println("driver location : " + absoluteUrl);
             getWebDriver().get(absoluteUrl);
         }
         
@@ -58,8 +64,8 @@ public class PageObject<T> {
         try {
             wait.until(ExpectedConditions.visibilityOf(element));
             wait.until(ExpectedConditions.elementToBeClickable(element));
-        } catch (NoSuchElementException ex) {
-            // nothing
+        } catch (NoSuchElementException | TimeoutException ex) {
+            LOG.severe(ex.getMessage());
         }
 
         element.click();
@@ -70,14 +76,8 @@ public class PageObject<T> {
         try {
             wait.until(ExpectedConditions.visibilityOf(element));
             wait.until(ExpectedConditions.elementToBeClickable(element));
-        } catch (NoSuchElementException ex) {
-            // nothing
-        }
-
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchElementException | TimeoutException ex) {
+            LOG.severe(ex.getMessage());
         }
 
         JavascriptExecutor js = ((JavascriptExecutor) driver);
@@ -90,8 +90,8 @@ public class PageObject<T> {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
             wait.until(ExpectedConditions.elementToBeClickable(locator));
-        } catch (NoSuchElementException ex) {
-            // nothing
+        } catch (NoSuchElementException | TimeoutException ex) {
+            LOG.severe(ex.getMessage());
         }
 
         WebElement element = driver.findElement(locator);
@@ -111,8 +111,8 @@ public class PageObject<T> {
         try {
             wait.until(ExpectedConditions.visibilityOf(element));
             wait.until(ExpectedConditions.elementToBeClickable(element));
-        } catch (NoSuchElementException ex) {
-            // nothing
+        } catch (NoSuchElementException | TimeoutException ex) {
+            LOG.severe(ex.getMessage());
         }
 
         element.clear();
@@ -136,7 +136,7 @@ public class PageObject<T> {
         try {
             wait.until(e);
         } catch (NoSuchElementException ex) {
-            // nothing
+            LOG.severe(ex.getMessage());
         }
 
         return (T) this;
@@ -196,6 +196,28 @@ public class PageObject<T> {
      */
     public static void close() {
         getWebDriver().close();
+    }
+    
+    /**
+     * Tries to confirm an alert message window in the specified time.
+     * @param seconds
+     */
+    public static void alertWindowConfirm(int seconds) {
+        
+        try {
+            
+            // Wait 3 seconds
+            new WebDriverWait(PageObject.getWebDriver(), seconds)
+                .until(ExpectedConditions.alertIsPresent());
+        
+            // Get the Alert
+            Alert alert = PageObject.getWebDriver().switchTo().alert();
+            alert.accept();
+            
+        } catch (NoAlertPresentException | TimeoutException ex) {
+            LOG.severe(ex.getMessage());
+        }
+        
     }
 
 }

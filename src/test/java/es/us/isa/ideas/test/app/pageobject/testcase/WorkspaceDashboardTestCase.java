@@ -2,6 +2,8 @@ package es.us.isa.ideas.test.app.pageobject.testcase;
 
 import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceManagerPage;
 import es.us.isa.ideas.test.app.pageobject.login.LoginPage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -16,107 +18,198 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class WorkspaceDashboardTestCase {
 
-    static String originWSName = "NewWorkspaceCard";
+    static String originWSName = "NewWorkspaceCardFelipe";
     static String originWSDesc = "Selemium Test";
     static String originWSTags = "test selenium";
 
-    static String targetWSName = "NewWorkspaceCardmodified";
+    static String targetWSName = "NewWorkspaceCardmodifiedFlipe";
     static String targetWSDesc = "Selemium Test Description (Edit test)";
     static String targetWSTags = "test selenium";
     
-    static String demoWSName = "DemoWorkspace";
+    static String demoWSName = "DemoWorkspaceFelipe";
 
     @Test
-    public void step01_loginGuest() {
+    public void step01_createAndPublishGuestWorkspace() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // Login guest
         WorkspaceManagerPage.logout();
         LoginPage.testLogin("guest", "guest");
-    }
-
-    @Test
-    public void step02_createGuestWorkspace() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // Create and publish workspace
         WorkspaceManagerPage.testCreateWorkspace(demoWSName, "", "");
-    }
-
-    @Test
-    public void step03_publishDemoWorkspace() {
         WorkspaceManagerPage.testPublishDemoWorkspace();
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
-
+    
     @Test
-    public void step04_loginAutoTester() {
+    public void step02_createAutoTesterWorkspace() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // Login autotester
         WorkspaceManagerPage.logout();
         LoginPage.testLogin("autotester", "autotester");
-    }
-    
-    @Test
-    public void step05_createAutoTesterWorkspace() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         WorkspaceManagerPage.testCreateWorkspace(originWSName, originWSDesc, originWSTags);
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     @Test
-    public void step06_openAutoTesterWorkspaceFromDashboard() {
+    public void step03_allDashboardOperationsWithAutoTesterWorkspace() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         WorkspaceManagerPage.testOpenWorkspaceFromDashboard();
-    }
-    
-    @Test
-    public void step07_downloadWorkspaceFromDashboard() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         WorkspaceManagerPage.testDownloadWorkspaceFromDashboard();
-    }
-    
-    @Test
-    public void step08_editWorkspaceFromDashboard() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         WorkspaceManagerPage.testEditWorkspaceFromDashboard(targetWSName, targetWSDesc);
-    }
-    
-    @Test
-    public void step09_publishDemoWorkspaceFromDashboard() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         WorkspaceManagerPage.testPublishDemoWorkspaceFromDashboard();
-    }
-    
-    @Test
-    public void step10_updateDemoWorkspaceFromDashboard() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         WorkspaceManagerPage.testUpdateDemoWorkspaceFromDashboard();
-    }
-    
-    @Test
-    public void step11_depublishDemoWorkspaceFromDashboard() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         WorkspaceManagerPage.testDepublishDemoWorkspaceFromDashboard(demoWSName);
-    }
-    
-    @Test
-    public void step12_deleteWorkspaceFromDashboard() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         WorkspaceManagerPage.testDeleteWorkspaceFromDashboard(targetWSName);
-    }
-    
-    @Test
-    public void step13_clonePublicDemoFromDashboard() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         WorkspaceManagerPage.testClonePublicDemoFromDashboard(demoWSName);
-    }
-    
-    @Test
-    public void step14_deleteCloneDemoFromDashboard() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         WorkspaceManagerPage.testDeleteCloneDemoFromDashboard(targetWSName);
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     @Test
-    public void step15_loginGuest() {
+    public void step04_deleteTestWorkspaces() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // Deleting guest workspace
         WorkspaceManagerPage.logout();
         LoginPage.testLogin("guest", "guest");
-    }
-    
-    @Test
-    public void step16_deleteGuestPublicDemoFromDashboard() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         WorkspaceManagerPage.testDeleteCloneDemoFromDashboard(demoWSName);
-    }
-    
-    @Test
-    public void step17_loginDemoMaster() {
+        
+        // Deleting DemoMaster workspace
         WorkspaceManagerPage.logout();
         LoginPage.testLogin("DemoMaster", "DemoMaster");
-    }
-    
-    @Test
-    public void step18_deleteDemoMasterWorkspace() {
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         WorkspaceManagerPage.testDeleteCloneDemoFromDashboard(demoWSName);
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceDashboardTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
