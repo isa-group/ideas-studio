@@ -6,7 +6,7 @@
 
     <groupId>es.us.isa</groupId>
     <artifactId>ideas-studio</artifactId>
-    <version>0.9.2</version>
+    <version>0.9.2.1</version>
 
     <name>ideas-studio</name>
     <url>http://maven.apache.org</url>
