@@ -3740,7 +3740,7 @@ exports.lookup = function(key) {
  * <tt>{ allowEval: true }</tt>
  */
 if (typeof Proxy !== 'undefined') {
-  exports.propertyLookup = Proxy.create({
+  exports.propertyLookup = new Proxy({}, {
     get: function(rcvr, name) {
       return exports.lookup(name);
     }
@@ -14035,7 +14035,7 @@ function getHighlightingProxy(item, match, document) {
   if (typeof Proxy === 'undefined') {
     return item;
   }
-  return Proxy.create({
+  return new Proxy({}, {
     get: function(rcvr, name) {
       var value = item[name];
       if (name !== 'name') {
