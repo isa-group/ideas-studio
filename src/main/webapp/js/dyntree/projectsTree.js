@@ -129,7 +129,7 @@ function bindContextMenu(span) {
 		      node.focus();
 		      node.setTitle(title);
 		      // Activate current file node
-		      if (EditorManager.currentUri != "") {
+		      if (EditorManager.currentUri && EditorManager.currentUri != "") {
 		      	getNodeByFileUri(EditorManager.currentUri).activate();
 		      } else {
 		      	node.deactivate();

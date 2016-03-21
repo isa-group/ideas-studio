@@ -3,11 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package es.us.isa.ideas.test.app.pageobject.testcase;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.Timeout;
+package es.us.isa.ideas.test.app.utils;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -16,16 +13,13 @@ import org.junit.rules.Timeout;
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
  * @version 1.0
  */
-public class TestCase {
-
-    protected static boolean TEST_RESULT;
+public class Main {
     
-    @Rule
-    public Timeout globalTimeout = Timeout.seconds(30000); // 30 seconds max per method tested
-
-    @Before
-    public void testResult() {
-        TEST_RESULT = false;
+    public static void main (String[] args) {
+        
+        FileType fileType = FileType.PLAINTEXT;
+        System.out.println("fileType: " + fileType.toString());
+        
     }
 
 }

@@ -1,14 +1,15 @@
 package es.us.isa.ideas.test.app.pageobject.login;
 
-import es.us.isa.ideas.test.app.pageobject.testcase.PageObject;
-import es.us.isa.ideas.test.app.pageobject.testcase.TestCase;
-import es.us.isa.ideas.test.app.pageobject.testcase.TestProperty;
+import es.us.isa.ideas.test.app.pageobject.PageObject;
+import es.us.isa.ideas.test.app.pageobject.TestCase;
+import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -45,17 +46,17 @@ public class LoginPage extends PageObject<LoginPage> {
 
     // click
     public LoginPage clickOnLogin() {
-        loginButton.click();
+        clickOnClickableElement(loginButton);
         return PageFactory.initElements(getWebDriver(), LoginPage.class);
     }
 
     public RegisterSocialTwitterPage clickOnTwitter() {
-        twitterButton.click();
+        clickOnClickableElement(twitterButton);
         return PageFactory.initElements(getWebDriver(), RegisterSocialTwitterPage.class);
     }
 
     public RegisterSocialGooglePage clickOnGoogle() {
-        googleButton.click();
+        clickOnClickableElement(googleButton);
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
 
@@ -66,7 +67,7 @@ public class LoginPage extends PageObject<LoginPage> {
     }
 
     public LoginPage typePassword(CharSequence password) {
-        passwordField.sendKeys(password);
+        sendKeysWithWait(passwordField, password);
         return PageFactory.initElements(getWebDriver(), LoginPage.class);
     }
 
@@ -92,6 +93,8 @@ public class LoginPage extends PageObject<LoginPage> {
         public void testLogin(String username, String password) {
 
             LoginPage page = LoginPage.navigateTo();
+            
+            PageObject.alertWindowConfirm(3);
 
             try {
                 Thread.sleep(2000);

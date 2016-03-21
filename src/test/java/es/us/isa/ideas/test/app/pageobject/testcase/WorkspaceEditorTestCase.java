@@ -1,6 +1,6 @@
 package es.us.isa.ideas.test.app.pageobject.testcase;
 
-import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceSection;
+import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceManagerPage;
 import es.us.isa.ideas.test.app.pageobject.login.LoginPage;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.junit.runners.MethodSorters;
  * @version 1.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestCaseWorkspaceEditor extends TestCase {
+public class WorkspaceEditorTestCase {
 
     static String originWSName = "New Workspace from Editor";
     static String originWSDesc = "Selemium Editor New Workspace Test";
@@ -31,37 +31,37 @@ public class TestCaseWorkspaceEditor extends TestCase {
 
     @Test
     public void step02_createWorkspace() {
-        WorkspaceSection.testCreateWorkspace(originWSName, originWSDesc, originWSTags);
+        WorkspaceManagerPage.testCreateWorkspace(originWSName, originWSDesc, originWSTags);
     }
 
     @Test
     public void step03_editCurrentWorkspace() {
-        WorkspaceSection.testEditWorkspace(targetWSName, targetWSDesc);
+        WorkspaceManagerPage.testEditWorkspace(targetWSName, targetWSDesc);
     }
 
     @Test
     public void step04_downloadWorkspace() {
-        WorkspaceSection.testDownloadWorkspace();
+        WorkspaceManagerPage.testDownloadWorkspace();
     }
 
     @Test
     public void step05_publishDemoWorkspace() {
-        WorkspaceSection.testPublishDemoWorkspace();
+        WorkspaceManagerPage.testPublishDemoWorkspace();
     }
 
     @Test
     public void step06_deleteAutoTesterWorkspace() {
-        WorkspaceSection.testDeleteWorkspaceButton();
+        WorkspaceManagerPage.testDeleteWorkspaceButton();
     }
 
     @Test
     public void step07_loginDemoMaster() {
-        WorkspaceSection.logout();
+        WorkspaceManagerPage.logout();
         LoginPage.testLogin("DemoMaster", "DemoMaster");
     }
 
     @Test
     public void step08_deleteDemoMasterWorkspace() {
-        WorkspaceSection.testDeleteWorkspace(targetWSName);
+        WorkspaceManagerPage.testDeleteWorkspace(targetWSName);
     }
 }

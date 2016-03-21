@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Not setting the context here allows for context param in CI deployment -->
-<Context antiJARLocking="true" path=""/>
+<Context antiJARLocking="true" path="">
+    <Loader className="org.apache.catalina.loader.VirtualWebappLoader"
+          virtualClasspath="${sedl.modules.repository.path}/*.jar"/>
+</Context>
 <!-- <Context antiJarLocking="true" path="/IDEAS"/> -->

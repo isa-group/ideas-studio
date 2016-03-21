@@ -58,7 +58,7 @@ public class StudioConfiguration implements Serializable {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
+        
         return config;
     }
 

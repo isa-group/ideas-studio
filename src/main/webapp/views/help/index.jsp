@@ -40,7 +40,7 @@
         </center>
         <ul class="list-unstyled">
             <li>
-                <h2><a href="https://labs.isa.us.es/IDEAS-help/intro.html">Introduction</a></h2>
+                <h2><a href="https://labs.isa.us.es/IDEAS-help/intro.html">Introduction (in spanish)</a></h2>
             </li>
             <li>
                 <h2>Languages</h2>
@@ -52,7 +52,7 @@
                             <core:set var="languageNameAux" value="${fn:replace(language.key, '-language','')}"/>
                             <core:set var="languageName" value="${fn:replace(languageNameAux, 'ideas-','')}"/>
                             <core:set var="languageNameFinal" value="${fn:toUpperCase(languageName)}" />                      
-                            <h3><a href="/${language.key}/help/">${languageNameFinal}</a></h3>
+                            <h3><a href="${language.value}/help/">${languageNameFinal}</a></h3>
                         </li>
 
                     </core:forEach>  
@@ -66,4 +66,3 @@
 </body>
 </html>
 		
-</div>
