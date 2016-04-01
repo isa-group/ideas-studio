@@ -71,67 +71,73 @@ angular.module("mainApp", ['puElasticInput'])
          * @returns {undefined}
          */
         $scope.slaString2Model = function () {
-            var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
-                editorContent = document.editor.getValue();
             
-            // Try-catch block for bad JSON parsing.
-            try {
+            if ( !DescriptionInspector.tabs.hasFormTabDefaultContent() ) {
                 
-                if (editorContent) {
+                var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
+                    editorContent = document.editor.getValue();
 
-                    //TODO: check if it's a "JSONable" content
+                // Try-catch block for bad JSON parsing.
+                try {
 
-                    if (currentFormat === "json") {
-                        if ($scope.slaString !== "") {
-                            $scope.model = JSON.parse(editorContent);
+                    if (editorContent) {
+
+                        //TODO: check if it's a "JSONable" content
+
+                        if (currentFormat === "json") {
+                            if ($scope.slaString !== "") {
+                                $scope.model = JSON.parse(editorContent);
+                            }
+
+                        } else if (currentFormat === "yaml") {
+                            $scope.model = jsyaml.safeLoad(editorContent);
+
+                        } else {
+                            // Convert current format to json
+                            var converterUri = ModeManager.getConverter(ModeManager
+                                    .calculateLanguageIdFromExt(ModeManager
+                                        .calculateExtFromFileUri(EditorManager.currentUri)));
+
+                            var promise = $q(function (resolve, reject) {
+                                CommandApi.callConverter(currentFormat, "json", EditorManager.currentUri, editorContent, converterUri,
+                                    function(result) {
+                                        if (result.data) {
+                                            resolve( JSON.parse(result.data) );
+                                        }
+                                    }
+                                );
+                            });
+                            promise.then(function (result) {
+                                $scope.model = result;
+                            });
                         }
 
-                    } else if (currentFormat === "yaml") {
-                        $scope.model = jsyaml.safeLoad(editorContent);
+                    } else {
+                        $scope.model = {};
+                    }
+
+                } catch (err) {
+                    // nothing
+                }
+
+                // Show/hide addSlaButton
+                $timeout(function () {
+                    if ($scope.model && $scope.model.creationConstraints) {
+                        if ($("#editorFormats .formatTab.active").text() === "FORM") {
+                            $(".addSlaButton").fadeIn();
+                        } else {
+                            $("#editorInspectorLoader .modelInspectorContent .addSlaButton").fadeIn();
+                        }
 
                     } else {
-                        // Convert current format to json
-                        var converterUri = ModeManager.getConverter(ModeManager
-                                .calculateLanguageIdFromExt(ModeManager
-                                    .calculateExtFromFileUri(EditorManager.currentUri)));
+                        $(".addSlaButton").hide();
+                    } 
 
-                        var promise = $q(function (resolve, reject) {
-                            CommandApi.callConverter(currentFormat, "json", EditorManager.currentUri, editorContent, converterUri,
-                                function(result) {
-                                    if (result.data) {
-                                        resolve( JSON.parse(result.data) );
-                                    }
-                                }
-                            );
-                        });
-                        promise.then(function (result) {
-                            $scope.model = result;
-                        });
-                    }
-                    
-                } else {
-                    $scope.model = {};
-                }
+                }, 500);
                 
-            } catch (err) {
+            } else {
                 // nothing
             }
-            
-            // Show/hide addSlaButton
-            $timeout(function () {
-                console.log("scope.model : ", $scope.model);
-                if ($scope.model && $scope.model.creationConstraints) {
-                    if ($("#editorFormats .formatTab.active").text() === "FORM") {
-                        $(".addSlaButton").fadeIn();
-                    } else {
-                        $("#editorInspectorLoader .modelInspectorContent .addSlaButton").fadeIn();
-                    }
-
-                } else {
-                    $(".addSlaButton").hide();
-                } 
-
-            }, 500);
             
         };
 
