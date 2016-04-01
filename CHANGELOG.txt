@@ -1,3 +1,8 @@
+ideas-studio v0.9.2.2, 01/04/2016
+----------------------------------------------
+- Fixes #150 "Unable to launch any language operation"
+- Fixes #148 "Unnecessary angular model update when editing a file"
+
 ideas-studio v0.9.2.1, 17/03/2016
 ----------------------------------------------
 - Fixes #143 "Proxy.create is not a function error"
