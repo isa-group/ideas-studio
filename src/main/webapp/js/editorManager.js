@@ -155,7 +155,7 @@ var loadExistingTabbedInstance = function(fileUri, content) {
                             }
 
                             mayCheckLanguageSyntax(EditorManager.currentUri);
-                            DescriptionInspector.slaString2Model();
+                            DescriptionInspector.editorContentToModel();
 
                         }, 1000);
 
@@ -295,7 +295,7 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 
 			if(ops_name_lenght <= 75){
 
-				var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '> '+ opMap[i].name + '</button>');
+				var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '>'+ opMap[i].name + '</button>');
 				operationArray.push(opMap[i]);
 				op.click(function() {
 					launchOperation($(this).html());

@@ -193,6 +193,11 @@ var DescriptionInspector = {
         var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
         return getNodeByFileUri(fileUriWithoutExt + ".ang") ? true : false;
     },
+    
+    existCurrentCtrlFile : function () {
+        var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
+        return getNodeByFileUri(fileUriWithoutExt + ".ctrl") ? true : false;
+    },
 
 	/**
 	 * Check if current opened file is a description file.
@@ -388,6 +393,11 @@ var DescriptionInspector = {
 			return fileUriWithoutExt + ".ang";
 	},
 
+    getCurrentModelControllerFileUri : function() {
+			var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
+			return fileUriWithoutExt + ".ctrl";
+	},
+
 	/**
 	 * Obtiene el contenido del fichero descriptor en cuestión.
 	 *
@@ -426,6 +436,26 @@ var DescriptionInspector = {
 						descriptionData = content;
 					} else {
 						console.log("Form file is empty");
+					}
+				}
+			});
+
+			return descriptionData;
+	},
+
+    getModelControllerFileContent : function() {
+
+			var urlReq = 'files/content?fileUri='
+					+ this.getCurrentModelControllerFileUri(), descriptionData = "";
+
+			$.ajax({
+				url : urlReq,
+				async : false,
+				success : function(content) {
+					if (content !== "") {
+						descriptionData = content;
+					} else {
+						console.log("Controller file is empty");
 					}
 				}
 			});
@@ -748,23 +778,26 @@ var DescriptionInspector = {
 		}
 	},
 
-    setInspectorModelContent : function (htmlObj, extraContent, callback) {
+    setInspectorModelContent : function (htmlObj, callback) {
         
         var modelInspectorContentWrapper = htmlObj,
-            content = DescriptionInspector.getModelFileContent(),
-            extra;
-        
-        if (typeof arguments[1] === "function") {
-            callback = arguments[1];
-        } else {
-            extra = extraContent || "";
-        }
+            modelContent = DescriptionInspector.getModelFileContent();
 
-        modelInspectorContentWrapper.html(content);
-        modelInspectorContentWrapper.parent().append(extra);
+        modelInspectorContentWrapper.html(modelContent);
         
+        // Load angular controller file content
+        if ( DescriptionInspector.existCurrentCtrlFile() ) {
+            var ctrlContent = DescriptionInspector.getModelControllerFileContent();
+            modelInspectorContentWrapper.append(
+                '<script>'+
+                '  var $scope = angular.element(document.getElementById("editorWrapper")).scope();'+
+                '  $scope.$apply(function () {' + ctrlContent + '});'+
+                '</script>');
+        }
+        
+        // Set model editor for input which have defined ng-model attribute.
         var i = 0;
-        modelInspectorContentWrapper.find("input[ng-model]").each(function () {
+        modelInspectorContentWrapper.find("[ng-model]", "[contenteditable]").each(function () {
             // Establish an id for input elements from the model in order to re-focus them after modification
             if ($(this).parentsUntil(DescriptionInspector.vars.selectors.inspectorModelContent, "[ng-repeat]").length > 0) {
                 $(this).attr("data-focus-id", "{{$index}}," + i);
@@ -772,27 +805,8 @@ var DescriptionInspector = {
                 $(this).attr("data-focus-id", i);
             }
             i++;
-
-            // enableEditor
-            $(this).attr({
-                "ng-blur": "disableEditor()",
-                "pu-elastic-input": "",
-                "pu-elastic-input-minwidth": "10px",
-                "pu-elastic-input-maxwidth": "none",
-                "ng-keyup": "modelKeyPress($event)"
-            });
-            $(this).wrap("<span class='editorModelElement'></span>");
-            var wrapperElement = $(this).wrap("<span ng-show='editorEnabled'></span>");
-            var anchorElement = $("<a ng-click='enableEditor($event)' ng-hide='editorEnabled'>{{ " + $(this).attr("ng-model") + " }}</a>")
-                .insertAfter(
-                    $(this).closest("span[ng-show='editorEnabled']")
-                );
-
-            // Copy anchor style to input element
-            var cssStyle = document.defaultView.getComputedStyle(anchorElement[0], "").cssText;
-            wrapperElement.first()[0].style.cssText = cssStyle;
         });
-//                modelInspectorContentWrapper.append("<a href='#' ng-click='disableEditor($event)' ng-show='editorEnabled'>Disable editor</a>");
+        
         if (callback)
             callback();
 
@@ -1018,13 +1032,10 @@ var DescriptionInspector = {
 
                 });
 
-                // Default structure for tab content
+                // Default structure for tab content container
                 if (DescriptionInspector.existCurrentAngularFile()) {
-                    $("#editorInspectorLoader .modelInspectorContent").html(
-                        // Content container
-                        '<article id="inspectorModelContent" style="display:none;" />' +
-                        // Model add button
-                        '<div class="btn btn-primary dropdown-toggle addSlaButton" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>');
+                    $("#editorInspectorLoader .modelInspectorContent")
+                        .html('<article id="inspectorModelContent" style="display:none;" />');
                 }
                 
                 return this;
@@ -1106,22 +1117,43 @@ var DescriptionInspector = {
     /**
      * Update angular model by sending a input event from editorContent element.
      */
-    slaString2Model : function() {
-        
-        var session = EditorManager.sessionsMap[EditorManager.currentUri],
-            formatsSessions = session.getFormatsSessions();
+    editorContentToModel : function() {
         
         if (!EditorManager.currentDocumentHasProblems() &&
             document.editor && ("json" in formatsSessions || "yaml" in formatsSessions)) {
+            
+            var session = EditorManager.sessionsMap[EditorManager.currentUri],
+                formatsSessions = session.getFormatsSessions();
+            
 			// Re-focusing element after sending input trigger
             var focusId = $(':focus').attr("data-focus-id"),
                 parent = $(":focus").closest("#inspectorModelContent").length > 0 ?
-                    $("#inspectorModelContent") : $("#modelBoardContent");
+                         $("#inspectorModelContent") : $("#modelBoardContent"),
+                savedRange = window.getSelection().getRangeAt(0);
 
-            // Update slaString model value
-            $("#editorContent").val(document.editor.getValue());
-            angular.element($("#editorContent")).trigger('input');
-            parent.find("input[data-focus-id='" + focusId + "']").focus();
+            // Update modelString model value
+            var angScope = angular.element(document.getElementById("editorWrapper")).scope();
+            angScope.modelString = document.editor.getValue();
+            angScope.editorContentToModel();
+            angScope.$apply();
+            
+            if (focusId) {
+                var element = parent.find("[data-focus-id='" + focusId + "']:visible")[0];
+                element.focus();
+
+                var startNode = element.childNodes[0],
+                    endNode = element.childNodes[0];
+
+                startNode.nodeValue = startNode.nodeValue.trim();
+                var range = document.createRange();
+                range.setStart(startNode, savedRange.startOffset);
+                range.setEnd(endNode, savedRange.startOffset);
+                console.log(savedRange);
+                console.log(window.getSelection());
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
 
             DescriptionInspector.tabs.saveFileFromOtherFormat();
             
@@ -2990,9 +3022,8 @@ var DescriptionInspector = {
 					angularFormatView.formatTab.build();
 					angularFormatView.show();
                     
-                    var slaAddBtn = '<div class="btn btn-primary dropdown-toggle addSlaButton" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>';
                     DescriptionInspector.setInspectorModelContent(
-                        $("#modelBoardContent"), slaAddBtn,
+                        $("#modelBoardContent"),
                         function () {
                             tabs.angularCompileModelInspectorFormatView();
                         }
@@ -3005,11 +3036,12 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		mayBuild : function() {
-            var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri);
+            var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri),
+                formatSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions();
             
-			return this.getHtmlObj().length === 0
-                    && currentExt !== "ang" && currentExt !== "html"
-					&& DescriptionInspector.existCurrentAngularFile();
+			return currentExt !== "ang" && currentExt !== "html"
+					&& DescriptionInspector.existCurrentAngularFile()
+                    && "json" in formatSessions || "yaml" in formatSessions;
 		},
 
 		/**
@@ -3023,7 +3055,7 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		getHtmlObj : function() {
-			return $("#modelBoardContent, #editorWrapper .addSlaButton");
+			return $("#modelBoardContent");
 		},
 
 		/**
@@ -3062,9 +3094,6 @@ var DescriptionInspector = {
 
                 this.getHtmlObj().fadeIn();
                 var model = angular.element(document.getElementById("editorWrapper")).scope().model;
-                if (model && "creationConstraints" in model) {
-                    $("#editorWrapper .addSlaButton").fadeIn();
-                }
                 this.formatTab.activate();
 
 			} else {
@@ -3242,9 +3271,6 @@ var DescriptionInspector = {
             // FormatView
 			DescriptionInspector.descriptionFormatView.destroy();
 			DescriptionInspector.angularFormatView.destroy();
-            
-            // Model
-            $(".addSlaButton").remove();
 		},
 
 		/**
@@ -3893,16 +3919,12 @@ var DescriptionInspector = {
                 buttonText = "Create a form file";
             
             // html content
-			var modelInspector = $("#editorInspector .modelInspectorContent")
-                .append(''+
+			$("#editorInspector .modelInspectorContent")
+                .append(
                     '<article id="'+ selectorId +'">'+
                     '  <a class="btn '+ buttonClass +' emptyMsg" style="color: #428bca;">'+ buttonText + '</a>'+
                     '</article>'
                 );
-            
-            if (modelInspector.find(".addSlaButton").length > 0) {
-                modelInspector.find(".addSlaButton").remove();
-            }
 
 			var buttonElement = $("#editorInspector a." + buttonClass);
             buttonElement
