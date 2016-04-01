@@ -237,38 +237,13 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 			.calculateLanguageIdFromExt(ModeManager
 					.calculateExtFromFileUri(fileUri)));
 
-	var ops_name_lenght = 0;
+	var ops_name_length = 0;
 	var use_caret = false;
 	var ops = [];
 	if(opMap && typeof opMap != "undefined"){
-		//Old code  in the commentary
-/*		if (opMap != undefined){
+		
 		for (var i = 0; i < opMap.length; i++) {
-			ops_name_lenght += opMap[i].name.length;
-			if(ops_name_lenght <= 75){
-				var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '>'+ opMap[i].name + '</button>');
-				operationArray.push(opMap[i]);
-				op.click(function() {
-					launchOperation($(this).html());
-					operationArray = [];
-				});
-				ops.push(op);
-			} else {
-				use_caret = true;
-				caretLI = $('<li><a id="' + opMap[i].id
-						+ '" class="continue onlyOne">' + opMap[i].name
-						+ '</a></li>');
-				caretUL.append(caretLI);
-				operationArray.push(opMap[i]);
-				caretLI.click(function() {
-					launchOperation($(this).children('a').html());
-					operationArray = [];
-				});
-			}
-		}
-*/
-		for (var i = 0; i < opMap.length; i++) {
-			ops_name_lenght += opMap[i].name.length;
+			ops_name_length += opMap[i].name.length;
 
 		if(typeof opMap[i].icon != "undefined"){
 			if(typeof opMap[i].iconOnly != "undefined" && opMap[i].iconOnly){
@@ -293,9 +268,9 @@ var loadExistingTabbedInstance = function(fileUri, content) {
 
 		}else{
 
-			if(ops_name_lenght <= 75){
+			if(ops_name_length <= 75){
 
-				var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '> '+ opMap[i].name + '</button>');
+				var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '>'+ opMap[i].name + '</button>');
 				operationArray.push(opMap[i]);
 				op.click(function() {
 					launchOperation($(this).html());
