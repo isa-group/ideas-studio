@@ -1100,7 +1100,16 @@ var DescriptionInspector = {
                     }
                 );
             }
+        },
+        
+        /**
+         * Check if FORM tab content has the 'Create a form file' default button.
+         * @returns {Boolean}
+         */
+        hasFormTabDefaultContent : function () {
+            return $("#inspectorModelContent").find(".emptyMsg").text() === "Create a form file";
         }
+        
     },
 
     /**
