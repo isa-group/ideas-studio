@@ -74,6 +74,7 @@
         <script type="text/javascript" src="js/vendor/angular.min.js"></script>
         <script type="text/javascript" src="js/vendor/angular-sanitize.min.js"></script>
         <script type="text/javascript" src="js/angular/app.js"></script>
+        <script type="text/javascript" src="js/angular/directive/ppinot.js"></script>
 
     </head>
 

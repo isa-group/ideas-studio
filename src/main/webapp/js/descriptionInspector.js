@@ -1128,11 +1128,11 @@ var DescriptionInspector = {
      */
     editorContentToModel : function() {
         
+        var session = EditorManager.sessionsMap[EditorManager.currentUri],
+                formatsSessions = session.getFormatsSessions();
+        
         if (!EditorManager.currentDocumentHasProblems() &&
             document.editor && ("json" in formatsSessions || "yaml" in formatsSessions)) {
-            
-            var session = EditorManager.sessionsMap[EditorManager.currentUri],
-                formatsSessions = session.getFormatsSessions();
             
 			// Re-focusing element after sending input trigger
             var focusId = $(':focus').attr("data-focus-id"),
@@ -1162,6 +1162,7 @@ var DescriptionInspector = {
                 var sel = window.getSelection();
                 sel.removeAllRanges();
                 sel.addRange(range);
+                console.log(window.getSelection());
             }
 
             DescriptionInspector.tabs.saveFileFromOtherFormat();
