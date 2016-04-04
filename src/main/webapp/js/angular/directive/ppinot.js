@@ -78,20 +78,15 @@ angular.module('mainApp')
                 '<em><span ng-switch="ngModel.changesToState.genericState">' +
                   '<span ng-switch-when="START">active</span>' +
                   '<span ng-switch-when="END">completed</span>' +
-//                  '<span ng-switch-default>(unknown state)</span>' +
                 '</span>' +
                 
                 '<span ng-switch="ngModel.changesToState.dataObjectState">' +
                   '<span ng-switch-default><span contenteditable ng-model="ngModel.changesToState.dataObjectState.name"></span></span>' +
-                '</span></em>',
-                  
-//                  var stateName = "";
-//                       angular.forEach(changesToState, function (value, key) {
-//                           if (key == "genericState" && value == "START") stateName = "active"
-//                           else if (key == "genericState" && value == "END") stateName = "completed"
-//                           else if (key == "dataObjectState" ) stateName = value.name;
-//                           else if (value != null) stateName = value;
-//                '</span><em>{{stateName()}}</em></span>',
+                '</span></em>' +
+                
+                '<span ng-if="!ngModel.changesToState.genericState && !ngModel.changesToState.dataObjectState">' +
+                  '<span>(unknown state)</span>' +
+                '</span>',
       controller: function($scope) {
         $scope.stateName = function(changesToState) {
             return $stateService(changesToState);
