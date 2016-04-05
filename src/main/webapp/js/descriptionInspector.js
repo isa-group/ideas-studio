@@ -795,18 +795,6 @@ var DescriptionInspector = {
                 '</script>');
         }
         
-        // Set model editor for input which have defined ng-model attribute.
-        var i = 0;
-        modelInspectorContentWrapper.find("[ng-model]", "[contenteditable]").each(function () {
-            // Establish an id for input elements from the model in order to re-focus them after modification
-            if ($(this).parentsUntil(DescriptionInspector.vars.selectors.inspectorModelContent, "[ng-repeat]").length > 0) {
-                $(this).attr("data-focus-id", "{{$index}}," + i);
-            } else {
-                $(this).attr("data-focus-id", i);
-            }
-            i++;
-        });
-        
         if (callback)
             callback();
 
@@ -1129,43 +1117,26 @@ var DescriptionInspector = {
     editorContentToModel : function() {
         
         var session = EditorManager.sessionsMap[EditorManager.currentUri],
-                formatsSessions = session.getFormatsSessions();
+            formatsSessions = session.getFormatsSessions(),
+            currentFormat = session.getCurrentFormat();
         
         if (!EditorManager.currentDocumentHasProblems() &&
             document.editor && ("json" in formatsSessions || "yaml" in formatsSessions)) {
-            
-			// Re-focusing element after sending input trigger
-            var focusId = $(':focus').attr("data-focus-id"),
-                parent = $(":focus").closest("#inspectorModelContent").length > 0 ?
-                         $("#inspectorModelContent") : $("#modelBoardContent"),
-                savedRange = window.getSelection().getRangeAt(0);
 
             // Update modelString model value
             var angScope = angular.element(document.getElementById("editorWrapper")).scope();
             angScope.modelString = document.editor.getValue();
-            angScope.editorContentToModel();
-            angScope.$apply();
             
-            if (focusId) {
-                var element = parent.find("[data-focus-id='" + focusId + "']:visible")[0];
-                element.focus();
-
-                var startNode = element.childNodes[0],
-                    endNode = element.childNodes[0];
-
-                startNode.nodeValue = startNode.nodeValue.trim();
-                var range = document.createRange();
-                range.setStart(startNode, savedRange.startOffset);
-                range.setEnd(endNode, savedRange.startOffset);
-                console.log(savedRange);
-                console.log(window.getSelection());
-                var sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(range);
-                console.log(window.getSelection());
+            // Check if editor is on focus
+            if ($(":focus").attr("class") === "ace_text-input") {
+                angScope.editorContentToModel();
             }
+            
+            angScope.$apply();
 
-            DescriptionInspector.tabs.saveFileFromOtherFormat();
+            if (currentFormat !== "json") {
+                DescriptionInspector.tabs.saveFileFromOtherFormat();
+            }
             
         }
     },

@@ -1,5 +1,5 @@
 // AngularJS initialization
-angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$compile", "$timeout", "$q", "$sce", function ($scope, $compile, $timeout, $q, $sce) {
+angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$compile", "$q", function ($scope, $compile, $q) {
 
         $scope.model = {};
 
@@ -14,15 +14,15 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
 
                     var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
                         formatSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions(),
-                        prevPos = document.editor.renderer.scrollBarV.scrollTop, // previous cursos position
-                        prevRange = document.editor.selection.getRange();
+                        editorCursorPos = document.editor.renderer.scrollBarV.scrollTop,
+                        editorRange = document.editor.selection.getRange();
 
                     if (currentFormat === "json" && ("json" in formatSessions || "yaml" in formatSessions)) {
                         if (newValue !== document.editor.getValue()) {
                             document.editor.setValue(angular.toJson(newValue, 2), -1);
                             // Update editor to previous view
-                            document.editor.selection.setRange(prevRange);
-                            document.editor.renderer.scrollToY(prevPos);
+                            document.editor.selection.setRange(editorRange);
+                            document.editor.renderer.scrollToY(editorCursorPos);
                         }
 
                     } else if (currentFormat === "yaml" && ("json" in formatSessions || "yaml" in formatSessions)) {
@@ -30,13 +30,11 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
                         if (yaml !== document.editor.getValue()) {
                             document.editor.setValue(yaml, -1);
                             // Update editor to previous view
-                            document.editor.selection.setRange(prevRange);
-                            document.editor.renderer.scrollToY(prevPos);
+                            document.editor.selection.setRange(editorRange);
+                            document.editor.renderer.scrollToY(editorCursorPos);
                         }
 
                     } else if ("json" in formatSessions || "yaml" in formatSessions) {
-
-                        var baseFormat = EditorManager.sessionsMap[EditorManager.currentUri].getBaseFormat();
 
                         var currentUri = EditorManager.currentUri,
                             converterUri = ModeManager.getConverter(ModeManager
@@ -55,8 +53,8 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
                             if (result !== document.editor.getValue()) {
                                 document.editor.setValue(result, -1);
                                 // Update editor to previous view
-                                document.editor.selection.setRange(prevRange);
-                                document.editor.renderer.scrollToY(prevPos);
+                                document.editor.selection.setRange(editorRange);
+                                document.editor.renderer.scrollToY(editorCursorPos);
                             }
                         });
 
