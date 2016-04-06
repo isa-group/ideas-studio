@@ -185,9 +185,10 @@ var setupClickForNewFile = function ($newLanguageFileElem, languageName,language
 };
 
 var createNewFile = function(languageId,languageExtension){
-	var fileName = $("#modalCreationField input").val();
-	console.log("result-->"+nameFileChecker(fileName));
-	if(nameFileChecker(fileName)){
+	var fileName = $("#modalCreationField input").val(),
+        fileExt = $("#modalCreationField .extension").text().split(".")[1];
+	console.log("result-->"+nameFileChecker(fileName, fileExt));
+	if(nameFileChecker(fileName, fileExt)){
 
 	    var templateName= $("#template-file").val();
 	    
@@ -233,21 +234,24 @@ var createNewFile = function(languageId,languageExtension){
     
 };
 
-var nameFileChecker = function(newName){
-	var result = true;
-	var parentFolder = $("#projectsTree").dynatree("getActiveNode");
+var nameFileChecker = function(newName, newExt){
+	var activeNode = $("#projectsTree").dynatree("getActiveNode"),
+        result = true;
 	
-	if (parentFolder != null){
-	
-		var childlist = parentFolder.childList;
-		
-		if(childlist!=null)
-			for(var i = 0;i<childlist.length;i++){
-				var nameChild = childlist[0].data.title.split(".")[0];
-				if(nameChild==newName){
-					result = result && false;
-				}
-			}
+	if (activeNode != null) {
+        
+        var parentFolder = activeNode.data.isFolder ? activeNode : activeNode.getParent(),
+            childlist = parentFolder.childList;
+
+        if(childlist!=null) {
+            for(var i = 0; i < childlist.length; i++){
+                var child = childlist[0].data.title.split(".");
+                if(child[0] == newName && child[1] == newExt){
+                    result = result && false;
+                    break;
+                }
+            }
+        }
 	}
 	
 	return result;
