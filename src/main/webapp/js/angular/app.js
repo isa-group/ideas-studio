@@ -68,12 +68,14 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
          * @returns {undefined}
          */
         $scope.editorContentToModel = function () {
-            var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
-                formatSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions(),
-                editorContent = document.editor.getValue();
 
             // Try-catch block for bad JSON parsing.
             try {
+                
+                var sessionMap = EditorManager.sessionsMap[EditorManager.currentUri],
+                    currentFormat = sessionMap.getCurrentFormat(),
+                    formatSessions = sessionMap.getFormatsSessions(),
+                    editorContent = document.editor.getValue();
 
                 if (editorContent && ("json" in formatSessions || "yaml" in formatSessions)) {
 

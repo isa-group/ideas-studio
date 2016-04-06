@@ -196,7 +196,7 @@ var DescriptionInspector = {
     
     existCurrentCtrlFile : function () {
         var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
-        return getNodeByFileUri(fileUriWithoutExt + ".ctrl") ? true : false;
+        return getNodeByFileUri(fileUriWithoutExt + ".ctl") ? true : false;
     },
 
 	/**
@@ -395,7 +395,7 @@ var DescriptionInspector = {
 
     getCurrentModelControllerFileUri : function() {
 			var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
-			return fileUriWithoutExt + ".ctrl";
+			return fileUriWithoutExt + ".ctl";
 	},
 
 	/**
@@ -415,52 +415,12 @@ var DescriptionInspector = {
 				if (content) {
 					descriptionData = content;
 				} else {
-					console.error("No description file content");
+					console.log("No description file content");
 				}
 			}
 		});
 
 		return descriptionData;
-	},
-
-    getModelFileContent : function() {
-
-			var urlReq = 'files/content?fileUri='
-					+ this.getCurrentModelFileUri(), descriptionData = "";
-
-			$.ajax({
-				url : urlReq,
-				async : false,
-				success : function(content) {
-					if (content !== "") {
-						descriptionData = content;
-					} else {
-						console.log("Form file is empty");
-					}
-				}
-			});
-
-			return descriptionData;
-	},
-
-    getModelControllerFileContent : function() {
-
-			var urlReq = 'files/content?fileUri='
-					+ this.getCurrentModelControllerFileUri(), descriptionData = "";
-
-			$.ajax({
-				url : urlReq,
-				async : false,
-				success : function(content) {
-					if (content !== "") {
-						descriptionData = content;
-					} else {
-						console.log("Controller file is empty");
-					}
-				}
-			});
-
-			return descriptionData;
 	},
 
 	/**
@@ -774,29 +734,38 @@ var DescriptionInspector = {
 				}, 100);
 			}
 		} else {
-			console.error("undefined params", loader, content);
+			console.log("undefined params", loader, content);
 		}
 	},
 
     setInspectorModelContent : function (htmlObj, callback) {
         
-        var modelInspectorContentWrapper = htmlObj,
-            modelContent = DescriptionInspector.getModelFileContent();
+        var fileUriForm = DescriptionInspector.getCurrentModelFileUri();
 
-        modelInspectorContentWrapper.html(modelContent);
-        
-        // Load angular controller file content
-        if ( DescriptionInspector.existCurrentCtrlFile() ) {
-            var ctrlContent = DescriptionInspector.getModelControllerFileContent();
-            modelInspectorContentWrapper.append(
-                '<script>'+
-                '  var $scope = angular.element(document.getElementById("editorWrapper")).scope();'+
-                '  $scope.$apply(function () {' + ctrlContent + '});'+
-                '</script>');
-        }
-        
-        if (callback)
-            callback();
+        FileApi.loadFileContents(fileUriForm, function (content) {
+
+            htmlObj.html(content);
+
+            if ( DescriptionInspector.existCurrentCtrlFile() ) {
+
+                var fileUriCtl = DescriptionInspector.getCurrentModelControllerFileUri();
+
+                FileApi.loadFileContents(fileUriCtl, function (content) {
+                    if (content !== "") {
+                        htmlObj.append(
+                            '<script>'+
+                            '  var $scope = angular.element(document.getElementById("editorWrapper")).scope();'+
+                            '  $scope.$apply(function () {' + content + '});'+
+                            '</script>');
+                    }
+                });	
+
+            }
+
+            if (callback)
+                callback();
+
+        });
 
     },
 
@@ -1112,7 +1081,7 @@ var DescriptionInspector = {
     },
 
     /**
-     * Update angular model by sending a input event from editorContent element.
+     * Update angular model from ace editor.
      */
     editorContentToModel : function() {
         
@@ -1146,23 +1115,10 @@ var DescriptionInspector = {
      * @returns {undefined}
      */
     resetModel : function () {
-        
-//        setTimeout(function () {
-            var prevFocus = $(':focus'),
-                modelEndPoint = $("#editorContent");
-            
-            // Send empty value to angular model
-            if (modelEndPoint.val() === "") {
-                modelEndPoint.val("{}");
-                angular.element(modelEndPoint).trigger('input');
-            }
-            modelEndPoint.val("");
-            angular.element(modelEndPoint).trigger('input');
-
-            // Re-focus element
-            prevFocus.focus();
-//        }, 2000);
-        
+    	var scope = angular.element(document.getElementById("editorWrapper")).scope();
+        scope.$apply(function () {
+            scope.editorContentToModel();
+        });
     },
 
 	expandableMenu : {
@@ -2740,7 +2696,7 @@ var DescriptionInspector = {
 
 					// TODO: carga el contenido a través de "BindableFormat"
 					// this.getHtmlObj().css("display", "block");
-					this.getHtmlObj().fadeIn();
+					this.getHtmlObj().show();
 					this.formatTab.activate();
 
 				} else {
@@ -3000,13 +2956,13 @@ var DescriptionInspector = {
 
 				if (angularFormatView.mayBuild()) {
 					angularFormatView.build();
-					angularFormatView.formatTab.build();
-					angularFormatView.show();
                     
                     DescriptionInspector.setInspectorModelContent(
                         $("#modelBoardContent"),
                         function () {
                             tabs.angularCompileModelInspectorFormatView();
+                            angularFormatView.formatTab.build();
+                            angularFormatView.show();
                         }
                     );
 				}
@@ -3043,7 +2999,7 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		setDefaultStructure : function() {
-			if (this.getHtmlObj().length === 0) {
+            if (this.getHtmlObj().length === 0) {
 				$("#editorWrapper").append('<div id="modelBoardContent"/>');
 			}
 		},
@@ -3064,17 +3020,12 @@ var DescriptionInspector = {
 			if (!EditorManager.currentDocumentHasProblems()) {
 
                 setTimeout(function() {
-//                    EditorManager.changeFormat(EditorManager.currentUri, "json");
-                }, 1);
-
-                setTimeout(function() {
                     if (!$("#editorInspector").hasClass("hdd")) {
                         $("#editorToggleInspector").click();
                     }
                 }, 100);
 
-                this.getHtmlObj().fadeIn();
-                var model = angular.element(document.getElementById("editorWrapper")).scope().model;
+                this.getHtmlObj().show();
                 this.formatTab.activate();
 
 			} else {
