@@ -193,6 +193,11 @@ var DescriptionInspector = {
         var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
         return getNodeByFileUri(fileUriWithoutExt + ".ang") ? true : false;
     },
+    
+    existCurrentCtrlFile : function () {
+        var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
+        return getNodeByFileUri(fileUriWithoutExt + ".ctl") ? true : false;
+    },
 
 	/**
 	 * Check if current opened file is a description file.
@@ -388,6 +393,11 @@ var DescriptionInspector = {
 			return fileUriWithoutExt + ".ang";
 	},
 
+    getCurrentModelControllerFileUri : function() {
+			var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
+			return fileUriWithoutExt + ".ctl";
+	},
+
 	/**
 	 * Obtiene el contenido del fichero descriptor en cuestión.
 	 *
@@ -405,32 +415,12 @@ var DescriptionInspector = {
 				if (content) {
 					descriptionData = content;
 				} else {
-					console.error("No description file content");
+					console.log("No description file content");
 				}
 			}
 		});
 
 		return descriptionData;
-	},
-
-    getModelFileContent : function() {
-
-			var urlReq = 'files/content?fileUri='
-					+ this.getCurrentModelFileUri(), descriptionData = "";
-
-			$.ajax({
-				url : urlReq,
-				async : false,
-				success : function(content) {
-					if (content !== "") {
-						descriptionData = content;
-					} else {
-						console.log("Form file is empty");
-					}
-				}
-			});
-
-			return descriptionData;
 	},
 
 	/**
@@ -744,57 +734,38 @@ var DescriptionInspector = {
 				}, 100);
 			}
 		} else {
-			console.error("undefined params", loader, content);
+			console.log("undefined params", loader, content);
 		}
 	},
 
-    setInspectorModelContent : function (htmlObj, extraContent, callback) {
+    setInspectorModelContent : function (htmlObj, callback) {
         
-        var modelInspectorContentWrapper = htmlObj,
-            content = DescriptionInspector.getModelFileContent(),
-            extra;
-        
-        if (typeof arguments[1] === "function") {
-            callback = arguments[1];
-        } else {
-            extra = extraContent || "";
-        }
+        var fileUriForm = DescriptionInspector.getCurrentModelFileUri();
 
-        modelInspectorContentWrapper.html(content);
-        modelInspectorContentWrapper.parent().append(extra);
-        
-        var i = 0;
-        modelInspectorContentWrapper.find("input[ng-model]").each(function () {
-            // Establish an id for input elements from the model in order to re-focus them after modification
-            if ($(this).parentsUntil(DescriptionInspector.vars.selectors.inspectorModelContent, "[ng-repeat]").length > 0) {
-                $(this).attr("data-focus-id", "{{$index}}," + i);
-            } else {
-                $(this).attr("data-focus-id", i);
+        FileApi.loadFileContents(fileUriForm, function (content) {
+
+            htmlObj.html(content);
+
+            if ( DescriptionInspector.existCurrentCtrlFile() ) {
+
+                var fileUriCtl = DescriptionInspector.getCurrentModelControllerFileUri();
+
+                FileApi.loadFileContents(fileUriCtl, function (content) {
+                    if (content !== "") {
+                        htmlObj.append(
+                            '<script>'+
+                            '  var $scope = angular.element(document.getElementById("editorWrapper")).scope();'+
+                            '  $scope.$apply(function () {' + content + '});'+
+                            '</script>');
+                    }
+                });	
+
             }
-            i++;
 
-            // enableEditor
-            $(this).attr({
-                "ng-blur": "disableEditor()",
-                "pu-elastic-input": "",
-                "pu-elastic-input-minwidth": "10px",
-                "pu-elastic-input-maxwidth": "none",
-                "ng-keyup": "modelKeyPress($event)"
-            });
-            $(this).wrap("<span class='editorModelElement'></span>");
-            var wrapperElement = $(this).wrap("<span ng-show='editorEnabled'></span>");
-            var anchorElement = $("<a ng-click='enableEditor($event)' ng-hide='editorEnabled'>{{ " + $(this).attr("ng-model") + " }}</a>")
-                .insertAfter(
-                    $(this).closest("span[ng-show='editorEnabled']")
-                );
+            if (callback)
+                callback();
 
-            // Copy anchor style to input element
-            var cssStyle = document.defaultView.getComputedStyle(anchorElement[0], "").cssText;
-            wrapperElement.first()[0].style.cssText = cssStyle;
         });
-//                modelInspectorContentWrapper.append("<a href='#' ng-click='disableEditor($event)' ng-show='editorEnabled'>Disable editor</a>");
-        if (callback)
-            callback();
 
     },
 
@@ -1018,13 +989,10 @@ var DescriptionInspector = {
 
                 });
 
-                // Default structure for tab content
+                // Default structure for tab content container
                 if (DescriptionInspector.existCurrentAngularFile()) {
-                    $("#editorInspectorLoader .modelInspectorContent").html(
-                        // Content container
-                        '<article id="inspectorModelContent" style="display:none;" />' +
-                        // Model add button
-                        '<div class="btn btn-primary dropdown-toggle addSlaButton" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>');
+                    $("#editorInspectorLoader .modelInspectorContent")
+                        .html('<article id="inspectorModelContent" style="display:none;" />');
                 }
                 
                 return this;
@@ -1113,26 +1081,31 @@ var DescriptionInspector = {
     },
 
     /**
-     * Update angular model by sending a input event from editorContent element.
+     * Update angular model from ace editor.
      */
-    slaString2Model : function() {
+    editorContentToModel : function() {
         
         var session = EditorManager.sessionsMap[EditorManager.currentUri],
-            formatsSessions = session.getFormatsSessions();
+            formatsSessions = session.getFormatsSessions(),
+            currentFormat = session.getCurrentFormat();
         
         if (!EditorManager.currentDocumentHasProblems() &&
             document.editor && ("json" in formatsSessions || "yaml" in formatsSessions)) {
-			// Re-focusing element after sending input trigger
-            var focusId = $(':focus').attr("data-focus-id"),
-                parent = $(":focus").closest("#inspectorModelContent").length > 0 ?
-                    $("#inspectorModelContent") : $("#modelBoardContent");
 
-            // Update slaString model value
-            $("#editorContent").val(document.editor.getValue());
-            angular.element($("#editorContent")).trigger('input');
-            parent.find("input[data-focus-id='" + focusId + "']").focus();
+            // Update modelString model value
+            var angScope = angular.element(document.getElementById("editorWrapper")).scope();
+            angScope.modelString = document.editor.getValue();
+            
+            // Check if editor is on focus
+            if ($(":focus").attr("class") === "ace_text-input") {
+                angScope.editorContentToModel();
+            }
+            
+            angScope.$apply();
 
-            DescriptionInspector.tabs.saveFileFromOtherFormat();
+            if (currentFormat !== "json") {
+                DescriptionInspector.tabs.saveFileFromOtherFormat();
+            }
             
         }
     },
@@ -1142,23 +1115,10 @@ var DescriptionInspector = {
      * @returns {undefined}
      */
     resetModel : function () {
-        
-//        setTimeout(function () {
-            var prevFocus = $(':focus'),
-                modelEndPoint = $("#editorContent");
-            
-            // Send empty value to angular model
-            if (modelEndPoint.val() === "") {
-                modelEndPoint.val("{}");
-                angular.element(modelEndPoint).trigger('input');
-            }
-            modelEndPoint.val("");
-            angular.element(modelEndPoint).trigger('input');
-
-            // Re-focus element
-            prevFocus.focus();
-//        }, 2000);
-        
+    	var scope = angular.element(document.getElementById("editorWrapper")).scope();
+        scope.$apply(function () {
+            scope.editorContentToModel();
+        });
     },
 
 	expandableMenu : {
@@ -2736,7 +2696,7 @@ var DescriptionInspector = {
 
 					// TODO: carga el contenido a través de "BindableFormat"
 					// this.getHtmlObj().css("display", "block");
-					this.getHtmlObj().fadeIn();
+					this.getHtmlObj().show();
 					this.formatTab.activate();
 
 				} else {
@@ -2996,14 +2956,13 @@ var DescriptionInspector = {
 
 				if (angularFormatView.mayBuild()) {
 					angularFormatView.build();
-					angularFormatView.formatTab.build();
-					angularFormatView.show();
                     
-                    var slaAddBtn = '<div class="btn btn-primary dropdown-toggle addSlaButton" data-toggle="dropdown" ng-click="createNewAgTemplate()">+</div>';
                     DescriptionInspector.setInspectorModelContent(
-                        $("#modelBoardContent"), slaAddBtn,
+                        $("#modelBoardContent"),
                         function () {
                             tabs.angularCompileModelInspectorFormatView();
+                            angularFormatView.formatTab.build();
+                            angularFormatView.show();
                         }
                     );
 				}
@@ -3014,11 +2973,12 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		mayBuild : function() {
-            var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri);
+            var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri),
+                formatSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions();
             
-			return this.getHtmlObj().length === 0
-                    && currentExt !== "ang" && currentExt !== "html"
-					&& DescriptionInspector.existCurrentAngularFile();
+			return currentExt !== "ang" && currentExt !== "html"
+					&& DescriptionInspector.existCurrentAngularFile()
+                    && "json" in formatSessions || "yaml" in formatSessions;
 		},
 
 		/**
@@ -3032,14 +2992,14 @@ var DescriptionInspector = {
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		getHtmlObj : function() {
-			return $("#modelBoardContent, #editorWrapper .addSlaButton");
+			return $("#modelBoardContent");
 		},
 
 		/**
 		 * @memberof DescriptionInspector.angularFormatView
 		 */
 		setDefaultStructure : function() {
-			if (this.getHtmlObj().length === 0) {
+            if (this.getHtmlObj().length === 0) {
 				$("#editorWrapper").append('<div id="modelBoardContent"/>');
 			}
 		},
@@ -3060,20 +3020,12 @@ var DescriptionInspector = {
 			if (!EditorManager.currentDocumentHasProblems()) {
 
                 setTimeout(function() {
-//                    EditorManager.changeFormat(EditorManager.currentUri, "json");
-                }, 1);
-
-                setTimeout(function() {
                     if (!$("#editorInspector").hasClass("hdd")) {
                         $("#editorToggleInspector").click();
                     }
                 }, 100);
 
-                this.getHtmlObj().fadeIn();
-                var model = angular.element(document.getElementById("editorWrapper")).scope().model;
-                if (model && "creationConstraints" in model) {
-                    $("#editorWrapper .addSlaButton").fadeIn();
-                }
+                this.getHtmlObj().show();
                 this.formatTab.activate();
 
 			} else {
@@ -3251,9 +3203,6 @@ var DescriptionInspector = {
             // FormatView
 			DescriptionInspector.descriptionFormatView.destroy();
 			DescriptionInspector.angularFormatView.destroy();
-            
-            // Model
-            $(".addSlaButton").remove();
 		},
 
 		/**
@@ -3902,16 +3851,12 @@ var DescriptionInspector = {
                 buttonText = "Create a form file";
             
             // html content
-			var modelInspector = $("#editorInspector .modelInspectorContent")
-                .append(''+
+			$("#editorInspector .modelInspectorContent")
+                .append(
                     '<article id="'+ selectorId +'">'+
                     '  <a class="btn '+ buttonClass +' emptyMsg" style="color: #428bca;">'+ buttonText + '</a>'+
                     '</article>'
                 );
-            
-            if (modelInspector.find(".addSlaButton").length > 0) {
-                modelInspector.find(".addSlaButton").remove();
-            }
 
 			var buttonElement = $("#editorInspector a." + buttonClass);
             buttonElement

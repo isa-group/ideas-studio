@@ -155,7 +155,7 @@ var loadExistingTabbedInstance = function(fileUri, content) {
                             }
 
                             mayCheckLanguageSyntax(EditorManager.currentUri);
-                            DescriptionInspector.slaString2Model();
+                            DescriptionInspector.editorContentToModel();
 
                         }, 1000);
 
