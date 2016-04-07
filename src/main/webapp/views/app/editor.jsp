@@ -11,11 +11,9 @@
 <script src='js/operationsReport.js' type="text/javascript"></script>
 <script src="js/gcli-console/commands.js" type="text/javascript"></script>
 <script src="js/gcli-console/gcli-uncompressed.js" type="text/javascript"></script>
-<!-- DescriptionInspector -->
 <script src='js/vendor/bootstrap.tooltip-popover.min.js' type="text/javascript"></script>
 <script src='js/descriptionInspector.js' type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="css/descriptionInspector.css" media="screen" />
-<!-- End DescriptionInspector -->
 <link rel="stylesheet" type="text/css" href="css/gcli-console.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css" media="screen" />
 
