@@ -111,7 +111,8 @@ function refreshPage(){
 // external js: isotope.pkgd.js
 
 // init Isotope
-var $cards = $('.cards');
+var $wscards = $('.cards.workspaces');
+var $democards=$('.cards.demos')
 var filters = [];
 var wsFilters = [];
     wsFilters.push(".workspace");
@@ -119,79 +120,49 @@ var wsFilters = [];
     wsFilters.push(".publicdemo");
 var tagsFilters = [];
 
-$cards.isotope({
+$wscards.isotope({
   itemSelector: '.wholeCard',
   layoutMode: 'fitRows'
 });
 
         
-$('.filterLink').click(function(){
-    var filterList = $( '.wsm-menu-members' );
-    filterList.find('.active_prot_menu').removeClass('active_prot_menu');
-    $( this ).parent().addClass('active_prot_menu');
-    
-    filters = [];
-    wsFilters = [];
-    tagsFilters = [];
-
-    var filterValue = $( this ).attr('data-filter-ws');
-    
-    if(filterValue===""){
-        wsFilters.push(".workspace");
-        wsFilters.push(".demoworkspace");
-        wsFilters.push(".publicdemo");
+$('.wsFilterLink').click(function(){
+   tagFilters=[];  
+    if($(this).parent().hasClass('active_prot_menu')){
+        $(this).parent().removeClass('active_prot_menu');        
     }
     else{
-        wsFilters.push(filterValue);
-    }
-    
-    $('.tagFilterLink').each(function(){
-        if($(this).parent().hasClass('active_prot_menu')){
-            $(this).parent().removeClass('active_prot_menu');
-        }
+        $( this ).parent().addClass('active_prot_menu');      
+    }    
+    $('.wsFilterLink').each(function(){
+        if($(this).parent().hasClass('active_prot_menu'))
+            tagFilters.push($( this ).attr('data-filter-ws')); 
+    });      
+    var selector = tagFilters.join(', ');        
+    $wscards.isotope({
+        filter: selector,
+        itemSelector: '.wholeCard'
     });
-    
-    
-        var selectorws = wsFilters.join(', ');
-        $cards.isotope({
-            filter: selectorws
-        });
 
-    
-     return false;
+    return false;
 });
 
-$('.tagFilterLink').click(function(){
-    
-    filters=[];
-    
-    var filterValue = $( this ).attr('data-filter-tag');
-    
+$('.demoFilterLink').click(function(){       
+    tagFilters=[];  
     if($(this).parent().hasClass('active_prot_menu')){
-        $(this).parent().removeClass('active_prot_menu');
-        remove(tagsFilters, filterValue);
+        $(this).parent().removeClass('active_prot_menu');        
     }
     else{
-        $( this ).parent().addClass('active_prot_menu'); 
-        tagsFilters.push(filterValue);
-    }
-    
-    //combine filters
-    for (var workspace_filter in wsFilters) {
-        var auxFilter=wsFilters[workspace_filter];
-        for (var tag_filter in tagsFilters) {
-            if(tag_filter!==""){
-                auxFilter+=tagsFilters[tag_filter];
-            }
-        }
-        filters.push(auxFilter);
-        auxFilter="";
-    }
-    
-    var selector = filters.join(', ');
-
-    $cards.isotope({
-        filter: selector
+        $( this ).parent().addClass('active_prot_menu');      
+    }    
+    $('.demoFilterLink').each(function(){
+        if($(this).parent().hasClass('active_prot_menu'))
+            tagFilters.push($( this ).attr('data-filter-demo')); 
+    });      
+    var selector = tagFilters.join(', ');        
+    $democards.isotope({
+        filter: selector,
+        itemSelector: '.wholeCard'
     });
 
     return false;

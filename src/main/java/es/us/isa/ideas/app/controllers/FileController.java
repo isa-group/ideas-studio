@@ -616,5 +616,33 @@ public class FileController extends AbstractController {
             workspaceService.updateDownloads(fileUri, username);
         }
     }
+    
+    @RequestMapping(value = "/copyProjectToTemp", method = RequestMethod.GET)
+    @ResponseBody
+    public void copyProjectToTemp(@RequestParam("temDirectory") String temDirectory,@RequestParam("fileUri")String fileUri) {
+        initRepoLab();
+      
+       String st= fileUri.replace('\\', '/');
+       String[] parts= st.split("/");
+       String workspace= parts[0];
+       String project= parts[1];
+       String owner= LoginService.getPrincipal().getUsername();
+       FSFacade.copyProjectInto(workspace, project, owner, temDirectory);
+     
+    }
+    @RequestMapping(value = "/copyTemptoProject", method = RequestMethod.GET)
+    @ResponseBody
+    public void copyTemptoProject(@RequestParam("temDirectory") String temDirectory,@RequestParam("fileUri")String fileUri) {
+        initRepoLab();
+      
+       String st= fileUri.replace('\\', '/');
+       String[] parts= st.split("/");
+       String workspace= parts[0];
+       String project= parts[1];
+       String owner= LoginService.getPrincipal().getUsername();
+       
+       FSFacade.copytoProject(workspace, project, owner, temDirectory);
+     
+    }
 
 }

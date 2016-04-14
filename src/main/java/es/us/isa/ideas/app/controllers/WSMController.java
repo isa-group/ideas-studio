@@ -10,6 +10,7 @@ import es.us.isa.ideas.app.entities.Workspace;
 import es.us.isa.ideas.app.security.LoginService;
 import es.us.isa.ideas.app.services.TagService;
 import es.us.isa.ideas.app.services.WorkspaceService;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -54,6 +55,9 @@ public class WSMController {
         List<Workspace> workspaces = (List<Workspace>) workspaceService.findByPrincipal();
         List<Workspace> demos = (List<Workspace>) workspaceService.findByDemoPrincipal();
         List<Workspace> otherdemos = (List<Workspace>) workspaceService.findByOtherDemos();
+        List<Workspace> allDemos = new ArrayList<Workspace>(demos.size()+otherdemos.size());
+        allDemos.addAll(demos);
+        allDemos.addAll(otherdemos);
         Collection<Tag> tagsCollection = tagService.findTagsInUse();
 
         if (taggedWS != null && workspaces != null) {
@@ -70,6 +74,7 @@ public class WSMController {
 
         result.addObject("workspaces", workspaces);
         result.addObject("demos", demos);
+        result.addObject("allDemos",allDemos);
         result.addObject("otherdemos", otherdemos);
         result.addObject("tags", tagsCollection);
 

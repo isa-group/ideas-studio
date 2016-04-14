@@ -1,7 +1,9 @@
 package es.us.isa.ideas.app.controllers;
 
+import es.us.isa.ideas.app.security.LoginService;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class WelcomeController extends AbstractController {
 
+       
 	// Constructors -----------------------------------------------------------
 	
 	public WelcomeController() {
@@ -20,8 +23,11 @@ public class WelcomeController extends AbstractController {
 	// Index ------------------------------------------------------------------		
 
         @RequestMapping(value = "/", method = RequestMethod.GET)
-        public ModelAndView home(){
-            return index();
+        public ModelAndView home(){            
+            if(LoginService.isAuthenticated())
+                return new ModelAndView("app/editor");
+            else
+                return index();
         }
         
         
