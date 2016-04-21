@@ -1457,6 +1457,11 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 	font-family: 'monaco';
 }
 
+/* ace searchbox */
+.ace_search {
+    background-color: #f7f7f7 !important;
+}
+
 @font-face {
 	font-family: 'monaco';
 	src: url(../fonts/Monaco.ttf) format("truetype");
