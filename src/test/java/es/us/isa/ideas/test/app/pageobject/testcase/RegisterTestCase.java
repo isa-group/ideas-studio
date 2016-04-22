@@ -33,7 +33,7 @@ public class RegisterTestCase {
     }
 
     @Test
-    public void step04_twitterRegister() {
+    public void step02_twitterRegister() {
         String twUser = TestProperty.getTestTwitterUser();
         String twPass = TestProperty.getTestTwitterPassword();
         RegisterSocialTwitterPage.testTwitterSocialRegister(twUser, twPass);

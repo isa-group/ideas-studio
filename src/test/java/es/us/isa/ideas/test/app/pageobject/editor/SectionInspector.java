@@ -124,6 +124,12 @@ public class SectionInspector extends EditorPage {
             // Make sure inspector is opened
             SectionInspector.testOpenInspector();
             
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionInspector.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             // Is button visible
             PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOf(inspector.buildExampleFormCreatorAnchor));
             

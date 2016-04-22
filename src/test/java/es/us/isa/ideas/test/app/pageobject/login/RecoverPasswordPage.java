@@ -41,7 +41,7 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
 
     // click
     public RecoverPasswordPage clickOnSubmit() {
-        clickOnNotClickableElement(submitButton);
+        clickOnClickableElement(submitButton);
         return PageFactory.initElements(getWebDriver(), RecoverPasswordPage.class);
     }
 
@@ -60,9 +60,15 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
         
         public void testRecoverPassword(CharSequence email, CharSequence emailPass, String user) {
 
-            RecoverPasswordPage page = RecoverPasswordPage.navigateTo()
-                .typeEmail(email)
-                .clickOnSubmit();
+            RecoverPasswordPage page = RecoverPasswordPage.navigateTo().typeEmail(email);
+            
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnSubmit();
 
             try {
                 Thread.sleep(1000);

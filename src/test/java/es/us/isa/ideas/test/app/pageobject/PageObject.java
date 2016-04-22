@@ -1,6 +1,5 @@
 package es.us.isa.ideas.test.app.pageobject;
 
-import es.us.isa.ideas.test.app.pageobject.editor.EditorPage;
 import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +28,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class PageObject<T> {
 
     static final WebDriver driver = new ChromeDriver();
-    static final WebDriverWait wait = new WebDriverWait(driver, 60);
+    static final WebDriverWait wait = new WebDriverWait(driver, 10);
     static final JavascriptExecutor js = (JavascriptExecutor) driver;
     
     private static final Logger LOG = Logger.getLogger(TestProperty.class.getName());

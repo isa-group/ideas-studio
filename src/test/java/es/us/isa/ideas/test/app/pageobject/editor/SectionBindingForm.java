@@ -75,7 +75,7 @@ public class SectionBindingForm extends EditorPage {
     
     // Test facade
 
-    public static void testFormatViewAddSlaButton() {
+    public static void testAddCreationConstraintFromFormatView() {
         new SectionBindingFormTestCase().testFormatViewAddSlaButton();
     }
     

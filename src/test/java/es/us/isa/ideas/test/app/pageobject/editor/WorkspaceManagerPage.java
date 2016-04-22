@@ -144,9 +144,24 @@ public class WorkspaceManagerPage extends EditorPage {
             // Implicit wait
             PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOf(page.wsMenuTogglerButton));
 
-            page.clickOnMenuTogglerButton()
-                .clickOnWorkspaceAddButton()
-                .typeWorkspaceName(wsName)
+            page.clickOnMenuTogglerButton();
+            
+            try {
+                Thread.sleep(1000); // animation
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnWorkspaceAddButton();
+            
+            try {
+                Thread.sleep(1000); // animation
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            // Fill workspace creation form
+            page.typeWorkspaceName(wsName)
                 .typeWorkspaceDescription(wsDescription)
                 .typeWorkspaceTags(wsTags)
                 .clickOnModalContinueButton();
@@ -662,6 +677,12 @@ public class WorkspaceManagerPage extends EditorPage {
             }
 
             getWebDriver().navigate().refresh();
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             page.clickOnMenuTogglerButton();
 

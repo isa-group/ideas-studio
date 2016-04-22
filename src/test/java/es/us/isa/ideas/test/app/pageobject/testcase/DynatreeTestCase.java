@@ -4,6 +4,8 @@ import es.us.isa.ideas.test.app.pageobject.editor.SectionFile;
 import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceManagerPage;
 import es.us.isa.ideas.test.app.pageobject.login.LoginPage;
 import es.us.isa.ideas.test.app.utils.FileType;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -11,7 +13,9 @@ import org.openqa.selenium.By;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
- * Sevilla, Spain
+ * Sevilla, Spain.
+ * 
+ * This test case needs PLAINTEXT module deployed.
  *
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
  * @version 1.0
@@ -22,16 +26,17 @@ public class DynatreeTestCase {
     static String wsName = "wsTest";
     static String wsDesc = "descTest";
     static String wsTags = "tag1";
-    
+
     static String projName = "Project";
-    
+
     static String dir1 = "dir1";
     static String dir2 = "dir2";
-    
+
     static String originFileName = "file1";
     static String targetFileName = "file1_mod";
     static String originFile2LName = "file2";
     static String targetFile2LName = "file2_mod";
+    
     static FileType fileType = FileType.PLAINTEXT;
 
     @Test
@@ -39,11 +44,13 @@ public class DynatreeTestCase {
         LoginPage.testLogin("DemoMaster", "DemoMaster");
     }
 
-    /**
-     * Creates a workspace.
-     */
     @Test
     public void step02_createWorkspace() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DynatreeTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
         WorkspaceManagerPage.testCreateWorkspace(wsName, wsDesc, wsTags);
     }
 
@@ -52,9 +59,6 @@ public class DynatreeTestCase {
         SectionFile.testCreateProject(projName);
     }
 
-    /**
-     * Creates a new file.
-     */
     @Test
     public void step04_createFile() {
         By parentLocator = By.linkText(projName);
@@ -62,27 +66,20 @@ public class DynatreeTestCase {
         SectionFile.testCreateFile(fileName, fileType, parentLocator);
     }
 
-    /**
-     * Creates a directory inside the project.
-     */
     @Test
     public void step05_createDirectory() {
         By parentLocator = By.linkText(projName);
         SectionFile.testCreateDirectory(dir1, parentLocator);
     }
 
-    /**
-     * Creates a new directory inside another directory.
-     */
+    // Creates a new directory inside another directory
     @Test
     public void step06_createDirectory2L() {
         By parentLocator = By.linkText(dir1);
         SectionFile.testCreateDirectory(dir2, parentLocator);
     }
 
-    /**
-     * Creates a file inside a second level directory.
-     */
+    // Creates a file inside a second level directory.
     @Test
     public void step07_createFile2L() {
         By parentLocator = By.linkText(dir2);

@@ -124,6 +124,9 @@ public class EditorPage extends PageObject<EditorPage> {
     @FindBy(linkText = "Create Angular file")
     WebElement projCreateAngFileAnchor;
 
+    @FindBy(linkText = "Create Angular Ctl file")
+    WebElement projCreateAngCtlFileAnchor;
+
     @FindBy(linkText = "Create JSON file")
     WebElement projCreateJsonFileAnchor;
 
@@ -281,7 +284,11 @@ public class EditorPage extends PageObject<EditorPage> {
         // Create a new switch case for future file types.
         switch (fileType) {
             case ANGULAR:
-                page = clickOnCreateTxtFileAnchor();
+                page = clickOnCreateAngFileAnchor();
+                break;
+
+            case ANGULAR_CONTROLLER:
+                page = clickOnCreateAngCtlFileAnchor();
                 break;
 
             case PLAINTEXT:
@@ -319,6 +326,11 @@ public class EditorPage extends PageObject<EditorPage> {
 
     public EditorPage clickOnCreateAngFileAnchor() {
         clickOnClickableElement(projCreateAngFileAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnCreateAngCtlFileAnchor() {
+        clickOnClickableElement(projCreateAngCtlFileAnchor);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
@@ -504,7 +516,7 @@ public class EditorPage extends PageObject<EditorPage> {
         getJs().executeScript(""
             + "var ret = false;"
             + "if (document.editor) {"
-            + "  document.editor.session.setValue('" + content + "');"
+            + "  document.editor.session.setValue('" + content.replaceAll("\n", "\\\\n").replaceAll("\"", "\\\"") + "');"
             + "  ret = true;"
             + "}"
             + "return ret;");
