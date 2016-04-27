@@ -5,11 +5,13 @@ import es.us.isa.ideas.test.app.pageobject.PageObject;
 import es.us.isa.ideas.test.app.pageobject.TestCase;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import static org.junit.Assert.assertTrue;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -46,7 +48,7 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
     }
 
     public RegisterSocialGooglePage clickOnGoToApp() {
-        clickOnNotClickableElement(goToAppButton);
+        clickOnClickableElement(goToAppButton);
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
 
@@ -84,18 +86,15 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
             
             page.clickOnGoToApp();
             
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterSocialTwitterPage.class.getName()).log(Level.SEVERE, null, ex);
+            WebElement lastElement = PageObject.getWebDriver().findElement(By.id("appFooter"));
+            TEST_RESULT = false;
+            if (lastElement != null) {
+                TEST_RESULT = page.getCurrentUrl().contains("app/editor");
+                if (TEST_RESULT) {
+                    new EditorPage().consoleEchoCommand("User logged with Twitter account \"" + twUser + "\".");
+                }
             }
-
-            TEST_RESULT = page.getCurrentUrl().contains("app/editor");
-
-            if (TEST_RESULT) {
-                new EditorPage().consoleEchoCommand("User logged with Twitter account \"" + twUser + "\".");
-            }
-
+            
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             assertTrue(TEST_RESULT);
 

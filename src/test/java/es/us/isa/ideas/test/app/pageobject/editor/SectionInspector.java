@@ -29,10 +29,10 @@ public class SectionInspector extends EditorPage {
 
     @FindBy(id = "editorToggleInspector")
     WebElement inspectorToggleSpan;
-    
+
     @FindBy(css = "#inspectorModelContent > a.buildExampleFormCreator")
     WebElement buildExampleFormCreatorAnchor;
-    
+
     @FindBy(id = "inspectorModelContent")
     WebElement inspectorModelContentContainer;
 
@@ -41,28 +41,22 @@ public class SectionInspector extends EditorPage {
         EditorPage.navigateTo();
         return PageFactory.initElements(getWebDriver(), SectionInspector.class);
     }
-    
+
     // Click
-    
     public SectionInspector clickOnInspectorToggle() {
         clickOnNotClickableElement(inspectorToggleSpan);
         return PageFactory.initElements(getWebDriver(), SectionInspector.class);
     }
-    
+
     public SectionInspector clickOnBuildExampleFormCreator() {
         clickOnClickableElement(buildExampleFormCreatorAnchor);
         return PageFactory.initElements(getWebDriver(), SectionInspector.class);
     }
-    
+
     // Getters
-    
     public Boolean isInspectorOpened() {
-        PageObject.getWebDriverWait()
-            .until(ExpectedConditions.visibilityOf(inspectorToggleSpan));
-        
         return inspectorToggleSpan.getAttribute("class").contains("hdd");
     }
-    
 
     // Test facade
     public static void testOpenInspector() {
@@ -94,7 +88,7 @@ public class SectionInspector extends EditorPage {
 
             SectionInspector inspector = SectionInspector.navigateTo();
 
-            if ( !inspector.isInspectorOpened() ) {
+            if (!inspector.isInspectorOpened()) {
                 inspector.clickOnInspectorToggle();
 
                 try {
@@ -112,61 +106,69 @@ public class SectionInspector extends EditorPage {
             Assert.assertTrue(TEST_RESULT);
 
         }
-        
+
         /**
-         * Check if creating a file form from a fileName opens a form file with the same name.
-         * @param fileName 
+         * Check if creating a file form from a fileName opens a form file with
+         * the same name.
+         *
+         * @param fileName
          */
         public void testBuildExampleFormFromFilename(String fileName) {
-            
+
             SectionInspector inspector = SectionInspector.navigateTo();
-            
+
             // Make sure inspector is opened
             SectionInspector.testOpenInspector();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(SectionInspector.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            // Is button visible
-            PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOf(inspector.buildExampleFormCreatorAnchor));
-            
+
             // Click on create example form
             inspector.clickOnBuildExampleFormCreator();
-            
+
             try {
                 Thread.sleep(1000); // creating a new file
             } catch (InterruptedException ex) {
                 Logger.getLogger(SectionInspector.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             By formFileLocator = By.linkText(fileName + FileType.ANGULAR);
-            PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(formFileLocator));
-            
-            TEST_RESULT = inspector.isFileTabActivatedByLocator(formFileLocator);
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionInspector.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            TEST_RESULT = inspector.isFileTabActivatedByLocator(getWebDriver().findElement(formFileLocator));
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
-            
+
         }
-        
+
         /**
          * Check if inspector form tab contains a param content.
-         * @param content 
+         *
+         * @param content
          */
         public void testInspectorFormTabContentContains(String content) {
-            
+
             SectionInspector inspector = SectionInspector.navigateTo();
-            
-            PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOf(inspector.inspectorModelContentContainer));
-            
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionInspector.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             TEST_RESULT = inspector.inspectorModelContentContainer.getText().contains(content);
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
-            
+
         }
-        
+
         public void testInspectorFormTabStructureLoaded() {
             // nothing yet
         }

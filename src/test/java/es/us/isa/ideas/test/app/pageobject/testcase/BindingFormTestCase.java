@@ -54,8 +54,6 @@ public class BindingFormTestCase {
     static String ctlFile = Util.loadFile("src/test/resources/repository/multiPlan.ctl");
     static String jsonAtFormat = Util.loadFile("src/test/resources/repository/multiPlan-json_format.json");
 
-    ;
-
     @BeforeClass
     public static void before() {
         PageObject.logout();
@@ -67,12 +65,6 @@ public class BindingFormTestCase {
 
         // Login
         LoginPage.testLogin(user, pass);
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BindingFormTestCase.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
         // Workspace, project and file creation
         WorkspaceManagerPage.testCreateWorkspace(wsName, wsDesc, wsTags);
@@ -89,7 +81,7 @@ public class BindingFormTestCase {
     public void step02_createJsonFormFile() {
         SectionInspector.testOpenInspector();
         By fileLocator = By.linkText(jsonFileName + jsonFileType.toString());
-        SectionFile.testOpenFile(fileLocator);
+        SectionFile.testOpenFile(PageObject.getWebDriver().findElement(fileLocator));
         SectionInspector.testBuildExampleFormFromFilename(jsonFileName);
     }
 
@@ -97,7 +89,7 @@ public class BindingFormTestCase {
     @Test
     public void step03_testJsonFormatView() {
         By fileLocator = By.linkText(jsonFileName + jsonFileType.toString());
-        SectionFile.testOpenFile(fileLocator);
+        SectionFile.testOpenFile(PageObject.getWebDriver().findElement(fileLocator));
         SectionEditorFormatTab.testIsEditorFormatActivated("FORM");
     }
 
@@ -107,17 +99,16 @@ public class BindingFormTestCase {
      */
     @Test
     public void step04_openInspectorWithSampleForm() {
-        SectionInspector.testOpenInspector();
-
         String sampleContent = "This is a sample content for a FORM file.";
+        SectionInspector.testOpenInspector();
         SectionInspector.testInspectorFormTabContentContains(sampleContent);
-
         SectionEditorFormatTab.testIsEditorFormatActivated("JSON");
     }
 
     @Test
     public void step05_createFiles() {
         By parentLocator = By.linkText(projName);
+        
         // Create iAgree template file
         SectionFile.testCreateFile(fileName, FileType.IAGREE_TEMPLATE, parentLocator);
         By fileLocator = By.linkText(fileName + FileType.IAGREE_TEMPLATE.toString());
@@ -137,13 +128,28 @@ public class BindingFormTestCase {
     // Check if you press addSlaButton on formatView, it creates a new creation constraint. 
     @Test
     public void step08_testAddCreationConstraintFromFormatView() {
-        By fileLocator = By.linkText(angFile + FileType.ANGULAR.toString());
-        SectionFile.testOpenFile(fileLocator);
-        SectionEditorFormatTab.testIsEditorFormatActivated("FORM");
 
+        By fileLocator = By.linkText(fileName + FileType.IAGREE_TEMPLATE.toString());
+        SectionFile.testOpenFile(PageObject.getWebDriver().findElement(fileLocator));
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BindingFormTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        SectionEditorFormatTab.testIsEditorFormatActivated("FORM");
         SectionBindingForm.testAddCreationConstraintFromFormatView();
-        SectionBindingForm.testNumberOfCreationConstraints(2);
+        SectionBindingForm.testNumberOfCreationConstraints(5);
+        
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BindingFormTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         SectionEditorFormatTab.testActivateFormatTab("JSON");
+        
     }
 
     @Test
@@ -210,5 +216,6 @@ public class BindingFormTestCase {
     @Test
     public void step10_deleteWorkspace() {
         WorkspaceManagerPage.testDeleteWorkspace(wsName);
+        PageObject.logout();
     }
 }

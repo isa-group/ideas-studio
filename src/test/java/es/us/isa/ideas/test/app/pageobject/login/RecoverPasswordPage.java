@@ -2,7 +2,6 @@ package es.us.isa.ideas.test.app.pageobject.login;
 
 import es.us.isa.ideas.test.app.pageobject.PageObject;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriver;
-import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriverWait;
 import es.us.isa.ideas.test.app.pageobject.TestCase;
 import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Level;
@@ -47,7 +46,7 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
 
     // sendKeys
     public RecoverPasswordPage typeEmail(CharSequence email) {
-        sendKeysWithWait(emailField, email);
+        emailField.sendKeys(email);
         return PageFactory.initElements(getWebDriver(), RecoverPasswordPage.class);
     }
 
@@ -63,7 +62,7 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
             RecoverPasswordPage page = RecoverPasswordPage.navigateTo().typeEmail(email);
             
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -71,15 +70,13 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
             page.clickOnSubmit();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             // Modal confirmation
             By locator = By.cssSelector("#pagesContent > h2");
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
-
             String result = getWebDriver().findElement(locator).getText().toLowerCase();
             TEST_RESULT = result.contains("thank you for using e3");
             Assert.assertTrue(TEST_RESULT);
@@ -110,10 +107,14 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
             // Open email
             String selectorConfirmationEmail = "#\\3a 2 > div > div > div.UI tbody tr:first-child td:nth-child(4)";
             locator = By.cssSelector(selectorConfirmationEmail);
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
             getWebDriver().findElement(locator).click(); // opening
             locator = By.cssSelector(".ads");
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             // Parse url confirmation
             String urlConfirmation = (String) getJs()
@@ -140,7 +141,13 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
             getWebDriver().get(urlConfirmation);
             String selectorModalTitle = "#message > div > div > div.modal-header > h4";
             locator = By.cssSelector(selectorModalTitle);
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             String modalTitle = getWebDriver().findElement(locator).getText();
 
             TEST_RESULT = "Account validated successfully".equals(modalTitle);
@@ -150,12 +157,24 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
             getWebDriver().get("https://www.gmail.com");
             String selectorEmail = "#\\3a 2 > div > div > div.UI tbody tr:first-child td:nth-child(4)";
             locator = By.cssSelector(selectorEmail);
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             getWebDriver().findElement(locator).click();
 
             // Copy parsed password
             locator = By.cssSelector(".gs");
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             String scriptCopyPass = "var str=document.getElementsByClassName('gs')[0].textContent;"
                 + "return str.match(/([0-9a-zA-Z]+-)+([0-9a-zA-Z]+)/i)[0];";
             String password = (String) getJs().executeScript(scriptCopyPass);

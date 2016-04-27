@@ -40,12 +40,9 @@ public class RegisterTestCase {
     }
 
     @Ignore
-    public void step05_logout() {
-        PageObject.logout();
-    }
-
-    @Ignore
     public void step06_googleRegister() {
+        PageObject.logout();
+        
         String goUser = TestProperty.getTestGoogleUser();
         String goPass = TestProperty.getTestGooglePassword();
         RegisterSocialGooglePage.testGoogleSocialRegister(goUser, goPass);
@@ -57,12 +54,9 @@ public class RegisterTestCase {
     }
 
     @Test
-    public void step07_logout() {
-        PageObject.logout();
-    }
-
-    @Test
     public void step10_register() {
+        PageObject.logout();
+        
         String user = TestProperty.getTestUser();
         String name = TestProperty.getTestUserName();
         String email = TestProperty.getTestUserEmail();
@@ -74,18 +68,15 @@ public class RegisterTestCase {
     }
 
     @Test
-    public void step11_logout() {
-        PageObject.logout();
-    }
-
-    @Test
     public void step12_recoverPassword() {
+        PageObject.logout();
 
         String user = TestProperty.getTestUser();
         String email = TestProperty.getTestUserEmail();
         String emailPass = TestProperty.getTestUserEmailPassword();
 
         RecoverPasswordPage.testRecoverPassword(email, emailPass, user);
+        PageObject.logout();
     }
 
 }

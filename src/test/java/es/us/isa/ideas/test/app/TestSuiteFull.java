@@ -29,12 +29,12 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     RegisterTestCase.class,
     DynatreeTestCase.class,
-    WorkspaceEditorTestCase.class,
-    WorkspaceDashboardTestCase.class,
-    WorkspaceDemoTestCase.class,
-    BindingFormTestCase.class,
-    WorkspaceSwitchTestCase.class,
-    ModulesTestCase.class
+//    WorkspaceEditorTestCase.class,
+//    WorkspaceDashboardTestCase.class,
+//    WorkspaceDemoTestCase.class,
+    BindingFormTestCase.class
+//    WorkspaceSwitchTestCase.class,
+//    ModulesTestCase.class
 })
 public class TestSuiteFull {
 
