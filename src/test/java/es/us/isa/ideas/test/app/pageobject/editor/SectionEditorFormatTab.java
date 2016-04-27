@@ -62,8 +62,8 @@ public class SectionEditorFormatTab extends EditorPage {
          * @param formatName
          */
         public void testIsEditorFormatActivated(String formatName) {
-            SectionEditorFormatTab formatTab = SectionEditorFormatTab.navigateTo();
-            String formatTabActive = formatTab.formatTabActive.getText();
+            String formatTabActive = SectionEditorFormatTab.navigateTo()
+                .formatTabActive.getText();
 
             TEST_RESULT = formatTabActive.equalsIgnoreCase(formatName);
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);

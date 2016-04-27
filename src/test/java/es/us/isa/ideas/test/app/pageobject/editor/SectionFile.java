@@ -38,6 +38,10 @@ public class SectionFile extends EditorPage {
         new FileTestCase().testOpenFile(element);
     }
 
+    public static void testCloseFile(WebElement element) {
+        new FileTestCase().testCloseFile(element);
+    }
+
     public static void testCreateFile(String fileName, FileType fileType, By parentLocator) {
         new FileTestCase().testCreateFile(fileName, fileType, parentLocator);
     }
@@ -103,11 +107,34 @@ public class SectionFile extends EditorPage {
             } catch (InterruptedException ex) {
                 Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             TEST_RESULT = page.isFileTabActivatedByLocator(element);
             if (TEST_RESULT) {
                 page.consoleEchoCommand("File \"" + element.getText() + "\" was successfully opened.");
             }
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            Assert.assertTrue(TEST_RESULT);
+
+        }
+
+        public void testCloseFile(WebElement element) {
+
+            String fileName = element.getText();
+            EditorPage page = EditorPage.navigateTo();
+
+            TEST_RESULT = false;
+            if (page.tabActivatedElement.getText().equals(fileName)) {
+                page.closeFileByName(fileName);
+
+                try {
+                    Thread.sleep(2000); // tab animation
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                TEST_RESULT = page.isFileTabActivatedByLocator(element);
+            }
+
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
@@ -213,11 +240,9 @@ public class SectionFile extends EditorPage {
 
             // Check if content has been successfully saved.
             TEST_RESULT = !isAceEditorEmpty();
-
             if (TEST_RESULT) {
                 page.consoleEchoCommand("File \"" + getWebDriver().findElement(fileLocator).getText() + "\" was successfully edited.");
             }
-
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 

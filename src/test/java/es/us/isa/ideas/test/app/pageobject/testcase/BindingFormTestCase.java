@@ -16,6 +16,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -108,7 +109,7 @@ public class BindingFormTestCase {
     @Test
     public void step05_createFiles() {
         By parentLocator = By.linkText(projName);
-        
+
         // Create iAgree template file
         SectionFile.testCreateFile(fileName, FileType.IAGREE_TEMPLATE, parentLocator);
         By fileLocator = By.linkText(fileName + FileType.IAGREE_TEMPLATE.toString());
@@ -125,37 +126,73 @@ public class BindingFormTestCase {
         SectionFile.testEditFile(fileLocator, ctlFile);
     }
 
-    // Check if you press addSlaButton on formatView, it creates a new creation constraint. 
     @Test
-    public void step08_testAddCreationConstraintFromFormatView() {
-
+    public void step08_testViewFormFormat() {
         By fileLocator = By.linkText(fileName + FileType.IAGREE_TEMPLATE.toString());
         SectionFile.testOpenFile(PageObject.getWebDriver().findElement(fileLocator));
-        
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
             Logger.getLogger(BindingFormTestCase.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         SectionEditorFormatTab.testIsEditorFormatActivated("FORM");
+    }
+
+    // Check if user loses FORM tab
+    @Test
+    public void step09_testFormViewWontDisappear() {
+
+        // Open any other file
+        By fileLocator = By.linkText(fileName + FileType.ANGULAR_CONTROLLER.toString());
+        SectionFile.testOpenFile(PageObject.getWebDriver().findElement(fileLocator));
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BindingFormTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        fileLocator = By.linkText(fileName + FileType.IAGREE_TEMPLATE.toString());
+        WebElement element = PageObject.getWebDriver().findElement(fileLocator);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BindingFormTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        SectionFile.testOpenFile(element);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BindingFormTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        SectionFile.testCloseFile(element);
+
+        SectionEditorFormatTab.testIsEditorFormatActivated("FORM");
+
+    }
+
+    // Check if you press addSlaButton on formatView, it creates a new creation constraint. 
+    @Test
+    public void step10_testAddCreationConstraintFromFormatView() {
         SectionBindingForm.testAddCreationConstraintFromFormatView();
         SectionBindingForm.testNumberOfCreationConstraints(5);
-        
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
             Logger.getLogger(BindingFormTestCase.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         SectionEditorFormatTab.testActivateFormatTab("JSON");
-        
+
     }
 
     @Test
-    public void step09_testUpdateModelFromIAgreeFormat() {
-        SectionEditorFormatTab.testActivateFormatTab("IAGREE");
+    public void step11_testUpdateModelFromIAgreeFormat() {
         SectionInspector.testOpenInspector();
+        SectionEditorFormatTab.testActivateFormatTab("IAGREE");
 
         String iAgreeContentFile;
         iAgreeContentFile = ""
@@ -188,14 +225,14 @@ public class BindingFormTestCase {
             + "		ResponseTimeTerm: Provider guarantees AVGResponseTime <= MaxResponseTime;\\n"
             + "\\n"
             + "CreationConstraints\\n"
-            + "	C3: (MaxRequests == 1000 AND MaxResponseTime == 100 AND PlanPrice == 10);\\n"
+            + "	C3: (MaxRequests == 1000 AND MaxResponseTime == 100 AND PlanPrice == 100);\\n"
             + "		onlyIf(PlanType == \"pro\");\\n"
             + "\\n"
-            + "	C1: (MaxRequests == 1000 AND MaxResponseTime == 100 AND PlanPrice == 10);\\n"
-            + "		onlyIf(PlanType == \"pro\");\\n"
+            + "	C1: (MaxRequests == 5 AND MaxResponseTime == 1000 AND PlanPrice == 10);\\n"
+            + "		onlyIf(PlanType == \"free\");\\n"
             + "	\\n"
-            + "	C2: (MaxRequests == 1000 AND MaxResponseTime == 100 AND PlanPrice == 10);\\n"
-            + "		onlyIf(PlanType == \"pro\");\\n"
+            + "	C2: (MaxRequests == 100 AND MaxResponseTime == 250 AND PlanPrice == 50);\\n"
+            + "		onlyIf(PlanType == \"medium\");\\n"
             + "\\n"
             + "\\n"
             + "EndTemplate";
@@ -214,7 +251,7 @@ public class BindingFormTestCase {
     }
 
     @Test
-    public void step10_deleteWorkspace() {
+    public void step12_deleteWorkspace() {
         WorkspaceManagerPage.testDeleteWorkspace(wsName);
         PageObject.logout();
     }

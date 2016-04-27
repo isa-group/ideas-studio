@@ -162,7 +162,10 @@ public class EditorPage extends PageObject<EditorPage> {
     @FindBy(css = "#gcli-root input.gcli-in-input")
     WebElement console;
 
-    // TAB
+    // EDITOR TAB
+    @FindBy(css = "#editorTabs")
+    WebElement editorTabContainer;
+
     @FindBy(css = "#editorTabs > li.active")
     WebElement tabActivatedElement;
 
@@ -551,7 +554,7 @@ public class EditorPage extends PageObject<EditorPage> {
     }
 
     public EditorPage aceEditorContent(String content) {
-        
+
         EditorPage result = null;
 
         try {
@@ -574,7 +577,7 @@ public class EditorPage extends PageObject<EditorPage> {
             } catch (InterruptedException ex) {
                 Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             result = PageFactory.initElements(getWebDriver(), EditorPage.class);
         }
 
@@ -600,6 +603,21 @@ public class EditorPage extends PageObject<EditorPage> {
 
         return tabActivatedElement.getText().equals(fileName);
 
+    }
+
+    public void closeFileByName(String fileName) {
+        
+        WebElement element = PageObject.getWebDriver().findElement(By.cssSelector("#editorTabsContainer > ul > li"));
+        
+        if (element != null) {
+            // Closes all files with the fileName and not activated
+            PageObject.getJs().executeScript(
+                "jQuery('#editorTabsContainer > ul > li').each(function() {"
+                + "if(jQuery(this).text().indexOf('" + fileName + "') !== -1) "
+                + "jQuery(this).not('.active').find('span').click()})"
+            );
+        }
+        
     }
 
 }

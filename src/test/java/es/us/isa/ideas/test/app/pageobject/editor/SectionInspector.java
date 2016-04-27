@@ -92,7 +92,7 @@ public class SectionInspector extends EditorPage {
                 inspector.clickOnInspectorToggle();
 
                 try {
-                    Thread.sleep(1000); // open animation
+                    Thread.sleep(2000); // open animation
                 } catch (InterruptedException ex) {
                     Logger.getLogger(SectionInspector.class.getName()).log(Level.SEVERE, null, ex);
                 }
