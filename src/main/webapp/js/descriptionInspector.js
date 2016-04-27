@@ -288,6 +288,10 @@ var DescriptionInspector = {
 		if (!this.ace.hasOpenTab()) {
 			// console.log("Erase inspector content");
 			$("#editorInspectorLoader").empty();
+            
+            // FormatView
+			DescriptionInspector.descriptionFormatView.destroy();
+			DescriptionInspector.angularFormatView.destroy();
 		}
 	},
 
@@ -3199,10 +3203,6 @@ var DescriptionInspector = {
 		 */
 		onEditorCloseFile : function() {
 			DescriptionInspector.empty();
-            
-            // FormatView
-			DescriptionInspector.descriptionFormatView.destroy();
-			DescriptionInspector.angularFormatView.destroy();
 		},
 
 		/**
