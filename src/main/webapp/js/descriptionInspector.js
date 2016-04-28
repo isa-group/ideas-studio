@@ -3189,7 +3189,8 @@ var DescriptionInspector = {
             
             // Highlight description binding
 			setTimeout(function() {
-				DescriptionInspector.highlightAllBindings();
+				if (DescriptionInspector.existCurrentDescriptionFile())
+					DescriptionInspector.highlightAllBindings();
 			}, 100);
             
             // Model

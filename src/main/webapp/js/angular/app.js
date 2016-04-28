@@ -71,13 +71,13 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
 
             // Try-catch block for bad JSON parsing.
             try {
-                
+
                 var sessionMap = EditorManager.sessionsMap[EditorManager.currentUri],
                     currentFormat = sessionMap.getCurrentFormat(),
                     formatSessions = sessionMap.getFormatsSessions(),
                     editorContent = document.editor.getValue();
 
-                if (editorContent && ("json" in formatSessions || "yaml" in formatSessions)) {
+                if (editorContent && DescriptionInspector.existCurrentAngularFile() && ("json" in formatSessions || "yaml" in formatSessions)) {
 
                     //TODO: check if it's a "JSONable" content
 
@@ -109,8 +109,6 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
                         });
                     }
 
-                } else {
-                    $scope.model = {};
                 }
 
             } catch (err) {
