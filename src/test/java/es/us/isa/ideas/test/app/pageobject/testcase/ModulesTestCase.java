@@ -36,7 +36,6 @@ public class ModulesTestCase extends TestCase {
             .executeCommand("testModules", Keys.RETURN);
         
         By locator = By.id("testModulesResult");
-        PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(locator));
         String testResult = PageObject.getWebDriver().findElement(locator).getText();
 		TEST_RESULT = testResult.contains("100%");
 		assertTrue(TEST_RESULT);

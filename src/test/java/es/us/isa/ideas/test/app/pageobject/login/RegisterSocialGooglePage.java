@@ -70,12 +70,12 @@ public class RegisterSocialGooglePage extends PageObject<RegisterSocialGooglePag
     }
 
     public RegisterSocialGooglePage typeUsername(CharSequence goUser) {
-        sendKeysWithWait(usernameField, goUser);
+        usernameField.sendKeys(goUser);
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
 
     public RegisterSocialGooglePage typePassword(CharSequence goPass) {
-        sendKeysWithWait(passwordField, goPass);
+        passwordField.sendKeys(goPass);
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
 
@@ -199,21 +199,19 @@ public class RegisterSocialGooglePage extends PageObject<RegisterSocialGooglePag
 
             RegisterSocialGooglePage page = RegisterSocialGooglePage.navigateTo();
             By locator = By.xpath("//*[@id=\"gb\"]/div[1]/div[1]/div[2]/div[4]/div[1]/a/span");
-            PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
             
             try {
-                Thread.sleep(2000);  
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterSocialGooglePage.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             page.clickOnNotClickableLocator(locator);
             
             locator = By.xpath("//*[@id=\"gb_71\"]");
-            PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
             
             try {
-                Thread.sleep(2000);  
+                Thread.sleep(5000);  
             } catch (InterruptedException ex) {
                 Logger.getLogger(RegisterSocialGooglePage.class.getName()).log(Level.SEVERE, null, ex);
             }
