@@ -10,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -62,12 +63,12 @@ public class LoginPage extends PageObject<LoginPage> {
 
     // sendKeys
     public LoginPage typeUsername(CharSequence username) {
-        sendKeysWithWait(usernameField, username);
+        usernameField.sendKeys(username);
         return PageFactory.initElements(getWebDriver(), LoginPage.class);
     }
 
     public LoginPage typePassword(CharSequence password) {
-        sendKeysWithWait(passwordField, password);
+        passwordField.sendKeys(password);
         return PageFactory.initElements(getWebDriver(), LoginPage.class);
     }
 
@@ -93,28 +94,21 @@ public class LoginPage extends PageObject<LoginPage> {
         public void testLogin(String username, String password) {
 
             LoginPage page = LoginPage.navigateTo();
-            
-            PageObject.alertWindowConfirm(3);
 
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(LoginPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            PageObject.alertWindowConfirm(3);
 
             page.typeUsername(username)
                 .typePassword(password)
                 .clickOnLogin();
 
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(LoginPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            TEST_RESULT = page.getCurrentUrl().contains("editor");
+            WebElement lastElement = PageObject.getWebDriver().findElement(By.id("appFooter"));
+            TEST_RESULT = page.getCurrentUrl().contains("editor") && lastElement != null;
             assertTrue(TEST_RESULT);
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+
+            if (TEST_RESULT) {
+                getWebDriver().navigate().refresh();
+            }
 
         }
 

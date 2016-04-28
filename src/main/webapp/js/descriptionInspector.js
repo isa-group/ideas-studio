@@ -288,6 +288,10 @@ var DescriptionInspector = {
 		if (!this.ace.hasOpenTab()) {
 			// console.log("Erase inspector content");
 			$("#editorInspectorLoader").empty();
+            
+            // FormatView
+			DescriptionInspector.descriptionFormatView.destroy();
+			DescriptionInspector.angularFormatView.destroy();
 		}
 	},
 
@@ -3185,7 +3189,8 @@ var DescriptionInspector = {
             
             // Highlight description binding
 			setTimeout(function() {
-				DescriptionInspector.highlightAllBindings();
+				if (DescriptionInspector.existCurrentDescriptionFile())
+					DescriptionInspector.highlightAllBindings();
 			}, 100);
             
             // Model
@@ -3199,10 +3204,6 @@ var DescriptionInspector = {
 		 */
 		onEditorCloseFile : function() {
 			DescriptionInspector.empty();
-            
-            // FormatView
-			DescriptionInspector.descriptionFormatView.destroy();
-			DescriptionInspector.angularFormatView.destroy();
 		},
 
 		/**
