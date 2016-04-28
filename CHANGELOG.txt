@@ -1,6 +1,6 @@
 ideas-studio v0.9.2.4, 28/04/2016
 ----------------------------------------------
-- Ace autocomplete #156
+- Ace autocomplete and searchbox #156
 - Ace content doesn't fit well #155
 - "Form" format disappears when you close another file tab #154
 
