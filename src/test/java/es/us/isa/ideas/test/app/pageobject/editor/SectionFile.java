@@ -8,8 +8,8 @@ package es.us.isa.ideas.test.app.pageobject.editor;
 import es.us.isa.ideas.test.app.utils.FileType;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getJs;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriver;
-import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriverWait;
 import es.us.isa.ideas.test.app.pageobject.TestCase;
+import es.us.isa.ideas.test.app.pageobject.login.RegisterPage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Assert;
@@ -29,16 +29,19 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  * @version 1.0
  */
 public class SectionFile extends EditorPage {
-    
+
     @FindBy(css = "#projectsTree > ul > li:nth-child(1) > span > a")
     WebElement projectElement;
-    
+
     // File tests
-    
-    public static void testOpenFile(By fileLocator) {
-        new FileTestCase().testOpenFile(fileLocator);
+    public static void testOpenFile(WebElement element) {
+        new FileTestCase().testOpenFile(element);
     }
-    
+
+    public static void testCloseFile(WebElement element) {
+        new FileTestCase().testCloseFile(element);
+    }
+
     public static void testCreateFile(String fileName, FileType fileType, By parentLocator) {
         new FileTestCase().testCreateFile(fileName, fileType, parentLocator);
     }
@@ -50,21 +53,18 @@ public class SectionFile extends EditorPage {
     public static void testEditFile(By fileLocator, String content) {
         new FileTestCase().testEditFile(fileLocator, content);
     }
-    
+
     // Directory tests
-    
     public static void testCreateDirectory(String dirName, By parentLocator) {
         new DirectoryTestCase().testCreateDirectory(dirName, parentLocator);
     }
-    
+
     // Project tests
-    
     public static void testCreateProject(String projName) {
         new ProjectTestCase().testCreateProject(projName);
     }
 
     // Others
-    
     public WebElement getProjectElement() {
         return PageFactory.initElements(getWebDriver(), SectionFile.class).projectElement;
     }
@@ -91,22 +91,48 @@ public class SectionFile extends EditorPage {
         }
 
         /**
-         * Checks if the click on fileLocator param activates a tab named like it.
-         * @param fileLocator 
+         * Checks if the click on fileLocator param activates a tab named like
+         * it.
+         *
+         * @param element
          */
-        public void testOpenFile(By fileLocator) {
+        public void testOpenFile(WebElement element) {
 
-            EditorPage page = EditorPage.navigateTo().expandAllDynatreeNodes();
-            ExpectedCondition<WebElement> fileCondition = ExpectedConditions.visibilityOfElementLocated(fileLocator);
+            EditorPage page = EditorPage.navigateTo()
+                .expandAllDynatreeNodes()
+                .clickOnNotClickableElement(element);
 
-            // Open file
-            WebElement fileElement = getWebDriverWait().until(fileCondition);
-            page.clickOnNotClickableElement(fileElement);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-            TEST_RESULT = page.isFileTabActivatedByLocator(fileLocator);
-
+            TEST_RESULT = page.isFileTabActivatedByLocator(element);
             if (TEST_RESULT) {
-                page.consoleEchoCommand("File \"" + fileElement.getText() + "\" was successfully opened.");
+                page.consoleEchoCommand("File \"" + element.getText() + "\" was successfully opened.");
+            }
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            Assert.assertTrue(TEST_RESULT);
+
+        }
+
+        public void testCloseFile(WebElement element) {
+
+            String fileName = element.getText();
+            EditorPage page = EditorPage.navigateTo();
+
+            TEST_RESULT = false;
+            if (page.tabActivatedElement.getText().equals(fileName)) {
+                page.closeFileByName(fileName);
+
+                try {
+                    Thread.sleep(2000); // tab animation
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                TEST_RESULT = page.isFileTabActivatedByLocator(element);
             }
 
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
@@ -116,9 +142,10 @@ public class SectionFile extends EditorPage {
 
         /**
          * Check if a new file persists after a page refresh.
+         *
          * @param fileName
          * @param fileType
-         * @param parentLocator 
+         * @param parentLocator
          */
         public void testCreateFile(String fileName, FileType fileType, By parentLocator) {
 
@@ -130,21 +157,20 @@ public class SectionFile extends EditorPage {
                 .typeFileName(fileName)
                 .clickOnModalContinueButton();
 
-            By fileLocator = By.linkText(fileName + fileType.toString());
-            ExpectedCondition<WebElement> fileCondition = ExpectedConditions.visibilityOfElementLocated(fileLocator);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-            getWebDriverWait().until(fileCondition);
             getWebDriver().navigate().refresh();
-
             page.expandAllDynatreeNodes();
-            getWebDriverWait().until(fileCondition);
 
+            By fileLocator = By.linkText(fileName + fileType.toString());
             TEST_RESULT = getWebDriver().findElements(fileLocator).size() > 0;
-
             if (TEST_RESULT) {
                 page.consoleEchoCommand("File \"" + fileName + fileType.toString() + "\" was successfully created.");
             }
-
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
@@ -158,21 +184,10 @@ public class SectionFile extends EditorPage {
                 .clickOnContextMenuEditAnchor()
                 .typeContextMenuEditField(targetFileName, Keys.RETURN);
 
-            By fileLocator = By.linkText(targetFileName);
-            ExpectedCondition<WebElement> fileCondition = ExpectedConditions.visibilityOfElementLocated(fileLocator);
-
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-//            getWebDriverWait().until(fileCondition);
             getWebDriver().navigate().refresh();
-
             page.expandAllDynatreeNodes();
-            getWebDriverWait().until(fileCondition);
 
+            By fileLocator = By.linkText(targetFileName);
             TEST_RESULT = getWebDriver().findElements(fileLocator).size() > 0;
 
             if (TEST_RESULT) {
@@ -187,15 +202,17 @@ public class SectionFile extends EditorPage {
         public void testEditFile(By fileLocator, String content) {
 
             EditorPage page = EditorPage.navigateTo()
-                .expandAllDynatreeNodes();
+                .expandAllDynatreeNodes()
+                .clickOnNotClickableElement(getWebDriver().findElement(fileLocator));
 
-            ExpectedCondition<WebElement> fileCondition = ExpectedConditions.visibilityOfElementLocated(fileLocator);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-            // Edit file content
-            WebElement fileElement = getWebDriverWait().until(fileCondition);
-            page.clickOnNotClickableElement(fileElement)
-                .aceEditorContent(content);
-            
+            page.aceEditorContent(content);
+
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
@@ -203,7 +220,7 @@ public class SectionFile extends EditorPage {
             }
 
             getWebDriver().navigate().refresh();
-            
+
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
@@ -211,17 +228,21 @@ public class SectionFile extends EditorPage {
             }
 
             // Re-open file
-            page.expandAllDynatreeNodes();
-            fileElement = getWebDriverWait().until(fileCondition);
-            page.clickOnNotClickableElement(fileElement);
+            EditorPage.navigateTo()
+                .expandAllDynatreeNodes()
+                .clickOnNotClickableElement(getWebDriver().findElement(fileLocator));
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             // Check if content has been successfully saved.
             TEST_RESULT = !isAceEditorEmpty();
-
             if (TEST_RESULT) {
-                page.consoleEchoCommand("File \"" + fileElement.getText() + "\" was successfully edited.");
+                page.consoleEchoCommand("File \"" + getWebDriver().findElement(fileLocator).getText() + "\" was successfully edited.");
             }
-
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
@@ -245,27 +266,20 @@ public class SectionFile extends EditorPage {
                 .clickOnModalContinueButton()
                 .expandAllDynatreeNodes();
 
-            By fileLocator = By.linkText(dirName);
-            ExpectedCondition<WebElement> dirCondition = ExpectedConditions.visibilityOfElementLocated(fileLocator);
-
-            getWebDriverWait().until(dirCondition);
             getWebDriver().navigate().refresh();
-
             page.expandAllDynatreeNodes();
-            getWebDriverWait().until(dirCondition);
 
+            By fileLocator = By.linkText(dirName);
             TEST_RESULT = getWebDriver().findElements(fileLocator).size() > 0;
-
             if (TEST_RESULT) {
                 page.consoleEchoCommand("Directory \"" + dirName + "\" was successfully created.");
             }
-
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
         }
     }
-    
+
     /**
      * This class implements all tests related to projects management.
      */
@@ -284,21 +298,20 @@ public class SectionFile extends EditorPage {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            WebElement element = getWebDriverWait().until(ExpectedConditions.visibilityOf(new SectionFile().getProjectElement()));
-
-            TEST_RESULT = element.getText().equals(projName);
-
-            if (TEST_RESULT) {
-                page.consoleEchoCommand("Project \"" + projName + "\" was successfully created.");
+            WebElement element = new SectionFile().getProjectElement();
+            TEST_RESULT = false;
+            if (element != null) {
+                TEST_RESULT = element.getText().equals(projName);
+                if (TEST_RESULT) {
+                    page.consoleEchoCommand("Project \"" + projName + "\" was successfully created.");
+                }
             }
-
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
         }
     }
-    
+
 }
