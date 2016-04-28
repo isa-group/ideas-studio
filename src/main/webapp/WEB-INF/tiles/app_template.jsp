@@ -51,6 +51,8 @@
         <script src="js/vendor/jquery.contextMenu-custom.js" type="text/javascript"></script>
 
         <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/ace-build/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/ace-build/ext-searchbox.js" type="text/javascript" charset="utf-8"></script>
 
         <script type="text/javascript" src="js/vendor/bootstrap.js"></script>
         <script type="text/javascript" src="js/md5.js"></script>
