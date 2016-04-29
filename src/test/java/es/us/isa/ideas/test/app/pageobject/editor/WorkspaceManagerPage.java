@@ -11,6 +11,7 @@ import es.us.isa.ideas.test.app.pageobject.TestCase;
 import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -18,6 +19,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
+import org.openqa.selenium.NoSuchElementException;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -37,6 +39,10 @@ public class WorkspaceManagerPage extends EditorPage {
     // Non-dashboard
     public static void testCreateWorkspace(String wsName, String wsDescription, String wsTags) {
         new WorkspaceTestCase().testCreateWorkspace(wsName, wsDescription, wsTags);
+    }
+    
+    public static void testCreateWorkspaceWithError(String wsName, String wsDescription, String wsTags) {
+        new WorkspaceTestCase().testCreateWorkspaceWithError(wsName, wsDescription, wsTags);
     }
 
     public static void testDeleteWorkspace(String wsName) {
@@ -164,6 +170,45 @@ public class WorkspaceManagerPage extends EditorPage {
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             assertTrue(TEST_RESULT);
 
+        }
+        
+        public void testCreateWorkspaceWithError(String wsName, String wsDescription, String wsTags) {
+
+            EditorPage page = EditorPage.navigateTo();
+            WebElement lastElement = PageObject.getWebDriver().findElement(By.id("appFooter"));
+
+            if (page != null && lastElement != null) {
+                page.clickOnMenuTogglerButton()
+                    .clickOnWorkspaceAddButton()
+                    .typeWorkspaceName(wsName)
+                    .typeWorkspaceDescription(wsDescription)
+                    .typeWorkspaceTags(wsTags)
+                    .clickOnModalContinueButton();
+
+                TEST_RESULT = page.modalErrorContent.getText().contains("Error creating new workspace");
+                Assert.assertTrue(TEST_RESULT);
+
+                page.clickOnModalErrorContinueButton();
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                TEST_RESULT = false;
+                try {
+                    TEST_RESULT = !page.modalBackground.isDisplayed();
+                } catch (NoSuchElementException ex) {
+                    TEST_RESULT = true;
+                }
+                
+                getWebDriver().navigate().refresh();
+                
+                Assert.assertTrue(TEST_RESULT);
+                LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+
+            }
         }
 
         public void testOpenWorkspace(String wsName) {

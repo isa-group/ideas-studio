@@ -1,15 +1,16 @@
 package es.us.isa.ideas.test.app.pageobject.editor;
 
 import es.us.isa.ideas.test.app.pageobject.PageObject;
+import es.us.isa.ideas.test.app.pageobject.TestCase;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterPage;
 import es.us.isa.ideas.test.app.utils.FileType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -169,6 +170,22 @@ public class EditorPage extends PageObject<EditorPage> {
     @FindBy(css = "#editorTabs > li.active")
     WebElement tabActivatedElement;
 
+    // MODAL
+    @FindBy(id = "appGenericError")
+    WebElement modalError;
+
+    @FindBy(css = "#appGenericError .modal-title")
+    WebElement modalErrorTitle;
+
+    @FindBy(css = "#appGenericError .modal-body")
+    WebElement modalErrorContent;
+
+    @FindBy(css = "#appGenericError > div > div > div.modal-footer > a")
+    WebElement modalErrorBtn;
+
+    @FindBy(css = ".modal-backdrop")
+    WebElement modalBackground;
+
     static final Logger LOG = Logger.getLogger(EditorPage.class.getName());
 
     public static EditorPage navigateTo() {
@@ -271,6 +288,17 @@ public class EditorPage extends PageObject<EditorPage> {
             Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
         }
         clickOnNotClickableElement(modalContinueButton);
+
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnModalErrorContinueButton() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        clickOnNotClickableElement(modalErrorBtn);
 
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
@@ -606,9 +634,9 @@ public class EditorPage extends PageObject<EditorPage> {
     }
 
     public void closeFileByName(String fileName) {
-        
+
         WebElement element = PageObject.getWebDriver().findElement(By.cssSelector("#editorTabsContainer > ul > li"));
-        
+
         if (element != null) {
             // Closes all files with the fileName and not activated
             PageObject.getJs().executeScript(
@@ -617,7 +645,5 @@ public class EditorPage extends PageObject<EditorPage> {
                 + "jQuery(this).not('.active').find('span').click()})"
             );
         }
-        
     }
-
 }
