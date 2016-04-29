@@ -1,10 +1,13 @@
 package es.us.isa.ideas.test.app.pageobject.testcase;
 
 import es.us.isa.ideas.test.app.pageobject.PageObject;
+import es.us.isa.ideas.test.app.pageobject.editor.EditorPage;
 import es.us.isa.ideas.test.app.pageobject.editor.SectionFile;
 import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceManagerPage;
 import es.us.isa.ideas.test.app.pageobject.login.LoginPage;
 import es.us.isa.ideas.test.app.utils.FileType;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -46,10 +49,21 @@ public class DynatreeTestCase {
     @Test
     public void step02_createWorkspace() {
         WorkspaceManagerPage.testCreateWorkspace(wsName, wsDesc, wsTags);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DynatreeTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        WorkspaceManagerPage.testCreateWorkspaceWithError(wsName, wsDesc, wsTags);
     }
 
     @Test
     public void step03_createProject() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DynatreeTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
         SectionFile.testCreateProject(projName);
     }
 
