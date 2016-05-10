@@ -135,6 +135,7 @@ var showError = function(title, content, primaryHandler) {
 
 var hideError = function() {
 	$('#appGenericError').modal('hide');
+    $(".modal-backdrop").remove();
 };
 
 var hideModal = function() {

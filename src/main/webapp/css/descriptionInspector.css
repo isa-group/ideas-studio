@@ -207,6 +207,7 @@ select.selectedFragment {
 .btn.inactive {background:#E8E8E8;border-color:#E8E8E8;color:#222;} 
  
 .highlighted-fragment, .ideas-binding:hover, .to-remove:hover { cursor: pointer; background: rgba(212, 198, 54, 0.5); } 
+.ideas-binding-vocab.to-remove:hover { background-color: white;}
 .middle-highlighted-fragment { cursor: pointer; background: rgba(0, 0, 0, 0.06); } 
 
 
