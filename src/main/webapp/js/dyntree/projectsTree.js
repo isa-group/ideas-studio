@@ -48,11 +48,26 @@ function copyPaste(action, node) {
 		break;
 	case "paste":
 		if (!destNode) {
-			CommandApi.echo("<p style='color:red'>Project Tree: Clipoard is empty.</p>");
+			CommandApi.echo("<p style='color:red'>Project Tree: Clipboard is empty.</p>");
 			break;
 		}
 		var origin = WorkspaceManager.getSelectedWorkspace() + "/" + originNode.data.keyPath;
-		var dest = WorkspaceManager.getSelectedWorkspace() + "/" + destNode.data.keyPath + "/" +originNode.data.title;
+		var dest = WorkspaceManager.getSelectedWorkspace() + "/" + destNode.data.keyPath + "/" + originNode.data.title;
+        
+        var msg = "";
+        if (originNode.getLevel() === 1) {
+            msg += "Cannot paste a project into a project.";
+        } else if ( !!getNodeByFileUri(dest) ) {
+            msg += "Element already exists.";
+        } else if (!destNode.data.isFolder) {
+            msg += "Cannot paste into a file.";
+        }
+
+        if (msg !== "") {
+            CommandApi.echo("<p style='color:red'>Project Tree: " + msg + "</p>");
+            break;
+        }
+        
 		if (pasteMode == "cut") {
 			CommandApi.move(origin, dest);
 		} else {
