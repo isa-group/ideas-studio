@@ -9,7 +9,10 @@ var newDirItem = {
     buttonCode: "editor.actions.modal.create_directory.button",
     contentUrl: "app/modalWindows/createNewDirectory",
     onClick: function () {
-        genericMenuOption(newDirItem);
+        var estate = $('.createNewDirectory');
+        if (!(estate.parent().attr('class') == 'disabled')) {
+            genericMenuOption(newDirItem);
+        }
     },
     onCreate: function () {
         var folderName = $("#modalCreationField input").val();
