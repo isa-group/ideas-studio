@@ -20,14 +20,21 @@ jQuery(function () {
 
     $(".addWorkspace").click(function () {
         showContentAsModal("app/modalWindows/createWorkspace", function () {
-            var workspaceName = $("#modalCreationField input").val();
+            var workspaceName = normalizeWSName($("#modalCreationField input").val());
             var description = $("#descriptionInput textarea").val();
             var tags = $("#tagsInput textarea").val();
-            $("#workspacesNavContainer li").removeClass("active");
-            WorkspaceManager.createWorkspace(workspaceName, description, tags);
-            AppPresenter.loadSection("editor", workspaceName, function () {
-                WorkspaceManager.loadWorkspace();
-            });
+            
+            if (workspaceName !== "") {
+                $("#workspacesNavContainer li").removeClass("active");
+                WorkspaceManager.createWorkspace(workspaceName, description, tags, function () {
+                    AppPresenter.loadSection("editor", workspaceName, function () {
+                        WorkspaceManager.loadWorkspace();
+                    });
+                });
+            } else {
+                alert("Unable to create workspace");
+            }
+            
         });
         // Update workspace name from file
         setTimeout(function () {
@@ -176,4 +183,8 @@ var compareObjects = function equals(obj1, obj2) {
     }
 
     return _equals(obj1, obj2) && _equals(obj2, obj1);
+}
+
+var normalizeWSName = function (s) {
+    return s.replace(/\s+/g,"-").replace(/[|&;:$%@"<>()+,]/g, "");
 }
