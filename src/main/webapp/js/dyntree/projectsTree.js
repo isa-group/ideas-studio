@@ -47,7 +47,7 @@ function copyPaste(action, node) {
             pasteMode = action;
             break;
         case "paste":
-            if (!destNode) {
+            if (!originNode) {
                 CommandApi.echo("<p style='color:red'>Project Tree: Clipboard is empty.</p>");
                 break;
             }
