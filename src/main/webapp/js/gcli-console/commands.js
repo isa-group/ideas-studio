@@ -210,7 +210,8 @@ var CommandsRegistry = {
             {
                 name: "destinationWorkspaceName",
                 type: "string",
-                description: "Optionally choose a name for the workspace. If not specified the default demo name will be used."
+                description: "Optionally choose a name for the workspace. If not specified the default demo name will be used.",
+                defaultValue: ""
             }],
         exec: function (args, context) {
 
