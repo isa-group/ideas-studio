@@ -40,7 +40,7 @@ var newDirItem = {
                     hideModal();
                     showError("Warning", "Please enter a directory name.", function () {
                         hideError();
-                        genericMenuOption(newProjectItem);
+                        genericMenuOption(newDirItem);
                     });
                 } else {
                     hideModal();
