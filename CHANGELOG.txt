@@ -1,3 +1,12 @@
+ideas-studio v0.9.2.7, 19/05/2016
+----------------------------------------------
+- Drag and drop project into project #14
+- Allow to copy and paste a node into its own path #22
+- Allowed to paste nothing copied/cut into a path #23
+- Creating a directory with disabled button #55
+- Unable to import .zip without workspace name #174
+- Cannot create a workspace with whitespace #175
+
 ideas-studio v0.9.2.6, 12/05/2016
 ----------------------------------------------
 - Allow other browers than Chrome #170

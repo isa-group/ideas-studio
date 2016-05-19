@@ -9,17 +9,16 @@ import es.us.isa.ideas.test.app.pageobject.PageObject;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriver;
 import es.us.isa.ideas.test.app.pageobject.TestCase;
 import es.us.isa.ideas.test.app.utils.TestProperty;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.NoSuchElementException;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -39,6 +38,10 @@ public class WorkspaceManagerPage extends EditorPage {
     // Non-dashboard
     public static void testCreateWorkspace(String wsName, String wsDescription, String wsTags) {
         new WorkspaceTestCase().testCreateWorkspace(wsName, wsDescription, wsTags);
+    }
+    
+    public static void testCreateWorkspaceZip(String wsDescription, String wsTags) {
+        new WorkspaceTestCase().testCreateWorkspaceZip(wsDescription, wsTags);
     }
     
     public static void testCreateWorkspaceWithError(String wsName, String wsDescription, String wsTags) {
@@ -163,7 +166,7 @@ public class WorkspaceManagerPage extends EditorPage {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
             String targetWsName = page.getProjCurrentWSText();
-            TEST_RESULT = targetWsName.equals(wsName);
+            TEST_RESULT = targetWsName.equals(wsName.replace(" ", "-"));
             if (TEST_RESULT) {
                 page.consoleEchoCommand("Workspace \"" + wsName + "\" was successfully created.");
             }
@@ -737,6 +740,61 @@ public class WorkspaceManagerPage extends EditorPage {
             }
 
             TEST_RESULT = page.getProjCurrentWSText().equals(wsName);
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            assertTrue(TEST_RESULT);
+
+        }
+        
+        public void testCreateWorkspaceZip(String wsDescription, String wsTags) {
+
+            EditorPage page = EditorPage.navigateTo();
+            WebElement lastElement = PageObject.getWebDriver().findElement(By.id("appFooter"));
+            
+            if (page != null && lastElement != null) {
+                page.clickOnMenuTogglerButton()
+                    .clickOnWorkspaceAddButton();
+                
+                try {
+                    Thread.sleep(1000); // animation
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                // Show upload button
+                page.clickOnWSModalZipCheckbox();
+                
+                try {
+                    Thread.sleep(1000); // checkbox animation
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                File file = new File("src/test/resources/repository/TestWorkspace.zip");
+                page.typeWorkspaceModalZipFilePath(file.getAbsolutePath())
+                    .typeWorkspaceDescription(wsDescription)
+                    .typeWorkspaceTags(wsTags)
+                    .clickOnModalContinueButton();
+                
+                
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                getWebDriver().navigate().refresh();
+                
+            }
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String targetWsName = page.getProjCurrentWSText();
+            TEST_RESULT = targetWsName.equals("TestWorkspace");
+            if (TEST_RESULT) {
+                page.consoleEchoCommand("Workspace \"TestWorkspace\" was successfully created.");
+            }
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             assertTrue(TEST_RESULT);
 
