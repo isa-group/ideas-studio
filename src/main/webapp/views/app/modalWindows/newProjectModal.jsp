@@ -18,7 +18,7 @@
         <label for="template-from-module"> <spring:message code="editor.actions.modal.create_project.from_template_of_module" /></label>
         <select id="template-from-module" name="template-from-module" class="form-control">
             <option id="module-empty" value=""><spring:message code="editor.actions.modal.create_project.choose_a_template" /></option>                            
-            <jstl:forEach var="language" items="${studioConfiguration.languages}">
+            <jstl:forEach var="language" items="${studioConfiguration.modules}">
                 <optgroup label="${language.key}" id="${language.key}-optgroup">                      
                 </optgroup>
             </jstl:forEach>
@@ -38,7 +38,7 @@
 </div>  
 <script>
     var mytemplates,mytemplate,index;
-    <jstl:forEach var="language" items="${studioConfiguration.languages}">        
+    <jstl:forEach var="language" items="${studioConfiguration.modules}">        
         $.ajax({"url": '${language.value}/template/project',
         success: function(result, textStatus, request) {
                 console.log("Templates provided by the ${language.key} module:" + result + "");

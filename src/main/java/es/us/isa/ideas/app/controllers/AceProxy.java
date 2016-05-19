@@ -1,5 +1,6 @@
 package es.us.isa.ideas.app.controllers;
 
+import com.google.common.base.Strings;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.us.isa.ideas.app.configuration.StudioConfiguration;
+import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,9 +60,9 @@ public class AceProxy extends AbstractController {
     private ServletContext servletContext;
 
     @Autowired
-    private ConfigurationController moduleController;
+    private StudioConfiguration studioConfiguration;
 
-    private Map<String, String> modeUriCache = new HashMap<String, String>();
+    private final Map<String, String> modeUriCache = new HashMap<>();
 
     @RequestMapping(value = "/ace/{file}", method = RequestMethod.GET)
     @ResponseBody
@@ -73,9 +75,9 @@ public class AceProxy extends AbstractController {
         if (file.equals(ACE_LIB)) {
             return getAceFile();
         } else if (file.startsWith(MODE_PREFIX)) {
-            return getRemoteAceContent(file, request);
+            return getRemoteAceContent(file);
         } else if (file.startsWith(THEME_PREFIX)) {
-            return getRemoteAceContent(file, request);
+            return getRemoteAceContent(file);
         } else {
             return "Unexpected file: " + file;
         }
@@ -96,43 +98,32 @@ public class AceProxy extends AbstractController {
             content = writer.toString();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
 
         return content;
     }
 
-    private String requestContent(String uri, HttpServletRequest request) {
+    private String requestContent(String stringUrl) {
 
         String result = "";
 
         try {
-            String baseRequestUrl = null;
-            if (!"".equals(request.getContextPath())) {
-                baseRequestUrl = (request.getRequestURL().toString())
-                        .split(request.getContextPath())[0];
-            } else {
-                String[] parts = (request.getRequestURL().toString())
-                        .split("/");
-                baseRequestUrl = parts[0] + "//" + parts[2] + "/";
-            }
-
-            if (baseRequestUrl.endsWith("/")) {
-                baseRequestUrl = baseRequestUrl.substring(0,
-                        baseRequestUrl.length() - 1);
-            }
-            URL url = new URL(baseRequestUrl + uri);
+            URL url = new URL(stringUrl);
 
             // Workaround for SSL problem doing the module servlets requests
             TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                @Override
                 public X509Certificate[] getAcceptedIssuers() {
                     return null;
                 }
 
+                @Override
                 public void checkClientTrusted(X509Certificate[] certs,
                         String authType) {
                 }
 
+                @Override
                 public void checkServerTrusted(X509Certificate[] certs,
                         String authType) {
                 }
@@ -145,6 +136,7 @@ public class AceProxy extends AbstractController {
 
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setHostnameVerifier(new HostnameVerifier() {
+                @Override
                 public boolean verify(String hostname, SSLSession session) {
                     return true;
                 }
@@ -162,87 +154,86 @@ public class AceProxy extends AbstractController {
             in.close();
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         } catch (KeyManagementException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.severe(e.getMessage());
         }
 
         return result;
     }
 
-    private String getRemoteAceContent(String fileName,
-            HttpServletRequest request) {
+    private String getRemoteAceContent(String fileName) {
 
         String result = "";
 
         if (modeUriCache.containsKey(fileName)) {
-            LOGGER.log(Level.INFO, "Getting from cache for '" + fileName
-                    + "' (uri=" + modeUriCache.get(fileName) + ")");
-            return requestContent(modeUriCache.get(fileName), request);
+            LOGGER.log(Level.INFO, "Getting from cache for '" + fileName + "' (uri=" + modeUriCache.get(fileName) + ")");
+            return requestContent(modeUriCache.get(fileName));
         } else {
 
-            StudioConfiguration studioConfiguration = moduleController
-                    .getConfiguration(request);
-
-            for (String languageKey : studioConfiguration.getLanguages()
-                    .keySet()) {
-                String languageModuleUri = studioConfiguration.getLanguages()
-                        .get(languageKey);
-                String languageString = requestContent(languageModuleUri
-                        + LANGUAGE_ENDPOINT, request);
-                
-                JSONObject json;
+            for (String moduleEndpoint : studioConfiguration.getModules().values()) {
                 try {
-                    json = new JSONObject(languageString);
-                    JSONArray formats = json.getJSONArray("formats");
-                    for (int i = 0; i < formats.length(); i++) {
-                        JSONObject format = formats.getJSONObject(i);
-                        String formatId = format.getString("format");
+                    String languageModuleUri;
 
-                        if (!format.isNull("_editorModeURI")) {
-                            String editorModeURI = format
-                                    .getString("_editorModeURI");
+                    Properties props = new Properties();
+                    props.load(getClass().getResourceAsStream("/application.properties"));
+                    if (Boolean.valueOf(props.getProperty("application.dockerMode"))) {
+                        languageModuleUri = "https://modules:" + ConfigurationController.MODULES_PORT + moduleEndpoint;
+                    } else {
+                        languageModuleUri = "https://localhost:8181" + moduleEndpoint;
+                    }
 
-                            if (fileName.startsWith(MODE_PREFIX) && editorModeURI != null && editorModeURI.equals(fileName + JS_EXT)) {
-                                String uri = languageModuleUri
-                                        + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT
-                                        + "/" + formatId + "/mode";
-                                LOGGER.log(Level.INFO, "Loading mode from: "
-                                        + uri);
-                                result = requestContent(uri, request);
-                                modeUriCache.put(fileName, uri);
-                                return result;
-                            }
-                        }
+                    String languageString = requestContent(languageModuleUri + LANGUAGE_ENDPOINT);
+                    if (!Strings.isNullOrEmpty(languageString)) {
+                        JSONObject json;
+                        try {
+                            json = new JSONObject(languageString);
+                            JSONArray formats = json.getJSONArray("formats");
+                            for (int i = 0; i < formats.length(); i++) {
+                                JSONObject format = formats.getJSONObject(i);
+                                String formatId = format.getString("format");
 
-                        if (!format.isNull("_editorThemeURI")) {
-                            String editorThemeURI = format
-                                    .getString("_editorThemeURI");
+                                if (!format.isNull("_editorModeURI")) {
+                                    String editorModeURI = format.getString("_editorModeURI");
 
-                            if (fileName.startsWith(THEME_PREFIX)) {
-                                LOGGER.log(Level.INFO, "Is " + editorThemeURI
-                                        + " equal to " + fileName + JS_EXT + "?");
-                                if (editorThemeURI != null
-                                        && editorThemeURI.equals(fileName + JS_EXT)) {
-                                    String uri = languageModuleUri
-                                            + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT
-                                            + "/" + formatId + "/theme";
-                                    LOGGER.log(Level.INFO, "Loading theme from: "
-                                            + uri);
-                                    result = requestContent(uri, request);
-                                    modeUriCache.put(fileName, uri);
-                                    return result;
+                                    if (fileName.startsWith(MODE_PREFIX) && editorModeURI != null && editorModeURI.equals(fileName + JS_EXT)) {
+                                        String uri = languageModuleUri + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT + "/" + formatId + "/mode";
+                                        LOGGER.log(Level.INFO, "Loading mode from: "
+                                                + uri);
+                                        result = requestContent(uri);
+                                        modeUriCache.put(fileName, uri);
+                                        return result;
+                                    }
+                                }
+
+                                if (!format.isNull("_editorThemeURI")) {
+                                    String editorThemeURI = format.getString("_editorThemeURI");
+
+                                    if (fileName.startsWith(THEME_PREFIX)) {
+                                        LOGGER.log(Level.INFO, "Is " + editorThemeURI + " equal to " + fileName + JS_EXT + "?");
+                                        if (editorThemeURI != null && editorThemeURI.equals(fileName + JS_EXT)) {
+                                            String uri = languageModuleUri + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT + "/" + formatId + "/theme";
+                                            LOGGER.log(Level.INFO, "Loading theme from: " + uri);
+                                            result = requestContent(uri);
+                                            modeUriCache.put(fileName, uri);
+                                            return result;
+                                        }
+                                    }
                                 }
                             }
+                        } catch (JSONException ex) {
+                            Logger.getLogger(AceProxy.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                    } else {
+                        Logger.getLogger(AceProxy.class.getName()).severe("Failed loading language manifest from " + languageModuleUri);
                     }
-                } catch (JSONException ex) {
+                } catch (IOException ex) {
                     Logger.getLogger(AceProxy.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

@@ -28,7 +28,7 @@
         console.dir(language);
         if(language.defaultFileName)
             $("#filename").val(language.defaultFileName);
-        $.ajax({"url": '${studioConfiguration.languages[languageId]}/template/document',
+        $.ajax({"url": '${studioConfiguration.modules[languageId]}/template/document',
         success: function(result, textStatus, request) {
                 console.log("Templates provided by the ${language} module:" + result + "");
                 mytemplates=$.parseJSON(result);                ;

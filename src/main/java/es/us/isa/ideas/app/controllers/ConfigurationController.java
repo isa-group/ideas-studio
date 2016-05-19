@@ -1,79 +1,89 @@
 package es.us.isa.ideas.app.controllers;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.StringWriter;
-
-import javax.servlet.ServletContext;
+import com.google.common.base.Strings;
+import com.google.gson.Gson;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
-
 import es.us.isa.ideas.app.configuration.StudioConfiguration;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
+import org.apache.commons.io.FileUtils;
 
 @Controller
 @RequestMapping("/module")
 public class ConfigurationController extends AbstractController {
-	
-	@Autowired
-	private ServletContext servletContext;
-	
-	protected final String CONFIG_PATH = "/WEB-INF/config/studio-configuration.json";
-	protected final String DEVELOP_PATH = "/WEB-INF/config/develop-configuration.json";
-	
-	// TODO: use spring cache
-	@RequestMapping(value = "/configuration", method = RequestMethod.GET)
-	@ResponseBody
-	public StudioConfiguration getConfiguration(HttpServletRequest request) {
-		StudioConfiguration config = null;		
-		
-		File f = new File(servletContext.getRealPath(DEVELOP_PATH));
-		if(f.exists()){
-			config = loadConfiguration(DEVELOP_PATH);
-		}else{
-			config = loadConfiguration(CONFIG_PATH);
-		}
-//		
-//		if(!request.getRequestURL().toString().startsWith("https://localhost")){
-//			config = loadConfiguration(CONFIG_PATH);
-//		}else{
-//			config = loadConfiguration(DEVELOP_PATH);
-//		}
-		return config;
-	}
-	
-	
-	// -----
-	
-	// Aux
-	public StudioConfiguration loadConfiguration(String path) {
-		StudioConfiguration config = null;
-		InputStream input = null;
-		
-		try {
-			
-			input = servletContext.getResourceAsStream(path);
 
-			StringWriter writer = new StringWriter();
-			IOUtils.copy(input, writer);
-			String json = writer.toString();
-			
-			System.out.println(json);
-	        
-	        Gson gson = new Gson();
-	        config = gson.fromJson(json, StudioConfiguration.class);
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    }
-		
-		return config;
-	}
+    protected static final String CONFIG_PATH = "/WEB-INF/config/studio-configuration.json";
+    protected static final String DEVELOP_PATH = "/WEB-INF/config/develop-configuration.json";
+
+    public static final String MODULES_PORT = "10943";
+
+    private static final Logger LOG = Logger.getLogger(ConfigurationController.class.getName());
+
+    @Autowired
+    StudioConfiguration studioConfiguration;
+
+    @Autowired
+    ServletContext servletContext;
+
+    // TODO: use spring cache
+    @RequestMapping(value = "/configuration", method = RequestMethod.GET)
+    @ResponseBody
+    public StudioConfiguration getConfiguration(HttpServletRequest request) {
+
+        // Select configuration path by order preference
+        String finalPath = "";
+        List<String> paths = new ArrayList<>();
+        paths.add(DEVELOP_PATH);
+        paths.add(CONFIG_PATH);
+
+        for (String path : paths) {
+            try {
+                if (new File(servletContext.getRealPath(path)).exists()) {
+                    finalPath = path;
+                    break;
+                }
+            } catch (Exception e) {
+                LOG.severe(e.getMessage());
+            }
+        }
+
+        if (!Strings.isNullOrEmpty(finalPath)) {
+            try {
+                Gson gson = new Gson();
+                String json = FileUtils.readFileToString(new File(servletContext.getRealPath(finalPath)));
+                studioConfiguration = gson.fromJson(json, StudioConfiguration.class);
+
+                Properties props = new Properties();
+                props.load(getClass().getResourceAsStream("/application.properties"));
+                String modulesPort = ":" + request.getServerPort();
+                if (Boolean.valueOf(props.getProperty("application.dockerMode"))) {
+                    modulesPort = ":" + MODULES_PORT;
+                }
+                String scheme = request.getScheme();
+                String serverName = request.getServerName();
+                for (String moduleId : studioConfiguration.getModules().keySet()) {
+                    String endpoint = scheme + "://" +  serverName + modulesPort + studioConfiguration.getModules().get(moduleId);
+                    studioConfiguration.getModules().put(moduleId, endpoint);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(StudioConfiguration.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return studioConfiguration;
+    }
 
 }
