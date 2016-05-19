@@ -181,7 +181,7 @@ var WorkspaceManager = {
 
         });
     },
-    createWorkspace: function (workspaceName, description, tags) {
+    createWorkspace: function (workspaceName, description, tags, callback) {
         FileApi.createWorkspace(workspaceName, description, tags, function (ts) {
             if (ts) {
                 createWSLine(workspaceName, function () {
@@ -190,6 +190,9 @@ var WorkspaceManager = {
                 });
                 if ($("#zipFile").val() !== "")
                     WorkspaceManager.initializeWithZipFile();
+                
+                if (callback)
+                    callback();
             } else {
                 showError("Error", "Error creating new workspace", function () {
                     hideError();

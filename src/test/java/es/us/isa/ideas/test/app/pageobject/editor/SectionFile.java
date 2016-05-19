@@ -5,6 +5,7 @@
  */
 package es.us.isa.ideas.test.app.pageobject.editor;
 
+import es.us.isa.ideas.test.app.pageobject.PageObject;
 import es.us.isa.ideas.test.app.utils.FileType;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getJs;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriver;
@@ -15,11 +16,10 @@ import java.util.logging.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -50,6 +50,14 @@ public class SectionFile extends EditorPage {
         new FileTestCase().testRenameFile(originFileName, targetFileName);
     }
 
+    public static void testCopyPaste(String originFileName, String targetFileName, Boolean cpExpect) {
+        new FileTestCase().testCopyPaste(originFileName, targetFileName, cpExpect);
+    }
+
+    public static void testPaste(String targetFileName, Boolean cpExpect) {
+        new FileTestCase().testPaste(targetFileName, cpExpect);
+    }
+
     public static void testEditFile(By fileLocator, String content) {
         new FileTestCase().testEditFile(fileLocator, content);
     }
@@ -58,10 +66,18 @@ public class SectionFile extends EditorPage {
     public static void testCreateDirectory(String dirName, By parentLocator) {
         new DirectoryTestCase().testCreateDirectory(dirName, parentLocator);
     }
+    
+    public static void testCreateDirectoryWithNoWorkspace() {
+        new DirectoryTestCase().testCreateDirectoryWithNoWorkspace();
+    }
 
     // Project tests
     public static void testCreateProject(String projName) {
         new ProjectTestCase().testCreateProject(projName);
+    }
+    
+    public static void testCreateProjectWithError(String projName) {
+        new ProjectTestCase().testCreateProjectWithError(projName);
     }
 
     // Others
@@ -199,6 +215,73 @@ public class SectionFile extends EditorPage {
 
         }
 
+        /**
+         * Copy a file into a target
+         * @param fileName
+         * @param target 
+         * @param cpExpect 
+         */
+        public void testCopyPaste(String fileName, String target, Boolean cpExpect) {
+
+            EditorPage page = SectionFile.navigateTo()
+                .expandAllDynatreeNodes()
+                .activateDynatreeContextMenuByNodeTitle(fileName)
+                .clickOnContextMenuCopyAnchor();
+            
+            By fileLocator = By.linkText(fileName);
+            Integer prevNumberElements = PageObject.getWebDriver().findElements(fileLocator).size();
+            
+            try {
+                Thread.sleep(500); // animation
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.activateDynatreeContextMenuByNodeTitle(target)
+                .clickOnContextMenuPasteAnchor();
+            
+            try {
+                Thread.sleep(500); // animation
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            fileLocator = By.linkText(fileName);
+            if (cpExpect) {
+                TEST_RESULT = getWebDriver().findElements(fileLocator).size() == prevNumberElements + 1;
+            } else {
+                TEST_RESULT = getWebDriver().findElements(fileLocator).size() == prevNumberElements;
+            }
+            
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            Assert.assertTrue(TEST_RESULT);
+
+        }
+        
+        public void testPaste(String target, Boolean successExpected) {
+
+            EditorPage page = SectionFile.navigateTo()
+                .activateDynatreeContextMenuByNodeTitle(target)
+                .clickOnContextMenuPasteAnchor();
+            
+            try {
+                Thread.sleep(500); // animation
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            TEST_RESULT = false;
+            if (successExpected) {
+                // TODO
+            } else {
+                TEST_RESULT = EditorPage.isConsoleLastMessageError("Clipboard is empty");
+            }
+            
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            Assert.assertTrue(TEST_RESULT);
+
+        }
+
         public void testEditFile(By fileLocator, String content) {
 
             EditorPage page = EditorPage.navigateTo()
@@ -278,6 +361,27 @@ public class SectionFile extends EditorPage {
             Assert.assertTrue(TEST_RESULT);
 
         }
+
+        // #55 Fix
+        public void testCreateDirectoryWithNoWorkspace() {
+            
+            EditorPage page = SectionFile.navigateTo();
+            WebElement lastElement = PageObject.getWebDriver().findElement(By.id("appFooter"));
+            
+            page.expandAllDynatreeNodes()
+                .clickOnProjectAddButton()
+                .clickOnCreateDirectoryAnchor();
+
+            TEST_RESULT = false;
+            try {
+                TEST_RESULT = !page.modalBackground.isDisplayed();
+            } catch (NoSuchElementException ex) {
+                TEST_RESULT = true;
+            }
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            Assert.assertTrue(TEST_RESULT);
+
+        }
     }
 
     /**
@@ -311,6 +415,44 @@ public class SectionFile extends EditorPage {
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
+        }
+        
+        public void testCreateProjectWithError(String projName) {
+
+            EditorPage page = EditorPage.navigateTo();
+            WebElement lastElement = PageObject.getWebDriver().findElement(By.id("appFooter"));
+
+            if (page != null && lastElement != null) {
+                page = EditorPage.navigateTo()
+                    .clickOnProjectAddButton()
+                    .clickOnCreateProjectAnchor()
+                    .typeProjectName(projName)
+                    .clickOnModalContinueButton();
+
+                TEST_RESULT = page.modalErrorContent.getText().contains("Error creating new project");
+                Assert.assertTrue(TEST_RESULT);
+
+                page.clickOnModalErrorContinueButton();
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                TEST_RESULT = false;
+                try {
+                    TEST_RESULT = !page.modalBackground.isDisplayed();
+                } catch (NoSuchElementException ex) {
+                    TEST_RESULT = true;
+                }
+                
+                getWebDriver().navigate().refresh();
+                
+                Assert.assertTrue(TEST_RESULT);
+                LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+
+            }
         }
     }
 

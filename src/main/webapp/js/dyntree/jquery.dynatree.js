@@ -2,15 +2,15 @@
 	jquery.dynatree.js
 	Dynamic tree view control, with support for lazy loading of branches.
 
-	Copyright (c) 2006-2013, Martin Wendt (http://wwWendt.de)
+	Copyright (c) 2006-2014, Martin Wendt (http://wwWendt.de)
 	Dual licensed under the MIT or GPL Version 2 licenses.
 	http://code.google.com/p/dynatree/wiki/LicenseInfo
 
 	A current version and some documentation is available at
 		http://dynatree.googlecode.com/
 
-	@version: DEVELOPMENT
-	@date:    DEVELOPMENT
+	@version: 1.2.8
+	@date:    2015-07-04T16:44
 
 	@depends: jquery.js
 	@depends: jquery.ui.core.js
@@ -18,7 +18,7 @@
 *******************************************************************************/
 
 /* jsHint options*/
-// Note: We currently allow eval() to parse the 'data' attribtes, when initializing from HTML.
+// Note: We currently allow eval() to parse the 'data' attributes, when initializing from HTML.
 // TODO: pass jsHint with the options given in grunt.js only.
 //       The following should not be required:
 /*global alert */
@@ -28,7 +28,7 @@
  *  Debug functions
  */
 
-var _canLog = false;
+var _canLog = true;
 
 function _log(mode, msg) {
 	/**
@@ -500,13 +500,15 @@ DynaTreeNode.prototype = {
 	},
 	/** Return '/id1/id2/id3'. */
 	getKeyPath: function(excludeSelf) {
-		var path = [];
+		var path = [],
+			sep = this.tree.options.keyPathSeparator;
+
 		this.visitParents(function(node){
 			if(node.parent){
 				path.unshift(node.data.key);
 			}
 		}, !excludeSelf);
-		return "/" + path.join(this.tree.options.keyPathSeparator);
+		return sep + path.join(sep);
 	},
 
 	getParent: function() {
@@ -767,7 +769,7 @@ DynaTreeNode.prototype = {
 					return "title";
 				}else if( cn.className==cns.expander ){
 					return "expander";
-				}else if( cn.className==cns.checkbox ){
+				}else if( cn.className==cns.checkbox || cn.className==cns.radio ){
 					return "checkbox";
 				}else if( cn.className==cns.nodeIcon ){
 					return "icon";
@@ -778,7 +780,7 @@ DynaTreeNode.prototype = {
 	},
 
 	getEventTargetType: function(event) {
-		// Return the part of a node, that a click event occured on.
+		// Return the part of a node, that a click event occurred on.
 		// Note: there is no check, if the event was fired on THIS node.
 		var tcn = event && event.target ? event.target.className : "",
 			cns = this.tree.options.classNames;
@@ -787,7 +789,7 @@ DynaTreeNode.prototype = {
 			return "title";
 		}else if( tcn.indexOf(cns.expander) >= 0 ){
 			return "expander";
-		}else if( tcn.indexOf(cns.checkbox) >= 0 ){
+		}else if( tcn.indexOf(cns.checkbox) >= 0 || tcn.indexOf(cns.radio) >= 0 ){
 			return "checkbox";
 		}else if( tcn.indexOf(cns.nodeIcon) >= 0 ){
 			return "icon";
@@ -837,10 +839,10 @@ DynaTreeNode.prototype = {
 		if( this.data.isStatusNode ){
 			return;
 		}
-		if ( fireEvents && opts.onQueryActivate && opts.onQueryActivate.call(this.tree, flag, this) === false ){
-			return; // Callback returned false
-		}
 		if( flag ) {
+			if ( fireEvents && opts.onQueryActivate && opts.onQueryActivate.call(this.tree, flag, this) === false ){
+				return; // Callback returned false
+			}
 			// Activate
 			if( this.tree.activeNode ) {
 				if( this.tree.activeNode === this ){
@@ -1827,7 +1829,9 @@ DynaTreeNode.prototype = {
 			success: function(data, textStatus, jqXHR){
 				// <this> is the request options
 //              self.tree.logDebug("appendAjax().success");
-				var prevPhase = self.tree.phase;
+				var prevPhase = self.tree.phase,
+					options = self.tree.options; // #473
+
 				self.tree.phase = "init";
 				// postProcess is similar to the standard dataFilter hook,
 				// but it is also called for JSONP
@@ -1907,7 +1911,7 @@ DynaTreeNode.prototype = {
 			this.parent.childList.splice(pos, 1);
 		}
 		// Remove from source DOM parent
-		if(this.parent.ul){
+		if(this.parent.ul && this.li){
 			this.parent.ul.removeChild(this.li);
 		}
 
@@ -1947,7 +1951,9 @@ DynaTreeNode.prototype = {
 			// (Hidden, because it will be
 			targetParent.ul = document.createElement("ul");
 			targetParent.ul.style.display = "none";
-			targetParent.li.appendChild(targetParent.ul);
+			if( targetParent.li ){
+				targetParent.li.appendChild(targetParent.ul);
+			}
 		}
 		// Issue 319: Add to target DOM parent (only if node was already rendered(expanded))
 		if(this.li){
@@ -2774,8 +2780,8 @@ TODO: better?
 		case "helper":
 			// Only event and node argument is available
 			var $helper = $("<div class='dynatree-drag-helper'><span class='dynatree-drag-helper-img' /></div>")
-				.append($(event.target).closest(".dynatree-title").clone());
-//              .append($(event.target).closest('a').clone());
+					// .append($(event.target).closest(".dynatree-title").clone());
+					.append(nodeTag.find(".dynatree-title").clone());
 			// issue 244: helper should be child of scrollParent
 			$("ul.dynatree-container", node.tree.divTree).append($helper);
 //          $(node.tree.divTree).append($helper);
@@ -3090,9 +3096,9 @@ if(versionCompare($.ui.version, "1.8") < 0){
  */
 $.extend($.ui.dynatree, {
 	/** @type {String} */
-	version: "DEVELOPMENT",
+	version: "1.2.8",
 	/** @type {String} */
-	buildType: "DEVELOP",
+	buildType: "release",
 	/** Expose class object as $.ui.dynatree._DynaTreeClass */
 	_DynaTreeClass: DynaTree,
 	/** Expose class object as $.ui.dynatree._DynaTreeNodeClass */
@@ -3221,6 +3227,7 @@ $.ui.dynatree.prototype.options = {
 		expander: "dynatree-expander",
 		connector: "dynatree-connector",
 		checkbox: "dynatree-checkbox",
+		radio: "dynatree-radio",
 		nodeIcon: "dynatree-icon",
 		title: "dynatree-title",
 		noConnector: "dynatree-no-connector",
@@ -3241,7 +3248,7 @@ $.ui.dynatree.prototype.options = {
 		partsel: "dynatree-partsel",
 		lastsib: "dynatree-lastsib"
 	},
-	debugLevel: 2, // 0:quiet, 1:normal, 2:debug
+	debugLevel: 1, // 0:quiet, 1:normal, 2:debug
 
 	// ------------------------------------------------------------------------
 	lastentry: undefined

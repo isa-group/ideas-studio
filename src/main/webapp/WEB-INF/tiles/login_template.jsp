@@ -44,19 +44,6 @@
 <script type="text/javascript" src="js/vendor/bootstrap.js"></script>
 
 <script>
-    $(document).ready(function () {
-        var isChrome = !!window.chrome && !!window.chrome.webstore;
-        if (!isChrome) {
-            $("#loginButtons").hide();
-            $("#loginLoader").hide();
-            $("#socialSigninButtons").hide();
-            $("#otherBrowserWrapper").show();
-            $("#loginContent").css("height", "auto");
-        }
-    });
-</script>
-
-<script>
 	var setupLogin = function() {
 		
 		$('#loginForm').submit(function() {
@@ -134,14 +121,6 @@
         </div>
 	<div id="lcWrapper">
 		<div id="loginContent">
-            <div id="otherBrowserWrapper" style="display:none;">
-                <span>Sorry, IDEAS is not supported by your browser.</span>
-                <br>
-                <span>Please, <a href="https://www.google.es/chrome/browser/desktop/">download Google Chrome</a> latest version or use our <a href="http://labs.isa.us.es/IDEAS/designer-chrome.exe">embedded application</a> for Windows to access IDEAS.</span>
-                <br>
-                <br>
-                <span>Thank you.</span>
-            </div>
 			<div id="loginLoader">
 				<tiles:insertAttribute name="body" />
 			</div>
@@ -177,6 +156,7 @@
 					</button>
 				</form>
 			</div>
+
 		</div>
 
 		<div id="loginShadow"></div>
@@ -213,8 +193,6 @@
         <script>
             //DEMO USERS
             $("#username").ready(function(){
-                var isChrome = !!window.chrome && !!window.chrome.webstore;
-                if (isChrome) {
                     if ($("#username").val()!="") {
                         $("#password").val($("#username").val());
                         //$("#loginForm").submit();
@@ -228,7 +206,6 @@
                         localStorage.setItem('demo', '');
                         localStorage.setItem('ws', '');
                     }
-                }
             });
 		</script>
 	
