@@ -38,8 +38,9 @@
 </div>  
 <script>
     var mytemplates,mytemplate,index;
+    $("#template-selection").remove(); //enable it when project templates become active
     <jstl:forEach var="language" items="${studioConfiguration.languages}">        
-        $.ajax({"url": '${language.value}/template/project',
+        /*$.ajax({"url": '${language.value}/template/project',
         success: function(result, textStatus, request) {
                 console.log("Templates provided by the ${language.key} module:" + result + "");
                 mytemplates=$.parseJSON(result);                
@@ -56,6 +57,6 @@
             error: function(result, textStatus, request){
             	$("#template-selection").remove();
             }
-        });
+        });*/
     </jstl:forEach>
 </script>
