@@ -36,11 +36,19 @@ var newDirItem = {
                 currentSelectedNode.sortChildren();
                 //currentSelectedNode.data.keyPath =  nodeUri + "/" + fileName + languageExtension;
             } else {
-                hideModal();
-                showError("There was an error", "Error creating new directory.<br>" +
-                    "Please, check if a directory with that name already exists in the workspace.", function () {
+                if (!$("#modalCreationField input").val()) {
+                    hideModal();
+                    showError("Warning", "Please enter a directory name.", function () {
                         hideError();
+                        genericMenuOption(newProjectItem);
                     });
+                } else {
+                    hideModal();
+                    showError("There was an error", "Error creating new directory.<br>" +
+                            "Please, check if a directory with that name already exists in the workspace.", function () {
+                                hideError();
+                            });
+                }
             }
         });
     },
@@ -77,12 +85,20 @@ var newProjectItem = {
                     parentNode.addChild(newChild);
                 }
                 hideModal();
-            } else {
-                hideModal();
-                showError("There was an error", "Error creating new project.<br>" +
-                    "Please, check if a project with that name already exists in the workspace.", function () {
+             } else {
+                if (!$("#modalCreationField input").val()) {
+                    hideModal();
+                    showError("Warning", "Please enter a project name.", function () {
                         hideError();
+                        genericMenuOption(newProjectItem);
                     });
+                } else {
+                    hideModal();
+                    showError("There was an error", "Error creating new project.<br>" +
+                            "Please, check if a project with that name already exists in the workspace.", function () {
+                                hideError();
+                            });
+                }
             }
 
         });
