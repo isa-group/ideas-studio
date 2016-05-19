@@ -264,7 +264,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
             Assert.assertTrue(TEST_RESULT);
 
             // Updated test password in properties file
-            TestProperty.setTestUserPassword(password);
+            TestProperty.setTestRegisterUserPassword(password);
 
             try {
                 Thread.sleep(1000);
