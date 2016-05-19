@@ -16,15 +16,4 @@
 <div class="modal-footer">
     <a data-dismiss="modal" class="btn dismiss">Close</a>
     <a class="btn btn-primary continue"><spring:message code="editor.actions.modal.create_directory.button"/></a>
-</div>  
-
-<script>
-	$(function(){
-		$('.modal-content').keypress(function(e) {
-		    var code = e.which;
-		     if(code == 13) { 
-		    	 newDirItem.onCreate();
-		     }
-		});
-	});
-</script>
+</div>
