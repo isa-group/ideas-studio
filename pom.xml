@@ -16,17 +16,21 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <application.finalName>IDEAS</application.finalName>
+        
+        <!--Properties from settings.xml-->
         <repo_base_uri>${settings.repo_base_uri}</repo_base_uri>
         <test.tw.user>${settings.test.tw.user}</test.tw.user>
         <test.tw.pass>${settings.test.tw.pass}</test.tw.pass>
         <test.go.user>${settings.test.go.user}</test.go.user>
         <test.go.pass>${settings.test.go.pass}</test.go.pass>
-        <test.user>${settings.test.user}</test.user>
-        <test.user.name>${settings.test.user.name}</test.user.name>
-        <test.user.email>${settings.test.user.email}</test.user.email>
-        <test.user.email.pass>${settings.test.user.email.pass}</test.user.email.pass>
-        <test.user.phone>${settings.test.user.phone}</test.user.phone>
-        <test.user.address>${settings.test.user.address}</test.user.address>
+        <test.register.user>${settings.test.register.user}</test.register.user>
+        <test.register.user.name>${settings.test.register.user.name}</test.register.user.name>
+        <test.register.user.email>${settings.test.register.user.email}</test.register.user.email>
+        <test.register.user.email.pass>${settings.test.register.user.email.pass}</test.register.user.email.pass>
+        <test.register.user.phone>${settings.test.register.user.phone}</test.register.user.phone>
+        <test.register.user.address>${settings.test.register.user.address}</test.register.user.address>
+        <test.default.user>${settings.test.default.user}</test.default.user>
+        <test.default.pass>${settings.test.default.pass}</test.default.pass>
 
         <!-- MySQL properties -->
         <application.mysqlDB>${settings.mysqlDB}</application.mysqlDB>

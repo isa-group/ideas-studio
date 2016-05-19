@@ -1,12 +1,10 @@
 package es.us.isa.ideas.test.app.pageobject.editor;
 
 import es.us.isa.ideas.test.app.pageobject.PageObject;
-import es.us.isa.ideas.test.app.pageobject.TestCase;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterPage;
 import es.us.isa.ideas.test.app.utils.FileType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -99,8 +97,14 @@ public class EditorPage extends PageObject<EditorPage> {
     @FindBy(css = "#tagsInput > textarea")
     WebElement modalWSTagsField;
 
+    @FindBy(id = "zipFile")
+    WebElement modalWSZipFile;
+
     @FindBy(css = "#appGenericModal > div > div > div.modal-body > div:nth-child(6) > div.checkbox > label > input")
     WebElement modalWSInitZipCheckbox;
+    
+    @FindBy(css = "#appGenericModal > div > div > div.modal-body > div:nth-child(6) > div.checkbox > label > input")
+    WebElement wsModalZipCheckbox;
 
     @FindBy(css = "#modalCreationField > input")
     WebElement modalProjOrDirNameField;
@@ -153,8 +157,23 @@ public class EditorPage extends PageObject<EditorPage> {
     @FindBy(id = "myMenu")
     WebElement contextMenuWrapper;
 
-    @FindBy(linkText = "Edit")
+    @FindBy(css = "#myMenu > .edit > a")
     WebElement contextMenuEditAnchor;
+
+    @FindBy(css = "#myMenu > .cut > a")
+    WebElement contextMenuCutAnchor;
+
+    @FindBy(css = "#myMenu > .copy > a")
+    WebElement contextMenuCopyAnchor;
+
+    @FindBy(css = "#myMenu > .paste > a")
+    WebElement contextMenuPasteAnchor;
+
+    @FindBy(css = "#myMenu > .delete > a")
+    WebElement contextMenuDeleteAnchor;
+
+    @FindBy(css = "#myMenu > .upload > a")
+    WebElement contextMenuUploadAnchor;
 
     @FindBy(css = "input#editNode")
     WebElement contextMenuEditField;
@@ -430,6 +449,36 @@ public class EditorPage extends PageObject<EditorPage> {
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
+    public EditorPage clickOnContextMenuCutAnchor() {
+        clickOnClickableElement(contextMenuCutAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnContextMenuCopyAnchor() {
+        clickOnClickableElement(contextMenuCopyAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnContextMenuPasteAnchor() {
+        clickOnClickableElement(contextMenuPasteAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnContextMenuUploadAnchor() {
+        clickOnClickableElement(contextMenuUploadAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnContextMenuDeleteAnchor() {
+        clickOnClickableElement(contextMenuDeleteAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnWSModalZipCheckbox() {
+        clickOnClickableElement(wsModalZipCheckbox);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
     // sendKeys - workspace
     public EditorPage typeWorkspaceName(CharSequence... wsName) {
         modalWSNameField.clear();
@@ -446,6 +495,12 @@ public class EditorPage extends PageObject<EditorPage> {
     public EditorPage typeWorkspaceTags(CharSequence... wsTags) {
         modalWSTagsField.clear();
         modalWSTagsField.sendKeys(wsTags);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage typeWorkspaceModalZipFilePath(CharSequence... zipFilePath) {
+        modalWSZipFile.clear();
+        modalWSZipFile.sendKeys(zipFilePath);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
@@ -514,6 +569,18 @@ public class EditorPage extends PageObject<EditorPage> {
 
         return result;
 
+    }
+    
+    public static boolean isConsoleLastMessageError(String msg) {
+        
+        Boolean ret = false;
+        Object found = (Object) getJs().executeScript("return $('#gcli-root > div > div > div > p').last().text().indexOf('" + msg + "') !== 0;");
+
+        if (found != null) {
+            ret = true;
+        }
+        return ret;
+        
     }
 
     public EditorPage expandAllDynatreeNodes() {

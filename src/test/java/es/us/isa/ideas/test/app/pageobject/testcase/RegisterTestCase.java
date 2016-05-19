@@ -42,12 +42,12 @@ public class RegisterTestCase {
     @Ignore
     public void step06_googleRegister() {
         PageObject.logout();
-        
+
         String goUser = TestProperty.getTestGoogleUser();
         String goPass = TestProperty.getTestGooglePassword();
         RegisterSocialGooglePage.testGoogleSocialRegister(goUser, goPass);
     }
-    
+
     @Ignore
     public void step06_googleRegisterb() {
         RegisterSocialGooglePage.testGoogleSocialLogout();
@@ -56,13 +56,13 @@ public class RegisterTestCase {
     @Test
     public void step10_register() {
         PageObject.logout();
-        
-        String user = TestProperty.getTestUser();
-        String name = TestProperty.getTestUserName();
-        String email = TestProperty.getTestUserEmail();
-        String emailPass = TestProperty.getTestUserEmailPassword();
-        String phone = TestProperty.getTestUserPhone();
-        String address = TestProperty.getTestUserAddress();
+
+        String user = TestProperty.getTestRegisterUser();
+        String name = TestProperty.getTestRegisterUserName();
+        String email = TestProperty.getTestRegisterUserEmail();
+        String emailPass = TestProperty.getTestRegisterUserEmailPassword();
+        String phone = TestProperty.getTestRegisterUserPhone();
+        String address = TestProperty.getTestRegisterUserAddress();
 
         RegisterPage.testRegister(name, email, emailPass, phone, address, user);
     }
@@ -71,9 +71,9 @@ public class RegisterTestCase {
     public void step12_recoverPassword() {
         PageObject.logout();
 
-        String user = TestProperty.getTestUser();
-        String email = TestProperty.getTestUserEmail();
-        String emailPass = TestProperty.getTestUserEmailPassword();
+        String user = TestProperty.getTestRegisterUser();
+        String email = TestProperty.getTestRegisterUserEmail();
+        String emailPass = TestProperty.getTestRegisterUserEmailPassword();
 
         RecoverPasswordPage.testRecoverPassword(email, emailPass, user);
         PageObject.logout();
