@@ -14,7 +14,9 @@ import es.us.isa.ideas.app.configuration.StudioConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,8 +66,14 @@ public class ConfigurationController extends AbstractController {
             try {
                 Gson gson = new Gson();
                 String json = FileUtils.readFileToString(new File(servletContext.getRealPath(finalPath)));
-                studioConfiguration = gson.fromJson(json, StudioConfiguration.class);
+                StudioConfiguration newStudioConfiguration = gson.fromJson(json, StudioConfiguration.class);
 
+                studioConfiguration.setConfigurationFiles(newStudioConfiguration.getConfigurationFiles());
+                studioConfiguration.setGoogleAnalyticsID(newStudioConfiguration.getGoogleAnalyticsID());
+                studioConfiguration.setHelpURI(newStudioConfiguration.getHelpURI());
+                studioConfiguration.setImages(newStudioConfiguration.getImages());
+                studioConfiguration.setWorkbenchName(newStudioConfiguration.getWorkbenchName());
+                
                 Properties props = new Properties();
                 props.load(getClass().getResourceAsStream("/application.properties"));
                 String modulesPort = ":" + request.getServerPort();
@@ -74,10 +82,12 @@ public class ConfigurationController extends AbstractController {
                 }
                 String scheme = request.getScheme();
                 String serverName = request.getServerName();
-                for (String moduleId : studioConfiguration.getModules().keySet()) {
-                    String endpoint = scheme + "://" +  serverName + modulesPort + studioConfiguration.getModules().get(moduleId);
-                    studioConfiguration.getModules().put(moduleId, endpoint);
+                Map<String, String> modules = new HashMap<>();
+                for (String moduleId : newStudioConfiguration.getModules().keySet()) {
+                    String endpoint = scheme + "://" +  serverName + modulesPort + newStudioConfiguration.getModules().get(moduleId);
+                    modules.put(moduleId, endpoint);
                 }
+                studioConfiguration.setModules(modules);
             } catch (IOException ex) {
                 Logger.getLogger(StudioConfiguration.class.getName()).log(Level.SEVERE, null, ex);
             }

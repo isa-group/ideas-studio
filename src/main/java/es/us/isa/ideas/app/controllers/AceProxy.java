@@ -178,63 +178,50 @@ public class AceProxy extends AbstractController {
         } else {
 
             for (String moduleEndpoint : studioConfiguration.getModules().values()) {
-                try {
-                    String languageModuleUri;
-
-                    Properties props = new Properties();
-                    props.load(getClass().getResourceAsStream("/application.properties"));
-                    if (Boolean.valueOf(props.getProperty("application.dockerMode"))) {
-                        languageModuleUri = "https://modules:" + ConfigurationController.MODULES_PORT + moduleEndpoint;
-                    } else {
-                        languageModuleUri = "https://localhost:8181" + moduleEndpoint;
-                    }
-
-                    String languageString = requestContent(languageModuleUri + LANGUAGE_ENDPOINT);
-                    if (!Strings.isNullOrEmpty(languageString)) {
-                        JSONObject json;
-                        try {
-                            json = new JSONObject(languageString);
-                            JSONArray formats = json.getJSONArray("formats");
-                            for (int i = 0; i < formats.length(); i++) {
-                                JSONObject format = formats.getJSONObject(i);
-                                String formatId = format.getString("format");
-
-                                if (!format.isNull("_editorModeURI")) {
-                                    String editorModeURI = format.getString("_editorModeURI");
-
-                                    if (fileName.startsWith(MODE_PREFIX) && editorModeURI != null && editorModeURI.equals(fileName + JS_EXT)) {
-                                        String uri = languageModuleUri + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT + "/" + formatId + "/mode";
-                                        LOGGER.log(Level.INFO, "Loading mode from: "
-                                                + uri);
+                String languageModuleUri = moduleEndpoint;
+                String languageString = requestContent(languageModuleUri + LANGUAGE_ENDPOINT);
+                if (!Strings.isNullOrEmpty(languageString)) {
+                    JSONObject json;
+                    try {
+                        json = new JSONObject(languageString);
+                        JSONArray formats = json.getJSONArray("formats");
+                        for (int i = 0; i < formats.length(); i++) {
+                            JSONObject format = formats.getJSONObject(i);
+                            String formatId = format.getString("format");
+                            
+                            if (!format.isNull("_editorModeURI")) {
+                                String editorModeURI = format.getString("_editorModeURI");
+                                
+                                if (fileName.startsWith(MODE_PREFIX) && editorModeURI != null && editorModeURI.equals(fileName + JS_EXT)) {
+                                    String uri = languageModuleUri + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT + "/" + formatId + "/mode";
+                                    LOGGER.log(Level.INFO, "Loading mode from: "
+                                            + uri);
+                                    result = requestContent(uri);
+                                    modeUriCache.put(fileName, uri);
+                                    return result;
+                                }
+                            }
+                            
+                            if (!format.isNull("_editorThemeURI")) {
+                                String editorThemeURI = format.getString("_editorThemeURI");
+                                
+                                if (fileName.startsWith(THEME_PREFIX)) {
+                                    LOGGER.log(Level.INFO, "Is " + editorThemeURI + " equal to " + fileName + JS_EXT + "?");
+                                    if (editorThemeURI != null && editorThemeURI.equals(fileName + JS_EXT)) {
+                                        String uri = languageModuleUri + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT + "/" + formatId + "/theme";
+                                        LOGGER.log(Level.INFO, "Loading theme from: " + uri);
                                         result = requestContent(uri);
                                         modeUriCache.put(fileName, uri);
                                         return result;
                                     }
                                 }
-
-                                if (!format.isNull("_editorThemeURI")) {
-                                    String editorThemeURI = format.getString("_editorThemeURI");
-
-                                    if (fileName.startsWith(THEME_PREFIX)) {
-                                        LOGGER.log(Level.INFO, "Is " + editorThemeURI + " equal to " + fileName + JS_EXT + "?");
-                                        if (editorThemeURI != null && editorThemeURI.equals(fileName + JS_EXT)) {
-                                            String uri = languageModuleUri + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT + "/" + formatId + "/theme";
-                                            LOGGER.log(Level.INFO, "Loading theme from: " + uri);
-                                            result = requestContent(uri);
-                                            modeUriCache.put(fileName, uri);
-                                            return result;
-                                        }
-                                    }
-                                }
                             }
-                        } catch (JSONException ex) {
-                            Logger.getLogger(AceProxy.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } else {
-                        Logger.getLogger(AceProxy.class.getName()).severe("Failed loading language manifest from " + languageModuleUri);
+                    } catch (JSONException ex) {
+                        Logger.getLogger(AceProxy.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (IOException ex) {
-                    Logger.getLogger(AceProxy.class.getName()).log(Level.SEVERE, null, ex);
+                } else {
+                    Logger.getLogger(AceProxy.class.getName()).severe("Failed loading language manifest from " + languageModuleUri);
                 }
             }
         }

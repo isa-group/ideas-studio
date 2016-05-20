@@ -36,7 +36,7 @@
     <!-- Page Content -->
     <div class="container">
         <center>
-            <img class="logo" src="../../img/ideas/appLogoBig.png">
+            <img class="logo" src="../../img/${studioConfiguration.images.logo}">
         </center>
         <ul class="list-unstyled">
             <li>
