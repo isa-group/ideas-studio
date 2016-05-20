@@ -53,6 +53,7 @@ var AppPresenter = {
 					}
 					$('#principalUserInfo span').first().append(user.name);
 					principalUser=user.name;
+                    principalUserName=user.username;
 					
 					var auths2 = [];
 					$.each(auths, function(ident, value) {                    
