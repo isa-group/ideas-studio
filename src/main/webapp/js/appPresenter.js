@@ -11,6 +11,7 @@ $(window).load(function() {
 });
 
 var principalUser ="";
+var principalUserName ="";
 var currentSectionElement;
 var currentSection;
 
