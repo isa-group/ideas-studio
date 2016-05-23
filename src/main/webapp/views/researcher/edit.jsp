@@ -10,133 +10,164 @@
 
 <script>
 	jQuery(function() {
-		//Connected with
-		var social = localStorage.getItem('social');
-		if (social == "facebook" || social == "twitter" || social == "google") {
-			var element = $('div#connect-' + social);
-			element.removeClass("btn-primary");
-			element.addClass("btn-default");
-			element.text("Connected with " + social);
-		}
+    //Connected with
+    var social = localStorage.getItem('social');
+    if (social == "facebook" || social == "twitter" || social == "google") {
+        var element = $('div#connect-' + social);
+        element.removeClass("btn-primary");
+        element.addClass("btn-default");
+        //			element.text("Connected with " + social);
+    }
 
-		//social loguin
-		if (localStorage.getItem("social") != "") {
-			$('#userAccount.username').prop('disabled', true);
-			$('#oldPass').prop('disabled', true);
-			$('#mypass').prop('disabled', true);
-			$('#repeatPass').prop('disabled', true);
-			var avatar = $("#principalUserAvatar");
-			if (avatar.size() != 0)
-				$('#settingsButtonPanel')
-						.append(
-								"<span class='lead ' style='float: left; color: #628FB8;'>Information acquired from social login</span>");
-		}
+    //social login
+    if (localStorage.getItem("social") != "") {
+        $('#userName').prop('readonly', true);
+        $('#oldPass').prop('readonly', true);
+        $('#mypass').prop('readonly', true);
+        $('#repeatPass').prop('readonly', true);
+        var avatar = $("#principalUserAvatar");
+        if (avatar.size() != 0)
+            $('#settingsButtonPanel')
+            .append(
+                "<span class='lead ' style='float: left; color: #628FB8;'>Information acquired from social login</span>");
+    }
+    $('#userName').prop('readonly', true);
 
-		$('#loginOKPanel').modal('hide');
-		$('#loginFailPanel').modal('hide');
-		// Check for status
-		var postSuccess = "${success}";
-		console.log(postSuccess);
-		var avatar = $("#principalUserAvatar");
-		if (postSuccess == "true") {
-			$("#statusPanel").addClass("success");
-			$("#statusPanel span").addClass("glyphicon-ok");
+    $('#loginOKPanel').modal('hide');
+    $('#loginFailPanel').modal('hide');
+    // Check for status
+    var postSuccess = "${success}";
+    console.log(postSuccess);
+    var avatar = $("#principalUserAvatar");
+    if (postSuccess == "true") {
+        $("#statusPanel").addClass("success");
+        $("#statusPanel span").addClass("glyphicon-ok");
 
-			if (avatar.size() == 0) {
-				$('#loginOKPanel').modal('show');
-			}
-		} else if (postSuccess == "false") {
-			console.log("captured");
-			$("#statusPanel").addClass("problems");
-			$("#statusPanel span").addClass("glyphicon-remove");
-			// 			$("#statusPanel").append('<spring:message code="researcher.settings.problems" />');
-			// Check repeated email
-			var repeatedEmail = "${repeatedEmail}";
-			if (repeatedEmail == "true") {
-				$("#statusPanel")
-						.append(
-								'<spring:message code="security.repeatedEmail.error" />');
-			} else {
-				$("#statusPanel")
-						.append(
-								'<spring:message code="researcher.settings.problems" />');
-				if (avatar.size() == 0) {
-					$('#loginFailPanel').modal('show');
-				}
-			}
-		}
+        if (avatar.size() == 0) {
+            $('#loginOKPanel').modal('show');
+        }
+    } else if (postSuccess == "false") {
+        console.log("captured");
+        $("#statusPanel").addClass("problems");
+        $("#statusPanel span").addClass("glyphicon-remove");
+        // 			$("#statusPanel").append('<spring:message code="researcher.settings.problems" />');
+        // Check repeated email
+        var repeatedEmail = "${repeatedEmail}";
+        if (repeatedEmail == "true") {
+            $("#statusPanel")
+                .append(
+                    '<spring:message code="security.repeatedEmail.error" />');
+        } else {
+            $("#statusPanel")
+                .append(
+                    '<spring:message code="researcher.settings.problems" />');
+            if (avatar.size() == 0) {
+                $('#loginFailPanel').modal('show');
+            }
+        }
+    }
 
-		var badPassword = "${badPassword}";
-		if (badPassword == "true") {
-			$("#badPassError").removeClass("hide");
-		}
+    var badPassword = "${badPassword}";
+    if (badPassword == "true") {
+        $("#badPassError").removeClass("hide");
+    }
 
-		var urlHash = window.location.hash;
+    var urlHash = window.location.hash;
 
-		var form1Changes = false;
-		// 		var form2Changes = false;
+    var form1Changes = false;
+    // 		var form2Changes = false;
 
-		$("#settingsSubmitChanges").prop('disabled', true);
-		$("#settingsRevertChanges").prop('disabled', true);
+    $("#settingsSubmitChanges").prop('disabled', true);
 
-		$('#settingsForm1 input').on("change paste keyup", function() {
-			form1Changes = true;
-			$("#settingsSubmitChanges").prop('disabled', false);
-			$("#settingsRevertChanges").prop('disabled', false);
-		});
+    $('#settingsForm1 input').on("change paste keyup", function() {
+        form1Changes = true;
+        $("#settingsSubmitChanges").prop('disabled', false);
+    });
 
-		if (urlHash == "#account") {
-			$('#accountTab').tab('show');
-		} else if (urlHash == "#social") {
-			$('#socialTab').tab('show');
-			$('#settingsButtonPanel').hide();
-		} else {
-			$('#profileTab').tab('show');
-			$('#settingsButtonPanel').show();
-		}
 
-		$("#socialTab").click(function() {
-			$('#settingsButtonPanel').hide();
-		});
-		$("#profileTab").click(function() {
-			$('#settingsButtonPanel').show();
-		});
+if (urlHash == "#account") {
+    $('#accountTab').tab('show');
+} else if (urlHash == "#social") {
+    $('#socialTab').tab('show');
+    $('#settingsButtonPanel').hide();
+} else {
+    $('#profileTab').tab('show');
+    $('#settingsButtonPanel').show();
+}
 
-		$('#settingTabs a').click(function(e) {
-			window.location.hash = '#' + $(this).attr('id').replace("Tab", "");
-			e.preventDefault();
-		});
+$("#socialTab").click(function() {
+    $('#settingsButtonPanel').hide();
+}); $("#profileTab").click(function() {
+    $('#settingsButtonPanel').show();
+});
 
-		$('#settingTabs .nav-tabs li a').click(function(e) {
-			e.preventDefault();
-			$(this).tab('show');
-		});
+$('#settingTabs a').click(function(e) {
+    window.location.hash = '#' + $(this).attr('id').replace("Tab", "");
+    e.preventDefault();
+});
 
-		$("#settingsSubmitChanges").click(function() {
+$('#settingTabs .nav-tabs li a').click(function(e) {
+    e.preventDefault();
+    $(this).tab('show');
+});
 
-			if (form1Changes)
-				$('#settingsForm1').submit();
+$("#settingsSubmitChanges").click(function() {
+    if ($("#oldPass").val() != "" || $("#mypass").val() != "" || $("#repeatPass").val() != "") { //trying to change password
+        if ($("#oldPass").val() != "" && $("#mypass").val() != "" && $("#repeatPass").val() != "") {
+            if (form1Changes) {
+                $('#settingsForm1').submit();
+            }
+        }else{
+            var message="";
+             if ($("#oldPass").val() == ""){
+                 console.log("missing oldPass value");
+                 message+='"Old password" field is missing.';
+            }
+            if ($("#mypass").val() == ""){
+                 console.log("missing mypass value");
+                 message+='<br>"Password" field is missing.';
+            }
+            if ($("#repeatPass").val() == ""){
+                 console.log("missing repeatPass value");
+                 message+='<br>"Repeat password" field is missing.';
+            }
+            if ($("#repeatPass").val() != $("#mypass").val()){
+                 console.log("passwords not matching");
+                 message+='<br>Passwords do not match.';
+            }
+            console.log(message);
+            if(message.indexOf("<br>")>=0){
+                $("#pagesContent #settingsButtonPanel").css("padding","1em 1em 4em 1em");
+             }
+            $("#statusPanel").removeClass("success").addClass("problems").html("").append('<span class="glyphicon glyphicon-ok glyphicon-remove"></span>'+message+'</span>');
+            
+        }
+        
+    } else {
+        if (form1Changes) {
+            $('#settingsForm1').submit();
+        }
+    }
+});
 
-		});
+$("#settingsRevertChanges").click(function() {
+    window.location = $('base').attr('href');
+});
 
-		$("#settingsRevertChanges").click(function() {
-			location.reload();
-		});
+$(".goHome").click(function() {
+    window.location = $('base').attr('href');
+});
 
-		$(".goHome").click(function() {
-			window.location = $('base').attr('href');
-		});
+});
 
-	});
-	function redirecToLogin() {
-		window.location.href = $('base').attr('href');
-	}
+function redirecToLogin() {
+    window.location.href = $('base').attr('href');
+}
 </script>
 
 <!-- return to login -->
 
-<div id="loginOKPanel" class="modal" data-backdrop="static"
-	data-keyboard="false">
+<div id="loginOKPanel" class="modal" data-backdrop="false" data-keyboard="false">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -160,20 +191,18 @@
 <!-- /.modal -->
 
 
-<div id="loginFailPanel" class="modal" data-backdrop="static"
-	data-keyboard="false">
+<div id="loginFailPanel" class="modal" data-backdrop="false" data-keyboard="false">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title">Sign up error</h4>
 			</div>
 			<div class="modal-body">
-				<p>Has not been able to make sign up due to errors in the fields</p>
+				<p>Unable to sign up. Check the errors in red.</p>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn" onclick="redirecToLogin()">Return
-					to Login</button>
-			</div>
+			   <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
 		</div>
 		<!-- /.modal-content -->
 	</div>
@@ -207,8 +236,8 @@
 		<security:authorize access="isAuthenticated()">
 			<li><a href="#accountTabContent" data-toggle="tab"
 				id="accountTab"><spring:message code="userAccount.editHeader" /></a></li>
-			<li><a href="#socialTabContent" data-toggle="tab" id="socialTab"><spring:message
-						code="socialnetwork.editHeader" /></a></li>
+<!--			<li><a href="#socialTabContent" data-toggle="tab" id="socialTab"><spring:message
+						code="socialnetwork.editHeader" /></a></li>-->
 		</security:authorize>
 	</ul>
 
@@ -224,7 +253,7 @@
 
 					<form:hidden path="id" />
 					<form:hidden path="version" />
-					<form:hidden path="userAccount" />
+					<form:hidden path="userAccount"/>
 					<div>
 						<div class="control-group">
 							<div class="input-group">
@@ -296,7 +325,7 @@
 						<div class="input-group">
 							<span class="input-group-addon"><spring:message
 									code="security.username" /></span>
-							<form:input path="userAccount.username" placeholder="myusername"
+							<form:input id="userName" path="userAccount.username" placeholder="myusername"
 								type="text" class="form-control" />
 						</div>
 						<span class="label label-danger"><form:errors
@@ -371,7 +400,7 @@
 
 				<!-- SOCIAL -->
 
-				<div class="tab-pane fade active" id="socialTabContent">
+<!--				<div class="tab-pane fade active" id="socialTabContent">
 					<div>
 						<jstl:forEach items="${missingServices}" var="snetwork">
 							<div id="${snetwork}-connections">
@@ -397,7 +426,7 @@
 							</div>
 						</jstl:forEach>
 					</div>
-				</div>
+				</div>-->
 				<%-- 		</jstl:if> --%>
 			</security:authorize>
 
@@ -420,7 +449,7 @@
 
 <div class="shadowCurvedBottom1"></div>
 
-<security:authorize access="isAnonymous()">
+<%--<security:authorize access="isAnonymous()">
 	<div id="socialAccountCreation">
 		<form id="tw_signin" action="/signin/twitter" method="POST">
 			<button type="submit">
@@ -433,6 +462,6 @@
 			</button>
 		</form>
 	</div>
-</security:authorize>
+</security:authorize>--%>
 
 

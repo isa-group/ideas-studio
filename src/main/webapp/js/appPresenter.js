@@ -68,7 +68,9 @@ var AppPresenter = {
 						callback();
 				},
 				"error" : function(result) {
-					console.error(result.statusText);
+                                    if(result.statusText){
+					console.log(result.statusText);
+                                    }
 				},
 				"async" : true,
 			});
