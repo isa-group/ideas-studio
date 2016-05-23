@@ -35,7 +35,6 @@
 	</div>
 	<div id="projectsTreeContainer">
 		<ul id="myMenu" class="contextMenu">
-			<li class="edit"><a href="#edit">Edit</a></li>
 			<li class="cut separator"><a href="#cut">Cut</a></li>
 			<li class="copy"><a href="#copy">Copy</a></li>
 			<li class="paste"><a href="#paste">Paste</a></li>

@@ -821,7 +821,7 @@ var moveNodeAux = function (originFileUri, targetFileUri, justRename, firstRecur
     var originNode = getNodeByFileUri(originFileUri);
     
     if (getNodeByFileUri(targetFileUri)) {
-        CommandApi.echo("<p style='color:red'>Project Tree: Element already exists.</p>");
+        if (!justRename) CommandApi.echo("<p style='color:red'>Project Tree: Element already exists.</p>");
         return false;
     }
 
