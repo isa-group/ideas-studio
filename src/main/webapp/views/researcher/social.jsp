@@ -7,7 +7,7 @@
 <%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 
 
-<div id="Social Data">
+<!--<div id="Social Data">
 
 <div id="socialneworksconfig">
     <h3><spring:message code="socialnetwork.editHeader"/> </h3
@@ -32,4 +32,4 @@
     </jstl:forEach>
 </div>
 
-</div>
+</div>-->
