@@ -12,6 +12,9 @@ import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -31,8 +34,8 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
     @FindBy(id = "allow")
     WebElement loginButton;
 
-    @FindBy(id = "goToApp")
-    WebElement goToAppButton;
+    @FindBy(id = "completeYourProfile")
+    WebElement completeYourProfileButton;
 
     static final Logger LOG = Logger.getLogger(RegisterSocialTwitterPage.class.getName());
 
@@ -47,8 +50,8 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
         return PageFactory.initElements(getWebDriver(), RegisterSocialTwitterPage.class);
     }
 
-    public RegisterSocialGooglePage clickOnGoToApp() {
-        clickOnClickableElement(goToAppButton);
+    public RegisterSocialGooglePage clickOnCompleteYourProfile() {
+        clickOnClickableElement(completeYourProfileButton);
         return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
 
@@ -84,15 +87,12 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
                 Logger.getLogger(RegisterSocialTwitterPage.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            page.clickOnGoToApp();
+            page.clickOnCompleteYourProfile();
             
-            WebElement lastElement = PageObject.getWebDriver().findElement(By.id("appFooter"));
+            WebElement lastElement = PageObject.getWebDriver().findElement(By.id("settingsContainer"));
             TEST_RESULT = false;
             if (lastElement != null) {
-                TEST_RESULT = page.getCurrentUrl().contains("app/editor");
-                if (TEST_RESULT) {
-                    new EditorPage().consoleEchoCommand("User logged with Twitter account \"" + twUser + "\".");
-                }
+                TEST_RESULT = page.getCurrentUrl().contains("settings/user");
             }
             
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
