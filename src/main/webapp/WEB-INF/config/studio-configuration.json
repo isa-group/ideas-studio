@@ -1,35 +1,35 @@
 {
     "workbenchName": "IDEAS",
     "images": {
-            "logo": "ideas/appLogoBig.png",
-            "search": "ideas/Search.png"
+        "logo": "ideas/appLogoBig.png",
+        "search": "ideas/Search.png"
     },
-	"languages": {
-            "ideas-sedl-language": "/ideas-sedl-language",
-            "iagree-template-language": "/ideas-iagree-template-language",
-           	"iagree-offer-language": "/ideas-iagree-offer-language",
-            "iagree-agreement-language": "/ideas-iagree-agreement-language",
-            "ideas-opl-language": "/ideas-opl-language",
-			"ideas-afm-language": "/ideas-afm-language",
-            "ideas-fmc-language": "/ideas-fmc-language",
-            "ideas-hcs-language": "/ideas-hcs-language",
-            "ideas-needs-language": "/ideas-needs-language",
-            "ideas-plaintext-language": "/ideas-plaintext-language",
-            "ideas-csv-language": "/ideas-csv-language",
-            "ideas-lusdl-language": "/ideas-lusdl-language",
-            "ideas-html-language": "/ideas-html-language",
-            "ideas-soup-language": "/ideas-soup-language",
-            "ideas-json-language": "/ideas-json-language",
-            "ideas-yaml-language": "/ideas-yaml-language",
-            "ideas-language-angular": "/ideas-language-angular",
-            "ideas-language-angular-controller": "/ideas-language-angular-controller"
-	},
-    "configurationFiles":{
-      "application":"classpath*:application.properties",
-      "security":"classpath*:security.properties",
-      "social":"classpath*:social.properties",
-      "email":"classpath*:email.properties"
+    "modules": {
+        "ideas-iagree-agreement-language": "/ideas-iagree-agreement-language",
+        "ideas-iagree-offer-language": "/ideas-iagree-offer-language",
+        "ideas-iagree-template-language": "/ideas-iagree-template-language",
+        "ideas-sedl-language": "/ideas-sedl-language",
+        "ideas-opl-language": "/ideas-opl-language",
+        "ideas-afm-language": "/ideas-afm-language",
+        "ideas-fmc-language": "/ideas-fmc-language",
+        "ideas-hcs-language": "/ideas-hcs-language",
+        "ideas-needs-language": "/ideas-needs-language",
+        "ideas-plaintext-language": "/ideas-plaintext-language",
+        "ideas-csv-language": "/ideas-csv-language",
+        "ideas-lusdl-language": "/ideas-lusdl-language",
+        "ideas-html-language": "/ideas-html-language",
+        "ideas-soup-language": "/ideas-soup-language",
+        "ideas-json-language": "/ideas-json-language",
+        "ideas-yaml-language": "/ideas-yaml-language",
+        "ideas-language-angular": "/ideas-language-angular",
+        "ideas-language-angular-controller": "/ideas-language-angular-controller"
     },
-    "helpURI":"https://labs.isa.us.es/IDEAS-help/",
-    "googleAnalyticsID":"UA-68297022-1"
+    "configurationFiles": {
+        "application": "classpath*:application.properties",
+        "security": "classpath*:security.properties",
+        "social": "classpath*:social.properties",
+        "email": "classpath*:email.properties"
+    },
+    "helpURI": "https://labs.isa.us.es/IDEAS-help/",
+    "googleAnalyticsID": "UA-68297022-1"
 }
