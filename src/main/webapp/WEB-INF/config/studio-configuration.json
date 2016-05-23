@@ -31,5 +31,6 @@
         "email": "classpath*:email.properties"
     },
     "helpURI": "https://labs.isa.us.es/IDEAS-help/",
-    "googleAnalyticsID": "UA-68297022-1"
+    "googleAnalyticsID": "UA-68297022-1",
+    "advancedMode": true
 }
