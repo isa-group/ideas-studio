@@ -27,6 +27,8 @@
     
     <definition name="loginTemplate" template="/WEB-INF/tiles/login_template.jsp"></definition>
     
+    <definition name="socialtemplate" template="/WEB-INF/tiles/social_template.jsp"></definition>
+    
     
 
     <definition name="misc/panic" extends="pagesTemplate">
