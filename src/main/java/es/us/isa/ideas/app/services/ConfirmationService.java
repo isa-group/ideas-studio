@@ -133,7 +133,7 @@ public class ConfirmationService extends BusinessService<Confirmation> {
         Map<String, String> finalCustomizations = mailer
                 .extractCustomizations(templateCustomizers);
         finalCustomizations.putAll(customization);
-        finalCustomizations.put("$confirmationUrl", request.getScheme() + "://" + request.getServerName() + ":" + request.getLocalPort() + request.getContextPath() + "/confirm/");
+        finalCustomizations.put("$confirmationUrl", request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()+ request.getContextPath() + "/confirm/");
         mailer.sendMail(result.getResearcher().getEmail(), finalCustomizations,
                 registrationConfirmationTemplate);
     }
@@ -147,7 +147,7 @@ public class ConfirmationService extends BusinessService<Confirmation> {
                 .extractCustomizations(templateCustomizers);
         finalCustomizations.putAll(customization);
         finalCustomizations.put("$code", confirmation.getConfirmationCode());
-        finalCustomizations.put("$confirmationUrl", request.getScheme() + "://" + request.getServerName() + ":" + request.getLocalPort() + request.getContextPath() + "/confirm/");
+        finalCustomizations.put("$confirmationUrl", request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/confirm/");
         mailer.sendMail(researcher.getEmail(), finalCustomizations,
                 resetPasswordConfirmationTemplate);
     }

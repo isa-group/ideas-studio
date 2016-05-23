@@ -36,7 +36,7 @@
     <!-- Page Content -->
     <div class="container">
         <center>
-            <img class="logo" src="../../img/ideas/appLogoBig.png">
+            <img class="logo" src="../../img/${studioConfiguration.images.logo}">
         </center>
         <ul class="list-unstyled">
             <li>
@@ -46,7 +46,7 @@
                 <h2>Languages</h2>
                 <ul class="help-links">
 
-                    <core:forEach var="language" items="${studioConfiguration.languages}">
+                    <core:forEach var="language" items="${studioConfiguration.modules}">
                         <li>
                             <core:set var="languageName" value="${language.key}"/>
                             <core:set var="languageNameAux" value="${fn:replace(language.key, '-language','')}"/>

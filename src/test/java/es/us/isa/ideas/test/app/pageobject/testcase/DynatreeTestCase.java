@@ -36,9 +36,9 @@ public class DynatreeTestCase {
     static String dir2 = "dir2";
 
     static String originFileName = "file1";
-    static String targetFileName = "file1_mod";
+//    static String targetFileName = "file1_mod";
     static String originFile2LName = "file2";
-    static String targetFile2LName = "file2_mod";
+//    static String targetFile2LName = "file2_mod";
 
     static FileType fileExt = FileType.PLAINTEXT;
 
@@ -129,11 +129,11 @@ public class DynatreeTestCase {
         SectionFile.testCreateFile(fileName, fileExt, parentLocator);
     }
 
-    @Test
-    public void step10_renameFile() {
-        SectionFile.testRenameFile(originFileName + fileExt.toString(),
-            targetFileName + fileExt.toString());
-    }
+//    @Test
+//    public void step10_renameFile() {
+//        SectionFile.testRenameFile(originFileName + fileExt.toString(),
+//            targetFileName + fileExt.toString());
+//    }
 
     @Test
     public void step11_editFile2L() {
@@ -141,11 +141,11 @@ public class DynatreeTestCase {
         SectionFile.testEditFile(fileLocator, "Hello world!");
     }
 
-    @Test
-    public void step12_renameFile2L() {
-        SectionFile.testRenameFile(originFile2LName + fileExt.toString(),
-            targetFile2LName + fileExt.toString());
-    }
+//    @Test
+//    public void step12_renameFile2L() {
+//        SectionFile.testRenameFile(originFile2LName + fileExt.toString(),
+//            targetFile2LName + fileExt.toString());
+//    }
 
     @Test
     public void step13_deleteWorkspace() {
