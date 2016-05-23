@@ -28,7 +28,7 @@
 <%-- <h3><a href="${researcherUrl}"><spring:message code="registration.editYourPersonalData"/></a></h3> --%>
 <%-- <h3><a href="experiment/create"><spring:message code="registration.createYourFirstExperiment"/></a></h3> --%>
 
-<img src="../../img/ideas/appLogoBig.png">
+<img src="../../img/${studioConfiguration.images.logo}">
 
 
 
