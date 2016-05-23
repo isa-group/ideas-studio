@@ -22,12 +22,12 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    RegisterTestCase.class,
+    BindingFormTestCase.class,
     DynatreeTestCase.class,
+    RegisterTestCase.class
 //    WorkspaceEditorTestCase.class,
 //    WorkspaceDashboardTestCase.class,
 //    WorkspaceDemoTestCase.class,
-    BindingFormTestCase.class
 //    WorkspaceSwitchTestCase.class,
 //    ModulesTestCase.class
 })
