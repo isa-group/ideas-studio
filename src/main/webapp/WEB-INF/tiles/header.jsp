@@ -27,16 +27,16 @@
                     <i class="icon-user"></i> 
                     <spring:message code="master.page.login" />
                 </a>
-                <form id="tw_signin" action="signin/twitter" method="POST">
+<!--                <form id="tw_signin" action="signin/twitter" method="POST">
                     <button type="submit">
                         <img src="img/Facebook.png"/>
                     </button>
-                </form>
-                <form id="fb_signin" action="signin/facebook" method="POST">
+                </form>-->
+<!--                <form id="fb_signin" action="signin/facebook" method="POST">
                     <button type="submit">
                          <img src="img/sign-in-with-facebook.png" />
                     </button>
-                </form>
+                </form>-->
                 <a class="btn btn-success" href="researcher/create">
                     <spring:message code="master.page.register" />
                 </a>
