@@ -53,7 +53,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
 
     // click
     public RegisterPage clickOnSaveChanges() {
-        saveChangesButton.click();
+        clickOnNotClickableElement(saveChangesButton);
         return PageFactory.initElements(getWebDriver(), RegisterPage.class);
     }
 
