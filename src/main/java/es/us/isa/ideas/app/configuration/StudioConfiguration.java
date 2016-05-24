@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -27,6 +26,7 @@ public class StudioConfiguration implements Serializable {
     private Map<String, String> configurationFiles;
     private String helpURI;
     private String googleAnalyticsID;
+    private Boolean advancedMode;
 
     public StudioConfiguration() {
         super();
@@ -94,4 +94,11 @@ public class StudioConfiguration implements Serializable {
         this.googleAnalyticsID = ga;
     }
 
+    public Boolean getAdvancedMode() {
+        return advancedMode;
+    }
+
+    public void setAdvancedMode(Boolean advancedMode) {
+        this.advancedMode = advancedMode;
+    }
 }
