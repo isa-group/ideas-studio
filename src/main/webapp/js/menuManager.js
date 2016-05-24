@@ -15,42 +15,55 @@ var newDirItem = {
         }
     },
     onCreate: function () {
-        var folderName = $("#modalCreationField input").val();
-        var nodeUri = FileApi.calculateNodeUri(currentSelectedNode);
-        try {
-            if (extractFileExtension(nodeUri)) {
-                // Get node parent
-                nodeUri = nodeUri.substring(0, nodeUri.lastIndexOf("/")).substring(0, nodeUri.lastIndexOf("/"));
-            }
-        } catch (err) {
-            // extractFileExtension fails if nodeUri doesn't include a fileUri
-        }
-        var folderUri = WorkspaceManager.getSelectedWorkspace() + "/" + nodeUri + "/" + folderName;
-        FileApi.createDirectory(folderUri, function (ts) {
-            if (ts == true || ts == "true") {
-                console.log("Directory created: " + ts);
-                var keyPath = nodeUri + "/" + folderName;
-                var newChild = buildChild(folderName, true, "folder_icon", keyPath);
-                hideModal();
-                currentSelectedNode.addChild(newChild);
-                currentSelectedNode.sortChildren();
-                //currentSelectedNode.data.keyPath =  nodeUri + "/" + fileName + languageExtension;
-            } else {
-                if (!$("#modalCreationField input").val()) {
-                    hideModal();
-                    showError("Warning", "Please enter a directory name.", function () {
-                        hideError();
-                        genericMenuOption(newDirItem);
-                    });
-                } else {
-                    hideModal();
-                    showError("There was an error", "Error creating new directory.<br>" +
-                            "Please, check if a directory with that name already exists in the workspace.", function () {
-                                hideError();
-                            });
+        var folderName = $("#modalCreationField input").val(), nodeUri;
+        
+        // Create a folder only inside a folder node
+        if (!currentSelectedNode.data.isFolder) currentSelectedNode = currentSelectedNode.getParent();
+        
+        nodeUri = FileApi.calculateNodeUri(currentSelectedNode);
+        // Folder already exists
+        if (!!getNodeByFileUri(WorkspaceManager.getSelectedWorkspace() + "/" + nodeUri + "/" + folderName)) {
+            hideModal();
+            showError("There was an error", "Error creating new directory.<br>" +
+            "Please, check if a directory with that name already exists in the workspace.", function () {
+                hideError();
+            });
+        } else {
+            try {
+                if (extractFileExtension(nodeUri)) {
+                    // Get node parent
+                    nodeUri = nodeUri.substring(0, nodeUri.lastIndexOf("/")).substring(0, nodeUri.lastIndexOf("/"));
                 }
+            } catch (err) {
+                // extractFileExtension fails if nodeUri doesn't include a fileUri
             }
-        });
+            var folderUri = WorkspaceManager.getSelectedWorkspace() + "/" + nodeUri + "/" + folderName;
+            FileApi.createDirectory(folderUri, function (ts) {
+                if (ts == true || ts == "true") {
+                    console.log("Directory created: " + ts);
+                    var keyPath = nodeUri + "/" + folderName;
+                    var newChild = buildChild(folderName, true, "folder_icon", keyPath);
+                    hideModal();
+                    currentSelectedNode.addChild(newChild);
+                    currentSelectedNode.sortChildren();
+                    //currentSelectedNode.data.keyPath =  nodeUri + "/" + fileName + languageExtension;
+                } else {
+                    if (!$("#modalCreationField input").val()) {
+                        hideModal();
+                        showError("Warning", "Please enter a directory name.", function () {
+                            hideError();
+                            genericMenuOption(newDirItem);
+                        });
+                    } else {
+                        hideModal();
+                        showError("There was an error", "Error creating new directory.<br>" +
+                                "Please, check if a directory with that name already exists in the workspace.", function () {
+                                    hideError();
+                                });
+                    }
+                }
+            });
+        }
     },
     onCancel: function () {
         hideModal();
