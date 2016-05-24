@@ -1,65 +1,65 @@
 package es.us.isa.ideas.app.configuration;
 
+import com.google.gson.Gson;
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
-
-import com.google.gson.Gson;
 
 public class StudioConfiguration implements Serializable {
 
+    private static final Logger LOG = Logger.getLogger(StudioConfiguration.class.getName());
+
+    protected static final String CONFIG_PATH = "/WEB-INF/config/studio-configuration.json";
+    protected static final String DEVELOP_PATH = "/WEB-INF/config/develop-configuration.json";
+
     private static final long serialVersionUID = 1L;
-    private static final String DEFAULT_FILE_PATH="/WEB-INF/config/studio-configuration.json";
 
     private String workbenchName;
-    
-    private Map<String, String> languages;
+
+    private Map<String, String> modules;
     private Map<String, String> images;
     private Map<String, String> configurationFiles;
     private String helpURI;
     private String googleAnalyticsID;
+    private Boolean advancedMode;
 
     public StudioConfiguration() {
         super();
     }
-    
-    public Map<String, String> getLanguages() {
-        return languages;
+
+    public static StudioConfiguration load(String realPath) {
+        StudioConfiguration config = null;
+
+        try {
+            Gson gson = new Gson();
+            String json = FileUtils.readFileToString(new File(realPath + CONFIG_PATH));
+            config = gson.fromJson(json, StudioConfiguration.class);
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, null, e);
+        }
+
+        return config;
+    }
+
+    public Map<String, String> getModules() {
+        return modules;
+    }
+
+    public void setModules(Map<String, String> modules) {
+        this.modules = modules;
     }
 
     public Map<String, String> getImages() {
         return images;
     }
 
-    public void setLanguages(Map<String, String> languages) {
-        this.languages = languages;
-    }
-
     public void setImages(Map<String, String> images) {
         this.images = images;
-    }
-
-    public static StudioConfiguration load() {
-        return load(DEFAULT_FILE_PATH);
-    }
-    
-    public static StudioConfiguration load(String configFilePath) {
-        StudioConfiguration config = null;
-
-        try {
-            String json = FileUtils.readFileToString(new File(configFilePath));
-            System.out.println(json);
-
-            Gson gson = new Gson();
-            config = gson.fromJson(json, StudioConfiguration.class);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-
-        return config;
     }
 
     public void setConfigurationFiles(Map<String, String> configFiles) {
@@ -78,21 +78,27 @@ public class StudioConfiguration implements Serializable {
         this.workbenchName = workbenchName;
     }
 
-	public String getHelpURI() {
-		return helpURI;
-	}
+    public String getHelpURI() {
+        return helpURI;
+    }
 
-	public void setHelpURI(String helpURI) {
-		this.helpURI = helpURI;
-	}
- 
+    public void setHelpURI(String helpURI) {
+        this.helpURI = helpURI;
+    }
+
     public String getGoogleAnalyticsID() {
-    	return googleAnalyticsID;
+        return googleAnalyticsID;
     }
-    
+
     public void setGoogleAnalyticsID(String ga) {
-    	this.googleAnalyticsID = ga;
+        this.googleAnalyticsID = ga;
     }
-    
-    
+
+    public Boolean getAdvancedMode() {
+        return advancedMode;
+    }
+
+    public void setAdvancedMode(Boolean advancedMode) {
+        this.advancedMode = advancedMode;
+    }
 }

@@ -8,15 +8,16 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd		        
 	">
-        
-    <bean id="studioConfiguration" class="es.us.isa.ideas.app.configuration.StudioConfiguration" 
-          factory-method="load">
-        <constructor-arg value="#{servletContext.getRealPath('')}/WEB-INF/config/studio-configuration.json"/>            
+    
+    
+    <bean id="studioConfiguration" class="es.us.isa.ideas.app.configuration.StudioConfiguration" factory-method="load">
+        <constructor-arg value="#{servletContext.getRealPath('')}"/>
     </bean>
+    
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-            	<value>#{studioConfiguration.configurationFiles['application']}</value>
+                <value>#{studioConfiguration.configurationFiles['application']}</value>
                 <value>#{studioConfiguration.configurationFiles['security']}</value>
                 <value>#{studioConfiguration.configurationFiles['social']}</value>
                 <value>#{studioConfiguration.configurationFiles['email']}</value>
