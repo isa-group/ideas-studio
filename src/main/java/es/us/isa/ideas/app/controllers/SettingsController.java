@@ -74,7 +74,7 @@ public class SettingsController extends AbstractController {
             repeatPass = "";
         }
         if (null == oldPass) {
-            repeatPass = "";
+            oldPass = "";
         }
         
         boolean isSocialLogin = null != researcher.getUserAccount() && null == researcher.getUserAccount().getPassword();
