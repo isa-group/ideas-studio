@@ -1777,6 +1777,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     /*width: 600px;
     height: 100%;
     margin: 10% auto;*/
+    white-space: normal;
 }
 
 .modal-backdrop {
