@@ -73,6 +73,7 @@ public class ConfigurationController extends AbstractController {
                 studioConfiguration.setHelpURI(newStudioConfiguration.getHelpURI());
                 studioConfiguration.setImages(newStudioConfiguration.getImages());
                 studioConfiguration.setWorkbenchName(newStudioConfiguration.getWorkbenchName());
+                studioConfiguration.setAdvancedMode(newStudioConfiguration.getAdvancedMode());
                 
                 Properties props = new Properties();
                 props.load(getClass().getResourceAsStream("/application.properties"));

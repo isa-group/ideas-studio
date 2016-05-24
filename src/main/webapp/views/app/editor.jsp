@@ -37,11 +37,16 @@
     </div>
     <div id="projectsTreeContainer">
         <ul id="myMenu" class="contextMenu">
+            <c:if test="${studioConfiguration.advancedMode}">
+                <li class="edit"><a href="#edit">Edit</a></li>
+            </c:if>
             <li class="cut separator"><a href="#cut">Cut</a></li>
             <li class="copy"><a href="#copy">Copy</a></li>
             <li class="paste"><a href="#paste">Paste</a></li>
             <li class="delete"><a href="#delete">Delete</a></li>
-            <li class="upload separator"><a href="#upload">Upload</a></li>
+            <c:if test="${studioConfiguration.advancedMode}">
+                <li class="upload separator"><a href="#upload">Upload</a></li>
+            </c:if>
         </ul>
         <div id="projectsTree"> </div>
     </div>
