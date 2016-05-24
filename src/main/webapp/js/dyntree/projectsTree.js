@@ -157,7 +157,16 @@ function bindContextMenu(span) {
                 });
                 break;
             case "delete":
-                CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, function (result) {});
+                var nodeUri = WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath;
+                showModal("Please, confirm your decision", "<strong>Are you sure you want to delete \"" + nodeUri + "\"?</strong>", "Delete",
+                    function () {
+                        CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, function (result) {
+                            hideModal();
+                        });
+                    },
+                    function () {
+                        hideModal();
+                    });
                 break;
             case "cut":
                 pasteMode = "cut";
