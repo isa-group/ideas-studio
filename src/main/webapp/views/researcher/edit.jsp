@@ -191,7 +191,7 @@ function redirecToLogin() {
 <!-- /.modal -->
 
 
-<div id="loginFailPanel" class="modal" data-backdrop="false" data-keyboard="false">
+<div id="loginFailPanel" class="modal" data-backdrop="true" data-keyboard="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
