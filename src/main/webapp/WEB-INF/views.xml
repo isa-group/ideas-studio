@@ -29,11 +29,8 @@
     
     <definition name="socialtemplate" template="/WEB-INF/tiles/social_template.jsp"></definition>
     
-    
+    <definition name="panicTemplate" template="/WEB-INF/tiles/panic_template.jsp"></definition>
 
-    <definition name="misc/panic" extends="pagesTemplate">
-        <put-attribute name="body" value="/views/misc/panic.jsp"/>
-    </definition>
     <definition name="home" extends="pagesTemplate">
         <put-attribute name="body" value="/views/home/home.jsp"/>
     </definition>

@@ -42,13 +42,13 @@
 
     </head>
 
-    <body id="404View">
+    <body id="403View">
         <div id="loginLogo" style="background-image: url('./img/${studioConfiguration.images['logo']}')">            
         </div>
         <div id="lcWrapper">
             <div id="panicTemplateContent">
                 <div id="loginLoader">
-                    <h2>You don't have access to this resource</h2>
+                    <h2>Resource not found</h2>
                     <button class="btn goToApp" onclick="redirectToApp()">Go to ${studioConfiguration.workbenchName}</button>
                 </div>
             </div>

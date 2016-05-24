@@ -3,7 +3,7 @@
 <%@ page session="false" %>
 
 <script type="text/javascript">
-	function redirecToApp(){
+	function redirectToApp(){
 		window.location.href = $('base').attr('href');
 	}
 </script>
@@ -20,4 +20,4 @@
 <!--     <button type="submit">Disconnect</button>	 -->
     <input type="hidden" name="_method" value="delete" />
 </form>
-<button id="goToApp" class="btn" onclick="redirecToApp()">Go to APP</button>
+<button id="goToApp" class="btn" onclick="redirectToApp()">Go to APP</button>

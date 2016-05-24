@@ -1,3 +1,6 @@
+<%@page language="java" contentType="text/html; charset=ISO-8859-1"
+        pageEncoding="ISO-8859-1"  import="java.net.*, java.io.*,java.util.Properties"%>
+
 <%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -42,32 +45,22 @@
 
     </head>
 
-    <body id="404View">
+    <body id="panicView">
         <div id="loginLogo" style="background-image: url('./img/${studioConfiguration.images['logo']}')">            
         </div>
         <div id="lcWrapper">
             <div id="panicTemplateContent">
                 <div id="loginLoader">
-                    <h2>You don't have access to this resource</h2>
-                    <button class="btn goToApp" onclick="redirectToApp()">Go to ${studioConfiguration.workbenchName}</button>
+                    <tiles:insertAttribute name="body" />
                 </div>
+
             </div>
+
             <div id="loginShadow"></div>
             <div id="loginCopyright2">
                 <spring:message code="app.footer.copyright" />
             </div>
         </div>
-
-        <script type="text/javascript">
-            function redirectToApp() {
-                window.location.href = $('base').attr('href');
-            }
-
-            function toggleExMsg() {
-                $("#exceptionMsg").toggleClass("hidden");
-            }
-        </script>
-
     </body>
 </html>
 

@@ -48,7 +48,7 @@
         <div id="lcWrapper">
             <div id="panicTemplateContent">
                 <div id="loginLoader">
-                    <h2>You don't have access to this resource</h2>
+                    <h2>Unsupported servlet method</h2>
                     <button class="btn goToApp" onclick="redirectToApp()">Go to ${studioConfiguration.workbenchName}</button>
                 </div>
             </div>
