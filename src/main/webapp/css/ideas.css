@@ -1123,7 +1123,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     z-index: 5;
     box-shadow: 1px 0 1px rgba(0, 0, 0, 0.07);
     max-width: 100%;
-    overflow: hidden;
+    /* overflow: hidden; */
     /* Maximization transition*/
     -webkit-transition: max-width 700ms
         cubic-bezier(0.420, 0.000, 0.580, 1.000);
@@ -1626,7 +1626,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     bottom: 5rem;
     left: 0;
     right: 0;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 #projectsTree {
