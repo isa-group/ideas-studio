@@ -6,7 +6,7 @@ var opMap = "";
 
 var saveCurrentSession = function () {
     if (document.editor != null
-        && (EditorManager.currentUri in EditorManager.sessionsMap)) {
+            && (EditorManager.currentUri in EditorManager.sessionsMap)) {
         saveSession(EditorManager.currentUri);
     }
 };
@@ -15,7 +15,7 @@ var saveSession = function (uri, callback) {
     if (document.editor != null) {
         // TODO!!!
         FileApi.saveFileContents(uri, EditorManager.sessionsMap[uri]
-            .getBaseSession().getValue(), function () {
+                .getBaseSession().getValue(), function () {
             if (callback != null)
                 callback();
         });
@@ -24,7 +24,7 @@ var saveSession = function (uri, callback) {
 
 var createNewTabbedInstance = function (fileUri, content) {
     var sessionAg = ModeManager.createSessionAggregationForEditor(fileUri,
-        content);
+            content);
     if (sessionAg == null) {
         var win = window.open("files/get/" + fileUri, "_blank");
         if (win) {
@@ -41,7 +41,7 @@ var createNewTabbedInstance = function (fileUri, content) {
     var auxArr = fileUri.split("/");
     var name = auxArr[auxArr.length - 1];
     var newTab = $("<li><a id=\"" + id + "\" class=\"editorTab\">" + name
-        + "</a></li>");
+            + "</a></li>");
     var newTabCloseCross = $("<span class=\"glyphicon glyphicon-remove\"></span>");
 
     newTab.attr('title', fileUri);
@@ -86,36 +86,36 @@ var mayCheckLanguageSyntax = function (fileUri) {
     var agSession = EditorManager.sessionsMap[fileUri];
     if (agSession == undefined || agSession == "undefined") {
         CommandApi
-            .echo("Please open the document you want to check before applying the command");
+                .echo("Please open the document you want to check before applying the command");
     } else {
         var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
-            .getCurrentFormat();
+                .getCurrentFormat();
 
         var checkLanguageUri = agSession.getCheckLanguageURI(currentFormat);
 
         if (checkLanguageUri != undefined && checkLanguageUri != null
-            && checkLanguageUri.length > 0) {
+                && checkLanguageUri.length > 0) {
 
             var content = agSession.getBaseSession().getValue();
 
             CommandApi.checkLanguage(content, currentFormat, checkLanguageUri,
-                fileUri, function (ts) {
-                    console.log("Checking syntax... " + ts);
-                    if (ts.status == "OK" || ts == "true") {
-                        console.log("Syntax is OK.");
-                        EditorManager
-                            .setAnnotations(eval('(' + "[]" + ')'));
+                    fileUri, function (ts) {
+                        console.log("Checking syntax... " + ts);
+                        if (ts.status == "OK" || ts == "true") {
+                            console.log("Syntax is OK.");
+                            EditorManager
+                                    .setAnnotations(eval('(' + "[]" + ')'));
 
-                        DescriptionInspector.onEditorCheckedLanguage();
+                            DescriptionInspector.onEditorCheckedLanguage();
 
-                        checkSyntaxFlag = true;
-                    } else {
-                        console.log(ts);
-                        EditorManager.setAnnotations(ts.annotations);
-                        checkSyntaxFlag = false;
-                    }
+                            checkSyntaxFlag = true;
+                        } else {
+                            console.log(ts);
+                            EditorManager.setAnnotations(ts.annotations);
+                            checkSyntaxFlag = false;
+                        }
 
-                });
+                    });
         }
     }
 };
@@ -140,30 +140,30 @@ var loadExistingTabbedInstance = function (fileUri, content) {
         initAceEditor();
 
         document.editor
-            .on(
-                "change",
-                function (changesDeltas) {
-                    if (checkerTimer)
-                        clearTimeout(checkerTimer);
+                .on(
+                        "change",
+                        function (changesDeltas) {
+                            if (checkerTimer)
+                                clearTimeout(checkerTimer);
 
-                    checkerTimer = setTimeout(
-                        function () {
-                            if (fileUri != "") {
+                            checkerTimer = setTimeout(
+                                    function () {
+                                        if (fileUri != "") {
 
-                                var content = EditorManager.sessionsMap[EditorManager.currentUri]
-                                    .getBaseSession()
-                                    .getValue();
-                                EditorManager.saveFile(
-                                    EditorManager.currentUri,
-                                    content);
-                            }
+                                            var content = EditorManager.sessionsMap[EditorManager.currentUri]
+                                                    .getBaseSession()
+                                                    .getValue();
+                                            EditorManager.saveFile(
+                                                    EditorManager.currentUri,
+                                                    content);
+                                        }
 
-                            mayCheckLanguageSyntax(EditorManager.currentUri);
-                            DescriptionInspector.editorContentToModel();
+                                        mayCheckLanguageSyntax(EditorManager.currentUri);
+                                        DescriptionInspector.editorContentToModel();
 
-                        }, 1000);
+                                    }, 1000);
 
-                });
+                        });
 
         DescriptionInspector.loaders.onInitAceEditor();
 
@@ -173,7 +173,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
 
     if (EditorManager.currentUri != null) {
         $(EditorManager.tabsMap[EditorManager.currentUri])
-            .removeClass("active");
+                .removeClass("active");
     }
 
     oldUri = EditorManager.currentUri;
@@ -183,8 +183,8 @@ var loadExistingTabbedInstance = function (fileUri, content) {
     $(EditorManager.tabsMap[EditorManager.currentUri]).addClass("active");
 
     document.editor
-        .setSession(EditorManager.sessionsMap[EditorManager.currentUri]
-            .getCurrentSession());
+            .setSession(EditorManager.sessionsMap[EditorManager.currentUri]
+                    .getCurrentSession());
 
     // Formats tabs
 
@@ -192,22 +192,22 @@ var loadExistingTabbedInstance = function (fileUri, content) {
     editorFormatsElement.empty();
     var count = 0;
     for (var key in EditorManager.sessionsMap[EditorManager.currentUri]
-        .getFormatsSessions()) {
+            .getFormatsSessions()) {
         drawNewFormatLiElement(key, EditorManager.currentUri,
-            editorFormatsElement);
+                editorFormatsElement);
         count++;
     }
 
     if (count <= 1 &&
-        (DescriptionInspector.isCurrentDescriptionFile() ||
-            !DescriptionInspector.existCurrentDescriptionFile())) {
+            (DescriptionInspector.isCurrentDescriptionFile() ||
+                    !DescriptionInspector.existCurrentDescriptionFile())) {
         $("#editorItself").removeClass("multiformat");
     } else {
         $("#editorItself").addClass("multiformat");
     }
 
     currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
-        .getCurrentFormat();
+            .getCurrentFormat();
     $("#editorFormats ." + currentFormat).addClass("active");
 
     // Operation buttons
@@ -238,8 +238,8 @@ var loadExistingTabbedInstance = function (fileUri, content) {
 
     fileUriOperation = EditorManager.getCurrentUri();
     opMap = ModeManager.getOperations(ModeManager
-        .calculateLanguageIdFromExt(ModeManager
-            .calculateExtFromFileUri(fileUri)));
+            .calculateModelIdFromExt(ModeManager
+                    .calculateExtFromFileUri(fileUri)));
 
     var ops_name_length = 0;
     var use_caret = false;
@@ -286,8 +286,8 @@ var loadExistingTabbedInstance = function (fileUri, content) {
                 } else {
                     use_caret = true;
                     caretLI = $('<li><a id="' + opMap[i].id
-                        + '" class="continue onlyOne">' + opMap[i].name
-                        + '</a></li>');
+                            + '" class="continue onlyOne">' + opMap[i].name
+                            + '</a></li>');
                     caretUL.append(caretLI);
                     operationArray.push(opMap[i]);
                     caretLI.click(function () {
@@ -308,12 +308,12 @@ var loadExistingTabbedInstance = function (fileUri, content) {
     }
 
     comMap = ModeManager.getCommands(ModeManager
-        .calculateLanguageIdFromExt(ModeManager
-            .calculateExtFromFileUri(fileUri)));
+            .calculateModelIdFromExt(ModeManager
+                    .calculateExtFromFileUri(fileUri)));
 
     oldCommands = ModeManager.getCommands(ModeManager
-        .calculateLanguageIdFromExt(ModeManager
-            .calculateExtFromFileUri(oldUri)));
+            .calculateModelIdFromExt(ModeManager
+                    .calculateExtFromFileUri(oldUri)));
     require(['gcli/index', 'demo/index'], function (gcli) {
         if (typeof oldCommands != 'undefined') {
             for (var i = 0; i < oldCommands.length; i++) {
@@ -353,7 +353,7 @@ var launchOperation = function (name) {
 
                 // console.log(operation);
                 if (_remoteExecution != undefined && _remoteExecution != null
-                    && eval('(' + _remoteExecution + ')')) {
+                        && eval('(' + _remoteExecution + ')')) {
                     CommandApi.doDocumentOperation(operation.id, operation.data, fileUriOperation, function (result) {
                         // console.log(result);
                         if (action != undefined && action != null) {
@@ -377,8 +377,8 @@ var launchOperation = function (name) {
             OperationMetrics.stop();
             OperationReport.timeOfOperations.push(OperationMetrics.getOperationMilliseconds());
             CommandApi.echo("An error occurred while performing the operation <b>"
-                + name
-                + "</b>. Make sure you have well defined this operation in the language's manifest.");
+                    + name
+                    + "</b>. Make sure you have well defined this operation in the language's manifest.");
             break;
         }
     }
@@ -387,7 +387,7 @@ var launchOperation = function (name) {
 
 var drawNewFormatLiElement = function (format, uri, editorFormatsElement) {
     var liElement = $("<li class='formatTab' ><a>" + format.toUpperCase()
-        + "</a></li>");
+            + "</a></li>");
     liElement.addClass(format);
     editorFormatsElement.append(liElement);
 
@@ -401,7 +401,7 @@ var drawNewFormatLiElement = function (format, uri, editorFormatsElement) {
             }
         } else {
             CommandApi.echo("<p style='color: red'>Can not convert to "
-                + format + " while errors exist.</p>");
+                    + format + " while errors exist.</p>");
         }
     });
 };
@@ -411,7 +411,7 @@ var updateChildrenKeyPath = function (node, newName, prevName) {
     node.visit(function (childNode) {
         //TODO: replace only once
         var originFileUri = WorkspaceManager.getSelectedWorkspace() + "/" + childNode.data.keyPath,
-            targetFileUri = WorkspaceManager.getSelectedWorkspace() + "/" + childNode.data.keyPath.replace(prevName, newName);
+                targetFileUri = WorkspaceManager.getSelectedWorkspace() + "/" + childNode.data.keyPath.replace(prevName, newName);
         // Update child tabsMap
         if (originFileUri in EditorManager.tabsMap) {
             EditorManager.tabsMap[targetFileUri] = EditorManager.tabsMap[originFileUri];
@@ -464,8 +464,8 @@ var EditorManager = {
         //		var loader = ModeManager.getInspectorLoader(ModeManager
         //		.calculateLanguageIdFromExt(ext));
         var loader = ModeManager.getInspectorLoader(ext)
-            , descriptionLoader = DescriptionInspector.loader
-            , editorInspector = $("#editorInspectorLoader");
+                , descriptionLoader = DescriptionInspector.loader
+                , editorInspector = $("#editorInspectorLoader");
 
         editorInspector.empty();
 
@@ -485,7 +485,7 @@ var EditorManager = {
         } else {
             // Default inspector content (REFACTOR?)
             editorInspector
-                .append("<span class='emptyMsg'>Nothing to show</span>");
+                    .append("<span class='emptyMsg'>Nothing to show</span>");
         }
 
     },
@@ -493,7 +493,7 @@ var EditorManager = {
     openFile: function (fileUri) {
 
         if (EditorManager.getCurrentUri() != fileUri
-            && getNodeByFileUri(fileUri) != undefined) {
+                && getNodeByFileUri(fileUri) != undefined) {
 
             saveCurrentSession();
 
@@ -503,7 +503,7 @@ var EditorManager = {
 
                 if (!exists) {
                     var tabbedInstance = createNewTabbedInstance(fileUri,
-                        content);
+                            content);
                     if (tabbedInstance == null) // The editor cannot hande this
                         // resource:
                         return;
@@ -517,13 +517,13 @@ var EditorManager = {
                     node.activate();
 
                 // Change editor theme
-                var languageId = ModeManager
-                    .calculateLanguageIdFromExt(ModeManager
-                        .calculateExtFromFileUri(fileUri));
+                var modelId = ModeManager
+                        .calculateModelIdFromExt(ModeManager
+                                .calculateExtFromFileUri(fileUri));
                 var editorThemeId;
-                var formats = ModeManager.languageModeMap[languageId].formats;
+                var formats = ModeManager.modelMap[modelId].formats;
                 var currentFormat = EditorManager.sessionsMap[fileUri]
-                    .getCurrentFormat();
+                        .getCurrentFormat();
                 // TODO: Refactor!
                 for (var f in formats) {
                     if (formats[f].format == currentFormat)
@@ -534,10 +534,10 @@ var EditorManager = {
 
                 // Inspector
                 EditorManager.loadInspector(ModeManager
-                    .calculateLanguageIdFromExt(ModeManager
-                        .calculateExtFromFileUri(fileUri)),
-                    EditorManager.sessionsMap[EditorManager.currentUri]
-                    .getCurrentFormat());
+                        .calculateModelIdFromExt(ModeManager
+                                .calculateExtFromFileUri(fileUri)),
+                        EditorManager.sessionsMap[EditorManager.currentUri]
+                        .getCurrentFormat());
 
                 if (DescriptionInspector) {
                     if (!DescriptionInspector.existBinding())
@@ -548,9 +548,9 @@ var EditorManager = {
                     document.editor.focus();
                 }
             });
-
+            
         }
-
+        
     },
     // FM
     closeFile: function (fileUri) {
@@ -633,42 +633,42 @@ var EditorManager = {
         //TODO: comprobar si el cambio de formato se realiza sobre/desde un un DescriptionFullView
 
         var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
-            .getCurrentFormat();
+                .getCurrentFormat();
         var actualContent = EditorManager.sessionsMap[EditorManager.currentUri]
-            .getCurrentSession().getValue();
+                .getCurrentSession().getValue();
         var converterUri = ModeManager.getConverter(ModeManager
-            .calculateLanguageIdFromExt(ModeManager
-                .calculateExtFromFileUri(EditorManager.currentUri)));
+                .calculateModelIdFromExt(ModeManager
+                        .calculateExtFromFileUri(EditorManager.currentUri)));
 
         if (desiredFormat in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() &&
-            currentFormat !== desiredFormat) {
+                currentFormat !== desiredFormat) {
 
             CommandApi.callConverter(
-                currentFormat,
-                desiredFormat,
-                fileUri,
-                actualContent,
-                converterUri,
-                function (result) {
-                    var appResponse = result;
-                    console.log("Converter resp:");
-                    console.log(appResponse);
-                    if (appResponse.data == "ERROR!")
-                        CommandApi.echo(
-                            "<p style='color: red'>" +
-                            "Cannot change to " + desiredFormat + " format, the file contains fails." +
-                            "</p>");
-                    else {
-                        EditorManager.sessionsMap[EditorManager.currentUri]
-                            .setCurrentFormat(desiredFormat);
-                        document.editor
-                            .setSession(EditorManager.sessionsMap[EditorManager.currentUri]
-                                .getCurrentSession());
-                        EditorManager.sessionsMap[EditorManager.currentUri]
-                            .getCurrentSession().setValue(
-                            appResponse.data);
-                    }
-                });
+                    currentFormat,
+                    desiredFormat,
+                    fileUri,
+                    actualContent,
+                    converterUri,
+                    function (result) {
+                        var appResponse = result;
+                        console.log("Converter resp:");
+                        console.log(appResponse);
+                        if (appResponse.data == "ERROR!")
+                            CommandApi.echo(
+                                    "<p style='color: red'>" +
+                                    "Cannot change to " + desiredFormat + " format, the file contains fails." +
+                                    "</p>");
+                        else {
+                            EditorManager.sessionsMap[EditorManager.currentUri]
+                                    .setCurrentFormat(desiredFormat);
+                            document.editor
+                                    .setSession(EditorManager.sessionsMap[EditorManager.currentUri]
+                                            .getCurrentSession());
+                            EditorManager.sessionsMap[EditorManager.currentUri]
+                                    .getCurrentSession().setValue(
+                                    appResponse.data);
+                        }
+                    });
         }
 
     },
@@ -686,12 +686,12 @@ var EditorManager = {
     },
     setAnnotationsToDocument: function (fileUri, annotations) {
         EditorManager.sessionsMap[fileUri].getBaseSession().setAnnotations(
-            annotations);
+                annotations);
     },
     // Felipe
     currentDocumentHasErrorAnnotation: function () {
         var ret = false
-            , annotations = document.editor.getSession().getAnnotations();
+                , annotations = document.editor.getSession().getAnnotations();
         for (var i = 0; i < annotations.length; i++) {
             if (annotations[i].type == "error") {
                 ret = true;
@@ -716,15 +716,15 @@ var EditorManager = {
                 var keyPath = nodeUri + "/" + fileName + languageExtension;
                 if (languageExtension == ".sedl") {
                     newChild = buildChild(fileName + languageExtension, false,
-                        "sedl_icon", keyPath);
+                            "sedl_icon", keyPath);
                 } else if (languageExtension == ".iagreetemplate"
-                    || languageExtension == ".iagreeoffer"
-                    || languageExtension == ".ttl") {
+                        || languageExtension == ".iagreeoffer"
+                        || languageExtension == ".ttl") {
                     newChild = buildChild(fileName + languageExtension, false,
-                        "binary_file_icon", keyPath);
+                            "binary_file_icon", keyPath);
                 } else {
                     newChild = buildChild(fileName + languageExtension, false,
-                        "file_icon", keyPath);
+                            "file_icon", keyPath);
                 }
 
                 currentSelectedNode.getParent().addChild(newChild);
@@ -785,7 +785,7 @@ var EditorManager = {
     moveNode: function (originFileUri, targetFileUri, copy) {
         moveNodeAux(originFileUri, targetFileUri, false, true, copy);
     }
-
+    
 };
 
 // File Management auxiliary functions
@@ -799,14 +799,14 @@ var calculateNodeNameFromUri = function (uri) {
 var trimFirstFromNodeUri = function (uri) {
     var splittedUri = uri.split("/");
     console.log("trimFirstFromNodeUri: "
-        + uri.replace(splittedUri[0] + "/", ""));
+            + uri.replace(splittedUri[0] + "/", ""));
     return uri.replace(splittedUri[0] + "/", "");
 };
 
 var trimLastFromNodeUri = function (uri) {
     var splittedUri = uri.split("/");
     console.log("trimLastFromNodeUri: "
-        + uri.replace("/" + splittedUri[splittedUri.length - 1], ""));
+            + uri.replace("/" + splittedUri[splittedUri.length - 1], ""));
     return uri.replace("/" + splittedUri[splittedUri.length - 1], "");
 };
 
@@ -819,7 +819,7 @@ var moveNodeAux = function (originFileUri, targetFileUri, justRename, firstRecur
     // Calculate tree nodes
     var targetDirForNode = trimLastFromNodeUri(targetFileUri);
     var originNode = getNodeByFileUri(originFileUri);
-    
+
     if (getNodeByFileUri(targetFileUri)) {
         if (!justRename) CommandApi.echo("<p style='color:red'>Project Tree: Element already exists.</p>");
         return false;
@@ -828,10 +828,10 @@ var moveNodeAux = function (originFileUri, targetFileUri, justRename, firstRecur
     // Recurs. "move" childrens
     for (potentialUri in EditorManager.tabsMap) {
         if (potentialUri.indexOf(originFileUri) != -1
-            && potentialUri != originFileUri) {
+                && potentialUri != originFileUri) {
             var childName = calculateNodeNameFromUri(potentialUri);
             moveNodeAux(potentialUri, targetFileUri + "/" + childName,
-                justRename, false, copy);
+                    justRename, false, copy);
         }
     }
 
@@ -919,8 +919,8 @@ var moveNodeAux = function (originFileUri, targetFileUri, justRename, firstRecur
                 });
         else if (originNode.data.isFolder)
             FileApi.moveDirectory(originFileUri, targetFileUri, copy,
-                function () {
-                });
+                    function () {
+                    });
         else
             FileApi.moveFile(originFileUri, targetDirForNode, copy, function () {
             });
@@ -1046,6 +1046,6 @@ SessionAggregation.prototype.getCheckLanguageURI = function (formatKey) {
 };
 
 SessionAggregation.prototype.setCheckLanguageURI = function (formatKey,
-    checkLanguageURI) {
+        checkLanguageURI) {
     this.checkLanguageURI[formatKey] = checkLanguageURI;
 };

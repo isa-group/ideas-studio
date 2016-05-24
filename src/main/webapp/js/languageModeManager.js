@@ -1,26 +1,35 @@
 
-var CONVERTER_URI = "/language/convert";
-var CHECK_LANGUAGE_URI = "/language/format/$format/checkLanguage";
-var EXEC_OP_URI = "/language/operation/$opId/execute";
+var DEPRECATED_CONVERTER_URI = "/language/convert";
+var DEPRECATED_CHECK_LANGUAGE_URI = "/language/format/$format/checkLanguage";
+var DEPRECATED_EXEC_OP_URI = "/language/operation/$opId/execute";
 
-var setupLanguages = function (configuration) {
+var CONVERTER_URI = "/api/v$version/models/$modelId/syntaxes/$syntaxId/translate";
+var CHECK_LANGUAGE_URI = "api/v$version/models/$modelId/syntaxes/$syntaxId/check";
+var EXEC_OP_URI = "/api/v$version/models/$modelId/operations/$operationId";
+
+var setupModels = function (configuration) {
     for (var moduleId in configuration.modules) {
         var uri = configuration.modules[moduleId];
         ModeManager.idUriMap[moduleId] = uri;
-        configureModule(moduleId, uri);
+        console.log("Setting up model: " + moduleId + " (" + configuration.modules[moduleId] + ")");
+        configureModel(uri);
     }
 };
 
-var configureModule = function (moduleId, uri) {
+var configureModel = function (uri) {
     $.ajax(uri + "/language", {
-        "type": "GET",
-        "success": function (languageManifest) {
-            console.log("Setting up module: " + moduleId);
-            ModeManager.registerNewMode(uri, languageManifest);
-            // TODO Cargar lenguajes aquí (quitar el SEDLSetup) y rellenar "ModeManager.idUriMap"!!
+        "type": "get",
+        "success": function (moduleManifest) {
+            moduleManifest.apiVersion = 1;
+            ModeManager.registerNewModule(uri, moduleManifest);
         },
         "error": function (result) {
-            console.error("Could not load module from " + uri + ": " + result.statusText);
+            $.ajax(uri + "/manifest", {
+                "type": "get",
+                "success": function (moduleManifest) {
+                    ModeManager.registerNewModule(uri, moduleManifest);
+                }
+            });
         },
         "async": true,
     });
@@ -34,7 +43,7 @@ var studioConfiguration;
 var ModeManager = {
     idUriMap: {},
     extIdMap: {}, // For performance
-    languageModeMap: {},
+    modelMap: {},
     converterMap: {},
     operationsMap: {},
     commandsMap: {},
@@ -46,7 +55,7 @@ var ModeManager = {
             "type": "get",
             "success": function (configuration) {
                 studioConfiguration = configuration;
-                setupLanguages(configuration);
+                setupModels(configuration);
             },
             "error": function (result) {
                 console.error("Could not load app configuration: " + result.statusText);
@@ -54,73 +63,93 @@ var ModeManager = {
             "async": true,
         });
     },
-    registerNewMode: function (uri, languageMode) {
-
-        var languageId = languageMode.id;
-        if (languageId in ModeManager.languageModeMap)
-            console.error("Language with ID " + languageId + " already registered. Ignoring...");
+    registerNewModule: function (uri, moduleManifest) {
+        var moduleId = moduleManifest.id;
+        var apiVersion = parseInt(moduleManifest.apiVersion);
+        if (moduleId in ModeManager.modelMap)
+            console.error("Model with ID " + moduleId + " already registered. Ignoring...");
         else {
-            ModeManager.idUriMap[languageId] = uri;
-            ModeManager.languageModeMap[languageId] = languageMode;
-            ModeManager.operationsMap[languageId] = languageMode.operations;
-            ModeManager.inspectorLoadersMap[languageId] = eval('(' + languageMode.inspectorLoader + ')');				// Eval is necessary as the received type is String.
-            ModeManager.extIdMap[languageMode.extension] = languageId;
-            ModeManager.converterMap[languageId] = ModeManager.idUriMap[languageMode.id] + CONVERTER_URI;
+            if (apiVersion <= 1) {
+                ModeManager.idUriMap[moduleId] = uri;
+                ModeManager.modelMap[moduleId] = moduleManifest;
+                ModeManager.operationsMap[moduleId] = moduleManifest.operations;
+                ModeManager.inspectorLoadersMap[moduleId] = eval('(' + moduleManifest.inspectorLoader + ')'); // Eval is necessary as the received type is String.
+                ModeManager.extIdMap[moduleManifest.extension] = moduleId;
+                ModeManager.converterMap[moduleId] = ModeManager.idUriMap[moduleManifest.id] + DEPRECATED_CONVERTER_URI;
 
-            if (!(languageId in ModeManager.formatsBiMap))
-                ModeManager.formatsBiMap[languageId] = {};
+                if (!(moduleId in ModeManager.formatsBiMap))
+                    ModeManager.formatsBiMap[moduleId] = {};
 
-            if (typeof languageMode.commands !== 'undefined' && languageMode.commands !== null)
-                ModeManager.commandsMap[languageId] = languageMode.commands;
+                for (var i = 0; i < moduleManifest.formats.length; i++) {
+                    var format = moduleManifest.formats[i];
+                    ModeManager.formatsBiMap[moduleId][format.format] = format;
+                }
+            } else {
+                for (var key in moduleManifest.models) {
+                    var model = moduleManifest.models[key];
+                    var modelId = model.id;
+                    model.module = moduleManifest.id;
+                    model.apiVersion = apiVersion; // Reference to the parent module
+                    ModeManager.idUriMap[modelId] = uri;
+                    ModeManager.modelMap[modelId] = model;
+                    ModeManager.operationsMap[modelId] = model.operations;
+                    ModeManager.extIdMap[model.extension] = modelId;
+                    ModeManager.converterMap[modelId] = ModeManager.idUriMap[modelId] + CONVERTER_URI.replace("$version", model.apiVersion)
+                            .replace("$modelId", modelId);
 
+                    if (!(modelId in ModeManager.formatsBiMap))
+                        ModeManager.formatsBiMap[modelId] = {};
 
-
-            for (var i = 0; i < languageMode.formats.length; i++) {
-                var format = languageMode.formats[i];
-                ModeManager.formatsBiMap[languageId][format.format] = format;
+                    for (var i = 0; i < model.syntaxes.length; i++) {
+                        var syntax = model.syntaxes[i];
+                        ModeManager.formatsBiMap[modelId][syntax.id] = syntax;
+                    }
+                }
             }
 
+            if (typeof moduleManifest.commands !== 'undefined' && moduleManifest.commands !== null)
+                ModeManager.commandsMap[moduleId] = moduleManifest.commands;
         }
 
     },
-    getInspectorLoader: function (languageId) {
-        return ModeManager.inspectorLoadersMap[languageId];
+    getInspectorLoader: function (modelId) {
+        return ModeManager.inspectorLoadersMap[modelId];
     },
-    getCheckLanguageURI: function (fileUri, format) {
+    getCheckModelURI: function (fileUri, format) {
         var ext = ModeManager.calculateExtFromFileUri(fileUri);
 
         // TODO
         if (ext == undefined)
             ext = "txt";
 
-        var languageId = ModeManager.calculateLanguageIdFromExt(ext);
+        var modelId = ModeManager.calculateModelIdFromExt(ext);
 
 //		return ModeManager.formatsBiMap[ext][format];
-        return ModeManager.formatsBiMap[languageId][format];
+        return ModeManager.formatsBiMap[modelId][format];
     },
-    getMode: function (languageId) {
-        return ModeManager.languageModeMap[languageId];
+    getMode: function (modelId) {
+        return ModeManager.modelMap[modelId];
     },
     getModes: function () {
-        return ModeManager.languageModeMap;
+        return ModeManager.modelMap;
     },
-    getConverter: function (languageId) {
-        return ModeManager.converterMap[languageId];
+    getConverter: function (modelId) {
+        return ModeManager.converterMap[modelId];
     },
-    getOperations: function (languageId) {
-        return ModeManager.operationsMap[languageId];
+    getOperations: function (modelId) {
+        return ModeManager.operationsMap[modelId];
     },
-    getCommands: function (languageId) {
-        return ModeManager.commandsMap[languageId];
+    getCommands: function (modelId) {
+        return ModeManager.commandsMap[modelId];
     },
-    getBaseUri: function (languageId) {
-        return ModeManager.idUriMap[languageId];
+    getBaseUri: function (modelId) {
+        return ModeManager.idUriMap[modelId];
     },
-    getExtension: function (languageId, optionalArgForExt) {		// TODO: optionalArgForExt is for the future when regexp in exensions are supported
+    getExtension: function (modelId, optionalArgForExt) {		// TODO: optionalArgForExt is for the future when regexp in exensions are supported
         var ext = "";
 
         for (potentialExt in ModeManager.extIdMap) {
-            if (ModeManager.extIdMap[potentialExt] == languageId) {
+            if (ModeManager.extIdMap[potentialExt] == modelId) {
                 ext = "." + potentialExt;
                 break;
             }
@@ -133,25 +162,44 @@ var ModeManager = {
 
         var ext = ModeManager.calculateExtFromFileUri(uri);
 
-        if (ext == undefined)
+        if (ext === undefined)
             ext = "txt"; 	// Default
 
-        var languageId = ModeManager.calculateLanguageIdFromExt(ext);
+        var modelId = ModeManager.calculateModelIdFromExt(ext);
 
-        if (languageId in ModeManager.languageModeMap) {
+        if (modelId in ModeManager.modelMap) {
             var sessionAg = new SessionAggregation();
-            var allFormats = ModeManager.languageModeMap[languageId].formats;
-            for (var i = 0; i < allFormats.length; i++) {
-                var f = allFormats[i];
-                if (i == 0) {
-                    sessionAg.setCurrentFormat(f.format);
-                    sessionAg.setBaseSession(f.format);
-                    sessionAg.setFormatSession(f.format, ace.createEditSession(content, f.editorModeId));
-                } else
-                    sessionAg.setFormatSession(f.format, ace.createEditSession("", f.editorModeId));
+            var model = ModeManager.modelMap[modelId];
+            if (model.apiVersion <= 1) {
+                var formats = model.formats;
+                for (var i = 0; i < formats.length; i++) {
+                    var f = formats[i];
+                    if (i == 0) {
+                        sessionAg.setCurrentFormat(f.format);
+                        sessionAg.setBaseSession(f.format);
+                        sessionAg.setFormatSession(f.format, ace.createEditSession(content, f.editorModeId));
+                    } else
+                        sessionAg.setFormatSession(f.format, ace.createEditSession("", f.editorModeId));
 
-                if (eval(f.checkLanguage))
-                    sessionAg.setCheckLanguageURI(f.format, ModeManager.idUriMap[languageId] + CHECK_LANGUAGE_URI.replace("$format", f.format));
+                    if (eval(f.checkLanguage))
+                        sessionAg.setCheckLanguageURI(f.format, ModeManager.idUriMap[modelId] + DEPRECATED_CHECK_LANGUAGE_URI.replace("$format", f.format));
+                }
+            } else {
+                var syntaxes = model.syntaxes;
+                for (var i = 0; i < syntaxes.length; i++) {
+                    var s = syntaxes[i];
+                    if (i === 0) {
+                        sessionAg.setCurrentFormat(s.id);
+                        sessionAg.setBaseSession(s.id);
+                        sessionAg.setFormatSession(s.id, ace.createEditSession(content, s.editorModeId));
+                    } else
+                        sessionAg.setFormatSession(s.id, ace.createEditSession("", s.editorModeId));
+
+                    if (eval(s.syntaxCheck))
+                        sessionAg.setCheckLanguageURI(s.id, ModeManager.idUriMap[modelId] + CHECK_LANGUAGE_URI.replace("$version", model.apiVersion)
+                                .replace("$modelId", model.id)
+                                .replace("$syntaxId", s.id));
+                }
             }
 
             return sessionAg;
@@ -163,7 +211,7 @@ var ModeManager = {
     },
     // Utils
 
-    calculateLanguageIdFromExt: function (ext) {
+    calculateModelIdFromExt: function (ext) {
         return ModeManager.extIdMap[ext];
     },
     calculateExtFromFileUri: function (fileUri) {
