@@ -2017,7 +2017,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     margin-right: 10px;
 }
 #shareDocumentModal {
-    display: block;
+    display: none;
     z-index: 10000;
     height: 500px;
     width: 500px;
@@ -2037,6 +2037,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 #mailContent {
     height: 275px;
     position: absolute;
+    resize: none;
 }
 .spn {
     margin-left: 15px;

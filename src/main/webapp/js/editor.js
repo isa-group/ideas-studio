@@ -127,7 +127,6 @@ var intializeEditorWindow = function () {
     $("#editorMaximize").click(maximize);
     $("#editorToggleInspector").click(toggleInspector);
     //share Document
-    $("#shareDocumentModal").hide();
     $("#shareDocument").click(function () {
         $("#shareDocumentModal").show();
         $("#mailContent").val(EditorManager.getCurrentEditorContent());
