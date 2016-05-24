@@ -5,11 +5,15 @@
                 "search": "exemplar/ExperimentsSearch.png"
         },
 	"languages": {
-
             "sedl-language": "/ideas-sedl-language",
             "ideas-plaintext-language": "/ideas-plaintext-language",
             "ideas-csv-language": "/ideas-csv-language",
-            "R-language": "/ideas-R-language"
+            "R-language": "/ideas-R-language",         
+            "ideas-html-language": "/ideas-html-language",            
+            "ideas-json-language": "/ideas-json-language",
+            "ideas-yaml-language": "/ideas-yaml-language",
+            "ideas-language-angular": "/ideas-language-angular",
+            "ideas-language-angular-controller": "/ideas-language-angular-controller"
 	},
         "configurationFiles":{
           "application":"classpath*:application.properties",

@@ -1,6 +1,7 @@
 package es.us.isa.ideas.test.app.pageobject.editor;
 
 import es.us.isa.ideas.test.app.pageobject.PageObject;
+import es.us.isa.ideas.test.app.pageobject.login.RegisterPage;
 import es.us.isa.ideas.test.app.utils.FileType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,7 +9,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -97,8 +97,14 @@ public class EditorPage extends PageObject<EditorPage> {
     @FindBy(css = "#tagsInput > textarea")
     WebElement modalWSTagsField;
 
+    @FindBy(id = "zipFile")
+    WebElement modalWSZipFile;
+
     @FindBy(css = "#appGenericModal > div > div > div.modal-body > div:nth-child(6) > div.checkbox > label > input")
     WebElement modalWSInitZipCheckbox;
+    
+    @FindBy(css = "#appGenericModal > div > div > div.modal-body > div:nth-child(6) > div.checkbox > label > input")
+    WebElement wsModalZipCheckbox;
 
     @FindBy(css = "#modalCreationField > input")
     WebElement modalProjOrDirNameField;
@@ -115,14 +121,16 @@ public class EditorPage extends PageObject<EditorPage> {
 
     @FindBy(linkText = "Create Project")
     WebElement projCreateProjectAnchor;
-    
-    // FILES
 
+    // FILES
     @FindBy(linkText = "Create Text file")
     WebElement projCreateTxtFileAnchor;
 
     @FindBy(linkText = "Create Angular file")
     WebElement projCreateAngFileAnchor;
+
+    @FindBy(linkText = "Create Angular Ctl file")
+    WebElement projCreateAngCtlFileAnchor;
 
     @FindBy(linkText = "Create JSON file")
     WebElement projCreateJsonFileAnchor;
@@ -141,7 +149,7 @@ public class EditorPage extends PageObject<EditorPage> {
 
     @FindBy(linkText = "Upload File")
     WebElement projUploadFileAnchor;
-    
+
     @FindBy(linkText = "Create Directory")
     WebElement projCreateDirectoryAnchor;
 
@@ -149,8 +157,23 @@ public class EditorPage extends PageObject<EditorPage> {
     @FindBy(id = "myMenu")
     WebElement contextMenuWrapper;
 
-    @FindBy(linkText = "Edit")
+    @FindBy(css = "#myMenu > .edit > a")
     WebElement contextMenuEditAnchor;
+
+    @FindBy(css = "#myMenu > .cut > a")
+    WebElement contextMenuCutAnchor;
+
+    @FindBy(css = "#myMenu > .copy > a")
+    WebElement contextMenuCopyAnchor;
+
+    @FindBy(css = "#myMenu > .paste > a")
+    WebElement contextMenuPasteAnchor;
+
+    @FindBy(css = "#myMenu > .delete > a")
+    WebElement contextMenuDeleteAnchor;
+
+    @FindBy(css = "#myMenu > .upload > a")
+    WebElement contextMenuUploadAnchor;
 
     @FindBy(css = "input#editNode")
     WebElement contextMenuEditField;
@@ -158,11 +181,29 @@ public class EditorPage extends PageObject<EditorPage> {
     // CONSOLE
     @FindBy(css = "#gcli-root input.gcli-in-input")
     WebElement console;
-    
-    // TAB
-    
+
+    // EDITOR TAB
+    @FindBy(css = "#editorTabs")
+    WebElement editorTabContainer;
+
     @FindBy(css = "#editorTabs > li.active")
     WebElement tabActivatedElement;
+
+    // MODAL
+    @FindBy(id = "appGenericError")
+    WebElement modalError;
+
+    @FindBy(css = "#appGenericError .modal-title")
+    WebElement modalErrorTitle;
+
+    @FindBy(css = "#appGenericError .modal-body")
+    WebElement modalErrorContent;
+
+    @FindBy(css = "#appGenericError > div > div > div.modal-footer > a")
+    WebElement modalErrorBtn;
+
+    @FindBy(css = ".modal-backdrop")
+    WebElement modalBackground;
 
     static final Logger LOG = Logger.getLogger(EditorPage.class.getName());
 
@@ -203,7 +244,17 @@ public class EditorPage extends PageObject<EditorPage> {
     }
 
     public EditorPage clickOnWorkspaceAddButton() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
         clickOnClickableElement(wsAddButton);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
@@ -250,7 +301,24 @@ public class EditorPage extends PageObject<EditorPage> {
 
     // click - modal
     public EditorPage clickOnModalContinueButton() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
         clickOnNotClickableElement(modalContinueButton);
+
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnModalErrorContinueButton() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        clickOnNotClickableElement(modalErrorBtn);
+
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
@@ -260,7 +328,17 @@ public class EditorPage extends PageObject<EditorPage> {
     }
 
     public EditorPage clickOnMenuTogglerButton() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
         clickOnNotClickableElement(wsMenuTogglerButton);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
@@ -281,7 +359,11 @@ public class EditorPage extends PageObject<EditorPage> {
         // Create a new switch case for future file types.
         switch (fileType) {
             case ANGULAR:
-                page = clickOnCreateTxtFileAnchor();
+                page = clickOnCreateAngFileAnchor();
+                break;
+
+            case ANGULAR_CONTROLLER:
+                page = clickOnCreateAngCtlFileAnchor();
                 break;
 
             case PLAINTEXT:
@@ -319,6 +401,11 @@ public class EditorPage extends PageObject<EditorPage> {
 
     public EditorPage clickOnCreateAngFileAnchor() {
         clickOnClickableElement(projCreateAngFileAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnCreateAngCtlFileAnchor() {
+        clickOnClickableElement(projCreateAngCtlFileAnchor);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
@@ -362,106 +449,174 @@ public class EditorPage extends PageObject<EditorPage> {
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
+    public EditorPage clickOnContextMenuCutAnchor() {
+        clickOnClickableElement(contextMenuCutAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnContextMenuCopyAnchor() {
+        clickOnClickableElement(contextMenuCopyAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnContextMenuPasteAnchor() {
+        clickOnClickableElement(contextMenuPasteAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnContextMenuUploadAnchor() {
+        clickOnClickableElement(contextMenuUploadAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnContextMenuDeleteAnchor() {
+        clickOnClickableElement(contextMenuDeleteAnchor);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage clickOnWSModalZipCheckbox() {
+        clickOnClickableElement(wsModalZipCheckbox);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
     // sendKeys - workspace
     public EditorPage typeWorkspaceName(CharSequence... wsName) {
-        sendKeysWithWait(modalWSNameField, wsName);
+        modalWSNameField.clear();
+        modalWSNameField.sendKeys(wsName);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
     public EditorPage typeWorkspaceDescription(CharSequence... wsDescription) {
-        sendKeysWithWait(modalWSDescriptionField, wsDescription);
+        modalWSDescriptionField.clear();
+        modalWSDescriptionField.sendKeys(wsDescription);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
     public EditorPage typeWorkspaceTags(CharSequence... wsTags) {
-        sendKeysWithWait(modalWSTagsField, wsTags);
+        modalWSTagsField.clear();
+        modalWSTagsField.sendKeys(wsTags);
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public EditorPage typeWorkspaceModalZipFilePath(CharSequence... zipFilePath) {
+        modalWSZipFile.clear();
+        modalWSZipFile.sendKeys(zipFilePath);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
     public EditorPage typeProjectName(CharSequence... projName) {
-        sendKeysWithWait(modalProjOrDirNameField, projName);
+        modalProjOrDirNameField.clear();
+        modalProjOrDirNameField.sendKeys(projName);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
     public EditorPage typeDirectoryName(CharSequence... dirName) {
-        sendKeysWithWait(modalProjOrDirNameField, dirName);
+        modalProjOrDirNameField.clear();
+        modalProjOrDirNameField.sendKeys(dirName);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
     public EditorPage typeFileName(CharSequence... fileName) {
-        sendKeysWithWait(modalFileNameField, fileName);
+        modalFileNameField.clear();
+        modalFileNameField.sendKeys(fileName);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
     public EditorPage typeContextMenuEditField(CharSequence... name) {
-        sendKeysWithWait(contextMenuEditField, name);
+        contextMenuEditField.clear();
+        contextMenuEditField.sendKeys(name);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
     public EditorPage executeCommand(CharSequence... cmds) {
-        sendKeysWithWait(console, cmds);
+        console.clear();
+        console.sendKeys(cmds);
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
 
     // others
     public String getProjCurrentWSText() {
-        getWebDriverWait().until(ExpectedConditions.visibilityOf(projCurrentWSText));
         return projCurrentWSText.getText();
     }
 
     public String getWorkspaceDemoCardTitle() {
-        getWebDriverWait().until(ExpectedConditions.visibilityOf(wsDemoCardTitle));
         return wsDemoCardTitle.getText();
     }
 
     public String getWorkspacePublicDemoCardTitle() {
-        getWebDriverWait().until(ExpectedConditions.visibilityOf(wsPublicDemoCardTitle));
         return wsPublicDemoCardTitle.getText();
     }
 
     public String getWorkspaceCardTitle() {
-        getWebDriverWait().until(ExpectedConditions.visibilityOf(wsCardTitle));
         return wsCardTitle.getText();
     }
 
     public EditorPage consoleEchoCommand(String msg) {
-        getJs().executeScript("CommandApi.echo('" + msg + "');");
+
+        EditorPage result = null;
+        WebElement lastElement = PageObject.getWebDriver().findElement(By.id("appFooter"));
+
+        if (lastElement != null) {
+            getJs().executeScript("CommandApi.echo('" + msg + "');");
+            result = PageFactory.initElements(getWebDriver(), EditorPage.class);
+        }
+
         try {
-            Thread.sleep(1500);
+            Thread.sleep(1000); // animation
         } catch (InterruptedException ex) {
             Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return PageFactory.initElements(getWebDriver(), EditorPage.class);
 
+        return result;
+
+    }
+    
+    public static boolean isConsoleLastMessageError(String msg) {
+        
+        Boolean ret = false;
+        Object found = (Object) getJs().executeScript("return $('#gcli-root > div > div > div > p').last().text().indexOf('" + msg + "') !== 0;");
+
+        if (found != null) {
+            ret = true;
+        }
+        return ret;
+        
     }
 
     public EditorPage expandAllDynatreeNodes() {
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException ex) {
             Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        getJs().executeScript(""
-            + "var ret=false;"
-            + "try {"
-            + "  jQuery('#projectsTree').dynatree('getRoot').visit(function(node){"
-            + "    node.expand(true);"
-            + "  });"
-            + "  ret = true;"
-            + "} catch (err) {"
-            + "  ret=false;"
-            + "}"
-            + "return ret;");
+        EditorPage result = null;
+        WebElement lastElement = PageObject.getWebDriver().findElement(By.id("appFooter"));
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+        if (lastElement != null) {
+            getJs().executeScript(""
+                + "var ret=false;"
+                + "try {"
+                + "  jQuery('#projectsTree').dynatree('getRoot').visit(function(node){"
+                + "    node.expand(true);"
+                + "  });"
+                + "  ret = true;"
+                + "} catch (err) {"
+                + "  ret=false;"
+                + "}"
+                + "return ret;");
+
+            try {
+                Thread.sleep(1000); // animation
+            } catch (InterruptedException ex) {
+                Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            result = PageFactory.initElements(getWebDriver(), EditorPage.class);
         }
 
-        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+        return result;
 
     }
 
@@ -495,49 +650,67 @@ public class EditorPage extends PageObject<EditorPage> {
 
     public EditorPage aceEditorContent(String content) {
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        getJs().executeScript(""
-            + "var ret = false;"
-            + "if (document.editor) {"
-            + "  document.editor.session.setValue('" + content + "');"
-            + "  ret = true;"
-            + "}"
-            + "return ret;");
+        EditorPage result = null;
 
         try {
-            Thread.sleep(1500);
+            Thread.sleep(2000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+        if (PageObject.getWebDriver().findElement(By.id("editor")) != null) {
+            getJs().executeScript(""
+                + "var ret = false;"
+                + "if (document.editor) {"
+                + "  document.editor.session.setValue('" + content.replaceAll("\n", "\\\\n").replaceAll("\"", "\\\"") + "');"
+                + "  ret = true;"
+                + "}"
+                + "return ret;");
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(EditorPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            result = PageFactory.initElements(getWebDriver(), EditorPage.class);
+        }
+
+        return result;
 
     }
-    
+
     /**
      * This method searches the file locator text and compares if it is equals
      * to the current activated file tab.
-     * @param fileLocator
-     * @return 
+     *
+     * @param element
+     * @return
      */
-    public Boolean isFileTabActivatedByLocator(By fileLocator) {
-        
+    public Boolean isFileTabActivatedByLocator(WebElement element) {
+
         try {
-            Thread.sleep(1000); // animation
+            Thread.sleep(5000);
         } catch (InterruptedException ex) {
-            Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        PageObject.getWebDriverWait().until(ExpectedConditions.visibilityOfElementLocated(fileLocator));
-        String fileName = PageObject.getWebDriver().findElement(fileLocator).getText();
-        
+        String fileName = element.getText();
+
         return tabActivatedElement.getText().equals(fileName);
-        
+
     }
 
+    public void closeFileByName(String fileName) {
+
+        WebElement element = PageObject.getWebDriver().findElement(By.cssSelector("#editorTabsContainer > ul > li"));
+
+        if (element != null) {
+            // Closes all files with the fileName and not activated
+            PageObject.getJs().executeScript(
+                "jQuery('#editorTabsContainer > ul > li').each(function() {"
+                + "if(jQuery(this).text().indexOf('" + fileName + "') !== -1) "
+                + "jQuery(this).not('.active').find('span').click()})"
+            );
+        }
+    }
 }

@@ -4,138 +4,142 @@ var operationArray = [];
 var fileUriOperation = "";
 var opMap = "";
 
-var saveCurrentSession = function() {
-	if (document.editor != null
-			&& (EditorManager.currentUri in EditorManager.sessionsMap)) {
-		saveSession(EditorManager.currentUri);
-	}
+var saveCurrentSession = function () {
+    if (document.editor != null
+        && (EditorManager.currentUri in EditorManager.sessionsMap)) {
+        saveSession(EditorManager.currentUri);
+    }
 };
 
-var saveSession = function(uri, callback) {
-	if (document.editor != null) {
-		// TODO!!!
-		FileApi.saveFileContents(uri, EditorManager.sessionsMap[uri]
-				.getBaseSession().getValue(), function() {
-			if (callback != null)
-				callback();
-		});
-	}
+var saveSession = function (uri, callback) {
+    if (document.editor != null) {
+        // TODO!!!
+        FileApi.saveFileContents(uri, EditorManager.sessionsMap[uri]
+            .getBaseSession().getValue(), function () {
+            if (callback != null)
+                callback();
+        });
+    }
 };
 
-var createNewTabbedInstance = function(fileUri, content) {
-	var sessionAg = ModeManager.createSessionAggregationForEditor(fileUri,
-			content);
-	if (sessionAg == null) {
-		var win = window.open("files/get/" + fileUri, "_blank");
-		if (win) {
-			// Browser has allowed it to be opened
-			win.focus();
-		} else {
-			// Broswer has blocked it
-			alert('Please allow popups for this site');
-		}
-		return null;
-	}
+var createNewTabbedInstance = function (fileUri, content) {
+    var sessionAg = ModeManager.createSessionAggregationForEditor(fileUri,
+        content);
+    if (sessionAg == null) {
+        var win = window.open("files/get/" + fileUri, "_blank");
+        if (win) {
+            // Browser has allowed it to be opened
+            win.focus();
+        } else {
+            // Broswer has blocked it
+            alert('Please allow popups for this site');
+        }
+        return null;
+    }
 
-	var id = "et$" + fileUri.replace(/ /g, "_").replace(/\//g, "$");
-	var auxArr = fileUri.split("/");
-	var name = auxArr[auxArr.length - 1];
-	var newTab = $("<li><a id=\"" + id + "\" class=\"editorTab\">" + name
-			+ "</a></li>");
-	var newTabCloseCross = $("<span class=\"glyphicon glyphicon-remove\"></span>");
+    var id = "et$" + fileUri.replace(/ /g, "_").replace(/\//g, "$");
+    var auxArr = fileUri.split("/");
+    var name = auxArr[auxArr.length - 1];
+    var newTab = $("<li><a id=\"" + id + "\" class=\"editorTab\">" + name
+        + "</a></li>");
+    var newTabCloseCross = $("<span class=\"glyphicon glyphicon-remove\"></span>");
 
-	newTab.attr('title', fileUri);
+    newTab.attr('title', fileUri);
 
-	$("#editorTabs").prepend(newTab);
-	newTab.append(newTabCloseCross);
+    $("#editorTabs").prepend(newTab);
+    newTab.append(newTabCloseCross);
 
-	EditorManager.tabsMap[fileUri] = newTab;
+    EditorManager.tabsMap[fileUri] = newTab;
 
-	EditorManager.sessionsMap[fileUri] = sessionAg;
+    EditorManager.sessionsMap[fileUri] = sessionAg;
 
-	// Select tab
-	newTab.click(function() {
-		if (fileUri != EditorManager.currentUri)
-			EditorManager.openFile(fileUri);
-	});
+    // Select tab
+    newTab.click(function () {
+        if (fileUri != EditorManager.currentUri)
+            EditorManager.openFile(fileUri);
+    });
 
-	// Close tab
-	newTabCloseCross.click(function(event) {
-		event.stopPropagation();
-		EditorManager.closeFile(fileUri);
-	});
+    // Close tab
+    newTabCloseCross.click(function (event) {
+        event.stopPropagation();
+        EditorManager.closeFile(fileUri);
+    });
 
-	newTab.css("bottom", "-27px");
-	newTab.css("max-width", "0%");
-	setTimeout(function() {
-		newTab.css("bottom", "0px");
-		newTab.css("max-width", "100%");
-	}, 1);
+    newTab.css("bottom", "-27px");
+    newTab.css("max-width", "0%");
+    setTimeout(function () {
+        newTab.css("bottom", "0px");
+        newTab.css("max-width", "100%");
+    }, 1);
 
-	ContextAction.register(newTab, [ {
-		name : "Close",
-		action : newTabCloseCross.click
-	} ]);
-	return newTab;
+    ContextAction.register(newTab, [{
+            name: "Close",
+            action: newTabCloseCross.click
+        }]);
+    return newTab;
 
 };
 
 var checkSyntaxFlag = false;
 
-var mayCheckLanguageSyntax = function(fileUri) {
-	var agSession = EditorManager.sessionsMap[fileUri];
-	if (agSession == undefined || agSession == "undefined") {
-		CommandApi
-				.echo("Please open the document you want to check before applying the command");
-	} else {
-		var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
-				.getCurrentFormat();
+var mayCheckLanguageSyntax = function (fileUri) {
+    var agSession = EditorManager.sessionsMap[fileUri];
+    if (agSession == undefined || agSession == "undefined") {
+        CommandApi
+            .echo("Please open the document you want to check before applying the command");
+    } else {
+        var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
+            .getCurrentFormat();
 
-		var checkLanguageUri = agSession.getCheckLanguageURI(currentFormat);
+        var checkLanguageUri = agSession.getCheckLanguageURI(currentFormat);
 
-		if (checkLanguageUri != undefined && checkLanguageUri != null
-				&& checkLanguageUri.length > 0) {
+        if (checkLanguageUri != undefined && checkLanguageUri != null
+            && checkLanguageUri.length > 0) {
 
-			var content = agSession.getBaseSession().getValue();
+            var content = agSession.getBaseSession().getValue();
 
-			CommandApi.checkLanguage(content, currentFormat, checkLanguageUri,
-					fileUri, function(ts) {
-						console.log("Checking syntax... " + ts);
-						if (ts.status == "OK" || ts == "true") {
-							console.log("Syntax is OK.");
-							EditorManager
-									.setAnnotations(eval('(' + "[]" + ')'));
+            CommandApi.checkLanguage(content, currentFormat, checkLanguageUri,
+                fileUri, function (ts) {
+                    console.log("Checking syntax... " + ts);
+                    if (ts.status == "OK" || ts == "true") {
+                        console.log("Syntax is OK.");
+                        EditorManager
+                            .setAnnotations(eval('(' + "[]" + ')'));
 
-							DescriptionInspector.onEditorCheckedLanguage();
+                        DescriptionInspector.onEditorCheckedLanguage();
 
-							checkSyntaxFlag = true;
-						} else {
-							console.log(ts);
-							EditorManager.setAnnotations(ts.annotations);
-							checkSyntaxFlag = false;
-						}
+                        checkSyntaxFlag = true;
+                    } else {
+                        console.log(ts);
+                        EditorManager.setAnnotations(ts.annotations);
+                        checkSyntaxFlag = false;
+                    }
 
-					});
-		}
-	}
+                });
+        }
+    }
 };
 
-var initAceEditor = function() {
-	var editor = ace.edit("editor");
-	document.editor = editor;
-	// editor.setTheme("ace/theme/SEDL4People"); //TODO: change theme depending
-	// of mode
-	editor.setShowPrintMargin(false);
+var initAceEditor = function () {
+    ace.require("ace/ext/language_tools");
+    var editor = ace.edit("editor");
+    editor.setOptions({
+        enableBasicAutocompletion: true
+    });
+    document.editor = editor;
+    // editor.setTheme("ace/theme/SEDL4People"); //TODO: change theme depending
+    // of mode
+    editor.setShowPrintMargin(false);
 
-	document.sessionsMap = EditorManager.sessionsMap;
+    document.sessionsMap = EditorManager.sessionsMap;
 };
 
-var loadExistingTabbedInstance = function(fileUri, content) {
+var loadExistingTabbedInstance = function (fileUri, content) {
 
-	if (document.editor == null) {
-		initAceEditor();
+    if (document.editor == null) {
+        initAceEditor();
 
-		document.editor
+        document.editor
             .on(
                 "change",
                 function (changesDeltas) {
@@ -155,281 +159,251 @@ var loadExistingTabbedInstance = function(fileUri, content) {
                             }
 
                             mayCheckLanguageSyntax(EditorManager.currentUri);
-                            DescriptionInspector.slaString2Model();
+                            DescriptionInspector.editorContentToModel();
 
                         }, 1000);
 
                 });
 
-		DescriptionInspector.loaders.onInitAceEditor();
+        DescriptionInspector.loaders.onInitAceEditor();
 
-	}
+    }
 
-	$("editor").css("visibility", "visible");
+    $("editor").css("visibility", "visible");
 
-	if (EditorManager.currentUri != null) {
-		$(EditorManager.tabsMap[EditorManager.currentUri])
+    if (EditorManager.currentUri != null) {
+        $(EditorManager.tabsMap[EditorManager.currentUri])
             .removeClass("active");
-	}
+    }
 
     oldUri = EditorManager.currentUri;
 
-	EditorManager.currentUri = fileUri;
+    EditorManager.currentUri = fileUri;
 
-	$(EditorManager.tabsMap[EditorManager.currentUri]).addClass("active");
+    $(EditorManager.tabsMap[EditorManager.currentUri]).addClass("active");
 
-	document.editor
-			.setSession(EditorManager.sessionsMap[EditorManager.currentUri]
-					.getCurrentSession());
+    document.editor
+        .setSession(EditorManager.sessionsMap[EditorManager.currentUri]
+            .getCurrentSession());
 
-	// Formats tabs
+    // Formats tabs
 
-	var editorFormatsElement = $("#editorFormats");
-	editorFormatsElement.empty();
-	var count = 0;
-	for ( var key in EditorManager.sessionsMap[EditorManager.currentUri]
-			.getFormatsSessions()) {
-		drawNewFormatLiElement(key, EditorManager.currentUri,
-				editorFormatsElement);
-		count++;
-	}
-
-	if (count <= 1 &&
-			(DescriptionInspector.isCurrentDescriptionFile() ||
-				!DescriptionInspector.existCurrentDescriptionFile())) {
-			$("#editorItself").removeClass("multiformat");
-	} else {
-		$("#editorItself").addClass("multiformat");
-	}
-
-	currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
-			.getCurrentFormat();
-	$("#editorFormats ." + currentFormat).addClass("active");
-
-	// Operation buttons
-
-	var buttonPanel = $('#editorActions');
-	buttonPanel.empty();
-
-	var divContent = $('<div id="selectOperationDiv" class="btn-group"></div>');
-	var optButton = $('<a class="btn" id="selectOperation" style="display:none;">Analysis report</a>');
-	optButton.click(function() {
-		loadOperations.onClick();
-	});
-	///////
-	var expandButton=$('<button class="btn" style="{float:left}" id="expandConsole"><span class="glyphicon glyphicon-chevron-up"></span></button>');
-	expandButton.click(function(){
-		DescriptionInspector.expandConsole('second');
-	});
-	
-	
-	var clearButton=$('<button class="btn" style="{float:left}" id="clearConsole"><span class="glyphicon glyphicon-remove-sign"></span></button>');
-	clearButton.click(function(){
-		DescriptionInspector.clearConsole();
-	});
-	
-	///////
-	divContent.append(optButton);
-	divContent.append(expandButton);
-	divContent.append(clearButton);
-
-	var caret = $('<button class="btn btn-primary opButton" data-toggle="dropdown">...</span><span class="sr-only">Toggle Dropdown</span></button>');
-	var caretUL = $('<ul id="ulOperationsTypes" class="dropdown-menu scrollable-op-menu" role="menu"></ul>');
-	var caretLI = "";
-
-	fileUriOperation = EditorManager.getCurrentUri();
-	opMap = ModeManager.getOperations(ModeManager
-			.calculateLanguageIdFromExt(ModeManager
-					.calculateExtFromFileUri(fileUri)));
-
-	var ops_name_lenght = 0;
-	var use_caret = false;
-	var ops = [];
-	if(opMap && typeof opMap != "undefined"){
-		//Old code  in the commentary
-/*		if (opMap != undefined){
-		for (var i = 0; i < opMap.length; i++) {
-			ops_name_lenght += opMap[i].name.length;
-			if(ops_name_lenght <= 75){
-				var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '>'+ opMap[i].name + '</button>');
-				operationArray.push(opMap[i]);
-				op.click(function() {
-					launchOperation($(this).html());
-					operationArray = [];
-				});
-				ops.push(op);
-			} else {
-				use_caret = true;
-				caretLI = $('<li><a id="' + opMap[i].id
-						+ '" class="continue onlyOne">' + opMap[i].name
-						+ '</a></li>');
-				caretUL.append(caretLI);
-				operationArray.push(opMap[i]);
-				caretLI.click(function() {
-					launchOperation($(this).children('a').html());
-					operationArray = [];
-				});
-			}
-		}
-*/
-		for (var i = 0; i < opMap.length; i++) {
-			ops_name_lenght += opMap[i].name.length;
-
-		if(typeof opMap[i].icon != "undefined"){
-			if(typeof opMap[i].iconOnly != "undefined" && opMap[i].iconOnly){
-				var op = $('<button class="btn btn-primary opButton" title="'+opMap[i].name+'" id="' + opMap[i].id + '"><span class="'+opMap[i].icon+'"></span></button>');
-				operationArray.push(opMap[i]);
-				op.click(function() {
-					launchOperation($(this).attr('title'));
-					operationArray = [];
-				});
-				ops.push(op);
-			}else{
-				var op = $('<button class="btn btn-primary opButton" name="'+opMap[i].name+'" id="' + opMap[i].id + '"><span class="'+opMap[i].icon+'"></span> '+opMap[i].name+'</button>');
-				operationArray.push(opMap[i]);
-				var name= opMap[i].name;
-				op.click(function() {
-					launchOperation($(this).attr('name'));
-					operationArray = [];
-
-				});
-				ops.push(op);
-			}
-
-		}else{
-
-			if(ops_name_lenght <= 75){
-
-				var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '> '+ opMap[i].name + '</button>');
-				operationArray.push(opMap[i]);
-				op.click(function() {
-					launchOperation($(this).html());
-					operationArray = [];
-				});
-				ops.push(op);
-
-
-			} else {
-				use_caret = true;
-				caretLI = $('<li><a id="' + opMap[i].id
-						+ '" class="continue onlyOne">' + opMap[i].name
-						+ '</a></li>');
-				caretUL.append(caretLI);
-				operationArray.push(opMap[i]);
-				caretLI.click(function() {
-					launchOperation($(this).children('a').html());
-					operationArray = [];
-				});
-			}
-
-		}
-		}
-		if(use_caret){
-			divContent.append(caret);
-			divContent.append(caretUL);
-		}
-
-		for(var k=0; k<ops.length;k++)
-			divContent.append(ops[k]);
-	}
-
-        comMap = ModeManager.getCommands(ModeManager
-			.calculateLanguageIdFromExt(ModeManager
-					.calculateExtFromFileUri(fileUri)));
-
-	 oldCommands= ModeManager.getCommands(ModeManager
-			.calculateLanguageIdFromExt(ModeManager
-					.calculateExtFromFileUri(oldUri)));
-	require(['gcli/index', 'demo/index'], function(gcli) {
-		if(typeof oldCommands != 'undefined'){
-	for(var i=0;i<oldCommands.length;i++){
-		gcli.removeCommand(oldCommands[i]);
-	}
-	}
-        if(typeof comMap != 'undefined'){
-	for(var i=0;i<comMap.length;i++){
-		var command= comMap[i];
-
-			var action= eval('('+command.action+')');
-			gcli.addCommand({
-				 name: command.id,
-					description: command.name,
-					params:command.params,
-					returnType: 'string',
-					exec: action,
-					defaultValue: command.defaultValue
-			 });
-
-	}
+    var editorFormatsElement = $("#editorFormats");
+    editorFormatsElement.empty();
+    var count = 0;
+    for (var key in EditorManager.sessionsMap[EditorManager.currentUri]
+        .getFormatsSessions()) {
+        drawNewFormatLiElement(key, EditorManager.currentUri,
+            editorFormatsElement);
+        count++;
     }
+
+    if (count <= 1 &&
+        (DescriptionInspector.isCurrentDescriptionFile() ||
+            !DescriptionInspector.existCurrentDescriptionFile())) {
+        $("#editorItself").removeClass("multiformat");
+    } else {
+        $("#editorItself").addClass("multiformat");
+    }
+
+    currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
+        .getCurrentFormat();
+    $("#editorFormats ." + currentFormat).addClass("active");
+
+    // Operation buttons
+
+    var buttonPanel = $('#editorActions');
+    buttonPanel.empty();
+
+    var divContent = $('<div id="selectOperationDiv" class="btn-group"></div>');
+    var optButton = $('<a class="btn" id="selectOperation" style="display:none;">Analysis report</a>');
+    optButton.click(function () {
+        loadOperations.onClick();
+    });
+    var expandButton = $('<button class="btn btn-link" style="{float:left}" id="expandConsole"><span class="glyphicon glyphicon-chevron-up"></span></button>');
+    expandButton.click(function () {
+        DescriptionInspector.expandConsole('second');
+    });
+    var clearButton = $('<button class="btn btn-link" style="{float:left}" id="clearConsole"><span class="glyphicon glyphicon-remove-sign"></span></button>');
+    clearButton.click(function () {
+        DescriptionInspector.clearConsole();
+    });
+    divContent.append(optButton);
+    divContent.append(expandButton);
+    divContent.append(clearButton);
+
+    var caret = $('<button class="btn btn-primary opButton" data-toggle="dropdown">...</span><span class="sr-only">Toggle Dropdown</span></button>');
+    var caretUL = $('<ul id="ulOperationsTypes" class="dropdown-menu scrollable-op-menu" role="menu"></ul>');
+    var caretLI = "";
+
+    fileUriOperation = EditorManager.getCurrentUri();
+    opMap = ModeManager.getOperations(ModeManager
+        .calculateLanguageIdFromExt(ModeManager
+            .calculateExtFromFileUri(fileUri)));
+
+    var ops_name_length = 0;
+    var use_caret = false;
+    var ops = [];
+    if (opMap && typeof opMap != "undefined") {
+
+        for (var i = 0; i < opMap.length; i++) {
+            ops_name_length += opMap[i].name.length;
+
+            if (typeof opMap[i].icon != "undefined") {
+                if (typeof opMap[i].iconOnly != "undefined" && opMap[i].iconOnly) {
+                    var op = $('<button class="btn btn-primary opButton" title="' + opMap[i].name + '" id="' + opMap[i].id + '"><span class="' + opMap[i].icon + '"></span></button>');
+                    operationArray.push(opMap[i]);
+                    op.click(function () {
+                        launchOperation($(this).attr('title'));
+                        operationArray = [];
+                    });
+                    ops.push(op);
+                } else {
+                    var op = $('<button class="btn btn-primary opButton" name="' + opMap[i].name + '" id="' + opMap[i].id + '"><span class="' + opMap[i].icon + '"></span> ' + opMap[i].name + '</button>');
+                    operationArray.push(opMap[i]);
+                    var name = opMap[i].name;
+                    op.click(function () {
+                        launchOperation($(this).attr('name'));
+                        operationArray = [];
+
+                    });
+                    ops.push(op);
+                }
+
+            } else {
+
+                if (ops_name_length <= 75) {
+
+                    var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '>' + opMap[i].name + '</button>');
+                    operationArray.push(opMap[i]);
+                    op.click(function () {
+                        launchOperation($(this).html());
+                        operationArray = [];
+                    });
+                    ops.push(op);
+
+
+                } else {
+                    use_caret = true;
+                    caretLI = $('<li><a id="' + opMap[i].id
+                        + '" class="continue onlyOne">' + opMap[i].name
+                        + '</a></li>');
+                    caretUL.append(caretLI);
+                    operationArray.push(opMap[i]);
+                    caretLI.click(function () {
+                        launchOperation($(this).children('a').html());
+                        operationArray = [];
+                    });
+                }
+
+            }
+        }
+        if (use_caret) {
+            divContent.append(caret);
+            divContent.append(caretUL);
+        }
+
+        for (var k = 0; k < ops.length; k++)
+            divContent.append(ops[k]);
+    }
+
+    comMap = ModeManager.getCommands(ModeManager
+        .calculateLanguageIdFromExt(ModeManager
+            .calculateExtFromFileUri(fileUri)));
+
+    oldCommands = ModeManager.getCommands(ModeManager
+        .calculateLanguageIdFromExt(ModeManager
+            .calculateExtFromFileUri(oldUri)));
+    require(['gcli/index', 'demo/index'], function (gcli) {
+        if (typeof oldCommands != 'undefined') {
+            for (var i = 0; i < oldCommands.length; i++) {
+                gcli.removeCommand(oldCommands[i]);
+            }
+        }
+        if (typeof comMap != 'undefined') {
+            for (var i = 0; i < comMap.length; i++) {
+                var command = comMap[i];
+
+                var action = eval('(' + command.action + ')');
+                gcli.addCommand({
+                    name: command.id,
+                    description: command.name,
+                    params: command.params,
+                    returnType: 'string',
+                    exec: action,
+                    defaultValue: command.defaultValue
+                });
+
+            }
+        }
     });
 
-	buttonPanel.append(divContent);
+    buttonPanel.append(divContent);
 };
 
 // Operation buttons auxiliar function
-var launchOperation = function(name) {
-	for (var i = 0; i < opMap.length; i++) {
+var launchOperation = function (name) {
+    for (var i = 0; i < opMap.length; i++) {
 
-		try {
-			if (opMap[i].name == name) {
-				var _remoteExecution = opMap[i]._remoteExecution;
-				var action = eval('(' + opMap[i].action + ')');
-				var operation = opMap[i];
+        try {
+            if (opMap[i].name == name) {
+                var _remoteExecution = opMap[i]._remoteExecution;
+                var action = eval('(' + opMap[i].action + ')');
+                var operation = opMap[i];
 
-				// console.log(operation);
-				if (_remoteExecution != undefined && _remoteExecution != null
-						&& eval('(' + _remoteExecution + ')')) {
-					CommandApi.doDocumentOperation(operation.id, operation.data, fileUriOperation, function(result) {
-						// console.log(result);
-						if (action != undefined	&& action != null) {
-							// console.log(result);
-							if (result.annotations)
-								EditorManager.setAnnotations(result.annotations);
-							action(operation, fileUriOperation, result);
-						}
+                // console.log(operation);
+                if (_remoteExecution != undefined && _remoteExecution != null
+                    && eval('(' + _remoteExecution + ')')) {
+                    CommandApi.doDocumentOperation(operation.id, operation.data, fileUriOperation, function (result) {
+                        // console.log(result);
+                        if (action != undefined && action != null) {
+                            // console.log(result);
+                            if (result.annotations)
+                                EditorManager.setAnnotations(result.annotations);
+                            action(operation, fileUriOperation, result);
+                        }
 
-						OperationReport.launchedOperations.push(operation.name);
-						OperationReport.resultLaunchedOperations.push(result.message);
-					});
-				} else if (action != undefined && action != null) {
-					action(operation, fileUriOperation);
-				}
-				OperationReport.timeOfOperations.push(OperationMetrics.getOperationMilliseconds());
+                        OperationReport.launchedOperations.push(operation.name);
+                        OperationReport.resultLaunchedOperations.push(result.message);
+                    });
+                } else if (action != undefined && action != null) {
+                    action(operation, fileUriOperation);
+                }
+                OperationReport.timeOfOperations.push(OperationMetrics.getOperationMilliseconds());
 
-				break;
-			}
-		} catch (err) {
-			OperationMetrics.stop();
-			OperationReport.timeOfOperations.push(OperationMetrics.getOperationMilliseconds());
-			CommandApi.echo("An error occurred while performing the operation <b>"
-							+ name
-							+ "</b>. Make sure you have well defined this operation in the language's manifest.");
-			break;
-		}
-	}
+                break;
+            }
+        } catch (err) {
+            OperationMetrics.stop();
+            OperationReport.timeOfOperations.push(OperationMetrics.getOperationMilliseconds());
+            CommandApi.echo("An error occurred while performing the operation <b>"
+                + name
+                + "</b>. Make sure you have well defined this operation in the language's manifest.");
+            break;
+        }
+    }
 
 };
 
-var drawNewFormatLiElement = function(format, uri, editorFormatsElement) {
-	var liElement = $("<li class='formatTab' ><a>" + format.toUpperCase()
-			+ "</a></li>");
-	liElement.addClass(format);
-	editorFormatsElement.append(liElement);
+var drawNewFormatLiElement = function (format, uri, editorFormatsElement) {
+    var liElement = $("<li class='formatTab' ><a>" + format.toUpperCase()
+        + "</a></li>");
+    liElement.addClass(format);
+    editorFormatsElement.append(liElement);
 
-	liElement.click(function() {
-		if (!EditorManager.currentDocumentHasProblems()) {
-			if (!$(".formatTab." + format.toLowerCase()).hasClass("active")) {
-				console.log("-> " + format);
-				$("#editorFormats li").removeClass("active");
-				EditorManager.changeFormat(uri, format);
-				liElement.addClass("active");
-			}
-		} else {
-			CommandApi.echo("<p style='color: red'>Can not convert to "
-					+ format + " while errors exist.</p>");
-		}
-	});
+    liElement.click(function () {
+        if (!EditorManager.currentDocumentHasProblems()) {
+            if (!$(".formatTab." + format.toLowerCase()).hasClass("active")) {
+                console.log("-> " + format);
+                $("#editorFormats li").removeClass("active");
+                EditorManager.changeFormat(uri, format);
+                liElement.addClass("active");
+            }
+        } else {
+            CommandApi.echo("<p style='color: red'>Can not convert to "
+                + format + " while errors exist.</p>");
+        }
+    });
 };
 
 // FE
@@ -457,229 +431,219 @@ var updateChildrenKeyPath = function (node, newName, prevName) {
 };
 
 var EditorManager = {
+    sessionsMap: {},
+    tabsMap: {},
+    currentUri: null,
+    getCurrentUri: function () {
+        return EditorManager.currentUri;
+    },
+    showInspector: function () {
+        var inspector = $("#editorInspector");
+        var inspectorToggle = $("#editorToggleInspector");
 
-	sessionsMap : {},
-	tabsMap : {},
-	currentUri : null,
+        inspectorToggle.addClass("hdd");
+        inspector.removeClass("hdd");
 
-	getCurrentUri : function() {
-		return EditorManager.currentUri;
-	},
+        $("#editorInspector").trigger("inspectorChangeState", [true]);
 
-	showInspector : function() {
-		var inspector = $("#editorInspector");
-		var inspectorToggle = $("#editorToggleInspector");
+    },
+    hideInspector: function () {
+        var inspector = $("#editorInspector");
+        var inspectorToggle = $("#editorToggleInspector");
 
-		inspectorToggle.addClass("hdd");
-		inspector.removeClass("hdd");
-
-		$("#editorInspector").trigger("inspectorChangeState", [true]);
-
-	},
-
-	hideInspector : function() {
-		var inspector = $("#editorInspector");
-		var inspectorToggle = $("#editorToggleInspector");
-
-		inspectorToggle.removeClass("hdd");
-		inspector.addClass("hdd");
-		inspector.css("max-width", inspector.width() + "px");
+        inspectorToggle.removeClass("hdd");
+        inspector.addClass("hdd");
+        inspector.css("max-width", inspector.width() + "px");
 
 
-		$("#editorInspector").trigger("inspectorChangeState", [false]);
+        $("#editorInspector").trigger("inspectorChangeState", [false]);
 
-	},
+    },
+    // FE
+    loadInspector: function (ext, format) {
+        //		var loader = ModeManager.getInspectorLoader(ModeManager
+        //		.calculateLanguageIdFromExt(ext));
+        var loader = ModeManager.getInspectorLoader(ext)
+            , descriptionLoader = DescriptionInspector.loader
+            , editorInspector = $("#editorInspectorLoader");
 
-	// FE
-	loadInspector : function(ext, format) {
-		//		var loader = ModeManager.getInspectorLoader(ModeManager
-		//		.calculateLanguageIdFromExt(ext));
-		var loader = ModeManager.getInspectorLoader(ext)
-			, descriptionLoader = DescriptionInspector.loader
-			, editorInspector = $("#editorInspectorLoader");
+        editorInspector.empty();
 
-		editorInspector.empty();
+        if (loader || descriptionLoader) {
 
-		if (loader || descriptionLoader) {
+            DescriptionInspector.loaders.buildInspectorTabs();
 
-			DescriptionInspector.loaders.buildInspectorTabs();
+            if (loader) {
+                var loadFn = loader(editorInspector.find(".moduleInspectorContent"), format);
+                if (loadFn) {
+                    DescriptionInspector.tabs.loadInspectorModuleTab(editorInspector);
+                    console.log("Inspector module content loaded");
+                }
+                DescriptionInspector.loader($("#editorInspector .descriptionInspectorContent"));
+            }
 
-			if (loader) {
-				var loadFn = loader(editorInspector.find(".moduleInspectorContent"), format);
-				if (loadFn) {
-					DescriptionInspector.tabs.loadInspectorModuleTab(editorInspector);
-					console.log("Inspector module content loaded");
-				}
-				DescriptionInspector.loader($("#editorInspector .descriptionInspectorContent"));
-			}
+        } else {
+            // Default inspector content (REFACTOR?)
+            editorInspector
+                .append("<span class='emptyMsg'>Nothing to show</span>");
+        }
 
-		} else {
-			// Default inspector content (REFACTOR?)
-			editorInspector
-				.append("<span class='emptyMsg'>Nothing to show</span>");
-		}
+    },
+    // FM
+    openFile: function (fileUri) {
 
-	},
+        if (EditorManager.getCurrentUri() != fileUri
+            && getNodeByFileUri(fileUri) != undefined) {
 
-	// FM
-	openFile : function(fileUri) {
+            saveCurrentSession();
 
-		if (EditorManager.getCurrentUri() != fileUri
-				&& getNodeByFileUri(fileUri) != undefined) {
+            var exists = fileUri in EditorManager.tabsMap;
 
-			saveCurrentSession();
+            FileApi.loadFileContents(fileUri, function (content) {
 
-			var exists = fileUri in EditorManager.tabsMap;
+                if (!exists) {
+                    var tabbedInstance = createNewTabbedInstance(fileUri,
+                        content);
+                    if (tabbedInstance == null) // The editor cannot hande this
+                        // resource:
+                        return;
+                }
 
-			FileApi.loadFileContents(fileUri, function(content) {
+                loadExistingTabbedInstance(fileUri, content);
+                mayCheckLanguageSyntax(fileUri);
 
-				if (!exists) {
-					var tabbedInstance = createNewTabbedInstance(fileUri,
-							content);
-					if (tabbedInstance == null) // The editor cannot hande this
-						// resource:
-						return;
-				}
+                var node = getNodeByFileUri(fileUri);
+                if (node != undefined)
+                    node.activate();
 
-				loadExistingTabbedInstance(fileUri, content);
-				mayCheckLanguageSyntax(fileUri);
+                // Change editor theme
+                var languageId = ModeManager
+                    .calculateLanguageIdFromExt(ModeManager
+                        .calculateExtFromFileUri(fileUri));
+                var editorThemeId;
+                var formats = ModeManager.languageModeMap[languageId].formats;
+                var currentFormat = EditorManager.sessionsMap[fileUri]
+                    .getCurrentFormat();
+                // TODO: Refactor!
+                for (var f in formats) {
+                    if (formats[f].format == currentFormat)
+                        editorThemeId = formats[f].editorThemeId;
+                }
+                console.log("## editorThemeId: " + editorThemeId);
+                document.editor.setTheme(editorThemeId);
 
-				var node = getNodeByFileUri(fileUri);
-				if (node != undefined)
-					node.activate();
+                // Inspector
+                EditorManager.loadInspector(ModeManager
+                    .calculateLanguageIdFromExt(ModeManager
+                        .calculateExtFromFileUri(fileUri)),
+                    EditorManager.sessionsMap[EditorManager.currentUri]
+                    .getCurrentFormat());
 
-				// Change editor theme
-				var languageId = ModeManager
-						.calculateLanguageIdFromExt(ModeManager
-								.calculateExtFromFileUri(fileUri));
-				var editorThemeId;
-				var formats = ModeManager.languageModeMap[languageId].formats;
-				var currentFormat = EditorManager.sessionsMap[fileUri]
-						.getCurrentFormat();
-				// TODO: Refactor!
-				for ( var f in formats) {
-					if (formats[f].format == currentFormat)
-						editorThemeId = formats[f].editorThemeId;
-				}
-				console.log("## editorThemeId: " + editorThemeId);
-				document.editor.setTheme(editorThemeId);
+                if (DescriptionInspector) {
+                    if (!DescriptionInspector.existBinding())
+                        document.editor.focus();
 
-				// Inspector
-				EditorManager.loadInspector(ModeManager
-						.calculateLanguageIdFromExt(ModeManager
-								.calculateExtFromFileUri(fileUri)),
-						EditorManager.sessionsMap[EditorManager.currentUri]
-								.getCurrentFormat());
+                    DescriptionInspector.loaders.onEditorOpenFile();
+                } else {
+                    document.editor.focus();
+                }
+            });
 
-				if (DescriptionInspector) {
-					if (!DescriptionInspector.existBinding())
-						document.editor.focus();
+        }
 
-					DescriptionInspector.loaders.onEditorOpenFile();
-				} else {
-					document.editor.focus();
-				}
-			});
+    },
+    // FM
+    closeFile: function (fileUri) {
 
-		}
+        saveSession(fileUri, function () {
+            var tab = EditorManager.tabsMap[fileUri];
 
-	},
+            tab.css("width", tab.width() + "px");
 
-	// FM
-	closeFile : function(fileUri) {
+            setTimeout(function () {
+                tab.css("bottom", "-27px"); // Magic!!
+                tab.css("width", "0px");
+                setTimeout(function () {
+                    tab.remove();
+                }, 200);
 
-		saveSession(fileUri, function() {
-			var tab = EditorManager.tabsMap[fileUri];
+                var potentialNextTab = Object.keys(EditorManager.tabsMap)[0];
+                if (potentialNextTab != undefined && potentialNextTab != null) {
+                    EditorManager.openFile("" + potentialNextTab);
+                } else {
+                    EditorManager.reset();
+                    $("#selectOperationDiv").remove();
+                    // EditorManager.currentUri = "";
+                    // document.editor.destroy();
+                    // document.editor = null;
+                    //
+                    // $("#editor").empty();
+                    // $('#editor').remove();
+                    // $('#editorWrapper').append('<div id="editor"></div>');
+                    //
+                    // $("#projectsTree").dynatree("getRoot").visit(function(node){
+                    // node.deactivate();
+                    // });
+                    //
+                    // $("#editorItself").removeClass("multiformat");
+                }
 
-			tab.css("width", tab.width() + "px");
+            }, 1);
 
-			setTimeout(function() {
-				tab.css("bottom", "-27px"); // Magic!!
-				tab.css("width", "0px");
-				setTimeout(function() {
-					tab.remove();
-				}, 200);
+            EditorManager.sessionsMap[fileUri] = null;
 
-				var potentialNextTab = Object.keys(EditorManager.tabsMap)[0];
-				if (potentialNextTab != undefined && potentialNextTab != null) {
-					EditorManager.openFile("" + potentialNextTab);
-				} else {
-					EditorManager.reset();
-					$("#selectOperationDiv").remove();
-					// EditorManager.currentUri = "";
-					// document.editor.destroy();
-					// document.editor = null;
-					//
-					// $("#editor").empty();
-					// $('#editor').remove();
-					// $('#editorWrapper').append('<div id="editor"></div>');
-					//
-					// $("#projectsTree").dynatree("getRoot").visit(function(node){
-					// node.deactivate();
-					// });
-					//
-					// $("#editorItself").removeClass("multiformat");
-				}
+            delete EditorManager.sessionsMap[fileUri];
+            delete EditorManager.tabsMap[fileUri];
 
-			}, 1);
-
-			EditorManager.sessionsMap[fileUri] = null;
-
-			delete EditorManager.sessionsMap[fileUri];
-			delete EditorManager.tabsMap[fileUri];
-
-			if (DescriptionInspector)
+            if (DescriptionInspector)
                 DescriptionInspector.loaders.onEditorCloseFile();
-		});
-	},
+        });
+    },
+    reset: function () {
+        EditorManager.currentUri = "";
+        // document.editor.destroy();
+        document.editor = null;
+        try {
+            $("#editor").empty();
+            $("#editor").remove();
+        } catch (Exception) {
+            console.log("#editor was empty");
+        }
+        $("#editorWrapper").append('<div id="editor"></div>');
+        try {
+            $("#projectsTree").dynatree("getRoot").visit(function (node) {
+                node.deactivate();
+            });
+            $("#editorItself").removeClass("multiformat");
+        } catch (Exception) {
+            console.log("#projectTree was empty");
+        }
+    },
+    saveFile: function (fileUri, content, callback) {
+        FileApi.saveFileContents(fileUri, content, function (ts) {
+            if (ts == true) {
+                console.log("File " + fileUri + " saved correctly.");
+                if (callback != undefined)
+                    callback();
+            }
+        });
+    },
+    changeFormat: function (fileUri, desiredFormat) {
 
-	reset : function() {
-		EditorManager.currentUri = "";
-		// document.editor.destroy();
-		document.editor = null;
-		try {
-			$("#editor").empty();
-			$("#editor").remove();
-		} catch (Exception) {
-			console.log("#editor was empty");
-		}
-		$("#editorWrapper").append('<div id="editor"></div>');
-		try {
-			$("#projectsTree").dynatree("getRoot").visit(function(node) {
-				node.deactivate();
-			});
-			$("#editorItself").removeClass("multiformat");
-		} catch (Exception) {
-			console.log("#projectTree was empty");
-		}
-	},
+        //TODO: comprobar si el cambio de formato se realiza sobre/desde un un DescriptionFullView
 
-	saveFile : function(fileUri, content, callback) {
-		FileApi.saveFileContents(fileUri, content, function(ts) {
-			if (ts == true) {
-				console.log("File " + fileUri + " saved correctly.");
-				if(callback != undefined)
-					callback();
-			}
-		});
-	},
+        var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
+            .getCurrentFormat();
+        var actualContent = EditorManager.sessionsMap[EditorManager.currentUri]
+            .getCurrentSession().getValue();
+        var converterUri = ModeManager.getConverter(ModeManager
+            .calculateLanguageIdFromExt(ModeManager
+                .calculateExtFromFileUri(EditorManager.currentUri)));
 
-	changeFormat : function(fileUri, desiredFormat) {
+        if (desiredFormat in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() &&
+            currentFormat !== desiredFormat) {
 
-		//TODO: comprobar si el cambio de formato se realiza sobre/desde un un DescriptionFullView
-
-		var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
-				.getCurrentFormat();
-		var actualContent = EditorManager.sessionsMap[EditorManager.currentUri]
-				.getCurrentSession().getValue();
-		var converterUri = ModeManager.getConverter(ModeManager
-				.calculateLanguageIdFromExt(ModeManager
-						.calculateExtFromFileUri(EditorManager.currentUri)));
-
-		if (desiredFormat in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() &&
-			currentFormat !== desiredFormat) {
-
-			CommandApi.callConverter(
+            CommandApi.callConverter(
                 currentFormat,
                 desiredFormat,
                 fileUri,
@@ -691,8 +655,8 @@ var EditorManager = {
                     console.log(appResponse);
                     if (appResponse.data == "ERROR!")
                         CommandApi.echo(
-                            "<p style='color: red'>"+
-                            "Cannot change to " + desiredFormat + " format, the file contains fails."+
+                            "<p style='color: red'>" +
+                            "Cannot change to " + desiredFormat + " format, the file contains fails." +
                             "</p>");
                     else {
                         EditorManager.sessionsMap[EditorManager.currentUri]
@@ -705,336 +669,328 @@ var EditorManager = {
                             appResponse.data);
                     }
                 });
-		}
+        }
 
-	},
+    },
+    getCurrentEditorContent: function () {
+        return document.editor.getSession().getValue();
+    },
+    setCurrentEditorContent: function (content) {
+        return document.editor.getSession().setValue(content);
+    },
+    getEditorContentByUri: function (fileUri) {
+        return EditorManager.sessionsMap[fileUri].getBaseSession().getValue();
+    },
+    setAnnotations: function (annotations) {
+        document.editor.getSession().setAnnotations(annotations);
+    },
+    setAnnotationsToDocument: function (fileUri, annotations) {
+        EditorManager.sessionsMap[fileUri].getBaseSession().setAnnotations(
+            annotations);
+    },
+    // Felipe
+    currentDocumentHasErrorAnnotation: function () {
+        var ret = false
+            , annotations = document.editor.getSession().getAnnotations();
+        for (var i = 0; i < annotations.length; i++) {
+            if (annotations[i].type == "error") {
+                ret = true;
+                break;
+            }
+        }
 
-	getCurrentEditorContent : function() {
-		return document.editor.getSession().getValue();
-	},
+        return ret;
+    },
+    currentDocumentHasProblems: function () {
+        return document.editor.getSession().getAnnotations().length > 0 && this.currentDocumentHasErrorAnnotation();
+    },
+    documentIsOpen: function (fileUri) {
+        return fileUri in EditorManager.tabsMap;
+    },
+    createNode: function (fileUri, fileName, languageExtension, callback) {
+        console.log("creating new node...");
+        var nodeUri = FileApi.calculateNodeUri(currentSelectedNode.getParent());
+        FileApi.createFile(fileUri, function (ts) {
+            if (ts == true || ts == "true") {
+                var newChild;
+                var keyPath = nodeUri + "/" + fileName + languageExtension;
+                if (languageExtension == ".sedl") {
+                    newChild = buildChild(fileName + languageExtension, false,
+                        "sedl_icon", keyPath);
+                } else if (languageExtension == ".iagreetemplate"
+                    || languageExtension == ".iagreeoffer"
+                    || languageExtension == ".ttl") {
+                    newChild = buildChild(fileName + languageExtension, false,
+                        "binary_file_icon", keyPath);
+                } else {
+                    newChild = buildChild(fileName + languageExtension, false,
+                        "file_icon", keyPath);
+                }
 
-	setCurrentEditorContent : function(content) {
-		return document.editor.getSession().setValue(content);
-	},
+                currentSelectedNode.getParent().addChild(newChild);
+                currentSelectedNode.getParent().sortChildren();
+            }
+            console.log("---->>" + fileUri);
+            callback();
+        });
 
-	getEditorContentByUri : function(fileUri) {
-		return EditorManager.sessionsMap[fileUri].getBaseSession().getValue();
-	},
+    },
+    // FM (para commandApi no incluir "ignorePersistance" y poner por defecto a
+    // false)
+    deleteNode: function (fileUri, ignorePersistance, callback) {
 
-	setAnnotations : function(annotations) {
-		document.editor.getSession().setAnnotations(annotations);
-	},
+        // Close file first
+        if (fileUri in EditorManager.tabsMap)
+            EditorManager.closeFile(fileUri);
 
-	setAnnotationsToDocument : function(fileUri, annotations) {
-		EditorManager.sessionsMap[fileUri].getBaseSession().setAnnotations(
-				annotations);
-	},
+        // Recurs. remove children files
+        for (potentialUri in EditorManager.tabsMap) {
+            if (potentialUri.indexOf(fileUri) != -1 && potentialUri != fileUri)
+                EditorManager.deleteFile(potentialUri, true);
+        }
 
-	// Felipe
-	currentDocumentHasErrorAnnotation : function() {
-		var ret = false
-			, annotations = document.editor.getSession().getAnnotations();
-		for (var i=0; i < annotations.length; i++) {
-			if (annotations[i].type == "error") {
-				ret = true;
-				break;
-			}
-		}
+        // Remove from tree
+        var node = getNodeByFileUri(fileUri);
+        if (node != undefined)
+            node.remove();
 
-		return ret;
-	},
+        // TODO show confirmation with callbacks
+        // Call backend for deletion
+        if (!ignorePersistance || ignorePersistance == undefined) {
 
-	currentDocumentHasProblems : function() {
-		return document.editor.getSession().getAnnotations().length > 0 && this.currentDocumentHasErrorAnnotation();
-	},
+            if (node.data.isFolder) {
+                if (node.getParent() == "DynaTreeNode<_1>: 'null'") {
+                    FileApi.deleteProject(fileUri, function (result) {
+                        callback(result);
+                    });
+                } else {
+                    FileApi.deleteDirectory(fileUri, function (result) {
+                        callback(result);
+                    });
+                }
+            } else {
+                FileApi.deleteFile(fileUri, function (result) {
+                    callback(result);
+                });
+            }
+        }
 
-	documentIsOpen : function(fileUri) {
-		return fileUri in EditorManager.tabsMap;
-	},
-
-	createNode : function(fileUri, fileName, languageExtension, callback) {
-		console.log("creating new node...");
-		var nodeUri = FileApi.calculateNodeUri(currentSelectedNode.getParent());
-		FileApi.createFile(fileUri, function(ts) {
-			if (ts == true || ts == "true") {
-				var newChild;
-				var keyPath = nodeUri + "/" + fileName + languageExtension;
-				if (languageExtension == ".sedl") {
-					newChild = buildChild(fileName + languageExtension, false,
-							"sedl_icon", keyPath);
-				} else if (languageExtension == ".iagreetemplate"
-						|| languageExtension == ".iagreeoffer"
-						|| languageExtension == ".ttl") {
-					newChild = buildChild(fileName + languageExtension, false,
-							"binary_file_icon", keyPath);
-				} else {
-					newChild = buildChild(fileName + languageExtension, false,
-							"file_icon", keyPath);
-				}
-
-				currentSelectedNode.getParent().addChild(newChild);
-				currentSelectedNode.getParent().sortChildren();
-			}
-			console.log("---->>" + fileUri);
-			callback();
-		});
-
-	},
-
-	// FM (para commandApi no incluir "ignorePersistance" y poner por defecto a
-	// false)
-	deleteNode : function(fileUri, ignorePersistance, callback) {
-
-		// Close file first
-		if (fileUri in EditorManager.tabsMap)
-			EditorManager.closeFile(fileUri);
-
-		// Recurs. remove children files
-		for (potentialUri in EditorManager.tabsMap) {
-			if (potentialUri.indexOf(fileUri) != -1 && potentialUri != fileUri)
-				EditorManager.deleteFile(potentialUri, true);
-		}
-
-		// Remove from tree
-		var node = getNodeByFileUri(fileUri);
-		if (node != undefined)
-			node.remove();
-
-		// TODO show confirmation with callbacks
-		// Call backend for deletion
-		if (!ignorePersistance || ignorePersistance == undefined) {
-
-			if (node.data.isFolder) {
-				if (node.getParent() == "DynaTreeNode<_1>: 'null'") {
-					FileApi.deleteProject(fileUri, function(result) {
-						callback(result);
-					});
-				} else {
-					FileApi.deleteDirectory(fileUri, function(result) {
-						callback(result);
-					});
-				}
-			} else {
-				FileApi.deleteFile(fileUri, function(result) {
-					callback(result);
-				});
-			}
-		}
-
-	},
-
-	// FM
-	renameNode : function(fileUri, newName) {
-		var baseUri = trimLastFromNodeUri(fileUri);
-		moveNodeAux(fileUri, baseUri + "/" + newName, true, true, false);
-	},
-
-	// FM (para commandApi poner 2 métodos: move y copy)
-	moveNode : function(originFileUri, targetFileUri, copy) {
-		moveNodeAux(originFileUri, targetFileUri, false, true, copy);
-	}
+    },
+    // FM
+    renameNode: function (fileUri, newName) {
+        var baseUri = trimLastFromNodeUri(fileUri);
+        moveNodeAux(fileUri, baseUri + "/" + newName, true, true, false);
+    },
+    // FM (para commandApi poner 2 métodos: move y copy)
+    moveNode: function (originFileUri, targetFileUri, copy) {
+        moveNodeAux(originFileUri, targetFileUri, false, true, copy);
+    }
 
 };
 
 // File Management auxiliary functions
-var calculateNodeNameFromUri = function(uri) {
-	var splittedUri = uri.split("/");
-	var name = splittedUri[splittedUri.length - 1];
-	console.log("name: " + name + "\nUri: " + uri);
-	return name;
+var calculateNodeNameFromUri = function (uri) {
+    var splittedUri = uri.split("/");
+    var name = splittedUri[splittedUri.length - 1];
+    console.log("name: " + name + "\nUri: " + uri);
+    return name;
 };
 
-var trimFirstFromNodeUri = function(uri) {
-	var splittedUri = uri.split("/");
-	console.log("trimFirstFromNodeUri: "
-			+ uri.replace(splittedUri[0] + "/", ""));
-	return uri.replace(splittedUri[0] + "/", "");
+var trimFirstFromNodeUri = function (uri) {
+    var splittedUri = uri.split("/");
+    console.log("trimFirstFromNodeUri: "
+        + uri.replace(splittedUri[0] + "/", ""));
+    return uri.replace(splittedUri[0] + "/", "");
 };
 
-var trimLastFromNodeUri = function(uri) {
-	var splittedUri = uri.split("/");
-	console.log("trimLastFromNodeUri: "
-			+ uri.replace("/" + splittedUri[splittedUri.length - 1], ""));
-	return uri.replace("/" + splittedUri[splittedUri.length - 1], "");
+var trimLastFromNodeUri = function (uri) {
+    var splittedUri = uri.split("/");
+    console.log("trimLastFromNodeUri: "
+        + uri.replace("/" + splittedUri[splittedUri.length - 1], ""));
+    return uri.replace("/" + splittedUri[splittedUri.length - 1], "");
 };
 
-var moveNodeAux = function(originFileUri, targetFileUri, justRename,
-		firstRecursion, copy) {
+var moveNodeAux = function (originFileUri, targetFileUri, justRename, firstRecursion, copy) {
 
-	// Names and uris
-	var newName = calculateNodeNameFromUri(targetFileUri);
-	var targetFileUriWithoutWS = trimFirstFromNodeUri(targetFileUri);
+    // Names and uris
+    var newName = calculateNodeNameFromUri(targetFileUri);
+    var targetFileUriWithoutWS = trimFirstFromNodeUri(targetFileUri);
 
-	// Calculate tree nodes
-	var targetDirForNode = trimLastFromNodeUri(targetFileUri);
-	var originNode = getNodeByFileUri(originFileUri);
+    // Calculate tree nodes
+    var targetDirForNode = trimLastFromNodeUri(targetFileUri);
+    var originNode = getNodeByFileUri(originFileUri);
+    
+    if (getNodeByFileUri(targetFileUri)) {
+        CommandApi.echo("<p style='color:red'>Project Tree: Element already exists.</p>");
+        return false;
+    }
 
-        // Recurs. "move" childrens
-	for (potentialUri in EditorManager.tabsMap) {
-		if (potentialUri.indexOf(originFileUri) != -1
-				&& potentialUri != originFileUri) {
-			var childName = calculateNodeNameFromUri(potentialUri);
-			moveNodeAux(potentialUri, targetFileUri + "/" + childName,
-					justRename, false, copy);
-		}
-	}
+    // Recurs. "move" childrens
+    for (potentialUri in EditorManager.tabsMap) {
+        if (potentialUri.indexOf(originFileUri) != -1
+            && potentialUri != originFileUri) {
+            var childName = calculateNodeNameFromUri(potentialUri);
+            moveNodeAux(potentialUri, targetFileUri + "/" + childName,
+                justRename, false, copy);
+        }
+    }
 
-	// Replace currentUri if necessary
-	if (originNode && EditorManager.currentUri == originFileUri)
-		EditorManager.currentUri = targetFileUri;
+    // Replace currentUri if necessary
+    if (originNode && EditorManager.currentUri == originFileUri)
+        EditorManager.currentUri = targetFileUri;
 
-	// Update references in maps (only for terminal nodes)
-	if (originNode && originFileUri != targetFileUri && originFileUri in EditorManager.tabsMap && !originNode.data.isFolder) {
-		EditorManager.sessionsMap[targetFileUri] = EditorManager.sessionsMap[originFileUri];
-		EditorManager.sessionsMap[originFileUri] = null;
-		delete EditorManager.sessionsMap[originFileUri];
+    // Update references in maps (only for terminal nodes)
+    if (originNode && originFileUri != targetFileUri && originFileUri in EditorManager.tabsMap && !originNode.data.isFolder) {
+        EditorManager.sessionsMap[targetFileUri] = EditorManager.sessionsMap[originFileUri];
+        EditorManager.sessionsMap[originFileUri] = null;
+        delete EditorManager.sessionsMap[originFileUri];
 
-		EditorManager.tabsMap[targetFileUri] = EditorManager.tabsMap[originFileUri];
-		EditorManager.tabsMap[originFileUri] = null;
-		delete EditorManager.tabsMap[originFileUri];
-	}
+        EditorManager.tabsMap[targetFileUri] = EditorManager.tabsMap[originFileUri];
+        EditorManager.tabsMap[originFileUri] = null;
+        delete EditorManager.tabsMap[originFileUri];
+    }
 
-	// Handle tab if open
-	var tab = EditorManager.tabsMap[targetFileUri];
-	if (tab != undefined) {
-		$(tab.children()[0]).empty();
-		$(tab.children()[0]).append(newName);
-		tab.attr('title', targetFileUri);
+    // Handle tab if open
+    var tab = EditorManager.tabsMap[targetFileUri];
+    if (tab != undefined) {
+        $(tab.children()[0]).empty();
+        $(tab.children()[0]).append(newName);
+        tab.attr('title', targetFileUri);
 
-		// Select tab
-		$(tab.children()).parent().off('click');
-		$(tab.children()).click(function() {
-			if (targetFileUri != EditorManager.currentUri)
-				EditorManager.openFile(targetFileUri);
-		});
+        // Select tab
+        $(tab.children()).parent().off('click');
+        $(tab.children()).click(function () {
+            if (targetFileUri != EditorManager.currentUri)
+                EditorManager.openFile(targetFileUri);
+        });
 
-		// Close tab
-		$(tab.children()[1]).off('click');
-		$(tab.children()[1]).click(function(event) {
-			// alert(targetFileUri);
-			event.stopPropagation();
-			EditorManager.closeFile(targetFileUri);
-		});
-	}
+        // Close tab
+        $(tab.children()[1]).off('click');
+        $(tab.children()[1]).click(function (event) {
+            // alert(targetFileUri);
+            event.stopPropagation();
+            EditorManager.closeFile(targetFileUri);
+        });
+    }
 
-	// Handle tree
-	var targetNode = getNodeByFileUri(targetDirForNode);
-	var prevName = originNode.data.title;
-	if (originNode != undefined && targetNode != undefined) {
-		originNode.data.keyPath = targetFileUriWithoutWS;
-		originNode.render(); // For dynatree bug! Node needs to be rendered
-		// before moving!
-		targetNode.render(); // For dynatree bug!
-		if (firstRecursion) {
-			if (copy) {
-				var copyNode = originNode.toDict(true, function(dict) {
-					// dict.title = "Copy of " + dict.title;
-					delete dict.key;
-				});
-				targetNode.addChild(copyNode);
-			} else {
-				originNode.move(targetNode);
-				originNode.setTitle(newName);
+    // Handle tree
+    var targetNode = getNodeByFileUri(targetDirForNode);
+    var prevName = originNode.data.title;
+    if (originNode != undefined && targetNode != undefined) {
+        originNode.data.keyPath = targetFileUriWithoutWS;
+        originNode.render(); // For dynatree bug! Node needs to be rendered
+        // before moving!
+        targetNode.render(); // For dynatree bug!
+        if (firstRecursion) {
+            if (copy) {
+                var copyNode = originNode.toDict(true, function (dict) {
+                    // dict.title = "Copy of " + dict.title;
+                    delete dict.key;
+                });
+                targetNode.addChild(copyNode);
+            } else {
+                originNode.move(targetNode);
+                originNode.setTitle(newName);
 
                 // Update children keypath
-				if (originNode.data.isFolder)
-					updateChildrenKeyPath(originNode, newName, prevName);
+                if (originNode.data.isFolder)
+                    updateChildrenKeyPath(originNode, newName, prevName);
 
-				targetNode.sortChildren(); // TODO: Add depth limit for
-				// performance
+                targetNode.sortChildren(); // TODO: Add depth limit for
+                // performance
 
-			}
-		}
-	} else if (originNode.getLevel() <= 1) { // it's  a project
-		originNode.data.keyPath = targetFileUriWithoutWS
-		originNode.render();
-		updateChildrenKeyPath(originNode, newName, prevName);
-	}
+            }
+        }
+    } else if (originNode.getLevel() <= 1) { // it's  a project
+        originNode.data.keyPath = targetFileUriWithoutWS
+        originNode.render();
+        updateChildrenKeyPath(originNode, newName, prevName);
+    }
 
-	// TODO show confirmation with callbacks
-	// Call backend
-	if (firstRecursion != undefined && firstRecursion) {
-		if (justRename)
-			if (originNode.data.isFolder)
-				FileApi.renameDirectory(originFileUri, newName, function() {
-				});
-			else
-				FileApi.renameFile(originFileUri, newName, function() {
-				});
-		else if (originNode.data.isFolder)
-			FileApi.moveDirectory(originFileUri, targetFileUri, copy,
-					function() {
-					});
-		else
-			FileApi.moveFile(originFileUri, targetDirForNode, copy, function() {
-			});
-	}
+    // TODO show confirmation with callbacks
+    // Call backend
+    if (firstRecursion != undefined && firstRecursion) {
+        if (justRename)
+            if (originNode.data.isFolder)
+                FileApi.renameDirectory(originFileUri, newName, function () {
+                });
+            else
+                FileApi.renameFile(originFileUri, newName, function () {
+                });
+        else if (originNode.data.isFolder)
+            FileApi.moveDirectory(originFileUri, targetFileUri, copy,
+                function () {
+                });
+        else
+            FileApi.moveFile(originFileUri, targetDirForNode, copy, function () {
+            });
+    }
 
 };
 
 // Operation languages launcher
 var operations = [];
 var loadOperations = {
-	elementClass : "selectOperationItem",
-	folderDisabled : true,
-	titleCode : "editor.actions.modal.operation.title",
-	buttonCode : "editor.actions.modal.operation.button",
-	contentUrl : "app/modalWindows/selectOperationItem",
-	onClick : function() {
-		genericMenuOption(loadOperations);
-	},
-	onCreate : function() {
-		var checkBoxMap = $(".box-operation");
-		for (var i = 0; i < checkBoxMap.length; i++) {
-			if (checkBoxMap[i].checked == true) {
-				operations.push(checkBoxMap[i].value);
-			}
-		}
-		hideModal();
-		resultOperations.onClick();
-	},
-	onCancel : function() {
-		hideModal();
-	}
+    elementClass: "selectOperationItem",
+    folderDisabled: true,
+    titleCode: "editor.actions.modal.operation.title",
+    buttonCode: "editor.actions.modal.operation.button",
+    contentUrl: "app/modalWindows/selectOperationItem",
+    onClick: function () {
+        genericMenuOption(loadOperations);
+    },
+    onCreate: function () {
+        var checkBoxMap = $(".box-operation");
+        for (var i = 0; i < checkBoxMap.length; i++) {
+            if (checkBoxMap[i].checked == true) {
+                operations.push(checkBoxMap[i].value);
+            }
+        }
+        hideModal();
+        resultOperations.onClick();
+    },
+    onCancel: function () {
+        hideModal();
+    }
 };
 var resultOperations = {
-	elementClass : "resultOperationItem",
-	folderDisabled : true,
-	titleCode : "editor.actions.modal.result-operation.title",
-	buttonCode : "editor.actions.modal.result-operation.button",
-	contentUrl : "app/modalWindows/resultOperationItem",
-	onClick : function() {
-		genericMenuOption(resultOperations);
-	},
-	onCreate : function() {
-		OperationReport.createPDFLink("Test");
-		operations = [];
-		OperationReport.resetForNewReport();
-		// download report
-	},
-	onCancel : function() {
-		hideModal();
-		operations = [];
-		OperationReport.resetForNewReport();
-	}
+    elementClass: "resultOperationItem",
+    folderDisabled: true,
+    titleCode: "editor.actions.modal.result-operation.title",
+    buttonCode: "editor.actions.modal.result-operation.button",
+    contentUrl: "app/modalWindows/resultOperationItem",
+    onClick: function () {
+        genericMenuOption(resultOperations);
+    },
+    onCreate: function () {
+        OperationReport.createPDFLink("Test");
+        operations = [];
+        OperationReport.resetForNewReport();
+        // download report
+    },
+    onCancel: function () {
+        hideModal();
+        operations = [];
+        OperationReport.resetForNewReport();
+    }
 };
 var userDemoInfo = {
-	elementClass : "userDemoInfo",
-	folderDisabled : true,
-	titleCode : "editor.actions.modal.userDemoInfo.title",
-	buttonCode : "editor.actions.modal.userDemoInfo.button",
-	contentUrl : "app/modalWindows/userDemoInfo",
-	onClick : function() {
-		genericMenuOption(userDemoInfo);
-		console.log("<<<<<<<onclick()");
-	},
-	onCreate : function() {
-		console.log("<<<<<<<oncreate()");
-		hideModal();
-	},
-	onCancel : function() {
-		hideModal();
-	}
+    elementClass: "userDemoInfo",
+    folderDisabled: true,
+    titleCode: "editor.actions.modal.userDemoInfo.title",
+    buttonCode: "editor.actions.modal.userDemoInfo.button",
+    contentUrl: "app/modalWindows/userDemoInfo",
+    onClick: function () {
+        genericMenuOption(userDemoInfo);
+        console.log("<<<<<<<onclick()");
+    },
+    onCreate: function () {
+        console.log("<<<<<<<oncreate()");
+        hideModal();
+    },
+    onCancel: function () {
+        hideModal();
+    }
 };
 
 // ------------
@@ -1044,52 +1000,52 @@ var userDemoInfo = {
 // SessionAggregation
 
 function SessionAggregation() {
-	this.current = null;
-	this.formatsSessions = {};
-	this.checkLanguageURI = {};
+    this.current = null;
+    this.formatsSessions = {};
+    this.checkLanguageURI = {};
 }
 
-SessionAggregation.prototype.getFormatsSessions = function() {
-	return this.formatsSessions;
+SessionAggregation.prototype.getFormatsSessions = function () {
+    return this.formatsSessions;
 };
 
-SessionAggregation.prototype.getSession = function(formatKey) {
-	return this.formatsSessions[formatKey];
+SessionAggregation.prototype.getSession = function (formatKey) {
+    return this.formatsSessions[formatKey];
 };
 
-SessionAggregation.prototype.getBaseSession = function() {
-	return this.formatsSessions[this.baseFormat];
+SessionAggregation.prototype.getBaseSession = function () {
+    return this.formatsSessions[this.baseFormat];
 };
 
-SessionAggregation.prototype.setBaseSession = function(baseFormat) {
-	this.baseFormat = baseFormat;
+SessionAggregation.prototype.setBaseSession = function (baseFormat) {
+    this.baseFormat = baseFormat;
 };
 
-SessionAggregation.prototype.setFormatSession = function(formatKey, session) {
-	this.formatsSessions[formatKey] = session;
+SessionAggregation.prototype.setFormatSession = function (formatKey, session) {
+    this.formatsSessions[formatKey] = session;
 };
 
-SessionAggregation.prototype.getBaseFormat = function() {
-	return this.baseFormat;
+SessionAggregation.prototype.getBaseFormat = function () {
+    return this.baseFormat;
 };
 
-SessionAggregation.prototype.getCurrentFormat = function() {
-	return this.current;
+SessionAggregation.prototype.getCurrentFormat = function () {
+    return this.current;
 };
 
-SessionAggregation.prototype.getCurrentSession = function() {
-	return this.getSession(this.getCurrentFormat());
+SessionAggregation.prototype.getCurrentSession = function () {
+    return this.getSession(this.getCurrentFormat());
 };
 
-SessionAggregation.prototype.setCurrentFormat = function(f) {
-	this.current = f;
+SessionAggregation.prototype.setCurrentFormat = function (f) {
+    this.current = f;
 };
 
-SessionAggregation.prototype.getCheckLanguageURI = function(formatKey) {
-	return this.checkLanguageURI[formatKey];
+SessionAggregation.prototype.getCheckLanguageURI = function (formatKey) {
+    return this.checkLanguageURI[formatKey];
 };
 
-SessionAggregation.prototype.setCheckLanguageURI = function(formatKey,
-		checkLanguageURI) {
-	this.checkLanguageURI[formatKey] = checkLanguageURI;
+SessionAggregation.prototype.setCheckLanguageURI = function (formatKey,
+    checkLanguageURI) {
+    this.checkLanguageURI[formatKey] = checkLanguageURI;
 };

@@ -191,22 +191,22 @@
         
         
         <script>
-			//DEMO USERS
-				$("#username").ready(function(){
-					if($("#username").val()!=""){
-						$("#password").val($("#username").val());
-						//$("#loginForm").submit();
-						console.log(location.href);
-						localStorage.setItem('demo', 'demo');
-						localStorage.setItem('ws', location.href.split("demo/")[1]);
-						console.log(">>>>>>>>>>>>>>"+location.href.split("demo/")[1]);
-						//$("#loginButton").click();
-						$("#loginForm").submit();
-					}else{
-						localStorage.setItem('demo', '');
-						localStorage.setItem('ws', '');
-					}
-				});				
+            //DEMO USERS
+            $("#username").ready(function(){
+                    if ($("#username").val()!="") {
+                        $("#password").val($("#username").val());
+                        //$("#loginForm").submit();
+                        console.log(location.href);
+                        localStorage.setItem('demo', 'demo');
+                        localStorage.setItem('ws', location.href.split("demo/")[1]);
+                        console.log(">>>>>>>>>>>>>>"+location.href.split("demo/")[1]);
+                        //$("#loginButton").click();
+                        $("#loginForm").submit();
+                    } else {
+                        localStorage.setItem('demo', '');
+                        localStorage.setItem('ws', '');
+                    }
+            });
 		</script>
 	
 </body>

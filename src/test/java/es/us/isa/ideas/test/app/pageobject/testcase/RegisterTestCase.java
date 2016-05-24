@@ -33,59 +33,50 @@ public class RegisterTestCase {
     }
 
     @Test
-    public void step04_twitterRegister() {
+    public void step02_twitterRegister() {
         String twUser = TestProperty.getTestTwitterUser();
         String twPass = TestProperty.getTestTwitterPassword();
         RegisterSocialTwitterPage.testTwitterSocialRegister(twUser, twPass);
     }
 
     @Ignore
-    public void step05_logout() {
-        PageObject.logout();
-    }
-
-    @Ignore
     public void step06_googleRegister() {
+        PageObject.logout();
+
         String goUser = TestProperty.getTestGoogleUser();
         String goPass = TestProperty.getTestGooglePassword();
         RegisterSocialGooglePage.testGoogleSocialRegister(goUser, goPass);
     }
-    
+
     @Ignore
     public void step06_googleRegisterb() {
         RegisterSocialGooglePage.testGoogleSocialLogout();
     }
 
     @Test
-    public void step07_logout() {
-        PageObject.logout();
-    }
-
-    @Test
     public void step10_register() {
-        String user = TestProperty.getTestUser();
-        String name = TestProperty.getTestUserName();
-        String email = TestProperty.getTestUserEmail();
-        String emailPass = TestProperty.getTestUserEmailPassword();
-        String phone = TestProperty.getTestUserPhone();
-        String address = TestProperty.getTestUserAddress();
+        PageObject.logout();
+
+        String user = TestProperty.getTestRegisterUser();
+        String name = TestProperty.getTestRegisterUserName();
+        String email = TestProperty.getTestRegisterUserEmail();
+        String emailPass = TestProperty.getTestRegisterUserEmailPassword();
+        String phone = TestProperty.getTestRegisterUserPhone();
+        String address = TestProperty.getTestRegisterUserAddress();
 
         RegisterPage.testRegister(name, email, emailPass, phone, address, user);
     }
 
     @Test
-    public void step11_logout() {
-        PageObject.logout();
-    }
-
-    @Test
     public void step12_recoverPassword() {
+        PageObject.logout();
 
-        String user = TestProperty.getTestUser();
-        String email = TestProperty.getTestUserEmail();
-        String emailPass = TestProperty.getTestUserEmailPassword();
+        String user = TestProperty.getTestRegisterUser();
+        String email = TestProperty.getTestRegisterUserEmail();
+        String emailPass = TestProperty.getTestRegisterUserEmailPassword();
 
         RecoverPasswordPage.testRecoverPassword(email, emailPass, user);
+        PageObject.logout();
     }
 
 }

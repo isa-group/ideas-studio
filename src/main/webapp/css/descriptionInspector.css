@@ -207,6 +207,7 @@ select.selectedFragment {
 .btn.inactive {background:#E8E8E8;border-color:#E8E8E8;color:#222;} 
  
 .highlighted-fragment, .ideas-binding:hover, .to-remove:hover { cursor: pointer; background: rgba(212, 198, 54, 0.5); } 
+.ideas-binding-vocab.to-remove:hover { background-color: white;}
 .middle-highlighted-fragment { cursor: pointer; background: rgba(0, 0, 0, 0.06); } 
 
 
@@ -298,45 +299,6 @@ a.bulkSelectAll, a.bulkSelectNone { cursor: pointer; }
 		no-repeat;
 	background-size: 40px;
 }*/
-
-/* Model inspector */
-/* reader mode */
-#inspectorModelContent span.editorModelElement a[ng-hide='editorEnabled'],
-#editorWrapper span.editorModelElement a[ng-hide='editorEnabled'] {
-	line-height: 15px;
-	border: 0;
-	border-bottom: 1px dotted;
-	color: #333;
-	text-decoration: none;
-}
-
-.modelInspectorContent {
-}
-
-/* add sla button */
-.modelInspectorContent > .addSlaButton,
-#editorWrapper .addSlaButton {
-	width: 32px;
-	height: 33px;
-	border-radius: 0;
-	font-size: 28px;
-	padding: 0px;
-	line-height: 1;
-	border: 0;
-	position: absolute;
-	z-index: 10;
-	bottom: 0;
-	right: 0;
-	background: rgb(187, 222, 251) !important;
-	margin: 0 40px 30px 0;
-	display: none;
-}
-
-.addSlaButton:hover,
-.addSlaButton:focus,
-.addSlaButton:active {
-	background: rgb(187, 222, 251) !important;
-}
 
 /* Agreement template */
 div.ag-template {

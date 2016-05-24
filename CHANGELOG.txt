@@ -1,3 +1,39 @@
+ideas-studio v0.9.2.7, 19/05/2016
+----------------------------------------------
+- Drag and drop project into project #14
+- Allow to copy and paste a node into its own path #22
+- Allowed to paste nothing copied/cut into a path #23
+- Creating a directory with disabled button #55
+- Unable to import .zip without workspace name #174
+- Cannot create a workspace with whitespace #175
+
+ideas-studio v0.9.2.6, 12/05/2016
+----------------------------------------------
+- Allow other browers than Chrome #170
+
+ideas-studio v0.9.2.5, 10/05/2016
+----------------------------------------------
+- Modal error window keeps gray background #162
+- Unable to remove nested "vocab" binding #165
+- Prohibit other browsers distinct from Chrome #166
+
+ideas-studio v0.9.2.4, 28/04/2016
+----------------------------------------------
+- Ace autocomplete and searchbox #156
+- Ace content doesn't fit well #155
+- "Form" format disappears when you close another file tab #154
+
+ideas-studio v0.9.2.3, 07/04/2016
+----------------------------------------------
+- Unable to create a file with the same name and different extension #133
+- [new module] ideas-module-angular-controller #139
+- Integrate angular controller functionalities to IDEAS #145
+
+ideas-studio v0.9.2.2, 01/04/2016
+----------------------------------------------
+- Fixes #150 "Unable to launch any language operation"
+- Fixes #148 "Unnecessary angular model update when editing a file"
+
 ideas-studio v0.9.2.1, 17/03/2016
 ----------------------------------------------
 - Fixes #143 "Proxy.create is not a function error"

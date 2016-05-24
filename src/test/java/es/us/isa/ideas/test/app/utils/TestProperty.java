@@ -63,32 +63,40 @@ public class TestProperty {
         return prop;
     }
     
-    public static String getTestUser() {
-        return getTestProperties().getProperty("test.user");
+    public static String getTestDefaultUser() {
+        return getTestProperties().getProperty("test.default.user");
     }
     
-    public static String getTestUserPassword() {
-        return getTestProperties().getProperty("test.user.pass");
+    public static String getTestDefaultUserPass() {
+        return getTestProperties().getProperty("test.default.pass");
     }
     
-    public static String getTestUserName() {
-        return getTestProperties().getProperty("test.user.name");
+    public static String getTestRegisterUser() {
+        return getTestProperties().getProperty("test.register.user");
     }
     
-    public static String getTestUserEmail() {
-        return getTestProperties().getProperty("test.user.email");
+    public static String getTestRegisterUserPassword() {
+        return getTestProperties().getProperty("test.register.user.pass");
     }
     
-    public static String getTestUserEmailPassword() {
-        return getTestProperties().getProperty("test.user.email.pass");
+    public static String getTestRegisterUserName() {
+        return getTestProperties().getProperty("test.register.user.name");
     }
     
-    public static String getTestUserPhone() {
-        return getTestProperties().getProperty("test.user.phone");
+    public static String getTestRegisterUserEmail() {
+        return getTestProperties().getProperty("test.register.user.email");
     }
     
-    public static String getTestUserAddress() {
-        return getTestProperties().getProperty("test.user.address");
+    public static String getTestRegisterUserEmailPassword() {
+        return getTestProperties().getProperty("test.register.user.email.pass");
+    }
+    
+    public static String getTestRegisterUserPhone() {
+        return getTestProperties().getProperty("test.register.user.phone");
+    }
+    
+    public static String getTestRegisterUserAddress() {
+        return getTestProperties().getProperty("test.register.user.address");
     }
     
     public static String getTestTwitterUser() {
@@ -107,7 +115,7 @@ public class TestProperty {
         return getTestProperties().getProperty("test.go.pass");
     }
     
-    public static void setTestUserPassword(String pass) {
+    public static void setTestRegisterUserPassword(String pass) {
         
         try {
             java.net.URL resource = TestCase.class.getResource("/" + FILE_NAME);
@@ -116,7 +124,7 @@ public class TestProperty {
             FileInputStream fileName = new FileInputStream(propsFile);
             Properties props = getTestProperties();
             props.load(fileName);
-            props.setProperty("autotester.pass", pass);
+            props.setProperty("test.register.user.pass", pass);
             fileName.close();
             
             FileOutputStream outFileName = new FileOutputStream(propsFile);

@@ -2,7 +2,6 @@ package es.us.isa.ideas.test.app.pageobject.login;
 
 import es.us.isa.ideas.test.app.pageobject.PageObject;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriver;
-import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriverWait;
 import es.us.isa.ideas.test.app.pageobject.TestCase;
 import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Level;
@@ -13,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * Applied Software Engineering Research Group (ISA Group) University of
@@ -59,7 +59,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
 
     // sendKeys
     public RegisterPage typeName(CharSequence name) {
-        sendKeysWithWait(nameField, name);
+        nameField.sendKeys(name);
         return PageFactory.initElements(getWebDriver(), RegisterPage.class);
     }
 
@@ -111,25 +111,13 @@ public class RegisterPage extends PageObject<RegisterPage> {
                 .typeName(name)
                 .typeEmail(email)
                 .typePhone(phone)
-                .typeAddress(address);
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            page.clickOnSaveChanges();
+                .typeAddress(address)
+                .clickOnSaveChanges();
 
             WebElement element = page.modalErrorHeaderTitle;
-            getWebDriverWait().until(ExpectedConditions.visibilityOf(element));
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+            new WebDriverWait(PageObject.getWebDriver(), 10)
+                .until(ExpectedConditions.visibilityOf(element));
+            
             TEST_RESULT = element.getText().equals("Sign up error");
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
@@ -155,7 +143,12 @@ public class RegisterPage extends PageObject<RegisterPage> {
 
             // Modal confirmation
             By locator = By.id("statusPanel");
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             String statusPanelText = getWebDriver().findElement(locator).getText();
             TEST_RESULT = !statusPanelText.contains("The email address you entered is already in use");
@@ -164,12 +157,13 @@ public class RegisterPage extends PageObject<RegisterPage> {
             // Email login
             getWebDriver().get("https://www.gmail.com");
             locator = By.id("Email");
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
             try {
-                Thread.sleep(2000);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
-                LOG.severe(ex.getMessage());
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
             PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class)
                 .typeUsername(email)
                 .clickOnNext()
@@ -187,10 +181,21 @@ public class RegisterPage extends PageObject<RegisterPage> {
             // Open email
             String selectorConfirmationEmail = "#\\3a 2 > div > div > div.UI tbody tr:first-child td:nth-child(4)";
             locator = By.cssSelector(selectorConfirmationEmail);
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             getWebDriver().findElement(locator).click(); // opening
             locator = By.cssSelector(".ads");
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             // Parse url confirmation
             String urlConfirmation = (String) getJs()
@@ -217,7 +222,13 @@ public class RegisterPage extends PageObject<RegisterPage> {
             getWebDriver().get(urlConfirmation);
             String selectorModalTitle = "#message > div > div > div.modal-header > h4";
             locator = By.cssSelector(selectorModalTitle);
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             String modalTitle = getWebDriver().findElement(locator).getText();
 
             TEST_RESULT = "Account validated successfully".equals(modalTitle);
@@ -227,12 +238,24 @@ public class RegisterPage extends PageObject<RegisterPage> {
             getWebDriver().get("https://www.gmail.com");
             String selectorEmail = "#\\3a 2 > div > div > div.UI tbody tr:first-child td:nth-child(4)";
             locator = By.cssSelector(selectorEmail);
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             getWebDriver().findElement(locator).click();
 
             // Copy parsed password
             locator = By.cssSelector(".gs");
-            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             String scriptCopyPass = "var str=document.getElementsByClassName('gs')[0].textContent;"
                 + "return str.match(/([0-9a-zA-Z]+-)+([0-9a-zA-Z]+)/i)[0];";
             String password = (String) getJs().executeScript(scriptCopyPass);
@@ -241,7 +264,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
             Assert.assertTrue(TEST_RESULT);
 
             // Updated test password in properties file
-            TestProperty.setTestUserPassword(password);
+            TestProperty.setTestRegisterUserPassword(password);
 
             try {
                 Thread.sleep(1000);
