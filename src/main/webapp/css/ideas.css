@@ -2194,8 +2194,6 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 .input-group-addon {
     padding: 0.3em 1em;
     max-width: 10em;
-    min-width: 8em;
-    white-space: pre-wrap!important;
     overflow: hidden;
     text-overflow: ellipsis;
 }
