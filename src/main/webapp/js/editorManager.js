@@ -237,9 +237,8 @@ var loadExistingTabbedInstance = function (fileUri, content) {
     var caretLI = "";
 
     fileUriOperation = EditorManager.getCurrentUri();
-    opMap = ModeManager.getOperations(ModeManager
-            .calculateModelIdFromExt(ModeManager
-                    .calculateExtFromFileUri(fileUri)));
+    opMap = ModeManager.getOperations(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)));
+    var model = ModeManager.getMode(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)));
 
     var ops_name_length = 0;
     var use_caret = false;
@@ -254,16 +253,15 @@ var loadExistingTabbedInstance = function (fileUri, content) {
                     var op = $('<button class="btn btn-primary opButton" title="' + opMap[i].name + '" id="' + opMap[i].id + '"><span class="' + opMap[i].icon + '"></span></button>');
                     operationArray.push(opMap[i]);
                     op.click(function () {
-                        launchOperation($(this).attr('title'));
+                        launchOperation(model, $(this).attr('id'), $(this).attr('title'));
                         operationArray = [];
                     });
                     ops.push(op);
                 } else {
                     var op = $('<button class="btn btn-primary opButton" name="' + opMap[i].name + '" id="' + opMap[i].id + '"><span class="' + opMap[i].icon + '"></span> ' + opMap[i].name + '</button>');
                     operationArray.push(opMap[i]);
-                    var name = opMap[i].name;
                     op.click(function () {
-                        launchOperation($(this).attr('name'));
+                        launchOperation(model, $(this).attr('id'), $(this).attr('name'));
                         operationArray = [];
 
                     });
@@ -277,7 +275,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
                     var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '>' + opMap[i].name + '</button>');
                     operationArray.push(opMap[i]);
                     op.click(function () {
-                        launchOperation($(this).html());
+                        launchOperation(model, $(this).attr('id'), $(this).text());
                         operationArray = [];
                     });
                     ops.push(op);
@@ -291,7 +289,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
                     caretUL.append(caretLI);
                     operationArray.push(opMap[i]);
                     caretLI.click(function () {
-                        launchOperation($(this).children('a').html());
+                        launchOperation(model, $(this).children('a').attr('id'), $(this).children('a').html());
                         operationArray = [];
                     });
                 }
@@ -342,35 +340,46 @@ var loadExistingTabbedInstance = function (fileUri, content) {
 };
 
 // Operation buttons auxiliar function
-var launchOperation = function (name) {
+var launchOperation = function (model, id, name) {
     for (var i = 0; i < opMap.length; i++) {
-
         try {
-            if (opMap[i].name == name) {
-                var _remoteExecution = opMap[i]._remoteExecution;
-                var action = eval('(' + opMap[i].action + ')');
+            if (opMap[i].id === id) {
                 var operation = opMap[i];
+                if (model.apiVersion >= 2.0) {
+                    switch (operation.type) {
+                        case 'simple':
+                            CommandApi.doDocumentOperation(operation.id, {}, fileUriOperation, function (result) {
+                                if (result.annotations)
+                                    EditorManager.setAnnotations(result.annotations);
+                                OperationReport.launchedOperations.push(operation.name);
+                                OperationReport.resultLaunchedOperations.push(result.message);
+                            });
+                            break;
+                    }
+                } else {
+                    var _remoteExecution = operation._remoteExecution;
+                    var action = eval('(' + operation.action + ')');
 
-                // console.log(operation);
-                if (_remoteExecution != undefined && _remoteExecution != null
-                        && eval('(' + _remoteExecution + ')')) {
-                    CommandApi.doDocumentOperation(operation.id, operation.data, fileUriOperation, function (result) {
-                        // console.log(result);
-                        if (action != undefined && action != null) {
+                    // console.log(operation);
+                    if (_remoteExecution !== undefined && _remoteExecution !== null
+                            && eval('(' + _remoteExecution + ')')) {
+                        CommandApi.doDocumentOperation(operation.id, operation.data, fileUriOperation, function (result) {
                             // console.log(result);
-                            if (result.annotations)
-                                EditorManager.setAnnotations(result.annotations);
-                            action(operation, fileUriOperation, result);
-                        }
+                            if (action !== undefined && action !== null) {
+                                // console.log(result);
+                                if (result.annotations)
+                                    EditorManager.setAnnotations(result.annotations);
+                                action(operation, fileUriOperation, result);
+                            }
 
-                        OperationReport.launchedOperations.push(operation.name);
-                        OperationReport.resultLaunchedOperations.push(result.message);
-                    });
-                } else if (action != undefined && action != null) {
-                    action(operation, fileUriOperation);
+                            OperationReport.launchedOperations.push(operation.name);
+                            OperationReport.resultLaunchedOperations.push(result.message);
+                        });
+                    } else if (action !== undefined && action !== null) {
+                        action(operation, fileUriOperation);
+                    }
                 }
                 OperationReport.timeOfOperations.push(OperationMetrics.getOperationMilliseconds());
-
                 break;
             }
         } catch (err) {
@@ -517,27 +526,34 @@ var EditorManager = {
                     node.activate();
 
                 // Change editor theme
-                var modelId = ModeManager
-                        .calculateModelIdFromExt(ModeManager
-                                .calculateExtFromFileUri(fileUri));
+                var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri));
                 var editorThemeId;
-                var formats = ModeManager.modelMap[modelId].formats;
-                var currentFormat = EditorManager.sessionsMap[fileUri]
-                        .getCurrentFormat();
-                // TODO: Refactor!
-                for (var f in formats) {
-                    if (formats[f].format == currentFormat)
-                        editorThemeId = formats[f].editorThemeId;
+                var model = ModeManager.modelMap[modelId];
+
+                if (model.apiVersion >= 2) {
+                    var formats = ModeManager.modelMap[modelId].syntaxes;
+                    var currentFormat = EditorManager.sessionsMap[fileUri].getCurrentFormat();
+                    // TODO: Refactor!
+                    for (var f in formats) {
+                        if (formats[f].id === currentFormat)
+                            editorThemeId = formats[f].editorThemeId;
+                    }
+                } else {
+                    var formats = ModeManager.modelMap[modelId].formats;
+                    var currentFormat = EditorManager.sessionsMap[fileUri].getCurrentFormat();
+                    // TODO: Refactor!
+                    for (var f in formats) {
+                        if (formats[f].format === currentFormat)
+                            editorThemeId = formats[f].editorThemeId;
+                    }
                 }
+
                 console.log("## editorThemeId: " + editorThemeId);
                 document.editor.setTheme(editorThemeId);
 
                 // Inspector
-                EditorManager.loadInspector(ModeManager
-                        .calculateModelIdFromExt(ModeManager
-                                .calculateExtFromFileUri(fileUri)),
-                        EditorManager.sessionsMap[EditorManager.currentUri]
-                        .getCurrentFormat());
+                EditorManager.loadInspector(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)),
+                        EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat());
 
                 if (DescriptionInspector) {
                     if (!DescriptionInspector.existBinding())
@@ -548,9 +564,9 @@ var EditorManager = {
                     document.editor.focus();
                 }
             });
-            
+
         }
-        
+
     },
     // FM
     closeFile: function (fileUri) {
@@ -632,43 +648,29 @@ var EditorManager = {
 
         //TODO: comprobar si el cambio de formato se realiza sobre/desde un un DescriptionFullView
 
-        var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
-                .getCurrentFormat();
-        var actualContent = EditorManager.sessionsMap[EditorManager.currentUri]
-                .getCurrentSession().getValue();
-        var converterUri = ModeManager.getConverter(ModeManager
-                .calculateModelIdFromExt(ModeManager
-                        .calculateExtFromFileUri(EditorManager.currentUri)));
+        var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
+        var actualContent = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentSession().getValue();
+        var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(EditorManager.currentUri));
+        var model = ModeManager.getMode(modelId);
+        var converterUri = ModeManager.getConverter(modelId);
+        if (model.apiVersion >= 2) {
+            converterUri = converterUri.replace("$srcSyntaxId", currentFormat).replace("$destSyntaxId", desiredFormat);
+        }
 
-        if (desiredFormat in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() &&
-                currentFormat !== desiredFormat) {
+        if (desiredFormat in EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions() && currentFormat !== desiredFormat) {
 
-            CommandApi.callConverter(
-                    currentFormat,
-                    desiredFormat,
-                    fileUri,
-                    actualContent,
-                    converterUri,
-                    function (result) {
-                        var appResponse = result;
-                        console.log("Converter resp:");
-                        console.log(appResponse);
-                        if (appResponse.data == "ERROR!")
-                            CommandApi.echo(
-                                    "<p style='color: red'>" +
-                                    "Cannot change to " + desiredFormat + " format, the file contains fails." +
-                                    "</p>");
-                        else {
-                            EditorManager.sessionsMap[EditorManager.currentUri]
-                                    .setCurrentFormat(desiredFormat);
-                            document.editor
-                                    .setSession(EditorManager.sessionsMap[EditorManager.currentUri]
-                                            .getCurrentSession());
-                            EditorManager.sessionsMap[EditorManager.currentUri]
-                                    .getCurrentSession().setValue(
-                                    appResponse.data);
-                        }
-                    });
+            CommandApi.callConverter(model, currentFormat, desiredFormat, fileUri, actualContent, converterUri, function (result) {
+                var appResponse = result;
+                console.log("Converter resp:");
+                console.log(appResponse);
+                if (appResponse.data === "ERROR!")
+                    CommandApi.echo("<p style='color: red'>" + "Cannot change to " + desiredFormat + " format, the file contains fails." + "</p>");
+                else {
+                    EditorManager.sessionsMap[EditorManager.currentUri].setCurrentFormat(desiredFormat);
+                    document.editor.setSession(EditorManager.sessionsMap[EditorManager.currentUri].getCurrentSession());
+                    EditorManager.sessionsMap[EditorManager.currentUri].getCurrentSession().setValue(appResponse.data);
+                }
+            });
         }
 
     },
@@ -785,7 +787,7 @@ var EditorManager = {
     moveNode: function (originFileUri, targetFileUri, copy) {
         moveNodeAux(originFileUri, targetFileUri, false, true, copy);
     }
-    
+
 };
 
 // File Management auxiliary functions
@@ -821,7 +823,8 @@ var moveNodeAux = function (originFileUri, targetFileUri, justRename, firstRecur
     var originNode = getNodeByFileUri(originFileUri);
 
     if (getNodeByFileUri(targetFileUri)) {
-        if (!justRename) CommandApi.echo("<p style='color:red'>Project Tree: Element already exists.</p>");
+        if (!justRename)
+            CommandApi.echo("<p style='color:red'>Project Tree: Element already exists.</p>");
         return false;
     }
 

@@ -22,28 +22,35 @@ var CommandApi = {
             "async": true,
         });
     },
-    callConverter: function (currentFormat, desiredFormat, fileUri,
+    callConverter: function (model, currentFormat, desiredFormat, fileUri,
             actualContent, converterUri, callback) {
+
+        var fileData = {
+            fileUri: fileUri,
+            content: actualContent
+        };
+        if (model.apiVersion <= 1) {
+            fileData.currentFormat = currentFormat;
+            fileData.desiredFormat = desiredFormat;
+        }
+
         $.ajax(converterUri, {
-            "type": "post",
-            "data": {
-                "currentFormat": currentFormat,
-                "desiredFormat": desiredFormat,
-                "fileUri": fileUri,
-                "content": actualContent
-            },
-            "success": function (result) {
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(fileData),
+            dataType: 'json',
+            success: function (result) {
                 callback(result);
             },
-            "error": function (result) {
+            error: function (result) {
                 console.error(result.statusText);
             },
-            "async": true,
+            async: true
         });
     },
     doDocumentOperation: function (operationId, data, fileUri, callback, async) {
 
-        if (async == undefined) {
+        if (async === undefined) {
             async = true;
         }
 
@@ -100,7 +107,8 @@ var CommandApi = {
                     data[(i - 4)] = arguments[i];
                 }
 
-                operationUri = "/" + model.module + EXEC_OP_URI.replace("$version", model.apiVersion).replace("$modelId", modelId).replace("$operationId", operationId);
+                operationUri = ModeManager.getBaseUri(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)))
+                        + EXEC_OP_URI.replace("$modelId", modelId).replace("$operationId", operationId);
                 data = JSON.stringify(data);
             }
 
@@ -130,7 +138,7 @@ var CommandApi = {
                     callback(result);
                     OperationMetrics.stop();
                 },
-                "async": async,
+                "async": async
             });
         } catch (e) {
             console.log("Error executing document operation: \n" + e);

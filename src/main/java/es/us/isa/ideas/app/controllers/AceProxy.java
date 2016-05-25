@@ -53,8 +53,9 @@ public class AceProxy extends AbstractController {
     private final String JS_EXT = ".js";
     private final String MODE_PREFIX = "mode-";
     private final String THEME_PREFIX = "theme-";
-    private final String LANGUAGE_ENDPOINT = "/language";
-    private final String FORMAT_ENDPOINT = "/format";
+    private final String DEPRECATED_MANIFEST_ENDPOINT = "/language";
+    private final String DEPRECATED_FORMAT_ENDPOINT = "/format";
+    private final String SYNTAX_ENDPOINT = "/syntaxes";
 
     @Autowired
     private ServletContext servletContext;
@@ -144,14 +145,12 @@ public class AceProxy extends AbstractController {
             LOGGER.log(Level.INFO, "Getting content from: " + url);
             conn.connect();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    conn.getInputStream()));
-
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                result += inputLine + System.getProperty("line.separator");
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    result += inputLine + System.getProperty("line.separator");
+                }
             }
-            in.close();
 
         } catch (MalformedURLException e) {
             LOGGER.severe(e.getMessage());
@@ -179,46 +178,37 @@ public class AceProxy extends AbstractController {
 
             for (String moduleEndpoint : studioConfiguration.getModules().values()) {
                 String languageModuleUri = moduleEndpoint;
-                String languageString = requestContent(languageModuleUri + LANGUAGE_ENDPOINT);
+                String languageString = requestContent(languageModuleUri + DEPRECATED_MANIFEST_ENDPOINT);
+
+                if (languageString.isEmpty()) {
+                    languageString = requestContent(languageModuleUri);
+                }
+
                 if (!Strings.isNullOrEmpty(languageString)) {
                     JSONObject json;
                     try {
                         json = new JSONObject(languageString);
-                        JSONArray formats = json.getJSONArray("formats");
-                        for (int i = 0; i < formats.length(); i++) {
-                            JSONObject format = formats.getJSONObject(i);
-                            String formatId = format.getString("format");
-                            
-                            if (!format.isNull("_editorModeURI")) {
-                                String editorModeURI = format.getString("_editorModeURI");
-                                
-                                if (fileName.startsWith(MODE_PREFIX) && editorModeURI != null && editorModeURI.equals(fileName + JS_EXT)) {
-                                    String uri = languageModuleUri + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT + "/" + formatId + "/mode";
-                                    LOGGER.log(Level.INFO, "Loading mode from: "
-                                            + uri);
-                                    result = requestContent(uri);
-                                    modeUriCache.put(fileName, uri);
-                                    return result;
-                                }
-                            }
-                            
-                            if (!format.isNull("_editorThemeURI")) {
-                                String editorThemeURI = format.getString("_editorThemeURI");
-                                
-                                if (fileName.startsWith(THEME_PREFIX)) {
-                                    LOGGER.log(Level.INFO, "Is " + editorThemeURI + " equal to " + fileName + JS_EXT + "?");
-                                    if (editorThemeURI != null && editorThemeURI.equals(fileName + JS_EXT)) {
-                                        String uri = languageModuleUri + LANGUAGE_ENDPOINT + FORMAT_ENDPOINT + "/" + formatId + "/theme";
-                                        LOGGER.log(Level.INFO, "Loading theme from: " + uri);
-                                        result = requestContent(uri);
-                                        modeUriCache.put(fileName, uri);
+                        Double version = 1.0;
+                        try {
+                            version = json.getDouble("apiVersion");
+                            if (version >= 2.0) {
+                                JSONArray languages = json.getJSONArray("models");
+                                for (int i = 0; i < languages.length(); i++) {
+                                    JSONObject language = languages.getJSONObject(i);
+                                    result = setFormats(language, fileName, languageModuleUri, version);
+                                    if (!result.isEmpty()) {
                                         return result;
                                     }
                                 }
+                            } else {
+                                result = setFormats(json, fileName, languageModuleUri, version);
                             }
+                        } catch (JSONException ex) {
+                            result = setFormats(json, fileName, languageModuleUri, version);
                         }
+
                     } catch (JSONException ex) {
-                        Logger.getLogger(AceProxy.class.getName()).log(Level.SEVERE, null, ex);
+                        LOGGER.log(Level.SEVERE, "Error retrieving remote ace content: {0}", ex.getMessage());
                     }
                 } else {
                     Logger.getLogger(AceProxy.class.getName()).severe("Failed loading language manifest from " + languageModuleUri);
@@ -226,6 +216,93 @@ public class AceProxy extends AbstractController {
             }
         }
 
+        return result;
+    }
+
+    public String setFormats(JSONObject language, String fileName, String languageModuleUri, Double version) {
+        String result = "";
+        String languageId = language.getString(("id"));
+        JSONArray syntaxes;
+        if (version >= 2.0) {
+            syntaxes = language.getJSONArray("syntaxes");
+        } else {
+            syntaxes = language.getJSONArray("formats");
+        }
+        for (int i = 0; i < syntaxes.length(); i++) {
+            JSONObject syntax = syntaxes.getJSONObject(i);
+            String syntaxId;
+            if (version >= 2.0) {
+                syntaxId = syntax.getString("id");
+            } else {
+                syntaxId = syntax.getString("format");
+            }
+
+            if (version >= 2.0) {
+                if (!syntax.isNull("editorModeURI")) {
+                    String editorModeURI = syntax.getString("editorModeURI");
+
+                    if (fileName.startsWith(MODE_PREFIX) && editorModeURI != null && editorModeURI.equals(fileName + JS_EXT)) {
+                        String uri = "";
+                        uri = languageModuleUri + "/models/" + languageId + SYNTAX_ENDPOINT + "/" + syntaxId + "/mode";
+
+                        LOGGER.log(Level.INFO, "Loading mode from: {0}", uri);
+                        result = requestContent(uri);
+                        modeUriCache.put(fileName, uri);
+                        return result;
+                    }
+                }
+            } else if (!syntax.isNull("_editorModeURI")) {
+                String editorModeURI = syntax.getString("_editorModeURI");
+
+                if (fileName.startsWith(MODE_PREFIX) && editorModeURI != null && editorModeURI.equals(fileName + JS_EXT)) {
+                    String uri = "";
+                    uri = languageModuleUri + DEPRECATED_MANIFEST_ENDPOINT + "/" + DEPRECATED_FORMAT_ENDPOINT + "/" + syntaxId + "/mode";
+
+                    LOGGER.log(Level.INFO, "Loading mode from: {0}", uri);
+                    result = requestContent(uri);
+                    modeUriCache.put(fileName, uri);
+                    return result;
+                }
+            }
+
+            if (version >= 2.0) {
+                if (!syntax.isNull("editorThemeURI")) {
+                    String editorThemeURI = syntax.getString("editorThemeURI");
+
+                    if (fileName.startsWith(THEME_PREFIX)) {
+                        LOGGER.log(Level.INFO, "Is {0} equal to {1}" + JS_EXT + "?", new Object[]{editorThemeURI, fileName});
+                        if (editorThemeURI != null
+                                && editorThemeURI.equals(fileName + JS_EXT)) {
+                            String uri = "";
+                            uri = languageModuleUri + "/models/" + languageId + SYNTAX_ENDPOINT + "/" + syntaxId + "/theme";
+
+                            LOGGER.log(Level.INFO, "Loading theme from: {0}", uri);
+                            result = requestContent(uri);
+                            modeUriCache.put(fileName, uri);
+                            return result;
+                        }
+                    }
+                }
+            } else if (!syntax.isNull("_editorThemeURI")) {
+                String editorThemeURI = syntax
+                        .getString("_editorThemeURI");
+
+                if (fileName.startsWith(THEME_PREFIX)) {
+                    LOGGER.log(Level.INFO, "Is {0} equal to {1}" + JS_EXT + "?", new Object[]{editorThemeURI, fileName});
+                    if (editorThemeURI != null
+                            && editorThemeURI.equals(fileName + JS_EXT)) {
+                        String uri = "";
+                        uri = languageModuleUri + DEPRECATED_MANIFEST_ENDPOINT + "/" + DEPRECATED_FORMAT_ENDPOINT + "/" + syntaxId + "/theme";
+
+                        LOGGER.log(Level.INFO, "Loading theme from: {0}", uri);
+                        result = requestContent(uri);
+                        modeUriCache.put(fileName, uri);
+                        return result;
+                    }
+                }
+            }
+
+        }
         return result;
     }
 }

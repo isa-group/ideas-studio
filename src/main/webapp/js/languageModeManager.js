@@ -3,9 +3,9 @@ var DEPRECATED_CONVERTER_URI = "/language/convert";
 var DEPRECATED_CHECK_LANGUAGE_URI = "/language/format/$format/checkLanguage";
 var DEPRECATED_EXEC_OP_URI = "/language/operation/$opId/execute";
 
-var CONVERTER_URI = "/api/v$version/models/$modelId/syntaxes/$syntaxId/translate";
-var CHECK_LANGUAGE_URI = "api/v$version/models/$modelId/syntaxes/$syntaxId/check";
-var EXEC_OP_URI = "/api/v$version/models/$modelId/operations/$operationId";
+var CONVERTER_URI = "/models/$modelId/syntaxes/$srcSyntaxId/translate/$destSyntaxId";
+var CHECK_LANGUAGE_URI = "/models/$modelId/syntaxes/$syntaxId/check";
+var EXEC_OP_URI = "/models/$modelId/operations/$operationId";
 
 var setupModels = function (configuration) {
     for (var moduleId in configuration.modules) {
@@ -24,7 +24,7 @@ var configureModel = function (uri) {
             ModeManager.registerNewModule(uri, moduleManifest);
         },
         "error": function (result) {
-            $.ajax(uri + "/manifest", {
+            $.ajax(uri, {
                 "type": "get",
                 "success": function (moduleManifest) {
                     ModeManager.registerNewModule(uri, moduleManifest);
@@ -60,7 +60,7 @@ var ModeManager = {
             "error": function (result) {
                 console.error("Could not load app configuration: " + result.statusText);
             },
-            "async": true,
+            "async": true
         });
     },
     registerNewModule: function (uri, moduleManifest) {
@@ -94,8 +94,7 @@ var ModeManager = {
                     ModeManager.modelMap[modelId] = model;
                     ModeManager.operationsMap[modelId] = model.operations;
                     ModeManager.extIdMap[model.extension] = modelId;
-                    ModeManager.converterMap[modelId] = ModeManager.idUriMap[modelId] + CONVERTER_URI.replace("$version", model.apiVersion)
-                            .replace("$modelId", modelId);
+                    ModeManager.converterMap[modelId] = ModeManager.idUriMap[modelId] + CONVERTER_URI.replace("$modelId", modelId);
 
                     if (!(modelId in ModeManager.formatsBiMap))
                         ModeManager.formatsBiMap[modelId] = {};
@@ -196,8 +195,7 @@ var ModeManager = {
                         sessionAg.setFormatSession(s.id, ace.createEditSession("", s.editorModeId));
 
                     if (eval(s.syntaxCheck))
-                        sessionAg.setCheckLanguageURI(s.id, ModeManager.idUriMap[modelId] + CHECK_LANGUAGE_URI.replace("$version", model.apiVersion)
-                                .replace("$modelId", model.id)
+                        sessionAg.setCheckLanguageURI(s.id, ModeManager.idUriMap[modelId] + CHECK_LANGUAGE_URI.replace("$modelId", model.id)
                                 .replace("$syntaxId", s.id));
                 }
             }
