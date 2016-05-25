@@ -38,7 +38,7 @@
         <put-attribute name="body" value="/views/welcome/welcome.jsp"/>
     </definition>
 
-    <definition name="security/useraccount/resetPassword" extends="pagesTemplate">
+    <definition name="security/useraccount/resetPassword" extends="socialtemplate">
         <put-attribute name="body" value="/views/security/useraccount/resetPassword.jsp"/>
     </definition>
 

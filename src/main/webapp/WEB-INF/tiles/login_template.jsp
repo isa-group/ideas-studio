@@ -159,7 +159,6 @@
 
 		</div>
 
-		<div id="loginShadow"></div>
 	</div>
 	<div id="loginCopyright">
 		<spring:message code="app.footer.copyright" />

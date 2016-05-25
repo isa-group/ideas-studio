@@ -52,7 +52,6 @@
                     <button class="btn goToApp" onclick="redirectToApp()">Go to ${studioConfiguration.workbenchName}</button>
                 </div>
             </div>
-            <div id="loginShadow"></div>
             <div id="loginCopyright2">
                 <spring:message code="app.footer.copyright" />
             </div>
