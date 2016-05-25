@@ -44,22 +44,22 @@ public class SettingsController extends AbstractController {
 	@Autowired
 	UserAccountController userAccountController;
 
-	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public ModelAndView edit() {
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public ModelAndView edit() {
+        ModelAndView mv;
+        Researcher originalResearcher = researcherController.edit(null);
+        if (null != originalResearcher) {
+            Researcher clonedResearcher = createClone(originalResearcher);
+            clonedResearcher.getUserAccount().setPassword(""); // Do not send password
 
-		Researcher clonedResearcher = createClone(researcherController
-				.edit(null));
-		clonedResearcher.getUserAccount().setPassword(""); // Do not send
-															// password
-
-		ModelAndView mv = createModelAndView(clonedResearcher,
-				"researcher.commit.error");
-
-		mv.setViewName("settings/user");
-		mv.addObject("url", "settings/user");
-
-		return mv;
-	}
+            mv = createModelAndView(clonedResearcher, "researcher.commit.error");
+            mv.setViewName("settings/user");
+            mv.addObject("url", "settings/user");
+        } else {
+            mv = new ModelAndView("redirect:/app/editor");
+        }
+        return mv;
+    }
 
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public ModelAndView save(@Valid Researcher researcher,
