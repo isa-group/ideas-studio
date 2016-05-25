@@ -34,6 +34,8 @@ var initializeEditor = function () {
 var initializeCommandLine = function () {
     require(['gcli/index', 'demo/index'], function (gcli) {
         gcli.createDisplay();
+        gcli.addCommand(CommandsRegistry.generateTemplateWorkspace);
+        gcli.addCommand(CommandsRegistry.generateTemplateWorkspaceWithDestination);
         gcli.addCommand(CommandsRegistry.generateDemoWorkspace);
         gcli.addCommand(CommandsRegistry.generateDemoWorkspaceWithDestination);
         gcli.addCommand(CommandsRegistry.checkDocument);

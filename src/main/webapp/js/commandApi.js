@@ -134,7 +134,7 @@ var CommandApi = {
 		EditorManager.moveNode(originFileUri, targetFileUri, true);
 	},
 	
-	importDemoWorkspace : function(demoWorkspaceName, targetWorkspaceName) {
+	importDemoWorkspace : function(demoWorkspaceName, targetWorkspaceName, overwrite) {
 		closeAllTabs();
 		WorkspaceManager.getWorkspaces(function(workspacesArray) {
 			var exists = false;
@@ -144,7 +144,9 @@ var CommandApi = {
 					break;
 				}
 			
-			if (exists) {
+			if (overwrite) {
+                switchToDemoWorkspace(demoWorkspaceName, targetWorkspaceName);
+            } else if (exists) {
 				var continueHandler = function() {
 					switchToDemoWorkspace(demoWorkspaceName, targetWorkspaceName);
 					hideModal();
@@ -316,7 +318,7 @@ var switchToDemoWorkspace = function(demoWorkspaceName, targetWorkspaceName) {
 			"targetWorkspaceName" : targetWorkspaceName
 		},
 		"onSuccess" : function(result) {
-			CommandApi.echo("Swithching to workspace...");
+			CommandApi.echo("Switching to workspace...");
 			WorkspaceManager.getWorkspaces(function(wss) {
                             $("#wsactions").remove();
                                $("#projectsTree").dynatree("getTree").reload();

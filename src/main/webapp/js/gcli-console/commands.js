@@ -185,15 +185,23 @@ var CommandsRegistry = {
     generateDemoWorkspace: {
         name: 'generateDemoWorkspace',
         description: 'Generate a workspace for a specific Demo.',
-        params: [{
+        params: [
+            {
                 name: 'demoName',
                 type: 'string',
                 description: 'Identifies the Demo workspace',
+            },
+            {
+                name: 'force',
+                short: 'f',
+                type: 'boolean',
+                description: 'Force overwrite',
+                option: true
             }],
         exec: function (args, context) {
 
             var deferred = context.defer();
-            auxGenerateDemo(args.demoName, args.demoName);
+            auxGenerateDemo(args.demoName, args.demoName, args.force);
             deferred.resolve("");
 
         }
@@ -212,14 +220,63 @@ var CommandsRegistry = {
                 type: "string",
                 description: "Optionally choose a name for the workspace. If not specified the default demo name will be used.",
                 defaultValue: ""
+            },
+            {
+                name: 'force',
+                short: 'f',
+                type: 'boolean',
+                description: 'Force overwrite',
+                option: true
             }],
         exec: function (args, context) {
 
             var deferred = context.defer();
-            auxGenerateDemo(args.demoName, args.destinationWorkspaceName);
+            auxGenerateDemo(args.demoName, args.destinationWorkspaceName, args.force);
             deferred.resolve("");
 
         }
+    },
+    generateTemplateWorkspace: {
+        name: 'generateTemplateWorkspace',
+        description: 'Generate a workspace for a specific template.',
+        params: [
+            {
+                name: 'demoName',
+                type: 'string',
+                description: 'Identifies the template workspace',
+            },
+            {
+                name: 'force',
+                short: 'f',
+                type: 'boolean',
+                description: 'Force overwrite',
+                option: true
+            }],
+        exec: function (args, context) { CommandsRegistry.generateDemoWorkspace.exec(args, context); }
+    },
+    generateTemplateWorkspaceWithDestination: {
+        name: 'generateTemplateWorkspaceWithDestination',
+        description: 'Generate a workspace for a specific template, allowing to define the destination workspace name.',
+        params: [
+            {
+                name: 'demoName',
+                type: 'string',
+                description: 'Identifies the template workspace',
+            },
+            {
+                name: "destinationWorkspaceName",
+                type: "string",
+                description: "Optionally choose a name for the workspace. If not specified the default demo name will be used.",
+                defaultValue: ""
+            },
+            {
+                name: 'force',
+                short: 'f',
+                type: 'boolean',
+                description: 'Force overwrite',
+                option: true
+            }],
+        exec: function (args, context) { CommandsRegistry.generateDemoWorkspaceWithDestination.exec(args, context); }
     },
     echo: {
         name: 'echo',
@@ -379,13 +436,13 @@ var auxCopyNode = function (origin, destination) {
     CommandApi.copy(origin, destination);
 };
 
-var auxGenerateDemo = function (demoName, destinationWorkspaceName) {
+var auxGenerateDemo = function (demoName, destinationWorkspaceName, overwrite) {
     if (destinationWorkspaceName == undefined
             || destinationWorkspaceName == null)
         destinationWorkspaceName = demoName;
-    CommandApi.importDemoWorkspace(demoName, destinationWorkspaceName);
+    CommandApi.importDemoWorkspace(demoName, destinationWorkspaceName, overwrite);
 };
-
+    
 var auxDeleteWorkspace = function (fileUri) {
     WorkspaceManager.deleteWorkspace(fileUri, function (ts) {
         if (ts) {

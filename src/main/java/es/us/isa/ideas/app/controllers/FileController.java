@@ -284,7 +284,7 @@ public class FileController extends AbstractController {
 
 			try {
 				IdeasRepo.get().getRepo().move(demoWS, newWS, true);
-				response.setMessage("Demo workspace created with name: "
+				response.setMessage("Workspace created with name: "
 						+ targetWorkspaceName);
                 response.setStatus(AppResponse.Status.OK);
 			} catch (AuthenticationException e) {

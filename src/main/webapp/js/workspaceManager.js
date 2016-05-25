@@ -184,11 +184,13 @@ var WorkspaceManager = {
                 }
             });
             hideModal();
-            showModal("Confirm demos delete",
+            if (studioConfiguration.advancedMode === true) {
+                showModal("Confirm demos delete",
                     "Your demos for <b>'" + workspaceName + "'</b> will be erased too.<BR/><BR/>\n\
                       <b>Do you want to delete your existing demos?</b><BR/></i>",
                     "Continue", deleteDemosHandler,
                     function () {}, function () {});
+            }
         };
 
         var deleteDemosHandler = function () {
