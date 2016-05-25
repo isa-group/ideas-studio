@@ -8,9 +8,7 @@
 <div class="modal-body" id="from-scrach">
     <h4><spring:message code="editor.actions.modal.create_project.form_scratch" /></h4>
     <div class="input-group" id="modalCreationField" >
-        <span class="input-group-addon">
-            <spring:message code="editor.actions.modal.create_project.msg" />
-        </span>
+        <span class="input-group-addon"><spring:message code="editor.actions.modal.create_project.msg" /></span>
         <input type="text" class="form-control focusedInput" onKeypress="checkerName(event)">
     </div>
     <div class="input-group" id="template-selection">
