@@ -184,7 +184,8 @@ public class WorkspaceController extends AbstractController {
             logger.log(Level.SEVERE, null, e);
             demoExists = Boolean.FALSE;
         }
-        if(!demoExists){
+        
+        if (!demoExists) {
             boolean success = Boolean.TRUE;
             try {
                 IdeasRepo.get().getRepo().move(userWS, demoWS, true);
@@ -202,10 +203,9 @@ public class WorkspaceController extends AbstractController {
                     String demomaster = DEMO_MASTER;
                     workspaceService.createWorkspace(workspaceName, demomaster, String.valueOf(ws.getId()));
                 }
-                
             }
-        }else{
-        	res = "[INFO] The ws already exists.";
+        } else {
+        	res = "Cannot convert workspace, because \""+ workspaceName + "\" already exists.";
                 logger.log(Level.INFO, res);
         }
         

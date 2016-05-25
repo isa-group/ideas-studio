@@ -368,8 +368,16 @@ var CommandsRegistry = {
             CommandApi.echo("Converting WS...");
             console.log(WorkspaceManager.getSelectedWorkspace());
 
-            FileApi.currentWSAsDemoWS(WorkspaceManager.getSelectedWorkspace(), function () {});
+            FileApi.currentWSAsDemoWS(WorkspaceManager.getSelectedWorkspace(), function (res) {
+                CommandApi.echo(res);
+                console.log(res);
+            });
         }
+    },
+    convertCurrentWorkspacetoTemplate: {
+        name: 'convertCurrentWorkspacetoTemplate',
+        description: 'Convert actual workspace in a template workspace.',
+        exec: function (args, context) { CommandsRegistry.convertCurrentWorkspacetoDemo(args, context); }
     },
     clearConsole: {
         name: 'clear',

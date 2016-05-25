@@ -52,6 +52,7 @@ var initializeCommandLine = function () {
         gcli.addCommand(CommandsRegistry.testModule);
         gcli.addCommand(CommandsRegistry.testModules);
         gcli.addCommand(CommandsRegistry.convertCurrentWorkspacetoDemo);
+        gcli.addCommand(CommandsRegistry.convertCurrentWorkspacetoTemplate);
         gcli.addCommand(CommandsRegistry.clearConsole);
     });
 };
