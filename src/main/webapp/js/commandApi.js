@@ -320,7 +320,6 @@ var switchToDemoWorkspace = function(demoWorkspaceName, targetWorkspaceName) {
 		"onSuccess" : function(result) {
 			CommandApi.echo("Switching to workspace...");
 			WorkspaceManager.getWorkspaces(function(wss) {
-                            $("#wsactions").remove();
                                $("#projectsTree").dynatree("getTree").reload();
 				WorkspaceManager.setSelectedWorkspace(targetWorkspaceName);
 				WorkspaceManager.loadWorkspace();

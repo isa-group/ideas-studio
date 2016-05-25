@@ -97,7 +97,7 @@ var WorkspaceManager = {
 
             $(".dynatree-expander").click();
 
-            $("#edit-ws").click(function (e) {
+            $("#edit-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 var oldName = WorkspaceManager.getSelectedWorkspace();
                 $("#modalCreationField input").val(oldName);
@@ -112,17 +112,17 @@ var WorkspaceManager = {
                 });
             });
 
-            $("#download-ws").click(function (e) {
+            $("#download-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 var name = WorkspaceManager.getSelectedWorkspace();
                 WorkspaceManager.downloadAsZip(name);
             });
 
-            $("#delete-ws").click(function (e) {
+            $("#delete-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 WorkspaceManager.deleteWorkspace(WorkspaceManager.getSelectedWorkspace());
             });
-            $("#demo-ws").click(function (e) {
+            $("#demo-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 var name = WorkspaceManager.getSelectedWorkspace();
                 WorkspaceManager.publishWorskspaceAsDemo(name);
@@ -130,7 +130,7 @@ var WorkspaceManager = {
                     WorkspaceManager.loadWorkspace();
                 });
             });
-            $("#screenshot-ws").click(function (e) {
+            $("#screenshot-ws").unbind("click").click(function (e) {
                 e.preventDefault();
 
                 var name = WorkspaceManager.getSelectedWorkspace();
