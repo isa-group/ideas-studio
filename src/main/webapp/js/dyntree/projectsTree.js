@@ -11,12 +11,12 @@ function getfile_iconIcon(nameFile) {
 function getNodeByFileUri(fileUri) {
     var res = undefined;
     $("#projectsTree").dynatree("getRoot").visit(function (node) {
-        if (WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath == fileUri) {
+        var nodeName = node.data.keyPath === "undefined" ? node.data.title : node.data.keyPath;
+        if (WorkspaceManager.getSelectedWorkspace() + "/" + nodeName === fileUri) {
             res = node;
             return;
         }
     });
-
     return res;
 }
 
@@ -153,7 +153,11 @@ function bindContextMenu(span) {
                 });
                 break;
             case "delete":
-                CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, function (result) {});
+                if (node.data.keyPath !== "undefined") {
+                    CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, function (result) {});
+                } else {
+                    CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.title, function (result) {});
+                }
                 break;
             case "cut":
                 pasteMode = "cut";
