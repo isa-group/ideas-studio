@@ -19,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -149,11 +148,17 @@ public class WorkspaceController extends AbstractController {
         initRepoLab();
         String wsJson = "";
         try {
+            String username = LoginService.getPrincipal().getUsername();
+            if (workspaceName.equalsIgnoreCase("SampleWorkspace") && !FSFacade.getWorkspaces(username).contains(workspaceName)) {
+                FSFacade.createWorkspace("SampleWorkspace", username);
+            }
             wsJson = FSFacade.getWorkspaceTree(workspaceName, LoginService.getPrincipal().getUsername());
-            if(LoginService.getPrincipal().getUsername().startsWith("demo"))
+            if (LoginService.getPrincipal().getUsername().startsWith("demo")) {
                 workspaceService.updateLaunches(workspaceName, "DemoMaster");
-        } catch (AuthenticationException e) {
+            }
+        } catch (Exception e) {
             logger.log(Level.SEVERE, null, e);
+            return wsJson;
         }
         return wsJson;
     }
