@@ -216,6 +216,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
     buttonPanel.empty();
 
     var divContent = $('<div id="selectOperationDiv" class="btn-group"></div>');
+    var divContentNonLanguageOpts= $('<div id="nonLanguageButtons" class="btn-group">');
     var optButton = $('<a class="btn" id="selectOperation" style="display:none;">Analysis report</a>');
     optButton.click(function () {
         loadOperations.onClick();
@@ -228,9 +229,10 @@ var loadExistingTabbedInstance = function (fileUri, content) {
     clearButton.click(function () {
         DescriptionInspector.clearConsole();
     });
-    divContent.append(optButton);
-    divContent.append(expandButton);
-    divContent.append(clearButton);
+    divContentNonLanguageOpts.append(optButton);
+    divContentNonLanguageOpts.append(expandButton);
+    divContentNonLanguageOpts.append(clearButton);
+    divContent.append(divContentNonLanguageOpts);
 
     var caret = $('<button class="btn btn-primary opButton" data-toggle="dropdown">...</span><span class="sr-only">Toggle Dropdown</span></button>');
     var caretUL = $('<ul id="ulOperationsTypes" class="dropdown-menu scrollable-op-menu" role="menu"></ul>');
