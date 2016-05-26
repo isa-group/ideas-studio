@@ -79,7 +79,7 @@ public class FileController extends AbstractController {
     }
 
     /* Files C-UD */
-    @RequestMapping(value = "", method = RequestMethod.POST)
+@RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public boolean createFile(@RequestParam("fileUri") String fileUri,
                               @RequestParam("fileType") String fileType) {
@@ -87,6 +87,12 @@ public class FileController extends AbstractController {
         
         boolean res = Boolean.FALSE;
         boolean success = Boolean.TRUE;
+        
+        try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         
         String username = LoginService.getPrincipal().getUsername();
         
@@ -121,6 +127,13 @@ public class FileController extends AbstractController {
         boolean res = Boolean.FALSE;
         boolean success = Boolean.TRUE;
         
+         try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+            newName = new String(newName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+         
         String username = LoginService.getPrincipal().getUsername();
         
         try {
@@ -152,6 +165,13 @@ public class FileController extends AbstractController {
         boolean res = Boolean.FALSE;
         boolean success = Boolean.TRUE;
         
+         try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+            destUri = new String(destUri.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+        
         String username = LoginService.getPrincipal().getUsername();
         
         try {
@@ -180,6 +200,12 @@ public class FileController extends AbstractController {
         
         boolean res = Boolean.FALSE;
         boolean success = Boolean.TRUE;
+        
+         try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         
         String username = LoginService.getPrincipal().getUsername();
         
@@ -212,6 +238,12 @@ public class FileController extends AbstractController {
         initRepoLab();
         
         String fileContent = "";
+        
+         try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
             
         try {
             fileContent = FSFacade.getFileContent(fileUri, LoginService.getPrincipal().getUsername());
@@ -230,6 +262,12 @@ public class FileController extends AbstractController {
         
         boolean res = Boolean.FALSE;
         boolean success = Boolean.TRUE;
+        
+         try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         
         String username = LoginService.getPrincipal().getUsername();
         
@@ -252,8 +290,16 @@ public class FileController extends AbstractController {
 			@RequestParam("demoWorkspaceName") String demoWorkspaceName,
 			@RequestParam("targetWorkspaceName") String targetWorkspaceName) {
 		AppResponse response = new AppResponse();
+                
 
 		String username = LoginService.getPrincipal().getUsername();
+                
+                 try {
+                    demoWorkspaceName = new String(demoWorkspaceName.getBytes("iso-8859-15"),"UTF-8");
+                    targetWorkspaceName = new String(targetWorkspaceName.getBytes("iso-8859-15"),"UTF-8");
+                } catch (Exception ex) {
+                    logger.log(Level.INFO, "Unsopported encoding", ex);
+                }
 
 		FSWorkspace demoWS = new FSWorkspace(demoWorkspaceName, "DemoMaster");
 		FSWorkspace newWS = new FSWorkspace(targetWorkspaceName, username);
@@ -327,6 +373,16 @@ public class FileController extends AbstractController {
         initRepoLab();
         boolean res = false;
         boolean success = true;
+        
+         try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+            description = new String(description.getBytes("iso-8859-15"),"UTF-8");
+            tags = new String(tags.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+         
+         
         String username = LoginService.getPrincipal().getUsername();
         try {
             res = FSFacade.createWorkspace(workspaceName, username);
@@ -348,6 +404,15 @@ public class FileController extends AbstractController {
                                     @RequestParam("newDescription") String newDescription){
         initRepoLab();
         boolean success = true;
+        
+         try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+            newName = new String(newName.getBytes("iso-8859-15"),"UTF-8");
+            newDescription = new String(newDescription.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+         
         String username = LoginService.getPrincipal().getUsername();
         
         String workspace = getSelectedWorkspace();
@@ -401,6 +466,12 @@ public class FileController extends AbstractController {
         
         boolean success = true;
         
+         try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+        
         String username = LoginService.getPrincipal().getUsername();
         
         try {
@@ -438,6 +509,13 @@ public class FileController extends AbstractController {
     public boolean setSelectedWorkspace(@RequestParam("workspaceName") String workspaceName) {
         
         initRepoLab();
+        
+         try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+         
         logger.log(Level.INFO, "Persisting selected workspace:  "
                         + workspaceName + ", username: "
                         + LoginService.getPrincipal().getUsername());
