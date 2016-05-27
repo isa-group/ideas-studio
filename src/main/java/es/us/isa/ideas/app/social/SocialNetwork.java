@@ -8,15 +8,15 @@ package es.us.isa.ideas.app.social;
  *
  * @author japarejo
  */
-public enum SocialNetwork { FACEBOOK("facebook"), TWITTER("twitter"), 
-                    LINKEDIN("linkedin"), GOOGLE("google"), GITHUB("github") ;
+public enum SocialNetwork {
+    TWITTER("twitter"), GOOGLE("google");
     private String name;
-    
-    SocialNetwork(String name){
-        this.name=name;
+
+    SocialNetwork(String name) {
+        this.name = name;
     }
-    
-    public String getName(){
+
+    public String getName() {
         return name;
     }
 }

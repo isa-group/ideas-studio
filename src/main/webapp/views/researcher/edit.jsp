@@ -371,7 +371,7 @@
 
 				<!-- SOCIAL -->
 
-				<div class="tab-pane fade active" id="socialTabContent">
+<!--				<div class="tab-pane fade active" id="socialTabContent">
 					<div>
 						<jstl:forEach items="${missingServices}" var="snetwork">
 							<div id="${snetwork}-connections">
@@ -397,7 +397,7 @@
 							</div>
 						</jstl:forEach>
 					</div>
-				</div>
+				</div>-->
 				<%-- 		</jstl:if> --%>
 			</security:authorize>
 
@@ -420,7 +420,7 @@
 
 <div class="shadowCurvedBottom1"></div>
 
-<security:authorize access="isAnonymous()">
+<%--<security:authorize access="isAnonymous()">
 	<div id="socialAccountCreation">
 		<form id="tw_signin" action="/signin/twitter" method="POST">
 			<button type="submit">
@@ -433,6 +433,6 @@
 			</button>
 		</form>
 	</div>
-</security:authorize>
+</security:authorize>--%>
 
 
