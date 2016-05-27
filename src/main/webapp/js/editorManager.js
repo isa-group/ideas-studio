@@ -355,6 +355,33 @@ var launchOperation = function (model, id, name) {
                                 OperationReport.resultLaunchedOperations.push(result.message);
                             });
                             break;
+                        case 'requireFile':
+                            CommandApi.fetchFileContentsBeforeExecutingOperation(operation, fileUriOperation, operation.config.filter,
+                                    operation.id, operation.config.modalTitle, operation.config.modalDescription, operation.name, function (result) {}, function (result) {})
+                            break;
+                        case 'createFile':
+                            CommandApi.doDocumentOperation(operation.id, {}, fileUriOperation, function (result) {
+                                if (result.annotations)
+                                    EditorManager.setAnnotations(result.annotations);
+
+                                if (result.status === 'OK') {
+                                    var newUri = fileUriOperation.replace(/\.[^/.]+$/, "") + '.' + operation.config.ext;
+                                    var fileName = fileUriOperation.substring(fileUriOperation.lastIndexOf('/') + 1, fileUriOperation.lastIndexOf('.'));
+                                    var ext = '.' + operation.config.ext;
+                                    var content = result.data;
+                                    EditorManager.createNode(newUri, fileName, ext, function () {
+                                        EditorManager.saveFile(newUri, content, function () {
+                                            EditorManager.openFile(newUri);
+                                            OperationReport.launchedOperations.push(operation.name);
+                                            OperationReport.resultLaunchedOperations.push(result.message);
+                                        });
+                                    });
+                                } else {
+                                    OperationReport.launchedOperations.push(operation.name);
+                                    OperationReport.resultLaunchedOperations.push(result.message);
+                                }
+                            });
+                            break;
                     }
                 } else {
                     var _remoteExecution = operation._remoteExecution;
@@ -501,8 +528,8 @@ var EditorManager = {
     // FM
     openFile: function (fileUri) {
 
-        if (EditorManager.getCurrentUri() != fileUri
-                && getNodeByFileUri(fileUri) != undefined) {
+        if (EditorManager.getCurrentUri() !== fileUri
+                && getNodeByFileUri(fileUri) !== undefined) {
 
             saveCurrentSession();
 
@@ -513,7 +540,7 @@ var EditorManager = {
                 if (!exists) {
                     var tabbedInstance = createNewTabbedInstance(fileUri,
                             content);
-                    if (tabbedInstance == null) // The editor cannot hande this
+                    if (tabbedInstance === null) // The editor cannot hande this
                         // resource:
                         return;
                 }
@@ -522,7 +549,7 @@ var EditorManager = {
                 mayCheckLanguageSyntax(fileUri);
 
                 var node = getNodeByFileUri(fileUri);
-                if (node != undefined)
+                if (node !== undefined)
                     node.activate();
 
                 // Change editor theme

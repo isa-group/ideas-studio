@@ -203,6 +203,9 @@ var CommandApi = {
             titleForModal, descText, primaryActionText, primaryHandler,
             cancelHandler) {
 
+        var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri));
+        var model = ModeManager.modelMap[modelId];
+
         if (window.File && window.FileReader && window.FileList && window.Blob) { // Check support
 
             useSelectionList = false;

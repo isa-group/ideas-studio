@@ -8,7 +8,8 @@
         "agreement-module": "/agreement-module/api/v2",
         "opl-language": "/ideas-opl-language",
         "html-language": "/ideas-language-html",
-        "angular-language": "/ideas-language-angular"
+        "angular-language": "/ideas-language-angular",
+        "angular-controller-language": "/ideas-language-angular-controller"
     },
     "configurationFiles": {
         "application": "classpath*:application.properties",

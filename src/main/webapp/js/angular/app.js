@@ -41,7 +41,7 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
                             var model = ModeManager.getMode(modelId);
                             var converterUri = ModeManager.getConverter(modelId);
                             if (model.apiVersion >= 2) {
-                                converterUri = converterUri.replace("$srcSyntax", currentFormat).replace("$destSyntax", "json");
+                                converterUri = converterUri.replace("$srcSyntaxId", "json").replace("$destSyntaxId", currentFormat);
                             }
 
                             // Convert json to currentFormat

@@ -93,6 +93,7 @@ var ModeManager = {
                     ModeManager.idUriMap[modelId] = uri;
                     ModeManager.modelMap[modelId] = model;
                     ModeManager.operationsMap[modelId] = model.operations;
+                    ModeManager.inspectorLoadersMap[modelId] = function(loader, format) {}; // Required by Binding 1.0
                     ModeManager.extIdMap[model.extension] = modelId;
                     ModeManager.converterMap[modelId] = ModeManager.idUriMap[modelId] + CONVERTER_URI.replace("$modelId", modelId);
 
