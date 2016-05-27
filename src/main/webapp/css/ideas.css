@@ -1946,7 +1946,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     font-size: 12px;
 }
 #versions {
-    z-index: 2;
+    z-index: 7;
     position: absolute;
     height: 500px;
     width: 600px;
