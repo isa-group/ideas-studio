@@ -201,6 +201,28 @@ function bindContextMenu(span) {
 }
 ;
 
+var sortProjectsTree = function (container) {
+    var cmp = function(a, b) {
+        var ret = null;
+        if (a.data.isFolder && b.data.isFolder) {
+            a = a.data.title.toLowerCase();
+            b = b.data.title.toLowerCase();
+            ret = a > b ? 1 : a < b ? -1 : 0;
+        } else if (a.data.isFolder && !b.data.isFolder) {
+            ret = -1;
+        } else if (!a.data.isFolder && b.data.isFolder) {
+            ret = 1;
+        } else {
+            a = a.data.title.toLowerCase();
+            b = b.data.title.toLowerCase();
+            ret = a > b ? 1 : a < b ? -1 : 0;
+        }
+        return ret;
+    };
+    var node = container || $("#projectsTree").dynatree("getTree").getRoot();
+    node.sortChildren(cmp, true);
+};
+
 $(function () {
     // Attach the dynatree widget to an existing <div id="tree"> element
     // and pass the tree options as an argument to the dynatree() function:
@@ -247,6 +269,7 @@ $(function () {
         },
         onCreate: function (node, span) {
             bindContextMenu(span);
+            sortProjectsTree();
         },
         /*
          * Load lazy content (to show that context menu will

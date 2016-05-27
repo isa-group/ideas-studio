@@ -95,7 +95,10 @@ var WorkspaceManager = {
                 $("#wsactions").css("display", "none");
             }
 
-            $(".dynatree-expander").click();
+            sortProjectsTree();
+            $("#projectsTree").dynatree("getRoot").visit(function(node){ 
+                if (node.getLevel() < 2) node.expand(true);
+            });
 
             $("#edit-ws").click(function (e) {
                 e.preventDefault();
