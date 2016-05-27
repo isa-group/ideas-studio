@@ -234,7 +234,11 @@ var DescriptionInspector = {
             function () {
                 // Reload inspectorContent
                 var content = _this.getDescriptionFileContent();
-                $("#inspectorContent").html(content);
+                try {
+                    $("#inspectorContent").html(content);
+                } catch(err) {
+                    console.error(err);
+                }
             });
 
         expandableMenu.find(".inspectorButtonReload").click();
@@ -688,7 +692,11 @@ var DescriptionInspector = {
     setInspectorDescriptionContent: function (loader, content) {
         if (loader && content) {
             loader.append(this.getHTMLTemplate());
-            $("#inspectorContent").html(content);
+            try {
+                $("#inspectorContent").html(content);
+            } catch(err) {
+                console.error(err);
+            }
             if (window.setTimeout) {
                 setTimeout(function () {
                     DescriptionInspector.inspectorContent.resize();
