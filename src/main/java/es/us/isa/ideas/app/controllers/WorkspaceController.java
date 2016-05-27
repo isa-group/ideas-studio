@@ -44,9 +44,9 @@ public class WorkspaceController extends AbstractController {
     private static final Logger logger = Logger.getLogger(WorkspaceController.class.getName());
     
     private static final String DEMO_MASTER="DemoMaster";
+    private static final String SAMPLE_WORKSPACE="SampleWorkspace";
 
     protected WorkspaceRepository workspaceRepository;
-    
     protected ResearcherRepository researcherRepository;
     
     /* API REST JSON FROM DB */
@@ -149,15 +149,16 @@ public class WorkspaceController extends AbstractController {
         String wsJson = "";
         try {
             String username = LoginService.getPrincipal().getUsername();
-            if (workspaceName.equalsIgnoreCase("SampleWorkspace") && !FSFacade.getWorkspaces(username).contains(workspaceName)) {
-                FSFacade.createWorkspace("SampleWorkspace", username);
+            if (workspaceName.equalsIgnoreCase(SAMPLE_WORKSPACE) && !FSFacade.getWorkspaces(username).contains(workspaceName) || "[]".equals(FSFacade.getWorkspaces(username))) {
+                FSFacade.createWorkspace(SAMPLE_WORKSPACE, username);
+                FSFacade.saveSelectedWorkspace(SAMPLE_WORKSPACE, username);
             }
             wsJson = FSFacade.getWorkspaceTree(workspaceName, LoginService.getPrincipal().getUsername());
             if (LoginService.getPrincipal().getUsername().startsWith("demo")) {
                 workspaceService.updateLaunches(workspaceName, "DemoMaster");
             }
         } catch (Exception e) {
-            logger.log(Level.SEVERE, null, e);
+            logger.log(Level.WARNING, "Workspace {0} does not exist.", workspaceName);
             return wsJson;
         }
         return wsJson;
