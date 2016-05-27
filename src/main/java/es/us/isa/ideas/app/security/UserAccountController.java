@@ -132,8 +132,7 @@ public class UserAccountController extends AbstractController {
             commitTransaction();
         } catch (Throwable oops) {
             rollbackTransaction();
-            Map model = new HashMap();
-            result = new ModelAndView("redirect:/app/editor", model);
+            result = new ModelAndView("confirmation/confirmationResetError");
         }
         return result;
     }

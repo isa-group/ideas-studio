@@ -5,6 +5,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 
+<p><spring:message code="security.resetPassword"/></p>
 <div id="resetLoader">
     <form id="resetPasswordForm" action="security/useraccount/resetPassword" method="post">
         <div class="control-group">
