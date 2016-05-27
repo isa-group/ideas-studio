@@ -95,10 +95,16 @@ var WorkspaceManager = {
                 $("#wsactions").css("display", "none");
             }
 
-            sortProjectsTree();
-            $("#projectsTree").dynatree("getRoot").visit(function(node){ 
-                if (node.getLevel() < 2) node.expand(true);
-            });
+            // Only for editor page
+            if (typeof EditorManager !== "undefined") {
+                EditorManager.reset();
+                if ($("#projectsTree").length > 0) { // Reorder tree
+                    sortProjectsTree();
+                    $("#projectsTree").dynatree("getRoot").visit(function(node){ 
+                        if (node.getLevel() < 2) node.expand(true);
+                    });
+                }
+            }
 
             $("#edit-ws").click(function (e) {
                 e.preventDefault();
