@@ -71,6 +71,7 @@ public class ConfigurationController extends AbstractController {
                 studioConfiguration.setConfigurationFiles(newStudioConfiguration.getConfigurationFiles());
                 studioConfiguration.setGoogleAnalyticsID(newStudioConfiguration.getGoogleAnalyticsID());
                 studioConfiguration.setHelpURI(newStudioConfiguration.getHelpURI());
+                studioConfiguration.setHelpMode(newStudioConfiguration.getHelpMode());
                 studioConfiguration.setImages(newStudioConfiguration.getImages());
                 studioConfiguration.setWorkbenchName(newStudioConfiguration.getWorkbenchName());
                 studioConfiguration.setAdvancedMode(newStudioConfiguration.getAdvancedMode());

@@ -25,6 +25,7 @@ public class StudioConfiguration implements Serializable {
     private Map<String, String> images;
     private Map<String, String> configurationFiles;
     private String helpURI;
+    private String helpMode;
     private String googleAnalyticsID;
     private Boolean advancedMode;
 
@@ -84,6 +85,14 @@ public class StudioConfiguration implements Serializable {
 
     public void setHelpURI(String helpURI) {
         this.helpURI = helpURI;
+    }
+
+    public String getHelpMode() {
+        return helpMode;
+    }
+
+    public void setHelpMode(String helpMode) {
+        this.helpMode = helpMode;
     }
 
     public String getGoogleAnalyticsID() {
