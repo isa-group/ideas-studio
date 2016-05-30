@@ -1493,6 +1493,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     height: 30%;
     width: 100%;
     border-top: 1px solid #dfdfdf;
+    z-index: 10;
 }
 
 #editorActions {
@@ -1543,6 +1544,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     left: 0;
     right: 0;
     height: 29px;
+    z-index: 10;
 }
 
 #editorFooter span {
