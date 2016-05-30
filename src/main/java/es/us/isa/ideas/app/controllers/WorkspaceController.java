@@ -175,11 +175,6 @@ public class WorkspaceController extends AbstractController {
         }
         String wsJson = "";
         try {
-            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
-        } catch (Exception ex) {
-            logger.log(Level.INFO, "Unsopported encoding", ex);
-        }
-        try {
             String username = LoginService.getPrincipal().getUsername();
             if (workspaceName.equalsIgnoreCase(SAMPLE_WORKSPACE) && !FSFacade.getWorkspaces(username).contains(workspaceName) || "[]".equals(FSFacade.getWorkspaces(username))) {
                 FSFacade.createWorkspace(SAMPLE_WORKSPACE, username);
