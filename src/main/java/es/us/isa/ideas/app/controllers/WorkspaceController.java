@@ -19,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,9 +44,9 @@ public class WorkspaceController extends AbstractController {
     private static final Logger logger = Logger.getLogger(WorkspaceController.class.getName());
     
     private static final String DEMO_MASTER="DemoMaster";
+    private static final String SAMPLE_WORKSPACE="SampleWorkspace";
 
     protected WorkspaceRepository workspaceRepository;
-    
     protected ResearcherRepository researcherRepository;
     
     /* API REST JSON FROM DB */
@@ -70,6 +69,11 @@ public class WorkspaceController extends AbstractController {
     @ResponseStatus(HttpStatus.OK)
     public Workspace getWorkspaceJSON(@PathVariable("workspaceName") String workspaceName) {
         initRepoLab();
+        try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         Workspace ws = workspaceService.findByNameOfPrincipal(workspaceName);
         return ws;
     }
@@ -91,6 +95,12 @@ public class WorkspaceController extends AbstractController {
     public void saveWorkspaceJSON(@RequestParam("workspaceName") String workspaceName, 
                                   @RequestBody(required=true) String workspaceJSON) {
         initRepoLab();
+        try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+            workspaceJSON = new String(workspaceJSON.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         String username = LoginService.getPrincipal().getUsername();
         System.out.println("Persisting selected workspace:  " + workspaceName + ", username: " + username);
         boolean success = Boolean.TRUE;
@@ -109,6 +119,12 @@ public class WorkspaceController extends AbstractController {
     public void updateWorkspaceJSON(@PathVariable("workspaceName") String workspaceName, 
                                     @RequestBody(required=true) String workspaceJSON) {
         initRepoLab();
+        try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+            workspaceJSON = new String(workspaceJSON.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         boolean success = Boolean.TRUE;
 
         try {
@@ -125,6 +141,11 @@ public class WorkspaceController extends AbstractController {
     @ResponseBody
     public void deleteWorkspaceJSON(@PathVariable("workspaceName") String workspaceName) {
         initRepoLab();
+        try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         String username = LoginService.getPrincipal().getUsername();
         boolean success = Boolean.TRUE;
 
@@ -147,13 +168,30 @@ public class WorkspaceController extends AbstractController {
     public String loadWorkspace(@PathVariable("workspaceName") String workspaceName) {
         logger.log(Level.INFO, "Reading workspace: {0}", workspaceName);
         initRepoLab();
+        try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         String wsJson = "";
         try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+        try {
+            String username = LoginService.getPrincipal().getUsername();
+            if (workspaceName.equalsIgnoreCase(SAMPLE_WORKSPACE) && !FSFacade.getWorkspaces(username).contains(workspaceName) || "[]".equals(FSFacade.getWorkspaces(username))) {
+                FSFacade.createWorkspace(SAMPLE_WORKSPACE, username);
+                FSFacade.saveSelectedWorkspace(SAMPLE_WORKSPACE, username);
+            }
             wsJson = FSFacade.getWorkspaceTree(workspaceName, LoginService.getPrincipal().getUsername());
-            if(LoginService.getPrincipal().getUsername().startsWith("demo"))
+            if (LoginService.getPrincipal().getUsername().startsWith("demo")) {
                 workspaceService.updateLaunches(workspaceName, "DemoMaster");
-        } catch (AuthenticationException e) {
-            logger.log(Level.SEVERE, null, e);
+            }
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Workspace {0} does not exist.", workspaceName);
+            return wsJson;
         }
         return wsJson;
     }
@@ -165,7 +203,11 @@ public class WorkspaceController extends AbstractController {
     public String cloneSelectedWorkspaceToDemo(@PathVariable("workspaceName") String workspaceName) {
         
         initRepoLab();
-        
+        try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         String res = "";
         System.out.println("URI: "+workspaceName);
         
@@ -184,7 +226,8 @@ public class WorkspaceController extends AbstractController {
             logger.log(Level.SEVERE, null, e);
             demoExists = Boolean.FALSE;
         }
-        if(!demoExists){
+        
+        if (!demoExists) {
             boolean success = Boolean.TRUE;
             try {
                 IdeasRepo.get().getRepo().move(userWS, demoWS, true);
@@ -202,10 +245,9 @@ public class WorkspaceController extends AbstractController {
                     String demomaster = DEMO_MASTER;
                     workspaceService.createWorkspace(workspaceName, demomaster, String.valueOf(ws.getId()));
                 }
-                
             }
-        }else{
-        	res = "[INFO] The ws already exists.";
+        } else {
+        	res = "Cannot convert workspace, because \""+ workspaceName + "\" already exists.";
                 logger.log(Level.INFO, res);
         }
         
@@ -217,7 +259,11 @@ public class WorkspaceController extends AbstractController {
     public String deleteSelectedWorkspaceDemo(@PathVariable("workspaceName") String workspaceName) {
         
         initRepoLab();
-        
+        try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         String res = "";
         logger.log(Level.INFO, "URI: {0}", workspaceName);
         
