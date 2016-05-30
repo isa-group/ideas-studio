@@ -14,6 +14,6 @@
 
 <div>
     <h2><spring:message code="registration.checkYourEmail"/></h2>
-    <spring:message code="registration.confirmationSent"/>
+    <spring:message code="registration.resetOk"/>
 </div>
 <button class="btn goToApp" onclick="redirectToApp()">Go to ${studioConfiguration.workbenchName}</button>

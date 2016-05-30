@@ -1966,7 +1966,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 }
 #vClose {
     float: right;
-    cursor:pointer; cursor: hand;
+    cursor:pointer;
 }
 #lostSessionPanel {
     z-index: 1051;
@@ -2195,6 +2195,7 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
     opacity:0.35;
 }
 
+
 .input-group-addon {
     padding: 0.3em 1em;
     max-width: 10em;
@@ -2204,4 +2205,58 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 
 input.modalCreationField.form-control {
     height: 4em;
+}
+
+#panicView{
+    overflow: auto;
+}
+
+#moreDetails{
+    cursor:pointer;
+}
+
+#panicTemplateContent {
+    position: relative;
+    top: 15%;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+    width: 66%;
+    margin: 0 auto 0 auto;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+    padding: 2em;
+}
+
+#loginCopyright2 {
+    position: relative;
+    left: 0%;
+    bottom: -15%;
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 12px;
+    padding-left: 1em;
+}
+
+.goToApp {
+    color: white;
+    background-color: rgba(48, 123, 189, 0.9);
+    padding: 7px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+.ideasButton{
+    color: white;
+    background-color: rgba(48, 123, 189, 0.9);
+    padding: 7px;
+}
+
+#resetButtons .btn {
+    position: absolute;
+    bottom: 20px;
+    right: 25px;
+}
+
+div#resetLoader {
+    height: 5em;
 }

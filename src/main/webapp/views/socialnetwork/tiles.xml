@@ -46,4 +46,9 @@
 <!--	<definition name="connect/githubConnected" extends="pagesTemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/githubConnected.jsp" />
 	</definition>-->
+        
+	<definition name="misc/panic" extends="panicTemplate">
+		<put-attribute name="body" value="/views/misc/panic.jsp"/>
+	</definition>
+        
 </tiles-definitions>

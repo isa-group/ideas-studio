@@ -2,7 +2,7 @@
 <%@ page session="false" %>
 
 <script type="text/javascript">
-	function redirecToApp(){
+	function redirectToApp(){
 		window.location.href = $('base').attr('href');
 	}
 </script>

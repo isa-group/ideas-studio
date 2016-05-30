@@ -56,9 +56,30 @@
     <welcome-file-list>
         <welcome-file>/welcome</welcome-file>
     </welcome-file-list>
+    <!-- Missing login -->
+    <error-page>
+        <error-code>401</error-code>
+        <location>/views/misc/401.jsp</location>
+    </error-page>
+    <!-- Forbidden directory listing -->
     <error-page>
         <error-code>403</error-code>
         <location>/views/misc/403.jsp</location>
+    </error-page>
+    <!-- Missing resource -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/views/misc/404.jsp</location>
+    </error-page>
+    <!-- Uncaught exception -->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/views/misc/500.jsp</location>
+    </error-page>
+    <error-page>
+        <!-- Unsupported servlet method -->
+        <error-code>503</error-code>
+        <location>/views/misc/503.jsp</location>
     </error-page>
     <session-config>
         <session-timeout>720</session-timeout>

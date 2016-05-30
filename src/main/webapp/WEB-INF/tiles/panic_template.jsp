@@ -43,78 +43,22 @@
         <script src='js/vendor/jquery.cookie.js' type="text/javascript"></script>
         <script type="text/javascript" src="js/vendor/bootstrap.js"></script>
 
-        <script>
-            var setupLogin = function () {
-
-                $('#loginForm').submit(function () {
-
-                    $.ajax({
-                        type: $('#loginForm').attr('method'),
-                        url: $('#loginForm').attr('action'),
-                        data: $('#loginForm').serialize(),
-                        success: function (result, textStatus, request) {
-
-                            console.log("-" + result + "-");
-
-                            $('#loginLoader').empty();
-                            $('#loginLoader').css("visibility", "hidden");
-                            $('#loginLoader').append(result);
-
-                            if ($("#loginLoader .formError").length > 0) {
-
-                                $('#loginLoader').css("visibility", "visible");
-
-                                $('#socialTemplateContent').addClass("loginError");
-
-                                $('#lcWrapper').effect("shake", {
-                                    direction: "left",
-                                    times: 2,
-                                    distance: 30
-                                });
-                                setupLogin();
-                            } else {
-                                window.location = originalRequestUrl;
-                            }
-
-                        }
-                    });
-                    return false;
-                });
-
-            };
-
-            $(document).ready(function () {
-                //sumit types
-                $('body').keypress(function (e) {
-                    var code = e.which;
-                    if (code == 13) {
-                        localStorage.setItem('social', '');
-                        $('#loginForm').submit();
-                    }
-                });
-
-                $('#loginButton').click(function () {
-                    $('#loginForm').submit();
-                });
-                setupLogin();
-            });
-        </script>
     </head>
 
-    <body id="loginView">
+    <body id="panicView">
         <div id="loginLogo" style="background-image: url('./img/${studioConfiguration.images['logo']}')">            
         </div>
         <div id="lcWrapper">
-            <div id="socialTemplateContent">
+            <div id="panicTemplateContent">
                 <div id="loginLoader">
                     <tiles:insertAttribute name="body" />
                 </div>
-                <div id="socialTemplateButtons">
-                </div>
+
             </div>
-        </div>
-        <div id="loginCopyright">
-            <spring:message code="app.footer.copyright" />
+
+            <div id="loginCopyright2">
+                <spring:message code="app.footer.copyright" />
+            </div>
         </div>
     </body>
 </html>

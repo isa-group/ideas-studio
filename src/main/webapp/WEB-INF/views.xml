@@ -3,14 +3,14 @@
         "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
 
-<!--     <definition name="template" template="/WEB-INF/tiles/main_template.jsp"> -->
-<!--         <put-attribute name="header" value="/WEB-INF/tiles/header.jsp"/> -->
-<!--         <put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp"/> -->
-<!--         <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"/>         -->
-<!--     </definition> -->
+    <!--     <definition name="template" template="/WEB-INF/tiles/main_template.jsp"> -->
+    <!--         <put-attribute name="header" value="/WEB-INF/tiles/header.jsp"/> -->
+    <!--         <put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp"/> -->
+    <!--         <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp"/>         -->
+    <!--     </definition> -->
     
     <definition name="appTemplate" template="/WEB-INF/tiles/app_template.jsp">
-    	<put-attribute name="left_menu" value="/WEB-INF/tiles/app_left_menu.jsp"/>
+        <put-attribute name="left_menu" value="/WEB-INF/tiles/app_left_menu.jsp"/>
         <put-attribute name="header" value="/WEB-INF/tiles/app_header.jsp"/>
         <put-attribute name="footer" value="/WEB-INF/tiles/app_footer.jsp"/>        
     </definition>
@@ -29,11 +29,8 @@
     
     <definition name="socialtemplate" template="/WEB-INF/tiles/social_template.jsp"></definition>
     
-    
+    <definition name="panicTemplate" template="/WEB-INF/tiles/panic_template.jsp"></definition>
 
-    <definition name="misc/panic" extends="pagesTemplate">
-        <put-attribute name="body" value="/views/misc/panic.jsp"/>
-    </definition>
     <definition name="home" extends="pagesTemplate">
         <put-attribute name="body" value="/views/home/home.jsp"/>
     </definition>
@@ -41,7 +38,7 @@
         <put-attribute name="body" value="/views/welcome/welcome.jsp"/>
     </definition>
 
-    <definition name="security/useraccount/resetPassword" extends="pagesTemplate">
+    <definition name="security/useraccount/resetPassword" extends="socialtemplate">
         <put-attribute name="body" value="/views/security/useraccount/resetPassword.jsp"/>
     </definition>
 
@@ -55,19 +52,25 @@
 
     <definition name="settings/detail" template="/views/researcher/detail.jsp"></definition>
 
-	<!-- inview -->
-	<definition name="researcher/edit" template="/views/researcher/edit.jsp"></definition>
+    <!-- inview -->
+    <definition name="researcher/edit" template="/views/researcher/edit.jsp"></definition>
     
     <definition name="researcher/deleteSuccessful" extends="pagesTemplate">
         <put-attribute name="body" value="/views/researcher/deleteSuccessful.jsp"/>
     </definition>
-    <definition name="confirmation/confirmationSent" extends="pagesTemplate">
+    <definition name="confirmation/confirmationSent" extends="socialtemplate">
         <put-attribute name="body" value="/views/confirmation/confirmationSent.jsp"/>
     </definition>
-    <definition name="confirmation/confirmationSucess" extends="pagesTemplate">
+    <definition name="confirmation/confirmationSucess" extends="socialtemplate">
         <put-attribute name="body" value="/views/confirmation/confirmationSucess.jsp"/>
     </definition>
-    <definition name="confirmation/confirmationError" extends="pagesTemplate">
+    <definition name="confirmation/confirmationResetSucess" extends="socialtemplate">
+        <put-attribute name="body" value="/views/confirmation/confirmationResetSucess.jsp"/>
+    </definition>
+    <definition name="confirmation/confirmationResetError" extends="socialtemplate">
+        <put-attribute name="body" value="/views/confirmation/confirmationResetError.jsp"/>
+    </definition>
+    <definition name="confirmation/confirmationError" extends="socialtemplate">
         <put-attribute name="body" value="/views/confirmation/confirmationError.jsp"/>
     </definition>  
     
@@ -79,27 +82,27 @@
         <put-attribute name="body" value="/views/workspace/list.jsp"/>
     </definition>
     
-<!--     App 	-->
+    <!--     App 	-->
     <definition name="app/editor" extends="appTemplate">
         <put-attribute name="body" value="/views/app/editor.jsp"/>
     </definition>
     <definition name="app/social" extends="appTemplate">
         <put-attribute name="body" value="/views/app/social.jsp"/>
     </definition>
-     <definition name="app/settings" extends="appTemplate">
+    <definition name="app/settings" extends="appTemplate">
         <put-attribute name="body" value="/views/app/settings.jsp"/>
     </definition>
-     <definition name="app/administration" extends="appTemplate">
+    <definition name="app/administration" extends="appTemplate">
         <put-attribute name="body" value="/views/app/administration.jsp"/>
     </definition>
-     <definition name="app/help" extends="appTemplate">
+    <definition name="app/help" extends="appTemplate">
         <put-attribute name="body" value="/views/app/help.jsp"/>
     </definition>
     <definition name="app/wsm" extends="appTemplate">
         <put-attribute name="body" value="/views/app/wsm.jsp"/>
     </definition>
     
-<!--     App content  -->
+    <!--     App content  -->
     
     <definition name="app_content/app_editor_content" template="/views/app/editor.jsp"></definition>
     <definition name="app_content/app_social_content" template="/views/app/social.jsp"></definition>
@@ -137,11 +140,11 @@
     <definition name="app_modal/userDemoInfo" extends="app_modal">
         <put-attribute name="body" value="/views/app/modalWindows/userDemoInfo.jsp"/>
     </definition>
-<!--     Adapted user views 	-->
-	<definition name="/misc/empty" template="/misc/empty.jsp"></definition>
+    <!--     Adapted user views 	-->
+    <definition name="/misc/empty" template="/misc/empty.jsp"></definition>
         
 	
-	<definition name="security/login" extends="loginTemplate">
+    <definition name="security/login" extends="loginTemplate">
         <put-attribute name="body" value="/views/security/login.jsp"/>
     </definition>
     <definition name="security/login_inview" template="/views/security/login.jsp"></definition>
