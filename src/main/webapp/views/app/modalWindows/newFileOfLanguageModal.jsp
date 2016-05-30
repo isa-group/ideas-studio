@@ -6,8 +6,8 @@
 </div>
 <div class="modal-body">
     <div class="input-group" id="modalCreationField" >
-        <span class="input-group-addon"><spring:message code="editor.actions.modal.create_language_file.msg" arguments="${language}" /></span>
-        <input id="filename" type="text" class="form-control focusedInput" onKeypress="checkerName(event)">
+        <span class="input-group-addon input-modal"><spring:message code="editor.actions.modal.create_language_file.msg" arguments="${language}" /></span>
+        <input id="filename" type="text" class="modalCreationField form-control focusedInput" onKeypress="checkerName(event)">
         <span class="input-group-addon extension"></span>
     </div>
     <div class="input-group" id="createFileFromTemplate">
