@@ -14,6 +14,7 @@ import es.us.isa.ideas.app.security.UserAccount;
 import es.us.isa.ideas.app.services.WorkspaceService;
 import es.us.isa.ideas.app.util.FileMetadata;
 import es.us.isa.ideas.repo.exception.AuthenticationException;
+import es.us.isa.ideas.repo.exception.BadUriException;
 import es.us.isa.ideas.repo.impl.fs.FSFacade;
 import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
 import es.us.isa.ideas.utilities.AppResponse;
@@ -108,12 +109,16 @@ public class FileController extends AbstractController {
                 res = FSFacade.createFile(fileUri, username);
             }
         } 
-        catch (Exception e) {
+        catch (BadUriException | AuthenticationException e) {
             logger.log(Level.SEVERE, "Error creating " + fileType + ": " + fileUri, e);
             success = Boolean.FALSE;
         }
         if (success) {
+            try{
             workspaceService.updateTime(getSelectedWorkspace(), username);
+            }catch(Exception e){
+                logger.log(Level.SEVERE, "Cannot update time in workspace "+getSelectedWorkspace());
+            }
         }
         return res;
     }
