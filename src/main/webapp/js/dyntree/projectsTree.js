@@ -53,10 +53,14 @@ function copyPaste(action, node) {
             }
             var origin = WorkspaceManager.getSelectedWorkspace() + "/" + originNode.data.keyPath;
             var dest = WorkspaceManager.getSelectedWorkspace() + "/" + destNode.data.keyPath + "/" + originNode.data.title;
+            var originProj = WorkspaceManager.getSelectedWorkspace() + "/" + originNode.data.keyPath.split("/")[0];
+            var destProj = WorkspaceManager.getSelectedWorkspace() + "/" + destNode.data.keyPath.split("/")[0];
 
             var msg = "";
             if (originNode.getLevel() === 1) {
                 msg += "Cannot paste a project into a project.";
+            } else if (originProj !== destProj) {
+                msg += "Cannot paste element into a different project.";
             } else if (!!getNodeByFileUri(dest)) {
                 msg += "Element already exists.";
             } else if (!destNode.data.isFolder) {
@@ -153,11 +157,22 @@ function bindContextMenu(span) {
                 });
                 break;
             case "delete":
-                if (node.data.keyPath !== "undefined") {
-                    CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, function (result) {});
-                } else {
-                    CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.title, function (result) {});
-                }
+                var nodeUri = WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath;
+                showModal("Please, confirm your decision", "<strong>Are you sure you want to delete \"" + nodeUri + "\"?</strong>", "Delete",
+                        function () {
+                            if (node.data.keyPath !== "undefined") {
+                                CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, function (result) {
+                                    hideModal();
+                                });
+                            } else {
+                                CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.title, function (result) {
+                                    hideModal();
+                                });
+                            }
+                        },
+                        function () {
+                            hideModal();
+                        });
                 break;
             case "cut":
                 pasteMode = "cut";
