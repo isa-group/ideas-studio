@@ -5,6 +5,7 @@
  */
 package es.us.isa.ideas.test.app.pageobject;
 
+import es.us.isa.ideas.test.app.utils.IdeasURLType;
 import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Logger;
 import org.junit.Before;

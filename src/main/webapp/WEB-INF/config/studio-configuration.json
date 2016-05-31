@@ -5,22 +5,11 @@
         "search": "ideas/Search.png"
     },
     "modules": {
-        "ideas-iagree-agreement-language": "/ideas-iagree-agreement-language",
-        "ideas-iagree-offer-language": "/ideas-iagree-offer-language",
-        "ideas-iagree-template-language": "/ideas-iagree-template-language",
-        "ideas-sedl-language": "/ideas-sedl-language",
-        "ideas-opl-language": "/ideas-opl-language",
-        "ideas-afm-language": "/ideas-afm-language",
-        "ideas-fmc-language": "/ideas-fmc-language",
-        "ideas-hcs-language": "/ideas-hcs-language",
-        "ideas-needs-language": "/ideas-needs-language",
         "ideas-plaintext-language": "/ideas-plaintext-language",
-        "ideas-csv-language": "/ideas-csv-language",
-        "ideas-lusdl-language": "/ideas-lusdl-language",
-        "ideas-html-language": "/ideas-html-language",
-        "ideas-soup-language": "/ideas-soup-language",
+        "ideas-language-html": "/ideas-language-html",
         "ideas-json-language": "/ideas-json-language",
         "ideas-yaml-language": "/ideas-yaml-language",
+        "ideas-iagree-template-language": "/ideas-iagree-template-language",
         "ideas-language-angular": "/ideas-language-angular",
         "ideas-language-angular-controller": "/ideas-language-angular-controller"
     },
@@ -31,6 +20,7 @@
         "email": "classpath*:email.properties"
     },
     "helpURI": "https://labs.isa.us.es/IDEAS-help/",
+    "helpMode": "none",
     "googleAnalyticsID": "UA-68297022-1",
-    "advancedMode": true
+    "advancedMode": false
 }

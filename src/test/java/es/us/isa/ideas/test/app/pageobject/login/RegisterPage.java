@@ -3,6 +3,9 @@ package es.us.isa.ideas.test.app.pageobject.login;
 import es.us.isa.ideas.test.app.pageobject.PageObject;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriver;
 import es.us.isa.ideas.test.app.pageobject.TestCase;
+import es.us.isa.ideas.test.app.pageobject.editor.EditorPage;
+import es.us.isa.ideas.test.app.pageobject.editor.WorkspaceManagerPage;
+import es.us.isa.ideas.test.app.utils.IdeasURLType;
 import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,14 +43,26 @@ public class RegisterPage extends PageObject<RegisterPage> {
     WebElement saveChangesButton;
 
     // MODAL
+    @FindBy(xpath = "//*[@id=\"loginOKPanel\"]/div/div/div[1]/h4")
+    WebElement modalSuccessHeaderTitle;
+    
     @FindBy(css = "#loginFailPanel > div > div > div.modal-header > h4")
     WebElement modalErrorHeaderTitle;
+    
+    @FindBy(css = "#loginFailPanel > div > div > div.modal-footer > button")
+    WebElement modalErrorCloseButton;
+    
+    @FindBy(id = "statusPanel")
+    WebElement registerFormValidation;
+    
+    @FindBy(className = "goToApp")
+    WebElement goToAppButton;
 
     static final Logger LOG = Logger.getLogger(RegisterPage.class.getName());
-    static final String URL = TestProperty.getBaseUrl() + "/settings/user";
+    static final String URL = TestProperty.getBaseUrl() + IdeasURLType.SETTINGS_NEW_USER_URL;
 
     public static RegisterPage navigateTo() {
-        getWebDriver().get(URL);
+        PageObject.getWebDriver().get(URL);
         return PageFactory.initElements(getWebDriver(), RegisterPage.class);
     }
 
@@ -76,6 +91,22 @@ public class RegisterPage extends PageObject<RegisterPage> {
     public RegisterPage typeAddress(CharSequence address) {
         addressField.sendKeys(address);
         return PageFactory.initElements(getWebDriver(), RegisterPage.class);
+    }
+    
+    public EditorPage clickOnModalErrorCloseButton() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        clickOnNotClickableElement(modalErrorCloseButton);
+
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+
+    public RegisterSocialGooglePage clickOnGoToApp() {
+        clickOnNotClickableElement(goToAppButton);
+        return PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
     }
 
     // others
@@ -115,10 +146,14 @@ public class RegisterPage extends PageObject<RegisterPage> {
                 .clickOnSaveChanges();
 
             WebElement element = page.modalErrorHeaderTitle;
-            new WebDriverWait(PageObject.getWebDriver(), 10)
-                .until(ExpectedConditions.visibilityOf(element));
+            PageObject.waitForElementVisible(page.modalErrorHeaderTitle, 10);
             
             TEST_RESULT = element.getText().equals("Sign up error");
+            Assert.assertTrue(TEST_RESULT);
+            
+            page.clickOnModalErrorCloseButton();
+            
+            TEST_RESULT = currentPageContainsURLType(IdeasURLType.SETTINGS_NEW_USER_URL);
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 
@@ -134,7 +169,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
                 .typeAddress(address);
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1000); // animation
             } catch (InterruptedException ex) {
                 Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -142,29 +177,18 @@ public class RegisterPage extends PageObject<RegisterPage> {
             page.clickOnSaveChanges();
 
             // Modal confirmation
-            By locator = By.id("statusPanel");
-            
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            String statusPanelText = getWebDriver().findElement(locator).getText();
-            TEST_RESULT = !statusPanelText.contains("The email address you entered is already in use");
+            PageObject.waitForElementVisible(page.registerFormValidation, 10);
+            PageObject.waitForElementVisible(page.modalSuccessHeaderTitle, 10);
+            String validationText = page.registerFormValidation.getText();
+            String modalText = page.modalSuccessHeaderTitle.getText();
+            TEST_RESULT = modalText.contains("Account created successfully") && !validationText.contains("The email address you entered is already in use");
             Assert.assertTrue(TEST_RESULT);
 
             // Email login
-            getWebDriver().get("https://www.gmail.com");
-            locator = By.id("Email");
-            
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class)
+            PageObject.getWebDriver().get("https://www.gmail.com");
+            RegisterSocialGooglePage pageGoogle = PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
+            pageGoogle.clickOnSignInDifferentAccountAnchor()
+                .clickOnSignInAddNewAccountAnchor()
                 .typeUsername(email)
                 .clickOnNext()
                 .typePassword(emailPass)
@@ -175,91 +199,12 @@ public class RegisterPage extends PageObject<RegisterPage> {
             } catch (InterruptedException ex) {
                 LOG.severe(ex.getMessage());
             }
-            TEST_RESULT = getWebDriver().getCurrentUrl().contains("mail.google.com");
-            Assert.assertTrue(TEST_RESULT);
-
-            // Open email
-            String selectorConfirmationEmail = "#\\3a 2 > div > div > div.UI tbody tr:first-child td:nth-child(4)";
-            locator = By.cssSelector(selectorConfirmationEmail);
             
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            getWebDriver().findElement(locator).click(); // opening
-            locator = By.cssSelector(".ads");
-            
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            // Parse url confirmation
-            String urlConfirmation = (String) getJs()
-                .executeScript(
-                    "return document.getElementsByClassName('ads')[0].textContent.match(/http.+code=[a-zA-Z0-9\\-]+/i)[0]");
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            // Delete current email
-            locator = By.xpath("//*[@id=\":5\"]/div[2]/div[1]/div/div[2]/div[3]/div/div");
-            getWebDriver().findElement(locator).click();
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            // Go to confirmation url
-            getWebDriver().get(urlConfirmation);
-            String selectorModalTitle = "#message > div > div > div.modal-header > h4";
-            locator = By.cssSelector(selectorModalTitle);
-            
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            String modalTitle = getWebDriver().findElement(locator).getText();
-
-            TEST_RESULT = "Account validated successfully".equals(modalTitle);
+            TEST_RESULT = RegisterSocialGooglePage.confirmEmail();
             Assert.assertTrue(TEST_RESULT);
 
             // Open generated password email
-            getWebDriver().get("https://www.gmail.com");
-            String selectorEmail = "#\\3a 2 > div > div > div.UI tbody tr:first-child td:nth-child(4)";
-            locator = By.cssSelector(selectorEmail);
-            
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            getWebDriver().findElement(locator).click();
-
-            // Copy parsed password
-            locator = By.cssSelector(".gs");
-            
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            String scriptCopyPass = "var str=document.getElementsByClassName('gs')[0].textContent;"
-                + "return str.match(/([0-9a-zA-Z]+-)+([0-9a-zA-Z]+)/i)[0];";
-            String password = (String) getJs().executeScript(scriptCopyPass);
-
+            String password = RegisterSocialGooglePage.getPasswordInEmail();
             TEST_RESULT = !password.equals("");
             Assert.assertTrue(TEST_RESULT);
 
@@ -273,19 +218,13 @@ public class RegisterPage extends PageObject<RegisterPage> {
             }
             
             // Delete current email
-            locator = By.xpath("//*[@id=\":5\"]/div[2]/div[1]/div/div[2]/div[3]/div/div");
-            getWebDriver().findElement(locator).click();
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            pageGoogle.clickOnDeleteEmailButton()
+                .expectDifferentUrl();
             
             // Login with generated password
             LoginPage.testLogin(user, password);
 
-            TEST_RESULT = page.getCurrentUrl().contains("app/editor");
+            TEST_RESULT = PageObject.currentPageContainsURLType(IdeasURLType.EDITOR_URL);
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 

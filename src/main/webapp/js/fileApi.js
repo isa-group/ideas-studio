@@ -4,8 +4,10 @@ var FileApi = {
 		$.ajax("workspaces/" + workspaceName + "/load", {
 			"type" : "GET",
 			"success" : function(result) {
+                            if(result!==""){
 				var treeStruct = eval("(" + result + ")");
 				callback(treeStruct);
+                            }
 			},
 			"error" : function(result) {
 				console.error(result.statusText);

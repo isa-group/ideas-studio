@@ -90,9 +90,11 @@
 
         </div>
 
-        <ul id="leftMenuHelp" class="nav nav-pills nav-stacked">
-            <li><a class="apl_help"><spring:message code="app.leftmenu.help" /></a><span class="glyphicon glyphicon-chevron-right"></span></li>
-        </ul>
+        <c:if test="${studioConfiguration.helpMode != 'none' }">
+            <ul id="leftMenuHelp" class="nav nav-pills nav-stacked">
+                <li><a class="apl_help"><spring:message code="app.leftmenu.help" /></a><span class="glyphicon glyphicon-chevron-right"></span></li>
+            </ul>
+        </c:if>
         <ul id="leftMenuLogout" class="nav nav-pills nav-stacked">
             <li><a href="j_spring_security_logout" target="_self">
                     <span class="glyphicon glyphicon-log-out"></span>

@@ -14,10 +14,7 @@ import es.us.isa.ideas.app.configuration.StudioConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
@@ -71,24 +68,11 @@ public class ConfigurationController extends AbstractController {
                 studioConfiguration.setConfigurationFiles(newStudioConfiguration.getConfigurationFiles());
                 studioConfiguration.setGoogleAnalyticsID(newStudioConfiguration.getGoogleAnalyticsID());
                 studioConfiguration.setHelpURI(newStudioConfiguration.getHelpURI());
+                studioConfiguration.setHelpMode(newStudioConfiguration.getHelpMode());
                 studioConfiguration.setImages(newStudioConfiguration.getImages());
                 studioConfiguration.setWorkbenchName(newStudioConfiguration.getWorkbenchName());
                 studioConfiguration.setAdvancedMode(newStudioConfiguration.getAdvancedMode());
-                
-                Properties props = new Properties();
-                props.load(getClass().getResourceAsStream("/application.properties"));
-                String modulesPort = ":" + request.getServerPort();
-                if (Boolean.valueOf(props.getProperty("application.dockerMode"))) {
-                    modulesPort = ":" + MODULES_PORT;
-                }
-                String scheme = request.getScheme();
-                String serverName = request.getServerName();
-                Map<String, String> modules = new HashMap<>();
-                for (String moduleId : newStudioConfiguration.getModules().keySet()) {
-                    String endpoint = scheme + "://" +  serverName + modulesPort + newStudioConfiguration.getModules().get(moduleId);
-                    modules.put(moduleId, endpoint);
-                }
-                studioConfiguration.setModules(modules);
+                studioConfiguration.setModules(newStudioConfiguration.getModules());
             } catch (IOException ex) {
                 Logger.getLogger(StudioConfiguration.class.getName()).log(Level.SEVERE, null, ex);
             }

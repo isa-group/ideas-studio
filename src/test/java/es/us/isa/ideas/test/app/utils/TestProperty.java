@@ -71,6 +71,14 @@ public class TestProperty {
         return getTestProperties().getProperty("test.default.pass");
     }
     
+    public static String getTestGuestUser() {
+        return getTestProperties().getProperty("test.guest.user");
+    }
+    
+    public static String getTestGuestUserPass() {
+        return getTestProperties().getProperty("test.guest.pass");
+    }
+    
     public static String getTestRegisterUser() {
         return getTestProperties().getProperty("test.register.user");
     }

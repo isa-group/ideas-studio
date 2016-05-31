@@ -45,7 +45,7 @@ public class ConfirmationController extends AbstractController {
         try {
             Confirmation confirmation = confirmationService.resetPassword(code);
 
-            result = new ModelAndView("confirmation/confirmationSucess");
+            result = new ModelAndView("confirmation/confirmationResetSucess");
             result.addObject("actor", confirmation.getResearcher());
             result.addObject("subject", "password reset");
             result.addObject("userAccount", confirmation.getResearcher().getUserAccount());

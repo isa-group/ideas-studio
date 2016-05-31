@@ -8,12 +8,7 @@ import java.util.logging.Logger;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -23,7 +18,7 @@ import static org.junit.Assert.assertTrue;
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
  * @version 1.0
  */
-public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterPage> {
+public class RegisterSocialTwitterPage extends RegisterPage {
 
     @FindBy(id = "username_or_email")
     WebElement usernameField;
@@ -88,11 +83,12 @@ public class RegisterSocialTwitterPage extends PageObject<RegisterSocialTwitterP
             }
             
             page.clickOnCompleteYourProfile();
+            PageObject.waitForElementVisible(page.nameField, 10);
             
             WebElement lastElement = PageObject.getWebDriver().findElement(By.id("settingsContainer"));
             TEST_RESULT = false;
             if (lastElement != null) {
-                TEST_RESULT = page.getCurrentUrl().contains("settings/user");
+                TEST_RESULT = page.getCurrentUrl().contains("settings/user") && !page.nameField.getText().toLowerCase().contains("null");
             }
             
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);

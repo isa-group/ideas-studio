@@ -5,62 +5,65 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
 
         // Update editor content from model
         $scope.$watch(
-            function () {
-                return $scope.model;
-            },
-            function (newValue, oldValue) {
+                function () {
+                    return $scope.model;
+                },
+                function (newValue, oldValue) {
 
-                if (document.editor && newValue && oldValue && !compareObjects(newValue, oldValue)) {
+                    if (document.editor && newValue && oldValue && !compareObjects(newValue, oldValue)) {
 
-                    var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
-                        formatSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions(),
-                        editorCursorPos = document.editor.renderer.scrollBarV.scrollTop,
-                        editorRange = document.editor.selection.getRange();
+                        var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
+                                formatSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions(),
+                                editorCursorPos = document.editor.renderer.scrollBarV.scrollTop,
+                                editorRange = document.editor.selection.getRange();
 
-                    if (currentFormat === "json" && ("json" in formatSessions || "yaml" in formatSessions)) {
-                        if (newValue !== document.editor.getValue()) {
-                            document.editor.setValue(angular.toJson(newValue, 2), -1);
-                            // Update editor to previous view
-                            document.editor.selection.setRange(editorRange);
-                            document.editor.renderer.scrollToY(editorCursorPos);
-                        }
-
-                    } else if (currentFormat === "yaml" && ("json" in formatSessions || "yaml" in formatSessions)) {
-                        var yaml = jsyaml.safeDump(newValue);
-                        if (yaml !== document.editor.getValue()) {
-                            document.editor.setValue(yaml, -1);
-                            // Update editor to previous view
-                            document.editor.selection.setRange(editorRange);
-                            document.editor.renderer.scrollToY(editorCursorPos);
-                        }
-
-                    } else if ("json" in formatSessions || "yaml" in formatSessions) {
-
-                        var currentUri = EditorManager.currentUri,
-                            converterUri = ModeManager.getConverter(ModeManager
-                                .calculateLanguageIdFromExt(ModeManager
-                                    .calculateExtFromFileUri(currentUri)));
-
-                        // Convert json to currentFormat
-                        var promise = $q(function (resolve, reject) {
-                            CommandApi.callConverter("json", currentFormat, currentUri, angular.toJson(newValue), converterUri,
-                                function (result) {
-                                    resolve(result.data);
-                                }
-                            );
-                        });
-                        promise.then(function (result) {
-                            if (result !== document.editor.getValue()) {
-                                document.editor.setValue(result, -1);
+                        if (currentFormat === "json" && ("json" in formatSessions || "yaml" in formatSessions)) {
+                            if (newValue !== document.editor.getValue()) {
+                                document.editor.setValue(angular.toJson(newValue, 2), -1);
                                 // Update editor to previous view
                                 document.editor.selection.setRange(editorRange);
                                 document.editor.renderer.scrollToY(editorCursorPos);
                             }
-                        });
 
+                        } else if (currentFormat === "yaml" && ("json" in formatSessions || "yaml" in formatSessions)) {
+                            var yaml = jsyaml.safeDump(newValue);
+                            if (yaml !== document.editor.getValue()) {
+                                document.editor.setValue(yaml, -1);
+                                // Update editor to previous view
+                                document.editor.selection.setRange(editorRange);
+                                document.editor.renderer.scrollToY(editorCursorPos);
+                            }
+
+                        } else if ("json" in formatSessions || "yaml" in formatSessions) {
+
+                            var currentUri = EditorManager.currentUri;
+                            var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(currentUri));
+                            var model = ModeManager.getMode(modelId);
+                            var converterUri = ModeManager.getConverter(modelId);
+                            if (model.apiVersion >= 2) {
+                                converterUri = converterUri.replace("$srcSyntaxId", "json").replace("$destSyntaxId", currentFormat);
+                            }
+
+                            // Convert json to currentFormat
+                            var promise = $q(function (resolve, reject) {
+                                CommandApi.callConverter(model, "json", currentFormat, currentUri, angular.toJson(newValue), converterUri,
+                                        function (result) {
+                                            resolve(result.data);
+                                        }
+                                );
+                            });
+                            promise.then(function (result) {
+                                if (result !== document.editor.getValue()) {
+                                    document.editor.setValue(result, -1);
+                                    // Update editor to previous view
+                                    document.editor.selection.setRange(editorRange);
+                                    document.editor.renderer.scrollToY(editorCursorPos);
+                                }
+                            });
+
+                        }
                     }
-                }
-            }, true);
+                }, true);
 
         /**
          * Update model from ace editor. 
@@ -73,9 +76,9 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
             try {
 
                 var sessionMap = EditorManager.sessionsMap[EditorManager.currentUri],
-                    currentFormat = sessionMap.getCurrentFormat(),
-                    formatSessions = sessionMap.getFormatsSessions(),
-                    editorContent = document.editor.getValue();
+                        currentFormat = sessionMap.getCurrentFormat(),
+                        formatSessions = sessionMap.getFormatsSessions(),
+                        editorContent = document.editor.getValue();
 
                 if (editorContent && DescriptionInspector.existCurrentAngularFile() && ("json" in formatSessions || "yaml" in formatSessions)) {
 
@@ -91,17 +94,22 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
 
                     } else {
                         // Convert current format to json
-                        var converterUri = ModeManager.getConverter(ModeManager
-                            .calculateLanguageIdFromExt(ModeManager
-                                .calculateExtFromFileUri(EditorManager.currentUri)));
+
+                        var currentUri = EditorManager.currentUri;
+                        var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(currentUri));
+                        var model = ModeManager.getMode(modelId);
+                        var converterUri = ModeManager.getConverter(modelId);
+                        if (model.apiVersion >= 2) {
+                            converterUri = converterUri.replace("$srcSyntaxId", currentFormat).replace("$destSyntaxId", "json");
+                        }
 
                         var promise = $q(function (resolve, reject) {
-                            CommandApi.callConverter(currentFormat, "json", EditorManager.currentUri, editorContent, converterUri,
-                                function (result) {
-                                    if (result.data) {
-                                        resolve(JSON.parse(result.data));
+                            CommandApi.callConverter(model, currentFormat, "json", EditorManager.currentUri, editorContent, converterUri,
+                                    function (result) {
+                                        if (result.data) {
+                                            resolve(JSON.parse(result.data));
+                                        }
                                     }
-                                }
                             );
                         });
                         promise.then(function (result) {
@@ -137,24 +145,24 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
         };
 
     }])
-    .directive("contenteditable", function () {
-        return {
-            require: "ngModel",
-            transclude: true,
-            scope: {ngModel: '='},
-            link: function (scope, element, attrs, ngModel) {
+        .directive("contenteditable", function () {
+            return {
+                require: "ngModel",
+                transclude: true,
+                scope: {ngModel: '='},
+                link: function (scope, element, attrs, ngModel) {
 
-                function read() {
-                    ngModel.$setViewValue(element.html());
+                    function read() {
+                        ngModel.$setViewValue(element.html());
+                    }
+
+                    ngModel.$render = function () {
+                        element.html(ngModel.$viewValue || "");
+                    };
+
+                    element.bind("blur keyup change", function () {
+                        scope.$apply(read);
+                    });
                 }
-
-                ngModel.$render = function () {
-                    element.html(ngModel.$viewValue || "");
-                };
-
-                element.bind("blur keyup change", function () {
-                    scope.$apply(read);
-                });
-            }
-        };
-    });
+            };
+        });

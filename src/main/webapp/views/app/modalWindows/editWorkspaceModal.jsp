@@ -13,12 +13,12 @@
 <div class="modal-body">                        
     <div class="input-group" id="modalCreationField" >
         <span class="input-group-addon"><spring:message code="editor.actions.modal.create_workspace.msg" /></span>
-        <input type="text" class="form-control focusedInput">
+        <input type="text" class="modalCreationField form-control focusedInput">
     </div>
         <br>
     <div class="input-group" id="descriptionInput" >
         <span class="input-group-addon"><spring:message code="editor.actions.modal.create_workspace.description" /></span>
-        <textarea type="text" class="form-control"></textarea>
+        <textarea type="text" class="modalCreationField form-control"></textarea>
     </div>
         <br>        
 </div>

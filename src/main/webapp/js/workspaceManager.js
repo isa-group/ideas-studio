@@ -95,9 +95,18 @@ var WorkspaceManager = {
                 $("#wsactions").css("display", "none");
             }
 
-            $(".dynatree-expander").click();
+            // Only for editor page
+            if (typeof EditorManager !== "undefined") {
+                EditorManager.reset();
+                if ($("#projectsTree").length > 0) { // Reorder tree
+                    sortProjectsTree();
+                    $("#projectsTree").dynatree("getRoot").visit(function(node){ 
+                        if (node.getLevel() < 2) node.expand(true);
+                    });
+                }
+            }
 
-            $("#edit-ws").click(function (e) {
+            $("#edit-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 var oldName = WorkspaceManager.getSelectedWorkspace();
                 $("#modalCreationField input").val(oldName);
@@ -112,17 +121,17 @@ var WorkspaceManager = {
                 });
             });
 
-            $("#download-ws").click(function (e) {
+            $("#download-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 var name = WorkspaceManager.getSelectedWorkspace();
                 WorkspaceManager.downloadAsZip(name);
             });
 
-            $("#delete-ws").click(function (e) {
+            $("#delete-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 WorkspaceManager.deleteWorkspace(WorkspaceManager.getSelectedWorkspace());
             });
-            $("#demo-ws").click(function (e) {
+            $("#demo-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 var name = WorkspaceManager.getSelectedWorkspace();
                 WorkspaceManager.publishWorskspaceAsDemo(name);
@@ -130,7 +139,7 @@ var WorkspaceManager = {
                     WorkspaceManager.loadWorkspace();
                 });
             });
-            $("#screenshot-ws").click(function (e) {
+            $("#screenshot-ws").unbind("click").click(function (e) {
                 e.preventDefault();
 
                 var name = WorkspaceManager.getSelectedWorkspace();
@@ -184,11 +193,13 @@ var WorkspaceManager = {
                 }
             });
             hideModal();
-            showModal("Confirm demos delete",
+            if (studioConfiguration.advancedMode === true) {
+                showModal("Confirm demos delete",
                     "Your demos for <b>'" + workspaceName + "'</b> will be erased too.<BR/><BR/>\n\
                       <b>Do you want to delete your existing demos?</b><BR/></i>",
                     "Continue", deleteDemosHandler,
                     function () {}, function () {});
+            }
         };
 
         var deleteDemosHandler = function () {

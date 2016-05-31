@@ -1,49 +1,39 @@
-<%--
- * panic.jsp
- *
- * Copyright (C) 2012 Universidad de Sevilla
- * 
- * The use of this project is hereby constrained to the conditions of the 
- * TDG Licence, a copy of which you may download from 
- * http://www.tdg-seville.info/License.html
- --%>
-
-<%@page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib prefix="security"
-	uri="http://www.springframework.org/security/tags"%>
-
 <%@taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page session="false" %>
 
+
+
+<script type="text/javascript">
+    function redirectToApp() {
+        window.location.href = $('base').attr('href');
+    }
+    
+    function toggleExMsg(){
+        $("#exceptionMsg").toggleClass("hidden");
+    }
+</script>
+
+<h2>An error has occurred</h2>
 <p>
-	<spring:message code="panic.text" />
-	<code>${name}</code>
-	.
+    <spring:message code="panic.text" />
+    <code>${name}</code>.
 </p>
 
-<h2>
-	<spring:message code="panic.message" />
-</h2>
+<button class="btn goToApp" id="moreDetails" onclick="toggleExMsg()">Details</button>
+<button class="btn goToApp" onclick="redirectToApp()">Go to ${studioConfiguration.workbenchName}</button>
 
-<p style="font-family: 'Courier New'">${exceptionMessage}</p>
 
-<h2>
-	<spring:message code="panic.stack.trace" />
-</h2>
 
-<p style="font-family: 'Courier New'">
-<div class="alert alert-block alert-error">
-	<button type="button" class="close" data-dismiss="alert">&times;</button>
-	<pre>
-           <jstl:forEach var="stackTraceElem"
-			items="${exception.stackTrace}">
-           <jstl:out value="${stackTraceElem}" />
-			<br />
-           </jstl:forEach>
-         </pre>
+<div id="exceptionMsg" class="alert alert-block alert-error hidden">
+    <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
+    <pre>
+        <jstl:forEach var="stackTraceElem" items="${exception.stackTrace}">
+            <jstl:out value="${stackTraceElem}" />
+        </jstl:forEach>
+    </pre>
 </div>

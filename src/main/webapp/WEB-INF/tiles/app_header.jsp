@@ -36,8 +36,8 @@
 		<span id="userTabHandler"></span>
 	</div>
 	<ul class="dropdown-menu" role="menu">
-		<li><a href="settings/user#account" target="_self" title=""><spring:message code="master.page.account" /></a></li>
-		<li><a href="settings/user" target="_self"><spring:message code="master.page.settings" /></a></li>
+		<li><a href="settings/user#profile" target="_self" title=""><spring:message code="master.page.account" /></a></li>
+<!--		<li><a href="settings/user" target="_self"><spring:message code="master.page.settings" /></a></li>-->
 		<security:authorize access="hasAnyRole('ADMIN')">
 			<li><a href="settings/admin" target="_self"><spring:message code="master.page.admin" /></a></li>
 		</security:authorize>

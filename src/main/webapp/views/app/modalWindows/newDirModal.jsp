@@ -10,7 +10,7 @@
         <span class="input-group-addon">
             <spring:message code="editor.actions.modal.create_directory.msg" />
         </span>
-        <input type="text" class="form-control" onKeypress="checkerName(event)">
+        <input type="text" class="modalCreationField form-control focusedInput" onKeypress="checkerName(event)">
     </div>
 </div>
 <div class="modal-footer">
