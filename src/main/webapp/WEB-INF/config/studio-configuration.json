@@ -5,11 +5,13 @@
         "search": "ideas/Search.png"
     },
     "modules": {
-        "agreement-module": "/agreement-module/api/v2",
-        "opl-language": "/ideas-opl-language",
-        "html-language": "/ideas-language-html",
-        "angular-language": "/ideas-language-angular",
-        "angular-controller-language": "/ideas-language-angular-controller"
+        "ideas-plaintext-language": "/ideas-plaintext-language",
+        "ideas-language-html": "/ideas-language-html",
+        "ideas-json-language": "/ideas-json-language",
+        "ideas-yaml-language": "/ideas-yaml-language",
+        "ideas-iagree-template-language": "/ideas-iagree-template-language",
+        "ideas-language-angular": "/ideas-language-angular",
+        "ideas-language-angular-controller": "/ideas-language-angular-controller"
     },
     "configurationFiles": {
         "application": "classpath*:application.properties",

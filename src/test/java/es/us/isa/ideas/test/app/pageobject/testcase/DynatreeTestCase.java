@@ -44,18 +44,16 @@ public class DynatreeTestCase {
 
     @Test
     public void step01_unableToCreateDirectoryWithoutWorkspace() {
-        
+        PageObject.logout();
         LoginPage.testLogin(TestProperty.getTestDefaultUser(), TestProperty.getTestDefaultUserPass());
         PageObject.getWebDriver().navigate().refresh();
         
         // Tries to create a directory in a non-existent workspace
-        SectionFile.testCreateDirectoryWithNoWorkspace();
-        
+//        SectionFile.testCreateDirectoryWithNoWorkspace();
     }
 
     @Test
     public void step02_createWorkspace() {
-        
         // It will normalize workspace name with 'wsNameFinal'
         WorkspaceManagerPage.testCreateWorkspace(wsName, wsDesc, wsTags);
         try {
@@ -64,11 +62,22 @@ public class DynatreeTestCase {
             Logger.getLogger(DynatreeTestCase.class.getName()).log(Level.SEVERE, null, ex);
         }
         WorkspaceManagerPage.testCreateWorkspaceWithError(wsNameFinal, wsDesc, wsTags);
-        
     }
 
     @Test
     public void step03_createProject() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DynatreeTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        SectionFile.testCreateProjectWithoutRefresh(projName);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DynatreeTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        SectionFile.testRemoveDynatreeNode(projName);
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ex) {
@@ -147,15 +156,48 @@ public class DynatreeTestCase {
 //            targetFile2LName + fileExt.toString());
 //    }
 
+//    @Test
+//    public void step12_deleteProject() {
+//        SectionFile.testRemoveDynatreeNode(projName);
+//    }
+    
     @Test
     public void step13_deleteWorkspace() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DynatreeTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
         WorkspaceManagerPage.testDeleteWorkspace(wsNameFinal);
     }
 
     @Test
     public void step14_uploadWorkspaceZip() {
+        PageObject.getWebDriver().navigate().refresh();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DynatreeTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
         WorkspaceManagerPage.testCreateWorkspaceZip(wsDesc, wsTags);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DynatreeTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
         WorkspaceManagerPage.testDeleteWorkspace("TestWorkspace");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(DynatreeTestCase.class.getName()).log(Level.SEVERE, null, ex);
+        }
         PageObject.logout();
+    }
+     
+    @Test
+    public void step15_generateTemplateWorkspace() {
+        LoginPage.testLogin(TestProperty.getTestGuestUser(), TestProperty.getTestGuestUserPass());
+        WorkspaceManagerPage.testForceGenerateTemplateWorkspace("SampleWorkspace");
+        WorkspaceManagerPage.testForceGenerateTemplateWorkspace("SampleWorkspace");
     }
 }

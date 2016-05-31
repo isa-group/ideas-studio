@@ -59,11 +59,13 @@ public class PageObject<T> {
     }
 
     public T clickOnClickableElement(WebElement element) {
+        PageObject.waitForElementVisible(element, 10);
         element.click();
         return (T) this;
     }
 
     public T clickOnNotClickableElement(WebElement element) {
+        PageObject.waitForElementVisible(element, 10);
         Actions actions = new Actions(driver);
         actions.moveToElement(element).click().perform();
         return (T) this;
@@ -71,6 +73,7 @@ public class PageObject<T> {
 
     public T clickOnNotClickableLocator(By locator) {
         WebElement element = driver.findElement(locator);
+        PageObject.waitForElementVisible(element, 10);
         return clickOnNotClickableElement(element);
     }
 

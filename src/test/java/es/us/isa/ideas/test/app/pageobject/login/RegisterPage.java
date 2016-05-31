@@ -146,8 +146,7 @@ public class RegisterPage extends PageObject<RegisterPage> {
                 .clickOnSaveChanges();
 
             WebElement element = page.modalErrorHeaderTitle;
-            new WebDriverWait(PageObject.getWebDriver(), 10)
-                .until(ExpectedConditions.visibilityOf(element));
+            PageObject.waitForElementVisible(page.modalErrorHeaderTitle, 10);
             
             TEST_RESULT = element.getText().equals("Sign up error");
             Assert.assertTrue(TEST_RESULT);

@@ -31,6 +31,8 @@
         <test.register.user.address>${settings.test.register.user.address}</test.register.user.address>
         <test.default.user>${settings.test.default.user}</test.default.user>
         <test.default.pass>${settings.test.default.pass}</test.default.pass>
+        <test.guest.user>${settings.test.guest.user}</test.guest.user>
+        <test.guest.pass>${settings.test.guest.pass}</test.guest.pass>
         
         <!-- Docker -->
         <application.dockerMode>false</application.dockerMode>
