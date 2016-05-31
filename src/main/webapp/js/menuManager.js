@@ -85,7 +85,7 @@ var newProjectItem = {
         var projectTemplateName = $("#template-from-module").val();
         var projectUri = WorkspaceManager.getSelectedWorkspace() + "/" + projectName;
         FileApi.createProject(projectUri, function (ts) {
-            if (ts) {
+            if (ts == true || ts == "true") {
                 if (projectTemplateName != undefined) {
                     var selectedOption = $("#template-from-module").find(":selected");
                     var selectedOptgroup = selectedOption.parent();
