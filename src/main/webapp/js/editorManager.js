@@ -85,28 +85,23 @@ var checkSyntaxFlag = false;
 var mayCheckLanguageSyntax = function (fileUri) {
     var agSession = EditorManager.sessionsMap[fileUri];
     if (agSession == undefined || agSession == "undefined") {
-        CommandApi
-                .echo("Please open the document you want to check before applying the command");
+        CommandApi.echo("Please open the document you want to check before applying the command");
     } else {
-        var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri]
-                .getCurrentFormat();
+        var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
 
         var checkLanguageUri = agSession.getCheckLanguageURI(currentFormat);
 
-        if (checkLanguageUri !== undefined && checkLanguageUri !== null
-                && checkLanguageUri.length > 0) {
+        if (checkLanguageUri !== undefined && checkLanguageUri !== null && checkLanguageUri.length > 0) {
 
             var content = agSession.getBaseSession().getValue();
-            
+
             content = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentSession().getValue();
 
-            CommandApi.checkModel(content, currentFormat, checkLanguageUri,
-                    fileUri, function (ts) {
+            CommandApi.checkModel(content, currentFormat, checkLanguageUri, fileUri, function (ts) {
                         console.log("Checking syntax... " + ts);
                         if (ts.status === "OK" || ts === "true") {
                             console.log("Syntax is OK.");
-                            EditorManager
-                                    .setAnnotations(eval('(' + "[]" + ')'));
+                            EditorManager.setAnnotations(eval('(' + "[]" + ')'));
 
                             DescriptionInspector.onEditorCheckedLanguage();
 
@@ -218,7 +213,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
     buttonPanel.empty();
 
     var divContent = $('<div id="selectOperationDiv" class="btn-group"></div>');
-    var divContentNonLanguageOpts= $('<div id="nonLanguageButtons" class="btn-group">');
+    var divContentNonLanguageOpts = $('<div id="nonLanguageButtons" class="btn-group">');
     var optButton = $('<a class="btn" id="selectOperation" style="display:none;">Analysis report</a>');
     optButton.click(function () {
         loadOperations.onClick();

@@ -6,16 +6,23 @@ var CommandApi = {
         alert("Function analyzeSEDLDocument() here");
     },
     checkModel: function (content, format, checkModelURI, fileUri, callback) {
+
+        var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri));
+        var model = ModeManager.modelMap[modelId];
         var data = {
             id: format,
             content: content,
             fileUri: fileUri
         };
+        var contentType = "application/x-www-form-urlencoded; charset=UTF-8";
+        if (model.apiVersion >= 2) {
+            contentType = "application/json; charset=utf-8";
+            data = JSON.stringify(data);
+        }
         $.ajax(checkModelURI, {
             type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(data),
-            dataType: 'json',
+            contentType: contentType,
+            data: data,
             success: function (result) {
                 callback(result);
             },
@@ -28,20 +35,28 @@ var CommandApi = {
     callConverter: function (model, currentFormat, desiredFormat, fileUri,
             actualContent, converterUri, callback) {
 
+        var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri));
+        var model = ModeManager.modelMap[modelId];
+
         var fileData = {
             fileUri: fileUri,
             content: actualContent
         };
+        
+        var contentType;        
         if (model.apiVersion <= 1) {
             fileData.currentFormat = currentFormat;
             fileData.desiredFormat = desiredFormat;
+            contentType = "application/x-www-form-urlencoded; charset=UTF-8";
+        } else {
+            contentType = "application/json; charset=utf-8";
+            fileData = JSON.stringify(fileData);
         }
 
         $.ajax(converterUri, {
             type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(fileData),
-            dataType: 'json',
+            contentType: contentType,
+            data: fileData,
             success: function (result) {
                 callback(result);
             },

@@ -84,6 +84,13 @@ public class AceProxy extends AbstractController {
         }
 
     }
+    
+    @RequestMapping(value = "/ace-reset", method = RequestMethod.GET)
+    @ResponseBody
+    public String resetCache() {
+        modeUriCache.clear();
+        return "Mode cache was cleared successfully";
+    }
 
     private String getAceFile() {
         String content = "";
