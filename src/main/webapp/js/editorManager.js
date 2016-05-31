@@ -93,15 +93,17 @@ var mayCheckLanguageSyntax = function (fileUri) {
 
         var checkLanguageUri = agSession.getCheckLanguageURI(currentFormat);
 
-        if (checkLanguageUri != undefined && checkLanguageUri != null
+        if (checkLanguageUri !== undefined && checkLanguageUri !== null
                 && checkLanguageUri.length > 0) {
 
             var content = agSession.getBaseSession().getValue();
+            
+            content = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentSession().getValue();
 
-            CommandApi.checkLanguage(content, currentFormat, checkLanguageUri,
+            CommandApi.checkModel(content, currentFormat, checkLanguageUri,
                     fileUri, function (ts) {
                         console.log("Checking syntax... " + ts);
-                        if (ts.status == "OK" || ts == "true") {
+                        if (ts.status === "OK" || ts === "true") {
                             console.log("Syntax is OK.");
                             EditorManager
                                     .setAnnotations(eval('(' + "[]" + ')'));

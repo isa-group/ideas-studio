@@ -6,20 +6,23 @@ var CommandApi = {
         alert("Function analyzeSEDLDocument() here");
     },
     checkModel: function (content, format, checkModelURI, fileUri, callback) {
+        var data = {
+            id: format,
+            content: content,
+            fileUri: fileUri
+        };
         $.ajax(checkModelURI, {
-            "type": "post",
-            "data": {
-                "id": format,
-                "content": content,
-                "fileUri": fileUri
-            },
-            "success": function (result) {
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            success: function (result) {
                 callback(result);
             },
-            "error": function (result) {
+            error: function (result) {
                 console.error(result.statusText);
             },
-            "async": true,
+            async: true
         });
     },
     callConverter: function (model, currentFormat, desiredFormat, fileUri,
