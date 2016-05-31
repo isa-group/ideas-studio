@@ -1,3 +1,42 @@
+ideas-studio v0.9.3, 1/06/2016
+----------------------------------------------
+- Error message is always shown to user while creating files/directories/projects #205 
+- Operation buttons bad overflow  #202 
+- Problems with enconding in Dynatree #201 
+- 'generateDemoWorkspace' removes dynatree bottom menu #200 
+- Nullpointer when accessing to user properties in demo user #198 
+- Improve errors display  #197 
+- Implement all queued tests for v0.9.3 #196 
+- New command alias #195 
+- Enable "Advanced Mode" configuration #194 
+- Integrate IDEAS dockerized #193 
+- Unable to hide dynatree context menu by clicking in any other place of IDEAS #187 
+- Improve (or disable) help #186 
+- Require file/project/workspace name #184 
+- Update copyright #183 
+- Hide modals with outside clicks #179 
+- Log error when there is no workspace #177 
+- Modal error when you create a directory by pressing "enter" #172 
+- Format tabs don't fit well when "form" is selected #149 
+- Changelog modal window doesn't fit well #144 
+- "EditorManager is not defined" error in Workspace Manager page #141 
+- Unable to delete a recently created project #129 
+- Rename a file with an already existing name #113 
+- Avoiding display generic error messages #104 
+- Description inspector with wrong mode. Reader mode expected #97 
+- Support new language modules #78 
+- "Save changes" button disappears when you change tab #61 
+- Fixed project templates logic #54 
+- Share document modal is shown when something goes wrong when trying to create a new workspace #38 
+- "null" string on username after registering by social network #28 
+- The input title doesn't fit well in a modal window #26 
+- Implement modal window confirmation when user tries to delete a project, directory or file #20 
+- "User Account" menu redirects to "Login information" tab #13 
+- Cannot update UserAccount profile with special characters like "ñ" or "ç" #11 
+- Dynatree projects are reordered only by a page refresh #7 
+- /security/loginFailure page has no format #3 
+- generateDemoWorkspace doesn't overwrite an already existent workspace #2 
+
 ideas-studio v0.9.2.7, 19/05/2016
 ----------------------------------------------
 - Drag and drop project into project #14
