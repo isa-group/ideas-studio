@@ -82,9 +82,7 @@
                 <span id="editorToggleInspector"></span>
                 <span id="editorMaximize"></span>
 
-                <c:if test="${studioConfiguration.advancedMode}">
-                    <span id="shareDocument" class="shareDocument"></span>
-                </c:if>
+                <span id="shareDocument" class="shareDocument"></span>
                 <!-- 				<span id="editorOutLink"></span> -->
                 <!-- 				<span id="editorSocial"></span> -->
             </div>

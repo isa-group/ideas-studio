@@ -7,7 +7,6 @@ import es.us.isa.ideas.test.app.pageobject.login.RegisterPage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialGooglePage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialTwitterPage;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -39,24 +38,20 @@ public class RegisterTestCase {
         RegisterSocialTwitterPage.testTwitterSocialRegister(twUser, twPass);
     }
 
-    @Ignore
-    public void step06_googleRegister() {
+    @Test
+    public void step03_googleRegister() {
         PageObject.logout();
-
+        
         String goUser = TestProperty.getTestGoogleUser();
         String goPass = TestProperty.getTestGooglePassword();
         RegisterSocialGooglePage.testGoogleSocialRegister(goUser, goPass);
-    }
-
-    @Ignore
-    public void step06_googleRegisterb() {
+        
+        PageObject.logout();
         RegisterSocialGooglePage.testGoogleSocialLogout();
     }
 
     @Test
-    public void step10_register() {
-        PageObject.logout();
-
+    public void step04_register() {
         String user = TestProperty.getTestRegisterUser();
         String name = TestProperty.getTestRegisterUserName();
         String email = TestProperty.getTestRegisterUserEmail();
@@ -68,7 +63,7 @@ public class RegisterTestCase {
     }
 
     @Test
-    public void step12_recoverPassword() {
+    public void step05_recoverPassword() {
         PageObject.logout();
 
         String user = TestProperty.getTestRegisterUser();

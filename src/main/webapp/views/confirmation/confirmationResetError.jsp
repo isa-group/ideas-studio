@@ -8,12 +8,12 @@
 
 <script type="text/javascript">
     function redirectToApp() {
-        window.location.href = $('base').attr('href');
+        window.location.href = $('base').attr('href')+"settings/user";
     }
 </script>
 
 <div>
-    <h2><spring:message code="registration.checkYourEmail"/></h2>
-    <spring:message code="registration.confirmationSent"/>
+    <h2><spring:message code="registration.errorTitle"/></h2>
+    <spring:message code="registration.confirmationResetError"/>
 </div>
-<button class="btn goToApp" onclick="redirectToApp()">Go to ${studioConfiguration.workbenchName}</button>
+<button class="btn goToApp" onclick="redirectToApp()">Sign up in ${studioConfiguration.workbenchName}</button>

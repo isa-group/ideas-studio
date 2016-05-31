@@ -1,5 +1,5 @@
-<%@page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"  import="java.net.*, java.io.*,java.util.Properties"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"  import="java.net.*, java.io.*,java.util.Properties"%>
 
 <%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -159,7 +159,6 @@
 
 		</div>
 
-		<div id="loginShadow"></div>
 	</div>
 	<div id="loginCopyright">
 		<spring:message code="app.footer.copyright" />

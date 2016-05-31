@@ -34,6 +34,8 @@ var initializeEditor = function () {
 var initializeCommandLine = function () {
     require(['gcli/index', 'demo/index'], function (gcli) {
         gcli.createDisplay();
+        gcli.addCommand(CommandsRegistry.generateTemplateWorkspace);
+        gcli.addCommand(CommandsRegistry.generateTemplateWorkspaceWithDestination);
         gcli.addCommand(CommandsRegistry.generateDemoWorkspace);
         gcli.addCommand(CommandsRegistry.generateDemoWorkspaceWithDestination);
         gcli.addCommand(CommandsRegistry.checkDocument);
@@ -50,6 +52,7 @@ var initializeCommandLine = function () {
         gcli.addCommand(CommandsRegistry.testModule);
         gcli.addCommand(CommandsRegistry.testModules);
         gcli.addCommand(CommandsRegistry.convertCurrentWorkspacetoDemo);
+        gcli.addCommand(CommandsRegistry.convertCurrentWorkspacetoTemplate);
         gcli.addCommand(CommandsRegistry.clearConsole);
     });
 };
@@ -127,7 +130,6 @@ var intializeEditorWindow = function () {
     $("#editorMaximize").click(maximize);
     $("#editorToggleInspector").click(toggleInspector);
     //share Document
-    $("#shareDocumentModal").hide();
     $("#shareDocument").click(function () {
         $("#shareDocumentModal").show();
         $("#mailContent").val(EditorManager.getCurrentEditorContent());

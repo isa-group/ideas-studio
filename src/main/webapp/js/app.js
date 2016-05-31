@@ -86,7 +86,7 @@ var showModal = function (title, content, primaryText, primaryHandler,
     $("body")
         .append(
             '<!-- Modal for all app -->'
-            + '<div class="modal" id="appGenericModal" data-backdrop="static" data-keyboard="false">'
+            + '<div class="modal" id="appGenericModal" data-backdrop="true" data-keyboard="true">'
             + '<div class="modal-dialog">'
             + '<div class="modal-content">'
             + '<div class="modal-header">'

@@ -14,6 +14,7 @@ import es.us.isa.ideas.app.security.UserAccount;
 import es.us.isa.ideas.app.services.WorkspaceService;
 import es.us.isa.ideas.app.util.FileMetadata;
 import es.us.isa.ideas.repo.exception.AuthenticationException;
+import es.us.isa.ideas.repo.exception.BadUriException;
 import es.us.isa.ideas.repo.impl.fs.FSFacade;
 import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
 import es.us.isa.ideas.utilities.AppResponse;
@@ -43,6 +44,7 @@ public class FileController extends AbstractController {
     WorkspaceService workspaceService;
     
     private static final String DEMO_MASTER="DemoMaster";
+    private static final String SAMPLE_WORKSPACE="SampleWorkspace";
     
     private static final String FILE_TYPE_PROJECT="project";
     private static final String FILE_TYPE_DIR="directory";
@@ -79,7 +81,7 @@ public class FileController extends AbstractController {
     }
 
     /* Files C-UD */
-    @RequestMapping(value = "", method = RequestMethod.POST)
+@RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public boolean createFile(@RequestParam("fileUri") String fileUri,
                               @RequestParam("fileType") String fileType) {
@@ -87,6 +89,12 @@ public class FileController extends AbstractController {
         
         boolean res = Boolean.FALSE;
         boolean success = Boolean.TRUE;
+        
+        try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         
         String username = LoginService.getPrincipal().getUsername();
         
@@ -101,12 +109,16 @@ public class FileController extends AbstractController {
                 res = FSFacade.createFile(fileUri, username);
             }
         } 
-        catch (Exception e) {
+        catch (BadUriException | AuthenticationException e) {
             logger.log(Level.SEVERE, "Error creating " + fileType + ": " + fileUri, e);
             success = Boolean.FALSE;
         }
         if (success) {
+            try{
             workspaceService.updateTime(getSelectedWorkspace(), username);
+            }catch(Exception e){
+                logger.log(Level.SEVERE, "Cannot update time in workspace "+getSelectedWorkspace());
+            }
         }
         return res;
     }
@@ -121,6 +133,13 @@ public class FileController extends AbstractController {
         boolean res = Boolean.FALSE;
         boolean success = Boolean.TRUE;
         
+         try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+            newName = new String(newName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+         
         String username = LoginService.getPrincipal().getUsername();
         
         try {
@@ -152,6 +171,13 @@ public class FileController extends AbstractController {
         boolean res = Boolean.FALSE;
         boolean success = Boolean.TRUE;
         
+         try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+            destUri = new String(destUri.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+        
         String username = LoginService.getPrincipal().getUsername();
         
         try {
@@ -180,6 +206,12 @@ public class FileController extends AbstractController {
         
         boolean res = Boolean.FALSE;
         boolean success = Boolean.TRUE;
+        
+         try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
         
         String username = LoginService.getPrincipal().getUsername();
         
@@ -212,6 +244,12 @@ public class FileController extends AbstractController {
         initRepoLab();
         
         String fileContent = "";
+        
+         try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
             
         try {
             fileContent = FSFacade.getFileContent(fileUri, LoginService.getPrincipal().getUsername());
@@ -231,6 +269,12 @@ public class FileController extends AbstractController {
         boolean res = Boolean.FALSE;
         boolean success = Boolean.TRUE;
         
+         try {
+            fileUri = new String(fileUri.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+        
         String username = LoginService.getPrincipal().getUsername();
         
         try {
@@ -247,63 +291,71 @@ public class FileController extends AbstractController {
     }
     
     @RequestMapping(value = "/importDemoWorkspace", method = RequestMethod.GET)
-	@ResponseBody
-	public AppResponse importDemoWorkspace(
-			@RequestParam("demoWorkspaceName") String demoWorkspaceName,
-			@RequestParam("targetWorkspaceName") String targetWorkspaceName) {
-		AppResponse response = new AppResponse();
+    @ResponseBody
+    public AppResponse importDemoWorkspace(
+            @RequestParam("demoWorkspaceName") String demoWorkspaceName,
+            @RequestParam("targetWorkspaceName") String targetWorkspaceName) {
 
-		String username = LoginService.getPrincipal().getUsername();
+        AppResponse response = new AppResponse();
 
-		FSWorkspace demoWS = new FSWorkspace(demoWorkspaceName, "DemoMaster");
-		FSWorkspace newWS = new FSWorkspace(targetWorkspaceName, username);
+        try {
+            demoWorkspaceName = new String(demoWorkspaceName.getBytes("iso-8859-15"), "UTF-8");
+            targetWorkspaceName = new String(targetWorkspaceName.getBytes("iso-8859-15"), "UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
 
-		FileController.initRepoLab();
+        String username = LoginService.getPrincipal().getUsername();
 
-		boolean demoExists = true;
+        FSWorkspace demoWS = new FSWorkspace(demoWorkspaceName, "DemoMaster");
+        FSWorkspace newWS = new FSWorkspace(targetWorkspaceName, username);
 
-		// TODO: Cambiar comprobacion una vez este refactorizado. No se deberia
-		// trabajar a nivel de cadenas, sino de objetos serializables (para
-		// devolver JSON)
-		try {
-			demoExists = FSFacade.getWorkspaces("DemoMaster").contains(
-					"\"" + demoWorkspaceName + "\"");
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, e.getMessage());
-			demoExists = false;
-		}
+        FileController.initRepoLab();
 
-		if (demoExists) {
+        boolean demoExists = true;
 
-			try {
-				IdeasRepo.get().getRepo().delete(newWS);
-			} catch (Exception e) {
-				logger.log(Level.SEVERE,
-						"Could not remove workspace before importing.");
-			}
+        // TODO: Cambiar comprobacion una vez este refactorizado. No se deberia
+        // trabajar a nivel de cadenas, sino de objetos serializables (para
+        // devolver JSON)
+        try {
+            demoExists = FSFacade.getWorkspaces("DemoMaster").contains("\"" + demoWorkspaceName + "\"");
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            demoExists = false;
+        }
 
-			try {
-				IdeasRepo.get().getRepo().move(demoWS, newWS, true);
-				response.setMessage("Demo workspace created with name: "
-						+ targetWorkspaceName);
+        if (demoExists) {
+            try {
+                IdeasRepo.get().getRepo().delete(newWS);
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Could not remove workspace before importing.");
+            }
+            try {
+                IdeasRepo.get().getRepo().move(demoWS, newWS, true);
+                response.setMessage("Demo workspace created with name: " + targetWorkspaceName);
                 response.setStatus(AppResponse.Status.OK);
-			} catch (AuthenticationException e) {
-				logger.log(Level.SEVERE, "Error creating demo workspace for "
-						+ username);
-				response.setMessage(e.getMessage());
+            } catch (AuthenticationException e) {
+                logger.log(Level.SEVERE, "Error creating demo workspace for {0}", username);
+                response.setMessage(e.getMessage());
                 response.setStatus(AppResponse.Status.ERROR);
-			}
+            }
 
-		} else {
-			logger.log(Level.WARNING, "There is no demo named \""
-					+ demoWorkspaceName + "\"");
-			response.setMessage("There is no Demo named " + demoWorkspaceName);
+        } else if (SAMPLE_WORKSPACE.equalsIgnoreCase(demoWorkspaceName)) {
+            try {
+                FSFacade.createWorkspace(demoWorkspaceName, username);
+                response.setMessage("Empty SampleWorkspace has been created");
+                response.setStatus(AppResponse.Status.OK);
+            } catch (AuthenticationException ex) {
+                Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            logger.log(Level.WARNING, "There is no demo named \"{0}\"", demoWorkspaceName);
+            response.setMessage("There is no Demo named " + demoWorkspaceName);
             response.setStatus(AppResponse.Status.OK_PROBLEMS);
-		}
-
-		return response;
-
-	}
+        }
+        return response;
+    }
 
     /* CRUD Workspaces in RepoLab */
     @RequestMapping(value = "/workspaces", method = RequestMethod.GET)
@@ -327,6 +379,16 @@ public class FileController extends AbstractController {
         initRepoLab();
         boolean res = false;
         boolean success = true;
+        
+         try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+            description = new String(description.getBytes("iso-8859-15"),"UTF-8");
+            tags = new String(tags.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+         
+         
         String username = LoginService.getPrincipal().getUsername();
         try {
             res = FSFacade.createWorkspace(workspaceName, username);
@@ -348,6 +410,15 @@ public class FileController extends AbstractController {
                                     @RequestParam("newDescription") String newDescription){
         initRepoLab();
         boolean success = true;
+        
+         try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+            newName = new String(newName.getBytes("iso-8859-15"),"UTF-8");
+            newDescription = new String(newDescription.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+         
         String username = LoginService.getPrincipal().getUsername();
         
         String workspace = getSelectedWorkspace();
@@ -401,6 +472,12 @@ public class FileController extends AbstractController {
         
         boolean success = true;
         
+         try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+        
         String username = LoginService.getPrincipal().getUsername();
         
         try {
@@ -423,12 +500,14 @@ public class FileController extends AbstractController {
         initRepoLab();
         
         String res = "";
+        String username = LoginService.getPrincipal().getUsername();
         
         try {
-            res = FSFacade.getSelectedWorkspace(LoginService.getPrincipal().getUsername());
+            res = FSFacade.getSelectedWorkspace(username);
             }
         catch (Exception e) {
-            logger.log(Level.SEVERE, null, e);
+            logger.log(Level.WARNING, "There not exists a selected workspace for user {0}", username);
+            return "";
         }
         return res;
     }
@@ -436,21 +515,27 @@ public class FileController extends AbstractController {
     @RequestMapping(value = "/workspaces/selected", method = RequestMethod.POST)
     @ResponseBody
     public boolean setSelectedWorkspace(@RequestParam("workspaceName") String workspaceName) {
-        
+
         initRepoLab();
+        
+         try {
+            workspaceName = new String(workspaceName.getBytes("iso-8859-15"),"UTF-8");
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Unsopported encoding", ex);
+        }
+         
         logger.log(Level.INFO, "Persisting selected workspace:  "
                         + workspaceName + ", username: "
                         + LoginService.getPrincipal().getUsername());
         boolean res = true;
         try {
-                FSFacade.saveSelectedWorkspace(workspaceName, LoginService
-                                .getPrincipal().getUsername());
+            FSFacade.saveSelectedWorkspace(workspaceName, LoginService.getPrincipal().getUsername());
         } catch (Exception e) {
-                res = false;
-                logger.log(Level.SEVERE, e.getMessage());
+            res = false;
+            logger.log(Level.SEVERE, e.getMessage());
         }
         return res;
-      
+
     }
 
     /* Upload */
