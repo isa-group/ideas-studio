@@ -41,7 +41,7 @@ public class RegisterSocialGooglePage extends RegisterPage {
 
     @FindBy(id = "submit_approve_access")
     WebElement submitApproveAccessButton;
-    
+    //
     // User menu
     @FindBy(xpath = "//*[@id=\"gb\"]/div[2]/div[1]/div[2]/div[4]/div[1]/a")
     WebElement userMenuButton;
@@ -216,33 +216,34 @@ public class RegisterSocialGooglePage extends RegisterPage {
                 .typePassword(goPass)
                 .clickOnSignIn();
 
-            PageObject.waitForElementVisible(page.submitApproveAccessButton, 10);
+//            PageObject.waitForElementVisible(page.submitApproveAccessButton, 10);
             
-            try {
-                Thread.sleep(5000); // allow button animation
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterSocialGooglePage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            try {
-                page.clickOnSubmitApproveAccess();
-            } catch (NoSuchElementException ex) {
-                // nothing
-            }
-
-            try {
-                page.clickOnGoToApp();
-            } catch (NoSuchElementException ex) {
-                // nothing
-            }
-
+//            try {
+//                Thread.sleep(5000); // allow button animation
+//            } catch (InterruptedException ex) {
+//                Logger.getLogger(RegisterSocialGooglePage.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            
+//            try {
+//                page.clickOnSubmitApproveAccess();
+//            } catch (NoSuchElementException ex) {
+//                // nothing
+//            }
+//
+//            try {
+//                page.clickOnGoToApp();
+//            } catch (NoSuchElementException ex) {
+//                // nothing
+//            }
+//
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException ex) {
                 LOG.severe(ex.getMessage());
             }
             
-            EditorPage.navigateTo();
+            EditorPage.navigateTo()
+                .expectDifferentUrl();
 
             TEST_RESULT = PageObject.currentPageContainsURLType(IdeasURLType.EDITOR_URL);
 
