@@ -1,26 +1,36 @@
 {
-    "workbenchName": "IDEAS",
-    "images": {
-        "logo": "ideas/appLogoBig.png",
-        "search": "ideas/Search.png"
-    },
-    "modules": {
-        "ideas-plaintext-language": "/ideas-plaintext-language",
-        "ideas-language-html": "/ideas-language-html",
-        "ideas-json-language": "/ideas-json-language",
-        "ideas-yaml-language": "/ideas-yaml-language",
-        "ideas-iagree-template-language": "/ideas-iagree-template-language",
-        "ideas-language-angular": "/ideas-language-angular",
-        "ideas-language-angular-controller": "/ideas-language-angular-controller"
-    },
-    "configurationFiles": {
-        "application": "classpath*:application.properties",
-        "security": "classpath*:security.properties",
-        "social": "classpath*:social.properties",
-        "email": "classpath*:email.properties"
-    },
-    "helpURI": "https://labs.isa.us.es/IDEAS-help/",
-    "helpMode": "none",
-    "googleAnalyticsID": "UA-68297022-1",
-    "advancedMode": false
+   "workbenchName": "IDEAS",
+   "images": {
+       "logo": "ideas/appLogoBig.png",
+       "search": "ideas/Search.png"
+   },
+   "modules": {
+       "agreement-module": "https://labs.isa.us.es:8181/agreement-module/api/v2",
+       "ideas-sedl-language": "https://labs.isa.us.es:8181/ideas-sedl-language",
+       "ideas-opl-language": "https://labs.isa.us.es:8181/ideas-opl-language",
+       "ideas-afm-language": "https://labs.isa.us.es:8181/ideas-afm-language",
+       "ideas-fmc-language": "https://labs.isa.us.es:8181/ideas-fmc-language",
+       "ideas-hcs-language": "https://labs.isa.us.es:8181/ideas-hcs-language",
+       "ideas-pref-language": "https://labs.isa.us.es:8181/ideas-pref-language",
+       "ideas-plaintext-language": "https://labs.isa.us.es:8181/ideas-plaintext-language",
+       "ideas-csv-language": "https://labs.isa.us.es:8181/ideas-csv-language",
+       "ideas-lusdl-language": "https://labs.isa.us.es:8181/ideas-lusdl-language",
+       "ideas-html-language": "https://labs.isa.us.es:8181/ideas-html-language",
+       "ideas-soup-language": "https://labs.isa.us.es:8181/ideas-soup-language",
+       "ideas-json-language": "https://labs.isa.us.es:8181/ideas-json-language",
+       "ideas-yaml-language": "https://labs.isa.us.es:8181/ideas-yaml-language",
+       "ideas-language-angular": "https://labs.isa.us.es:8181/ideas-language-angular",
+       "ideas-language-angular-controller": "https://labs.isa.us.es:8181/ideas-language-angular-controller",
+       "ideas-R-language": "https://labs.isa.us.es:8181/ideas-R-language"
+   },
+   "configurationFiles": {
+       "application": "classpath*:application.properties",
+       "security": "classpath*:security.properties",
+       "social": "classpath*:social.properties",
+       "email": "classpath*:email.properties"
+   },
+   "helpURI": "https://labs.isa.us.es/IDEAS-help/",
+   "helpMode": "dynamic",
+   "googleAnalyticsID": "UA-68297022-1",
+   "advancedMode": true
 }

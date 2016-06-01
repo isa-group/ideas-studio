@@ -1,5 +1,11 @@
+ideas-studio v0.9.3.1, 1/06/2016
+----------------------------------------------
+- HTML code in changelog.txt is processed as HTML #207
+- Update studioConfiguration #209
+
 ideas-studio v0.9.3, 1/06/2016
 ----------------------------------------------
+- Update title #206
 - Error message is always shown to user while creating files/directories/projects #205 
 - Operation buttons bad overflow  #202 
 - Problems with enconding in Dynatree #201 
@@ -36,7 +42,6 @@ ideas-studio v0.9.3, 1/06/2016
 - Dynatree projects are reordered only by a page refresh #7 
 - /security/loginFailure page has no format #3 
 - generateDemoWorkspace doesn't overwrite an already existent workspace #2 
-- Update <title> #206
 
 ideas-studio v0.9.2.7, 19/05/2016
 ----------------------------------------------
