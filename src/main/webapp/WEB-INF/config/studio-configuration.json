@@ -5,7 +5,8 @@
        "search": "ideas/Search.png"
    },
    "modules": {
-       "agreement-module": "https://labs.isa.us.es:8181/agreement-module/api/v2",
+       "module-agreement-lite": "https://designer.governify.io:10043/module-agreement-lite/api/v2",
+       "ideas-agreement-module": "https://labs.isa.us.es:8181/ideas-agreement-module/api/v2",
        "ideas-sedl-language": "https://labs.isa.us.es:8181/ideas-sedl-language",
        "ideas-opl-language": "https://labs.isa.us.es:8181/ideas-opl-language",
        "ideas-afm-language": "https://labs.isa.us.es:8181/ideas-afm-language",
