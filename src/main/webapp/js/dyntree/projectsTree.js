@@ -11,12 +11,12 @@ function getfile_iconIcon(nameFile) {
 function getNodeByFileUri(fileUri) {
     var res = undefined;
     $("#projectsTree").dynatree("getRoot").visit(function (node) {
-        if (WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath == fileUri) {
+        var nodeName = node.data.keyPath === "undefined" ? node.data.title : node.data.keyPath;
+        if (WorkspaceManager.getSelectedWorkspace() + "/" + nodeName === fileUri) {
             res = node;
             return;
         }
     });
-
     return res;
 }
 
@@ -53,10 +53,14 @@ function copyPaste(action, node) {
             }
             var origin = WorkspaceManager.getSelectedWorkspace() + "/" + originNode.data.keyPath;
             var dest = WorkspaceManager.getSelectedWorkspace() + "/" + destNode.data.keyPath + "/" + originNode.data.title;
+            var originProj = WorkspaceManager.getSelectedWorkspace() + "/" + originNode.data.keyPath.split("/")[0];
+            var destProj = WorkspaceManager.getSelectedWorkspace() + "/" + destNode.data.keyPath.split("/")[0];
 
             var msg = "";
             if (originNode.getLevel() === 1) {
                 msg += "Cannot paste a project into a project.";
+            } else if (originProj !== destProj) {
+                msg += "Cannot paste element into a different project.";
             } else if (!!getNodeByFileUri(dest)) {
                 msg += "Element already exists.";
             } else if (!destNode.data.isFolder) {
@@ -153,7 +157,22 @@ function bindContextMenu(span) {
                 });
                 break;
             case "delete":
-                CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, function (result) {});
+                var nodeUri = WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath;
+                showModal("Please, confirm your decision", "<strong>Are you sure you want to delete \"" + nodeUri + "\"?</strong>", "Delete",
+                        function () {
+                            if (node.data.keyPath !== "undefined") {
+                                CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, function (result) {
+                                    hideModal();
+                                });
+                            } else {
+                                CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.title, function (result) {
+                                    hideModal();
+                                });
+                            }
+                        },
+                        function () {
+                            hideModal();
+                        });
                 break;
             case "cut":
                 pasteMode = "cut";
@@ -201,6 +220,28 @@ function bindContextMenu(span) {
 }
 ;
 
+var sortProjectsTree = function (container) {
+    var cmp = function(a, b) {
+        var ret = null;
+        if (a.data.isFolder && b.data.isFolder) {
+            a = a.data.title.toLowerCase();
+            b = b.data.title.toLowerCase();
+            ret = a > b ? 1 : a < b ? -1 : 0;
+        } else if (a.data.isFolder && !b.data.isFolder) {
+            ret = -1;
+        } else if (!a.data.isFolder && b.data.isFolder) {
+            ret = 1;
+        } else {
+            a = a.data.title.toLowerCase();
+            b = b.data.title.toLowerCase();
+            ret = a > b ? 1 : a < b ? -1 : 0;
+        }
+        return ret;
+    };
+    var node = container || $("#projectsTree").dynatree("getTree").getRoot();
+    node.sortChildren(cmp, true);
+};
+
 $(function () {
     // Attach the dynatree widget to an existing <div id="tree"> element
     // and pass the tree options as an argument to the dynatree() function:
@@ -247,6 +288,7 @@ $(function () {
         },
         onCreate: function (node, span) {
             bindContextMenu(span);
+            sortProjectsTree();
         },
         /*
          * Load lazy content (to show that context menu will
@@ -258,72 +300,72 @@ $(function () {
             });
         },
         // Drag'n'drop support
-        dnd: {
-            // Make tree nodes draggable:
-            onDragStart: function (node) {
-                console.log("Activated node: " + node);
-                currentSelectedNode = node;
-                var result = true;
-                if (node.lastsib == "dynatree-lastsib" || node.getLevel() === 1) {
-                    result = false;
-                }
-                return result;
-            }, // Callback(sourceNode), return true, to enable
-            // dnd
-            onDragStop: null, // Callback(sourceNode)
-            // Make tree nodes accept draggables
-            autoExpandMS: 500, // Expand nodes after n
-            // milliseconds of hovering.
-            preventVoidMoves: true, // Prevent dropping
-            // nodes 'before self',
-            // etc.
-            //revert : true, // true: slide helper back to source
-            // if drop is rejected
-            onDragEnter: function (node, sourceNode) {
-                var result = true;
-                if (node.isDescendantOf(sourceNode) || !node.data.isFolder || node.lastsib == "dynatree-lastsib") {
-                    result = false;
-                }
-                return result;
-            }, // Callback(targetNode, sourceNode, ui,
-            // draggable)
-            onDragOver: function (node, sourceNode, hitMode) {
-                // Deactivating to drag and drop between projects
-                var Porigin = sourceNode.data.keyPath.substring(0, sourceNode.data.keyPath.indexOf("/"));
-                var Pdest = node.data.keyPath.substring(0, node.data.keyPath.indexOf("/"));
-                if (node.isDescendantOf(sourceNode) || !node.data.isFolder || Porigin !== Pdest) {
-                    return false;
-                }
-                if (!node.data.isFolder && hitMode === "over") {
-                    return "after";
-                }
-            }, // Callback(targetNode,
-            // sourceNode, hitMode)
-            onDrop: function (node, sourceNode, hitMode, ui, draggable) {
-                var Porigin = sourceNode.data.keyPath.substring(0, sourceNode.data.keyPath.indexOf("/"));
-                var Pdest = node.data.keyPath.substring(0, node.data.keyPath.indexOf("/"));
-                if (Pdest == "") {
-                    Pdest = node.data.keyPath;
-                }
-                if (Porigin == Pdest) {
-                    //si esta dentro del proyecto --> move
-                    CommandApi.move(WorkspaceManager.getSelectedWorkspace() + "/" + sourceNode.data.keyPath,
-                        WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath + "/" + sourceNode.data.title);
-                } else {
-                    //en otro proyecto --> copia
-                    CommandApi.copy(WorkspaceManager.getSelectedWorkspace() + "/" + sourceNode.data.keyPath,
-                        WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath + "/" + sourceNode.data.title);
-                }
-            }, // Callback(targetNode, sourceNode, hitMode, ui,
-            // draggable)
-            onDragLeave: function (node, sourceNode) {
-                /**
-                 * Always called if onDragEnter was called.
-                 */
-//								logMsg("tree.onDragLeave(%o, %o)", node,
-//										sourceNode);
-            } // Callback(targetNode, sourceNode)
-        },
+//        dnd: {
+//            // Make tree nodes draggable:
+//            onDragStart: function (node) {
+//                console.log("Activated node: " + node);
+//                currentSelectedNode = node;
+//                var result = true;
+//                if (node.lastsib == "dynatree-lastsib" || node.getLevel() === 1) {
+//                    result = false;
+//                }
+//                return result;
+//            }, // Callback(sourceNode), return true, to enable
+//            // dnd
+//            onDragStop: null, // Callback(sourceNode)
+//            // Make tree nodes accept draggables
+//            autoExpandMS: 500, // Expand nodes after n
+//            // milliseconds of hovering.
+//            preventVoidMoves: true, // Prevent dropping
+//            // nodes 'before self',
+//            // etc.
+//            //revert : true, // true: slide helper back to source
+//            // if drop is rejected
+//            onDragEnter: function (node, sourceNode) {
+//                var result = true;
+//                if (node.isDescendantOf(sourceNode) || !node.data.isFolder || node.lastsib == "dynatree-lastsib") {
+//                    result = false;
+//                }
+//                return result;
+//            }, // Callback(targetNode, sourceNode, ui,
+//            // draggable)
+//            onDragOver: function (node, sourceNode, hitMode) {
+//                // Deactivating to drag and drop between projects
+//                var Porigin = sourceNode.data.keyPath.substring(0, sourceNode.data.keyPath.indexOf("/"));
+//                var Pdest = node.data.keyPath.substring(0, node.data.keyPath.indexOf("/"));
+//                if (node.isDescendantOf(sourceNode) || !node.data.isFolder || Porigin !== Pdest) {
+//                    return false;
+//                }
+//                if (!node.data.isFolder && hitMode === "over") {
+//                    return "after";
+//                }
+//            }, // Callback(targetNode,
+//            // sourceNode, hitMode)
+//            onDrop: function (node, sourceNode, hitMode, ui, draggable) {
+//                var Porigin = sourceNode.data.keyPath.substring(0, sourceNode.data.keyPath.indexOf("/"));
+//                var Pdest = node.data.keyPath.substring(0, node.data.keyPath.indexOf("/"));
+//                if (Pdest == "") {
+//                    Pdest = node.data.keyPath;
+//                }
+//                if (Porigin == Pdest) {
+//                    //si esta dentro del proyecto --> move
+//                    CommandApi.move(WorkspaceManager.getSelectedWorkspace() + "/" + sourceNode.data.keyPath,
+//                        WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath + "/" + sourceNode.data.title);
+//                } else {
+//                    //en otro proyecto --> copia
+//                    CommandApi.copy(WorkspaceManager.getSelectedWorkspace() + "/" + sourceNode.data.keyPath,
+//                        WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath + "/" + sourceNode.data.title);
+//                }
+//            }, // Callback(targetNode, sourceNode, hitMode, ui,
+//            // draggable)
+//            onDragLeave: function (node, sourceNode) {
+//                /**
+//                 * Always called if onDragEnter was called.
+//                 */
+////								logMsg("tree.onDragLeave(%o, %o)", node,
+////										sourceNode);
+//            } // Callback(targetNode, sourceNode)
+//        },
         persist : true,
             children: []
 

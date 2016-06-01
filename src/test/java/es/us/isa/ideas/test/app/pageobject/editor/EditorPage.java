@@ -40,6 +40,9 @@ public class EditorPage extends PageObject<EditorPage> {
 
     @FindBy(id = "demo-ws")
     WebElement wsPublishDemoButton;
+    
+    @FindBy(id = "wsactions")
+    WebElement wsActionsContainer;
 
     @FindBy(css = "#wsmWorkspaces > div.col-xs-12.cards > div > div > div.card__meta > div > p.card__meta-content-title")
     WebElement wsDemoCardTitle;
@@ -84,6 +87,9 @@ public class EditorPage extends PageObject<EditorPage> {
     // MODAL
     @FindBy(css = "#appGenericModal div.modal-footer > a.btn.btn-primary.continue")
     WebElement modalContinueButton;
+    
+    @FindBy(css = "#appGenericError > div > div > div.modal-footer > a")
+    WebElement modalWarningContinueButton;
 
     @FindBy(css = "#appGenericModal div.modal-footer > a.btn.dismiss")
     WebElement modalCloseButton;
@@ -138,13 +144,13 @@ public class EditorPage extends PageObject<EditorPage> {
     @FindBy(linkText = "Create YAML file")
     WebElement projCreateYamlFileAnchor;
 
-    @FindBy(linkText = "Create iAgreeTemplate file")
+    @FindBy(linkText = "Create iAgree template file")
     WebElement projCreateIAgreeTemplateFileAnchor;
 
-    @FindBy(linkText = "Create iAgreeOffer file")
+    @FindBy(linkText = "Create iAgree offer file")
     WebElement projCreateIAgreeOfferFileAnchor;
 
-    @FindBy(linkText = "Create iAgreeAgreement file")
+    @FindBy(linkText = "Create iAgree agreement file")
     WebElement projCreateIAgreeAgreementFileAnchor;
 
     @FindBy(linkText = "Upload File")
@@ -307,6 +313,17 @@ public class EditorPage extends PageObject<EditorPage> {
             Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
         }
         clickOnNotClickableElement(modalContinueButton);
+
+        return PageFactory.initElements(getWebDriver(), EditorPage.class);
+    }
+    
+    public EditorPage clickOnModalWarningContinueButton() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        clickOnNotClickableElement(modalWarningContinueButton);
 
         return PageFactory.initElements(getWebDriver(), EditorPage.class);
     }
@@ -620,7 +637,7 @@ public class EditorPage extends PageObject<EditorPage> {
 
     }
 
-    public EditorPage activateDynatreeContextMenuByNodeTitle(String nodeTitle) {
+    public EditorPage openContextMenu(String nodeTitle) {
 
         try {
             Thread.sleep(1000);

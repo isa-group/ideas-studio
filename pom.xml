@@ -6,7 +6,7 @@
 
     <groupId>es.us.isa</groupId>
     <artifactId>ideas-studio</artifactId>
-    <version>0.9.2.7</version>
+    <version>0.9.3</version>
 
     <name>ideas-studio</name>
     <url>http://maven.apache.org</url>
@@ -31,14 +31,18 @@
         <test.register.user.address>${settings.test.register.user.address}</test.register.user.address>
         <test.default.user>${settings.test.default.user}</test.default.user>
         <test.default.pass>${settings.test.default.pass}</test.default.pass>
-
+        <test.guest.user>${settings.test.guest.user}</test.guest.user>
+        <test.guest.pass>${settings.test.guest.pass}</test.guest.pass>
+        <test.environment>${settings.test.environment}</test.environment>
+        <test.environment.url>${settings.test.environment.url}</test.environment.url>
+        
+        <!-- Docker -->
+        <application.dockerMode>false</application.dockerMode>
+        
         <!-- MySQL properties -->
         <application.mysqlDB>${settings.mysqlDB}</application.mysqlDB>
         <application.mysqlUser>${settings.mysqlUser}</application.mysqlUser>
         <application.mysqlPass>${settings.mysqlPass}</application.mysqlPass>
-
-        <!-- Integration Tests Execution configuration <test.rest.basePath>/${project.artifactId}-${project.version}/resources</test.rest.basePath> 
-        <test.rest.port>8880</test.rest.port> -->
 
         <!-- Integration Tests Debug configuration -->
         <test.rest.basePath>/${project.artifactId}/resources</test.rest.basePath>
@@ -831,346 +835,15 @@
             </plugin>
         </plugins>
     </build>
+    
     <profiles>
         <profile>
-            <id>endorsed</id>
-            <activation>
-                <property>
-                    <name>sun.boot.class.path</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>2.0.2</version>
-                        <configuration>
-                            <!-- javaee6 contains upgrades of APIs contained within the JDK itself. 
-                            As such these need to be placed on the bootclasspath, rather than classpath 
-                            of the compiler. If you don't make use of these new updated API, you can 
-                            delete the profile. On non-SUN jdk, you will need to create a similar profile 
-                            for your jdk, with the similar property as sun.boot.class.path in Sun's JDK. -->
-                            <compilerArguments>
-                                <bootclasspath>${settings.localRepository}/javax/javaee-endorsed-api/6.0/javaee-endorsed-api-6.0.jar${path.separator}${sun.boot.class.path}</bootclasspath>
-                            </compilerArguments>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>javax</groupId>
-                                <artifactId>javaee-endorsed-api</artifactId>
-                                <version>6.0</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>DeployInProduction</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.4.5</version>
-                        <configuration>
-                            <!-- Container configuration -->
-                            <container>
-                                <containerId>tomcat7x</containerId>
-                                <type>remote</type>
-                            </container>
-
-                            <!-- Configuration to use with the container (which will also configure 
-                            the deployer) -->
-                            <configuration>
-                                <type>runtime</type>
-                                <properties>
-                                    <cargo.remote.username>pleon</cargo.remote.username>
-                                    <cargo.remote.password>pl30n</cargo.remote.password>
-                                    <cargo.remote.uri>http://exemplar.us.es/manager/text</cargo.remote.uri>
-                                </properties>
-                            </configuration>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>deploy</id>
-                                <goals>
-                                    <goal>deployer-redeploy</goal>
-                                </goals>
-                                <phase>install</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <!-- Unit tests profile -->
-        <profile>
-            <id>unit-test</id>
-            <activation>
-                <property>
-                    <name>unit.test</name>
-                </property>
-            </activation>
-            <dependencies>
-
-                <!-- We use embedded-glassfish and Restassured for integration testing -->
-                <dependency>
-                    <groupId>com.jayway.restassured</groupId>
-                    <artifactId>rest-assured</artifactId>
-                    <version>1.7.2</version>
-                    <scope>test</scope>
-                    <exclusions>
-                        <exclusion>
-                            <artifactId>httpclient</artifactId>
-                            <groupId>org.apache.httpcomponents</groupId>
-                        </exclusion>
-                        <exclusion>
-                            <artifactId>commons-collections</artifactId>
-                            <groupId>commons-collections</groupId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-
-                <dependency>
-                    <groupId>org.glassfish.extras</groupId>
-                    <artifactId>glassfish-embedded-all</artifactId>
-                    <version>3.1.1</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.12</version>
-                        <configuration>
-                            <skipTests>${skip.unit.tests}</skipTests>
-                            <!-- Excluding integration tests from surefire execution -->
-                            <excludes>
-                                <exclude>**/*.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <!-- Local test -->
-        <profile>
-            <id>local-test</id>
-            <activation>
-                <property>
-                    <name>local</name>
-                </property>
-            </activation>
+            <id>docker-mode</id>
             <properties>
-                <test.server.baseURL>https://localhost</test.server.baseURL>
-                <test.server.port>8181</test.server.port>
+                <application.dockerMode>true</application.dockerMode>
             </properties>
-            <build>
-                <plugins>
-                    <!-- Tomcat for integration tests. It starts on pre-integration and 
-                    stops on post-integration. -->
-                    <plugin>
-                        <groupId>org.apache.tomcat.maven</groupId>
-                        <artifactId>tomcat7-maven-plugin</artifactId>
-                        <version>2.2</version>
-                        <configuration>
-                            <path>/</path>
-                            <port>8181</port>
-                            <httpsPort>8881</httpsPort>
-                            <!-- Increases embedded Tomcat PermGen memory -->
-                            <argLine>-Xms512m -Xmx1024m -XX:MaxPermSize=256m</argLine>
-                        </configuration>
-                        <executions>
-                            <!-- Embedded Tomcat starts -->
-                            <execution>
-                                <id>start-tomcat</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>run-war</goal>
-                                </goals>
-                                <configuration>
-                                    <webapps>
-                                        <!-- IDEAS languages to deploy into embedded Tomcat -->
-                                        <webapp>
-                                            <groupId>es.us.isa.ideas.module.language.html</groupId>
-                                            <artifactId>ideas-html-language</artifactId>
-                                            <version>0.0.1-SNAPSHOT</version>
-                                            <type>war</type>
-                                            <asWebapp>true</asWebapp>
-                                            <contextPath>/ideas-html-language</contextPath>
-                                        </webapp>
-                                        <webapp>
-                                            <groupId>es.us.isa.ideas.module.iagree</groupId>
-                                            <artifactId>ideas-iagree-template-language</artifactId>
-                                            <version>0.0.1-SNAPSHOT</version>
-                                            <type>war</type>
-                                            <asWebapp>true</asWebapp>
-                                            <contextPath>/ideas-iagree-template-language</contextPath>
-                                        </webapp>
-                                    </webapps>
-                                    <fork>true</fork>
-                                </configuration>
-                            </execution>
-                            <!-- Embedded Tomcat stops -->
-                            <execution>
-                                <id>stop-tomcat</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>shutdown</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <!-- Release Manager test profile -->
-        <profile>
-            <id>rm-tester</id>
-            <activation>
-                <property>
-                    <name>rm.tester</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- Includes integration tests on integration phase -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.19.1</version>
-                        <configuration>
-                            <skipTests>${skip.integration.tests}</skipTests>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>integration-tests</id>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>test</goal>
-                                </goals>
-                                <configuration>
-                                    <includes>
-                                        <include>**/TestSuiteFull.java</include>
-                                        <!-- <include>**/module/TestSuite.java</include> -->
-                                    </includes>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <!-- Developer test profile -->
-        <profile>
-            <id>dev-tester</id>
-            <activation>
-                <property>
-                    <name>dev.tester</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- Includes integration tests on integration phase -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.18.1</version>
-                        <configuration>
-                            <skipTests>${skip.integration.tests}</skipTests>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>integration-tests</id>
-                                <phase>integration-test</phase>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                                <configuration>
-                                    <includes>
-                                        <include>**/TestSuiteFull.java</include>
-                                        <!-- <include>**/TestSuiteCore.java</include> -->
-                                    </includes>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-report-plugin</artifactId>
-                        <version>2.18.1</version>
-                        <configuration>
-                            <outputName>000-testresult</outputName>
-                            <outputDirectory>${basedir}/src/test/QA</outputDirectory>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jxr-plugin</artifactId>
-                        <version>2.1</version>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- App developer test profile -->
-        <profile>
-            <id>app-tester</id>
-            <activation>
-                <property>
-                    <name>app.tester</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- Includes integration tests on integration phase -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>2.18.1</version>
-                        <configuration>
-                            <skipTests>${skip.integration.tests}</skipTests>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>integration-tests</id>
-                                <phase>integration-test</phase>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                                <configuration>
-                                    <includes>
-                                        <include>**/TestSuiteFull.java</include>
-                                        <!-- <include>**/*TestSuiteCore.java</include> -->
-                                        <!-- <include>**/*TestSuiteModule.java</include> -->
-                                    </includes>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-report-plugin</artifactId>
-                        <version>2.18.1</version>
-                        <configuration>
-                            <outputName>000-testresult</outputName>
-                            <outputDirectory>${basedir}/src/test/QA</outputDirectory>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jxr-plugin</artifactId>
-                        <version>2.1</version>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
+    
     <packaging>war</packaging>
 </project> 

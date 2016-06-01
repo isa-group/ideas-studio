@@ -28,267 +28,227 @@ import es.us.isa.ideas.app.social.SocialNetwork;
 @RequestMapping("/settings")
 public class SettingsController extends AbstractController {
 
-	@Autowired
-	ResearcherService researcherService;
-	@Autowired
-	ConfirmationService registrationConfirmationService;
-	@Autowired
-	UserAccountService userAccountService;
-	@Autowired
-	SocialNetworkConfigurationService socialNetworkConfigurationService;
-	@Autowired
-	LoginService loginService;
+    @Autowired
+    ResearcherService researcherService;
+    @Autowired
+    ConfirmationService registrationConfirmationService;
+    @Autowired
+    UserAccountService userAccountService;
+    @Autowired
+    SocialNetworkConfigurationService socialNetworkConfigurationService;
+    @Autowired
+    LoginService loginService;
 
-	@Autowired
-	ResearcherController researcherController;
-	@Autowired
-	UserAccountController userAccountController;
+    @Autowired
+    ResearcherController researcherController;
+    @Autowired
+    UserAccountController userAccountController;
 
-	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public ModelAndView edit() {
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public ModelAndView edit() {
+        ModelAndView mv;
+        Researcher originalResearcher = researcherController.edit(null);
+        if (null != originalResearcher) {
+            Researcher clonedResearcher = createClone(originalResearcher);
+            clonedResearcher.getUserAccount().setPassword(""); // Do not send password
 
-		Researcher clonedResearcher = createClone(researcherController
-				.edit(null));
-		clonedResearcher.getUserAccount().setPassword(""); // Do not send
-															// password
+            mv = createModelAndView(clonedResearcher, "researcher.commit.error");
+            mv.setViewName("settings/user");
+            mv.addObject("url", "settings/user");
+        } else {
+            mv = new ModelAndView("redirect:/app/editor");
+        }
+        return mv;
+    }
 
-		ModelAndView mv = createModelAndView(clonedResearcher,
-				"researcher.commit.error");
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public ModelAndView save(@Valid Researcher researcher, BindingResult binding, String oldPass, String repeatPass) throws Throwable {
+        String mypass;
+        boolean diffPasswords = false;
+        boolean changingPass = false;
+        boolean newAccount = researcher.getUserAccount() == null;
+        ModelAndView mv = null;
+        if (!newAccount) {
+            mypass = researcher.getUserAccount().getPassword();
+            changingPass = mypass.length() > 1 && repeatPass.length() > 1;
+            diffPasswords = (repeatPass.length() > 1 || mypass.length() > 1) && (!mypass.equals(repeatPass));
+        }
+        if (null == repeatPass) {
+            repeatPass = "";
+        }
+        if (null == oldPass) {
+            oldPass = "";
+        }
+        
+        boolean isSocialLogin = null != researcher.getUserAccount() && null == researcher.getUserAccount().getPassword();
+        boolean notEmptyPassValidation = binding.hasFieldErrors("userAccount.password") && binding.getErrorCount() == binding.getFieldErrorCount("userAccount.password") && oldPass.length() <= 0;
+        boolean isPasswordUpdate = !oldPass.equals("") || !repeatPass.equals("");
+        if ((!isSocialLogin && binding.hasErrors() && !notEmptyPassValidation) || diffPasswords || isPasswordUpdate) {
+            mv = createModelAndView(researcher, "researcher.commit.error");
+            mv.addObject("url", "settings/user");
 
-		mv.setViewName("settings/user");
-		mv.addObject("url", "settings/user");
+            // TODO
+            // if (binding.hasFieldErrors(""))
+            // mv.addObject("successInfo", false);
+            // mv.addObject("successAccount", false);
+            mv.addObject("success", false);
 
-		return mv;
-	}
+            if (diffPasswords) {
+                mv.addObject("repeatPasswordInconsistent", true);
+            } else {
+                mv.addObject("repeatPasswordInconsistent", false);
+            }
 
-	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	public ModelAndView save(@Valid Researcher researcher,
-			BindingResult binding, String oldPass, String repeatPass)
-			throws Throwable {
+        } else {
 
-		String mypass;
-		boolean diffPasswords = false;
-		boolean changingPass = false;
+            if (!newAccount) {
+                UserAccount principalUser = userAccountService.findByUsername(LoginService.getPrincipal().getUsername());
+                Researcher principalResearcher = researcherService.findByUserAccount(principalUser);
+                researcher = updateResearcher(principalResearcher.getId(), researcher, changingPass);
 
-		boolean newAccount = researcher.getUserAccount() == null;
+                // Save UserAccount
+                try {
+                    userAccountController.save(researcher.getUserAccount(), oldPass, repeatPass);
+                } catch (Throwable oops) {
+                    System.out.println("SC opss: " + oops.getMessage());
+                    mv = edit();
+                    mv.addObject("badPassword", true);
+                    mv.addObject("success", false);
+                    return mv;
+                }
+            }
 
-		ModelAndView mv = null;
+            // Save Researcher
+            if (newAccount) {
+                try {
+                    researcher.setUserAccount(new UserAccount());
+                    researcherController.saveNew(researcher);
+                    mv = edit();
+                    mv.addObject("success", true);
+                } catch (Throwable oops) {
+                    mv = edit();
+                    mv.addObject("success", false);
+                    mv.addObject("repeatedEmail", true);
+                }
+            } else {
+                researcherController.save(researcher);
+                mv = edit();
+                mv.addObject("success", true);
+            }
+        }
+        return mv;
+    }
 
-		if (!newAccount) {
-			mypass = researcher.getUserAccount().getPassword();
-			changingPass = mypass.length() > 1 && repeatPass.length() > 1;
+    @RequestMapping(value = "/admin")
+    public ModelAndView list() {
+        Collection<Researcher> researchers = researcherController.list();
+        ModelAndView result = new ModelAndView("settings/admin");
+        result.addObject("researchers", researchers);
 
-			diffPasswords = (repeatPass.length() > 1 || mypass.length() > 1)
-					&& (!mypass.equals(repeatPass));
-		}
+        return result;
+    }
 
-		boolean notEmptyPassValidation = binding
-				.hasFieldErrors("userAccount.password")
-				&& binding.getErrorCount() == binding
-						.getFieldErrorCount("userAccount.password")
-				&& oldPass.length() <= 0;
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
+    public ModelAndView detail(HttpServletRequest request) {
+        String userId = request.getParameter("userId");
+        Researcher clonedResearcher = createClone(researcherController.edit(userId));
+        clonedResearcher.getUserAccount().setPassword(""); // Do not send
+        // password
+        ModelAndView mv = new ModelAndView("settings/detail");
+        mv.addObject("researcher", clonedResearcher);
+        mv.addObject("url", "settings/detail");
+        return mv;
+    }
 
-		if ((binding.hasErrors() && !notEmptyPassValidation) || diffPasswords) {
-			mv = createModelAndView(researcher, "researcher.commit.error");
-			mv.addObject("url", "settings/user");
+    @RequestMapping(value = "/detail", method = RequestMethod.POST)
+    public ModelAndView savedetail(HttpServletRequest request, @Valid Researcher researcher, BindingResult binding) throws Throwable {
+        ModelAndView mv = null;
+        String userId = request.getParameter("userId");
+        boolean changingPass = researcher.getUserAccount().getPassword().length() > 1;
+        boolean notEmptyPassValidation = binding.hasFieldErrors("userAccount.password") && binding.getErrorCount() == binding.getFieldErrorCount("userAccount.password") && !changingPass;
 
-			// TODO
-			// if (binding.hasFieldErrors(""))
-			// mv.addObject("successInfo", false);
-			// mv.addObject("successAccount", false);
+        if ((binding.hasErrors() && !notEmptyPassValidation)) {
+            mv = createModelAndView(researcher, "researcher.commit.error");
+            mv.setViewName("settings/detail");
+            mv.addObject("url", "settings/detail");
+            mv.addObject("success", false);
 
-			mv.addObject("success", false);
+        } else {
+            String settedPass = researcher.getUserAccount().getPassword();
+            UserAccount user = userAccountService.findById(Integer.valueOf(userId));
+            Researcher res = researcherService.findByUserAccount(user);
+            researcher = updateResearcher(res.getId(), researcher, changingPass);
 
-			if (diffPasswords)
-				mv.addObject("repeatPasswordInconsistent", true);
-			else
-				mv.addObject("repeatPasswordInconsistent", false);
+            if (changingPass) {
+                Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+                String newpasshash = encoder.encodePassword(settedPass, null);
+                researcher.getUserAccount().setPassword(newpasshash);
+            }
+            // Save Researcher
+            researcherController.save(researcher);
+            mv = detail(request);
+            mv.addObject("success", true);
+        }
+        return mv;
+    }
 
-		} else {
+    private Researcher updateResearcher(int researcherId, Researcher researcher, boolean changingPass) {
 
-			if (!newAccount) {
-				UserAccount principalUser = userAccountService
-						.findByUsername(LoginService.getPrincipal()
-								.getUsername());
-				Researcher principalResearcher = researcherService
-						.findByUserAccount(principalUser);
-				researcher = updateResearcher(principalResearcher.getId(),
-						researcher, changingPass);
+        Researcher currentResearcher = researcherService.findById(researcherId);
 
-				// Save UserAccount
-				try {
+        currentResearcher.setAddress(researcher.getAddress());
+        currentResearcher.setEmail(researcher.getEmail());
+        currentResearcher.setName(researcher.getName());
+        currentResearcher.setPhone(researcher.getPhone());
+        currentResearcher.getUserAccount().setUsername(currentResearcher.getUserAccount().getUsername());
 
-					userAccountController.save(researcher.getUserAccount(),
-							oldPass, repeatPass);
+        // Do not change password here!
+        return currentResearcher;
+    }
 
-				} catch (Throwable oops) {
-					System.out.println("SC opss: " + oops.getMessage());
-					mv = edit();
-					mv.addObject("badPassword", true);
-					mv.addObject("success", false);
-					return mv;
-				}
-			}
+    private Researcher createClone(Researcher original) {
+        Researcher cloned = null;
+        try {
+            cloned = original.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return cloned;
+    }
 
-			// Save Researcher
-			if (newAccount) {
-				try {
-					researcher.setUserAccount(new UserAccount());
-					researcherController.saveNew(researcher);
-					mv = edit();
-					mv.addObject("success", true);
-				} catch (Throwable oops) {
-					mv = edit();
-					mv.addObject("success", false);
-					mv.addObject("repeatedEmail", true);
-				}
-			} else {
-				researcherController.save(researcher);
-				mv = edit();
-				mv.addObject("success", true);
-			}
-		}
-
-		return mv;
-	}
-
-	@RequestMapping(value = "/admin")
-	public ModelAndView list() {
-		Collection<Researcher> researchers = researcherController.list();
-		ModelAndView result = new ModelAndView("settings/admin");
-		result.addObject("researchers", researchers);
-
-		return result;
-	}
-
-	@RequestMapping(value = "/detail", method = RequestMethod.GET)
-	public ModelAndView detail(HttpServletRequest request) {
-		String userId = request.getParameter("userId");
-		Researcher clonedResearcher = createClone(researcherController
-				.edit(userId));
-		clonedResearcher.getUserAccount().setPassword(""); // Do not send
-															// password
-
-		ModelAndView mv = new ModelAndView("settings/detail");
-
-		mv.addObject("researcher", clonedResearcher);
-		mv.addObject("url", "settings/detail");
-
-		return mv;
-	}
-
-	@RequestMapping(value = "/detail", method = RequestMethod.POST)
-	public ModelAndView savedetail(HttpServletRequest request,
-			@Valid Researcher researcher, BindingResult binding)
-			throws Throwable {
-
-		ModelAndView mv = null;
-
-		String userId = request.getParameter("userId");
-		boolean changingPass = researcher.getUserAccount().getPassword()
-				.length() > 1;
-		boolean notEmptyPassValidation = binding
-				.hasFieldErrors("userAccount.password")
-				&& binding.getErrorCount() == binding
-						.getFieldErrorCount("userAccount.password")
-				&& !changingPass;
-
-		if ((binding.hasErrors() && !notEmptyPassValidation)) {
-			mv = createModelAndView(researcher, "researcher.commit.error");
-			mv.setViewName("settings/detail");
-			mv.addObject("url", "settings/detail");
-
-			mv.addObject("success", false);
-
-		} else {
-
-			String settedPass = researcher.getUserAccount().getPassword();
-
-			UserAccount user = userAccountService.findById(Integer
-					.valueOf(userId));
-			Researcher res = researcherService.findByUserAccount(user);
-			researcher = updateResearcher(res.getId(), researcher, changingPass);
-
-			if (changingPass) {
-				Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-				String newpasshash = encoder.encodePassword(settedPass, null);
-				researcher.getUserAccount().setPassword(newpasshash);
-			}
-			// Save Researcher
-			researcherController.save(researcher);
-			mv = detail(request);
-			mv.addObject("success", true);
-		}
-
-		return mv;
-	}
-
-	private Researcher updateResearcher(int researcherId,
-			Researcher researcher, boolean changingPass) {
-
-		Researcher currentResearcher = researcherService.findById(researcherId);
-
-		currentResearcher.setAddress(researcher.getAddress());
-		currentResearcher.setEmail(researcher.getEmail());
-		currentResearcher.setName(researcher.getName());
-		currentResearcher.setPhone(researcher.getPhone());
-		currentResearcher.getUserAccount().setUsername(
-				currentResearcher.getUserAccount().getUsername());
-
-		// Do not change password here!
-
-		return currentResearcher;
-	}
-
-	private Researcher createClone(Researcher original) {
-		Researcher cloned = null;
-		try {
-			cloned = original.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-		return cloned;
-	}
-
-	// Using existing private methods in researcher controller:
-	// private ModelAndView createModelAndView(UserAccount account, String
-	// message) {
-	// Researcher researcher = researcherService.findByUserAccount(account);
-	// Assert.notNull(researcher);
-	// ModelAndView result = createModelAndView();
-	// result.addObject("userAccount", account);
-	// result.addObject("researcher", researcher);
-	// result.addObject("message", message);
-	// return result;
-	// }
-
-	private ModelAndView createModelAndView(Researcher researcher,
-			String message) {
-		ModelAndView result = createModelAndView();
-		result.addObject("researcher", researcher);
-		result.addObject("userAccount", researcher.getUserAccount());
-		result.addObject("missingServices", socialNetworkConfigurationService
-				.missingServices(researcher.getId()));
-		result.addObject("servicesConfigs", socialNetworkConfigurationService
-				.getSocialNetworConfigurations(researcher.getId()));
-		/*
+    // Using existing private methods in researcher controller:
+    // private ModelAndView createModelAndView(UserAccount account, String
+    // message) {
+    // Researcher researcher = researcherService.findByUserAccount(account);
+    // Assert.notNull(researcher);
+    // ModelAndView result = createModelAndView();
+    // result.addObject("userAccount", account);
+    // result.addObject("researcher", researcher);
+    // result.addObject("message", message);
+    // return result;
+    // }
+    private ModelAndView createModelAndView(Researcher researcher, String message) {
+        ModelAndView result = createModelAndView();
+        result.addObject("researcher", researcher);
+        result.addObject("userAccount", researcher.getUserAccount());
+        result.addObject("missingServices", socialNetworkConfigurationService.missingServices(researcher.getId()));
+        result.addObject("servicesConfigs", socialNetworkConfigurationService.getSocialNetworConfigurations(researcher.getId()));
+        /*
 		 * result.addObject("message", message);
 		 * result.addObject("message_Type","message.error");
-		 */
-		return result;
-	}
+         */
+        return result;
+    }
 
-	private ModelAndView createModelAndView() {
-		ModelAndView result = new ModelAndView("settings/user");
-		result.addObject("services", Arrays.asList(SocialNetwork.values()));
-		result.addObject("url", "settings/user");
-		// result.addObject("savePersonalInformationUrl",
-		// "researcher/savePersonalInformation");
-		// result.addObject("deletePersonalInformationUrl",
-		// "researcher/deletePersonalInformation");
-		// result.addObject("saveUserAccountUrl", "researcher/saveUserAccount");
-
-		return result;
-	}
-
+    private ModelAndView createModelAndView() {
+        ModelAndView result = new ModelAndView("settings/user");
+        result.addObject("services", Arrays.asList(SocialNetwork.values()));
+        result.addObject("url", "settings/user");
+        // result.addObject("savePersonalInformationUrl",
+        // "researcher/savePersonalInformation");
+        // result.addObject("deletePersonalInformationUrl",
+        // "researcher/deletePersonalInformation");
+        // result.addObject("saveUserAccountUrl", "researcher/saveUserAccount");
+        return result;
+    }
 }

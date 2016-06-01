@@ -11,7 +11,6 @@ import es.us.isa.ideas.test.app.utils.FileType;
 import es.us.isa.ideas.test.app.utils.Util;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -55,16 +54,11 @@ public class BindingFormTestCase {
     static String ctlFile = Util.loadFile("src/test/resources/repository/multiPlan.ctl");
     static String jsonAtFormat = Util.loadFile("src/test/resources/repository/multiPlan-json_format.json");
 
-    @BeforeClass
-    public static void before() {
-        PageObject.logout();
-    }
-
     // Creates initial workspace, project and json file
     @Test
     public void step01_createJsonFile() {
-
-        // Login
+        
+        PageObject.logout();
         LoginPage.testLogin(user, pass);
 
         // Workspace, project and file creation

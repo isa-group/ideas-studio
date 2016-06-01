@@ -16,7 +16,8 @@ package es.us.isa.ideas.test.app.utils;
 public enum FileType {
     // Please, for future file types named like its module name
     ANGULAR("ang"), ANGULAR_CONTROLLER("ctl"), PLAINTEXT("txt"), JSON("json"), YAML("yaml"),
-    IAGREE_TEMPLATE("at"), IAGREE_OFFER("ao"), IAGREE_AGREEMENT("ag");
+    IAGREE_TEMPLATE("iat"), IAGREE_OFFER("iao"), IAGREE_AGREEMENT("iag");
+//    IAGREE_TEMPLATE_OLD("at"), IAGREE_OFFER_OLD("ao"), IAGREE_AGREEMENT_OLD("ag");
     
     private final String extension;
     

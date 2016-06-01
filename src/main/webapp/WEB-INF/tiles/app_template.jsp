@@ -12,10 +12,9 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
     <head>
-        <title>${studioConfiguration.workbenchName} | editor</title>
+        <title>${studioConfiguration.workbenchName} | app</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <!-- TITLE & ICON -->
-        <title><tiles:insertAttribute name="title" ignore="true" /></title>
         <link rel="shortcut icon" href="favicon.ico"/>
         <!-- Other meta-information -->
         <meta name="description" content="">

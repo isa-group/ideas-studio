@@ -794,7 +794,7 @@ snippet thead\n\
 snippet time\n\
 	<time datetime=\"${1}\" pubdate=\"${2:$1}>${3:$1}</time>\n\
 snippet title\n\
-	<title>${1:`substitute(Filename('', 'Page Title'), '^.', '\\u&', '')`}</title>\n\
+	<title>${1:`substitute(Filename('', 'Page Title'), '^.', '\\u&', '')`}hols</title>\n\
 snippet tr\n\
 	<tr>\n\
 		${1}\n\

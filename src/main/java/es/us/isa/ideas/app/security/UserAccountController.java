@@ -17,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import es.us.isa.ideas.app.controllers.AbstractController;
 import es.us.isa.ideas.app.services.ConfirmationService;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 
@@ -120,17 +122,20 @@ public class UserAccountController extends AbstractController {
 		return new ModelAndView("security/useraccount/resetPassword");
 	}
 
-	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
-	public ModelAndView resetPassword(String email) {
-		ModelAndView result = null;
-		try {
-			confirmationService.createPasswordResetConfirmation(email);
-			result = new ModelAndView("confirmation/confirmationSent");
-		} catch (Throwable oops) {
-			throw new IllegalArgumentException("No user with email: " + email);
-		}
-		return result;
-	}
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public ModelAndView resetPassword(String email) throws Throwable {
+        ModelAndView result;
+        try {
+            beginTransaction();
+            confirmationService.createPasswordResetConfirmation(email);
+            result = new ModelAndView("confirmation/confirmationSent");
+            commitTransaction();
+        } catch (Throwable oops) {
+            rollbackTransaction();
+            result = new ModelAndView("confirmation/confirmationResetError");
+        }
+        return result;
+    }
 
 
 	// Ancillary methods -------------------------------------------

@@ -62,6 +62,10 @@ public class SectionFile extends EditorPage {
         new FileTestCase().testEditFile(fileLocator, content);
     }
 
+    public static void testRemoveDynatreeNode(String nodeTitle) {
+        new FileTestCase().testRemoveDynatreeNode(nodeTitle);
+    }
+
     // Directory tests
     public static void testCreateDirectory(String dirName, By parentLocator) {
         new DirectoryTestCase().testCreateDirectory(dirName, parentLocator);
@@ -74,6 +78,10 @@ public class SectionFile extends EditorPage {
     // Project tests
     public static void testCreateProject(String projName) {
         new ProjectTestCase().testCreateProject(projName);
+    }
+    
+    public static void testCreateProjectWithoutRefresh(String projName) {
+        new ProjectTestCase().testCreateProjectWithoutRefresh(projName);
     }
     
     public static void testCreateProjectWithError(String projName) {
@@ -196,7 +204,7 @@ public class SectionFile extends EditorPage {
 
             EditorPage page = SectionFile.navigateTo()
                 .expandAllDynatreeNodes()
-                .activateDynatreeContextMenuByNodeTitle(originFileName)
+                .openContextMenu(originFileName)
                 .clickOnContextMenuEditAnchor()
                 .typeContextMenuEditField(targetFileName, Keys.RETURN);
 
@@ -225,7 +233,7 @@ public class SectionFile extends EditorPage {
 
             EditorPage page = SectionFile.navigateTo()
                 .expandAllDynatreeNodes()
-                .activateDynatreeContextMenuByNodeTitle(fileName)
+                .openContextMenu(fileName)
                 .clickOnContextMenuCopyAnchor();
             
             By fileLocator = By.linkText(fileName);
@@ -237,7 +245,7 @@ public class SectionFile extends EditorPage {
                 Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            page.activateDynatreeContextMenuByNodeTitle(target)
+            page.openContextMenu(target)
                 .clickOnContextMenuPasteAnchor();
             
             try {
@@ -261,7 +269,7 @@ public class SectionFile extends EditorPage {
         public void testPaste(String target, Boolean successExpected) {
 
             EditorPage page = SectionFile.navigateTo()
-                .activateDynatreeContextMenuByNodeTitle(target)
+                .openContextMenu(target)
                 .clickOnContextMenuPasteAnchor();
             
             try {
@@ -330,7 +338,52 @@ public class SectionFile extends EditorPage {
             Assert.assertTrue(TEST_RESULT);
 
         }
+        
+        public void testRemoveDynatreeNode(String nodeTitle) {
+
+            EditorPage page = SectionFile.navigateTo()
+                .expandAllDynatreeNodes()
+                .openContextMenu(nodeTitle)
+                .clickOnContextMenuDeleteAnchor()
+                .clickOnModalCloseButton(); // cancel
+            
+            page.openContextMenu(nodeTitle)
+                .clickOnContextMenuDeleteAnchor()
+                .clickOnModalContinueButton(); // delete
+            try {
+                Thread.sleep(2000); // dynatree render
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            WebElement element = null;
+            try {
+                element = PageObject.getWebDriver().findElement(By.linkText(nodeTitle));
+            } catch (NoSuchElementException ex) {
+                // nothing
+                element = null;
+            }
+            TEST_RESULT = element == null;
+            Assert.assertTrue(TEST_RESULT);
+            
+            PageObject.getWebDriver().navigate().refresh();
+            
+            try {
+                element = PageObject.getWebDriver().findElement(By.linkText(nodeTitle));
+            } catch (NoSuchElementException ex) {
+                // nothing
+                element = null;
+            }
+            TEST_RESULT = element == null;
+
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            Assert.assertTrue(TEST_RESULT);
+            
+        }
+
     }
+    
+    
 
     /**
      * This class implements all tests related to directories management.
@@ -392,10 +445,29 @@ public class SectionFile extends EditorPage {
         public void testCreateProject(String projName) {
 
             EditorPage page = EditorPage.navigateTo()
-                .clickOnProjectAddButton()
-                .clickOnCreateProjectAnchor()
+                .clickOnProjectAddButton();
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            page.clickOnCreateProjectAnchor()
+                .typeProjectName("")
+                .clickOnModalContinueButton()
+                .clickOnModalWarningContinueButton(); // please enter a project name
+            
+            // Try again
+            page = EditorPage.navigateTo()
                 .typeProjectName(projName)
                 .clickOnModalContinueButton();
+            
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             getWebDriver().navigate().refresh();
 
@@ -404,6 +476,49 @@ public class SectionFile extends EditorPage {
             } catch (InterruptedException ex) {
                 Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
             }
+            WebElement element = new SectionFile().getProjectElement();
+            TEST_RESULT = false;
+            if (element != null) {
+                TEST_RESULT = element.getText().equals(projName);
+                if (TEST_RESULT) {
+                    page.consoleEchoCommand("Project \"" + projName + "\" was successfully created.");
+                }
+            }
+            LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
+            Assert.assertTrue(TEST_RESULT);
+
+        }
+        
+        public void testCreateProjectWithoutRefresh(String projName) {
+            
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException ex) {
+//                Logger.getLogger(SectionFile.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+            
+            // Try to create an empty project
+            EditorPage page = EditorPage.navigateTo();
+            PageObject.waitForElementVisible(page.projAddButton, 10); 
+            page.clickOnProjectAddButton();
+            PageObject.waitForElementVisible(page.projAddButton, 10); 
+            page.clickOnCreateProjectAnchor();
+            
+            page.typeProjectName("")
+                .clickOnModalContinueButton()
+                .clickOnModalWarningContinueButton(); // please enter a project name
+            
+            // Try again
+            page = EditorPage.navigateTo()
+                .typeProjectName(projName)
+                .clickOnModalContinueButton();
+            
+            try {
+                Thread.sleep(2000); // modal animation
+            } catch (InterruptedException ex) {
+                Logger.getLogger(WorkspaceManagerPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             WebElement element = new SectionFile().getProjectElement();
             TEST_RESULT = false;
             if (element != null) {

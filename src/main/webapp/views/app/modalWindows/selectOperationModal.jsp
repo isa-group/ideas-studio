@@ -22,31 +22,31 @@
 
 
 <script>
-	$(function(){
-		
-		var fileUri = EditorManager.getCurrentUri();
-		var opMap = ModeManager.getOperations(ModeManager.calculateLanguageIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)));
-		var opTypes = $("#operationsTypes");
-		var opTypesUl = $("#ulOperationsTypes");
-		
-		if (opMap != undefined)
-			for (var i=0; i<opMap.length; i++) {
-				opTypes.append('<input type="checkbox" class="box-operation" value="'+opMap[i].id+'" id="box-'+opMap[i].id+'" checked>'+opMap[i].name+'</br>');
-			}
-		
-		$("#addAll").click(function(){
-			$(".box-operation").each(function(){
-				console.log("--->>OK1"+this);
-				this.checked=true;
-			});
-		});
-		$("#removeAll").click(function(){
-			$(".box-operation").each(function(){
-				console.log("--->>OK3"+this);
-				this.checked=false;
-			});
-		});
+    $(function () {
 
-		
-	});
+        var fileUri = EditorManager.getCurrentUri();
+        var opMap = ModeManager.getOperations(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)));
+        var opTypes = $("#operationsTypes");
+        var opTypesUl = $("#ulOperationsTypes");
+
+        if (opMap != undefined)
+            for (var i = 0; i < opMap.length; i++) {
+                opTypes.append('<input type="checkbox" class="box-operation" value="' + opMap[i].id + '" id="box-' + opMap[i].id + '" checked>' + opMap[i].name + '</br>');
+            }
+
+        $("#addAll").click(function () {
+            $(".box-operation").each(function () {
+                console.log("--->>OK1" + this);
+                this.checked = true;
+            });
+        });
+        $("#removeAll").click(function () {
+            $(".box-operation").each(function () {
+                console.log("--->>OK3" + this);
+                this.checked = false;
+            });
+        });
+
+
+    });
 </script>

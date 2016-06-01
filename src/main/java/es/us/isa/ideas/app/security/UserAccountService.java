@@ -43,8 +43,7 @@ public class UserAccountService extends BusinessService<UserAccount> {
 
     public static final String USERNAME_DISAMBIGUATION_SUFIX = "1";
 
-    public static final Authority DEFAULT_AUTHORITY = Authority
-        .get(Authority.RESEARCHER);
+    public static final Authority DEFAULT_AUTHORITY = Authority.get(Authority.RESEARCHER);
 
     @Autowired
     UserAccountRepository userRepository;
@@ -85,8 +84,7 @@ public class UserAccountService extends BusinessService<UserAccount> {
         userRepository.delete(account);
     }
 
-    public UserAccount create(Integer id, String username, String password,
-        String notificationEmail) {
+    public UserAccount create(Integer id, String username, String password, String notificationEmail) {
 
         UserAccount uac_res = null;
 
@@ -123,16 +121,20 @@ public class UserAccountService extends BusinessService<UserAccount> {
         if (userProfile.getEmail() != null) {
             researcher.setEmail(userProfile.getEmail());
         } else {
-            researcher.setEmail(userProfile.getUsername()
-                + "@unknown-email.com");
+            researcher.setEmail(userProfile.getUsername() + "@unknown-email.com");
         }
-        researcher.setAddress("Unknown");
-        researcher.setPhone("Unknown");
-        researcher.setName(userProfile.getFirstName() + " "
-            + userProfile.getLastName());
+        researcher.setAddress("Unknown address");
+        researcher.setPhone("Unknown phone");
+        if (null == userProfile.getFirstName()) {
+            researcher.setName("Unknown");
+        }
+        if (null != userProfile.getLastName()) {
+            researcher.setName(userProfile.getFirstName() + " " + userProfile.getLastName());
+        }else{
+            researcher.setName(userProfile.getFirstName());
+        }
 
-        UserAccount result = create(null, generateUsername(researcher),
-            UUID.randomUUID().toString(), researcher.getEmail());
+        UserAccount result = create(null, generateUsername(researcher), UUID.randomUUID().toString(), researcher.getEmail());
 
         researcher.setUserAccount(result);
         researcherService.save(researcher);
@@ -144,13 +146,11 @@ public class UserAccountService extends BusinessService<UserAccount> {
     }
 
     public UserAccount create(Actor actor) {
-        return create(actor.getUserAccount().getId(), generateUsername(actor),
-            UUID.randomUUID().toString(), actor.getEmail());
+        return create(actor.getUserAccount().getId(), generateUsername(actor), UUID.randomUUID().toString(), actor.getEmail());
     }
 
     public String generateUsername(Actor actor) {
-        String result = actor.getEmail().substring(0,
-            actor.getEmail().indexOf("@"));
+        String result = actor.getEmail().substring(0, actor.getEmail().indexOf("@"));
 
         while (findByUsername(result) != null) {
             result += USERNAME_DISAMBIGUATION_SUFIX;
@@ -158,11 +158,9 @@ public class UserAccountService extends BusinessService<UserAccount> {
         return result;
     }
 
-    private void sendWelcomeMail(String email, UserAccount account,
-        String password) {
+    private void sendWelcomeMail(String email, UserAccount account, String password) {
         Object[] templateCustomizers = {account};
-        Map<String, String> finalCustomizations = mailer
-            .extractCustomizations(templateCustomizers);
+        Map<String, String> finalCustomizations = mailer.extractCustomizations(templateCustomizers);
         finalCustomizations.put("$password", password);
         mailer.sendMail(email, finalCustomizations, confirmationDoneTemplate);
     }
@@ -177,30 +175,25 @@ public class UserAccountService extends BusinessService<UserAccount> {
         }
     }
 
-    private void sendPasswordResetEmail(String email, UserAccount account,
-        String password) {
+    private void sendPasswordResetEmail(String email, UserAccount account, String password) {
         Object[] templateCustomizers = {account};
-        Map<String, String> finalCustomizations = mailer
-            .extractCustomizations(templateCustomizers);
+        Map<String, String> finalCustomizations = mailer.extractCustomizations(templateCustomizers);
         finalCustomizations.put("$password", password);
         mailer.sendMail(email, finalCustomizations, resetPasswordDoneTemplate);
     }
 
-    public void modifyPassword(UserAccount userAccount, String oldPass,
-        String newPass) {
+    public void modifyPassword(UserAccount userAccount, String oldPass, String newPass) {
 
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
         String passhash = encoder.encodePassword(oldPass, null);
         String newpasshash = encoder.encodePassword(newPass, null);
-        UserAccount oldUserAccount = userRepository.findByUsername(userAccount
-            .getUsername());
+        UserAccount oldUserAccount = userRepository.findByUsername(userAccount.getUsername());
 
         if (passhash.equals(oldUserAccount.getPassword())) {
             userAccount.setPassword(newpasshash);
             // userRepository.save(userAccount); // Fallo con candado
         } else {
-            throw new InvalidParameterException(
-                "The value of the old password is wrong.");
+            throw new InvalidParameterException("The value of the old password is wrong.");
         }
     }
 

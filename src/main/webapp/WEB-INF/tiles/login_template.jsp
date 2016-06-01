@@ -1,5 +1,5 @@
-<%@page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"  import="java.net.*, java.io.*,java.util.Properties"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"  import="java.net.*, java.io.*,java.util.Properties"%>
 
 <%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -18,7 +18,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <!-- TITLE & ICON -->
-<title><tiles:insertAttribute name="title" ignore="true" /></title>
+<title>${studioConfiguration.workbenchName} | login</title>
 <link rel="shortcut icon" href="favicon.ico" />
 <!-- Other meta-information -->
 <meta name="description" content="">
@@ -159,7 +159,6 @@
 
 		</div>
 
-		<div id="loginShadow"></div>
 	</div>
 	<div id="loginCopyright">
 		<spring:message code="app.footer.copyright" />

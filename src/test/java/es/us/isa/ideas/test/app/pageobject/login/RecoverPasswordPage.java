@@ -3,6 +3,7 @@ package es.us.isa.ideas.test.app.pageobject.login;
 import es.us.isa.ideas.test.app.pageobject.PageObject;
 import static es.us.isa.ideas.test.app.pageobject.PageObject.getWebDriver;
 import es.us.isa.ideas.test.app.pageobject.TestCase;
+import es.us.isa.ideas.test.app.utils.IdeasURLType;
 import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +21,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
  * @author Felipe Vieira da Cunha Serafim <fvieiradacunha@us.es>
  * @version 1.0
  */
-public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
+public class RecoverPasswordPage extends RegisterSocialGooglePage {
 
     // FORM
     @FindBy(id = "email")
@@ -28,6 +29,9 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
 
     @FindBy(id = "submit")
     WebElement submitButton;
+    
+    @FindBy(xpath = "//*[@id=\"loginLoader\"]/div/h2")
+    WebElement confirmationTitle;
 
     // MODAL
     static final Logger LOG = Logger.getLogger(RecoverPasswordPage.class.getName());
@@ -59,15 +63,12 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
         
         public void testRecoverPassword(CharSequence email, CharSequence emailPass, String user) {
 
-            RecoverPasswordPage page = RecoverPasswordPage.navigateTo().typeEmail(email);
+            RecoverPasswordPage pageRecover = RecoverPasswordPage.navigateTo();
+            RegisterSocialGooglePage pageGoogle = PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class);
             
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            page.clickOnSubmit();
+            PageObject.waitForElementVisible(pageRecover.emailField, 10);
+            pageRecover.typeEmail(email)
+                .clickOnSubmit();
 
             try {
                 Thread.sleep(2000);
@@ -76,109 +77,14 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
             }
 
             // Modal confirmation
-            By locator = By.cssSelector("#pagesContent > h2");
-            String result = getWebDriver().findElement(locator).getText().toLowerCase();
-            TEST_RESULT = result.contains("thank you for using e3");
+            PageObject.waitForElementVisible(pageRecover.confirmationTitle, 10);
+            TEST_RESULT = pageRecover.confirmationTitle.getText().contains("Please check your email");
             Assert.assertTrue(TEST_RESULT);
 
-            // Email login
-            getWebDriver().get("https://www.gmail.com");
-//            locator = By.id("Email");
-//            getWebDriverWait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
-//            try {
-//                Thread.sleep(2000);
-//            } catch (InterruptedException ex) {
-//                LOG.severe(ex.getMessage());
-//            }
-//            PageFactory.initElements(getWebDriver(), RegisterSocialGooglePage.class)
-//                .typeUsername(email)
-//                .clickOnNext()
-//                .typePassword(emailPass)
-//                .clickOnSignIn();
-//
-//            try {
-//                Thread.sleep(2000);
-//            } catch (InterruptedException ex) {
-//                LOG.severe(ex.getMessage());
-//            }
-//            TEST_RESULT = getWebDriver().getCurrentUrl().contains("mail.google.com");
-//            Assert.assertTrue(TEST_RESULT);
-
-            // Open email
-            String selectorConfirmationEmail = "#\\3a 2 > div > div > div.UI tbody tr:first-child td:nth-child(4)";
-            locator = By.cssSelector(selectorConfirmationEmail);
-            getWebDriver().findElement(locator).click(); // opening
-            locator = By.cssSelector(".ads");
-            
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            // Parse url confirmation
-            String urlConfirmation = (String) getJs()
-                .executeScript(
-                    "return document.getElementsByClassName('ads')[0].textContent.match(/http.+code=[a-zA-Z0-9\\-]+/i)[0]");
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            // Delete current email
-            locator = By.xpath("//*[@id=\":5\"]/div[2]/div[1]/div/div[2]/div[3]/div/div");
-            getWebDriver().findElement(locator).click();
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            // Go to confirmation url
-            getWebDriver().get(urlConfirmation);
-            String selectorModalTitle = "#message > div > div > div.modal-header > h4";
-            locator = By.cssSelector(selectorModalTitle);
-            
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            String modalTitle = getWebDriver().findElement(locator).getText();
-
-            TEST_RESULT = "Account validated successfully".equals(modalTitle);
+            TEST_RESULT = RegisterSocialGooglePage.confirmEmail();
             Assert.assertTrue(TEST_RESULT);
-
-            // Open generated password email
-            getWebDriver().get("https://www.gmail.com");
-            String selectorEmail = "#\\3a 2 > div > div > div.UI tbody tr:first-child td:nth-child(4)";
-            locator = By.cssSelector(selectorEmail);
             
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            getWebDriver().findElement(locator).click();
-
-            // Copy parsed password
-            locator = By.cssSelector(".gs");
-            
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            String scriptCopyPass = "var str=document.getElementsByClassName('gs')[0].textContent;"
-                + "return str.match(/([0-9a-zA-Z]+-)+([0-9a-zA-Z]+)/i)[0];";
-            String password = (String) getJs().executeScript(scriptCopyPass);
-
+            String password = RegisterSocialGooglePage.getPasswordInEmail();
             TEST_RESULT = !password.equals("");
             Assert.assertTrue(TEST_RESULT);
 
@@ -188,23 +94,17 @@ public class RecoverPasswordPage extends PageObject<RecoverPasswordPage> {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
             // Delete current email
-            locator = By.xpath("//*[@id=\":5\"]/div[2]/div[1]/div/div[2]/div[3]/div/div");
-            getWebDriver().findElement(locator).click();
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(RecoverPasswordPage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+            pageGoogle.clickOnDeleteEmailButton()
+                .expectDifferentUrl();
+            
             // Login with generated password
             LoginPage.testLogin(user, password);
 
-            TEST_RESULT = page.getCurrentUrl().contains("app/editor");
+            TEST_RESULT = PageObject.currentPageContainsURLType(IdeasURLType.EDITOR_URL);
             LOG.log(Level.INFO, "test_result: {0}", TEST_RESULT);
             Assert.assertTrue(TEST_RESULT);
 

@@ -6,14 +6,14 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 
+<script type="text/javascript">
+    function redirectToApp() {
+        window.location.href = $('base').attr('href');
+    }
+</script>
 
-
-<h2><spring:message code="registration.confirmationGreeting"/></h2>
-<div class="row-fluid">
-    <div class="span3"> 
-        <img src="img/email-sent.jpeg" alt="Email sent">
-    </div>
-    <div class="span9">
-        <spring:message code="registration.confirmationSent"/>
-    </div>
+<div>
+    <h2><spring:message code="registration.checkYourEmail"/></h2>
+    <spring:message code="registration.confirmationSent"/>
 </div>
+<button class="btn goToApp" onclick="redirectToApp()">Go to ${studioConfiguration.workbenchName}</button>

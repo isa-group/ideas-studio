@@ -35,7 +35,12 @@ public class TestProperty {
             String environmentProperty = getTestProperties().getProperty("test.environment");
 
             if (environmentProperty.equals("REMOTE")) {
-                baseUrl += "https://labs.isa.us.es:8181/IDEAS-pre";
+                String environmentURL = getTestProperties().getProperty("test.environment.url");
+                if (environmentURL != "") {
+                    baseUrl += environmentURL;
+                } else {
+                    baseUrl += "https://labs.isa.us.es:8181/IDEAS-pre";
+                }
             } else {
                 baseUrl += "https://localhost:8181/IDEAS";
             }
@@ -69,6 +74,14 @@ public class TestProperty {
     
     public static String getTestDefaultUserPass() {
         return getTestProperties().getProperty("test.default.pass");
+    }
+    
+    public static String getTestGuestUser() {
+        return getTestProperties().getProperty("test.guest.user");
+    }
+    
+    public static String getTestGuestUserPass() {
+        return getTestProperties().getProperty("test.guest.pass");
     }
     
     public static String getTestRegisterUser() {

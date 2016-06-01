@@ -7,43 +7,48 @@
 		<put-attribute name="body" value="/views/socialnetwork/connect/status.jsp" />
 	</definition>
 
-	<definition name="connect/facebookConnect" extends="pagesTemplate">
+<!--	<definition name="connect/facebookConnect" extends="pagesTemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/facebookConnect.jsp" />
-	</definition>
+	</definition>-->
 
-	<definition name="connect/facebookConnected" extends="pagesTemplate">
+<!--	<definition name="connect/facebookConnected" extends="pagesTemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/facebookConnected.jsp" />
-	</definition>
+	</definition>-->
 
-	<definition name="connect/twitterConnect" extends="pagesTemplate">
+	<definition name="connect/twitterConnect" extends="socialtemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/twitterConnect.jsp" />
 	</definition>
 
-	<definition name="connect/twitterConnected" extends="pagesTemplate">
+	<definition name="connect/twitterConnected" extends="socialtemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/twitterConnected.jsp" />
 	</definition>
 
-	<definition name="connect/linkedinConnect" extends="pagesTemplate">
+<!--	<definition name="connect/linkedinConnect" extends="pagesTemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/linkedinConnect.jsp" />
-	</definition>
+	</definition>-->
 
-	<definition name="connect/linkedinConnected" extends="pagesTemplate">
+<!--	<definition name="connect/linkedinConnected" extends="pagesTemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/linkedinConnected.jsp" />
-	</definition>
+	</definition>-->
         
-        <definition name="connect/googleConnect" extends="pagesTemplate">
+        <definition name="connect/googleConnect" extends="socialtemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/googleConnect.jsp" />
 	</definition>
 
-	<definition name="connect/googleConnected" extends="pagesTemplate">
+	<definition name="connect/googleConnected" extends="socialtemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/googleConnected.jsp" />
 	</definition>
         
-        <definition name="connect/githubConnect" extends="pagesTemplate">
+<!--        <definition name="connect/githubConnect" extends="pagesTemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/githubConnect.jsp" />
-	</definition>
+	</definition>-->
 
-	<definition name="connect/githubConnected" extends="pagesTemplate">
+<!--	<definition name="connect/githubConnected" extends="pagesTemplate">
 		<put-attribute name="body" value="/views/socialnetwork/connect/githubConnected.jsp" />
+	</definition>-->
+        
+	<definition name="misc/panic" extends="panicTemplate">
+		<put-attribute name="body" value="/views/misc/panic.jsp"/>
 	</definition>
+        
 </tiles-definitions>
