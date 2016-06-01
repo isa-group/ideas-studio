@@ -144,13 +144,13 @@ public class EditorPage extends PageObject<EditorPage> {
     @FindBy(linkText = "Create YAML file")
     WebElement projCreateYamlFileAnchor;
 
-    @FindBy(linkText = "Create iAgreeTemplate file")
+    @FindBy(linkText = "Create iAgree template file")
     WebElement projCreateIAgreeTemplateFileAnchor;
 
-    @FindBy(linkText = "Create iAgreeOffer file")
+    @FindBy(linkText = "Create iAgree offer file")
     WebElement projCreateIAgreeOfferFileAnchor;
 
-    @FindBy(linkText = "Create iAgreeAgreement file")
+    @FindBy(linkText = "Create iAgree agreement file")
     WebElement projCreateIAgreeAgreementFileAnchor;
 
     @FindBy(linkText = "Upload File")
