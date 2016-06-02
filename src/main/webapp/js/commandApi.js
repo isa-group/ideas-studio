@@ -42,8 +42,8 @@ var CommandApi = {
             fileUri: fileUri,
             content: actualContent
         };
-        
-        var contentType;        
+
+        var contentType;
         if (model.apiVersion <= 1) {
             fileData.currentFormat = currentFormat;
             fileData.desiredFormat = desiredFormat;
@@ -76,9 +76,11 @@ var CommandApi = {
 
         try {
 
+            var operation;
             var name = '';
             for (var i = 0; i < opMap.length; i++) {
-                if (opMap[i].id == operationId) {
+                if (opMap[i].id === operationId) {
+                    operation = opMap[i];
                     name = opMap[i].name;
                 }
             }
@@ -119,6 +121,11 @@ var CommandApi = {
                 data[0] = {};
                 data[0].fileUri = fileUri;
                 data[0].content = EditorManager.getEditorContentByUri(fileUri);
+                data[0].parameters = operation.config;
+                
+                if(operation.config && operation.config.requireCredential){
+                    data[0].parameters.username = principalUserName;
+                }
 
                 // Extensión para coger argumentos adicionales
                 for (var i = 5; i < arguments.length; i++) {
