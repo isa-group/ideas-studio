@@ -123,7 +123,7 @@ var CommandApi = {
                 data[0].content = EditorManager.getEditorContentByUri(fileUri);
                 data[0].parameters = operation.config;
                 
-                if(operation.config.requireCredential){
+                if(operation.config && operation.config.requireCredential){
                     data[0].parameters.username = principalUserName;
                 }
 
