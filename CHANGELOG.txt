@@ -1,3 +1,7 @@
+ideas-studio v0.9.3.2, 2/06/2016
+----------------------------------------------
+- Add support to new generatePortal #211
+
 ideas-studio v0.9.3.1, 1/06/2016
 ----------------------------------------------
 - HTML code in changelog.txt is processed as HTML #207
