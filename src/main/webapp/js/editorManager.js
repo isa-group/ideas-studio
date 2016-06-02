@@ -98,21 +98,21 @@ var mayCheckLanguageSyntax = function (fileUri) {
             content = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentSession().getValue();
 
             CommandApi.checkModel(content, currentFormat, checkLanguageUri, fileUri, function (ts) {
-                        console.log("Checking syntax... " + ts);
-                        if (ts.status === "OK" || ts === "true") {
-                            console.log("Syntax is OK.");
-                            EditorManager.setAnnotations(eval('(' + "[]" + ')'));
+                console.log("Checking syntax... " + ts);
+                if (ts.status === "OK" || ts === "true") {
+                    console.log("Syntax is OK.");
+                    EditorManager.setAnnotations(eval('(' + "[]" + ')'));
 
-                            DescriptionInspector.onEditorCheckedLanguage();
+                    DescriptionInspector.onEditorCheckedLanguage();
 
-                            checkSyntaxFlag = true;
-                        } else {
-                            console.log(ts);
-                            EditorManager.setAnnotations(ts.annotations);
-                            checkSyntaxFlag = false;
-                        }
+                    checkSyntaxFlag = true;
+                } else {
+                    console.log(ts);
+                    EditorManager.setAnnotations(ts.annotations);
+                    checkSyntaxFlag = false;
+                }
 
-                    });
+            });
         }
     }
 };
@@ -364,8 +364,13 @@ var launchOperation = function (model, id, name) {
                                     EditorManager.setAnnotations(result.annotations);
 
                                 if (result.status === 'OK') {
+                                    
                                     var newUri = fileUriOperation.replace(/\.[^/.]+$/, "") + '.' + operation.config.ext;
                                     var fileName = fileUriOperation.substring(fileUriOperation.lastIndexOf('/') + 1, fileUriOperation.lastIndexOf('.'));
+                                    if (operation.config.fileName) {
+                                        newUri = fileUriOperation.replace(/[^\/]*$/, operation.config.fileName + '.' + operation.config.ext);
+                                        fileName = operation.config.fileName;
+                                    }
                                     var ext = '.' + operation.config.ext;
                                     var content = result.data;
                                     EditorManager.createNode(newUri, fileName, ext, function () {
