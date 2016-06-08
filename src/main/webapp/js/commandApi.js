@@ -10,7 +10,6 @@ var CommandApi = {
         var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri));
         var model = ModeManager.modelMap[modelId];
         var data = {
-            id: format,
             content: content,
             fileUri: fileUri
         };
@@ -18,6 +17,8 @@ var CommandApi = {
         if (model.apiVersion >= 2) {
             contentType = "application/json; charset=utf-8";
             data = JSON.stringify(data);
+        } else {
+            data.id = format;
         }
         $.ajax(checkModelURI, {
             type: "POST",
@@ -122,8 +123,8 @@ var CommandApi = {
                 data[0].fileUri = fileUri;
                 data[0].content = EditorManager.getEditorContentByUri(fileUri);
                 data[0].parameters = operation.config;
-                
-                if(operation.config && operation.config.requireCredential){
+
+                if (operation.config && operation.config.requireCredential) {
                     data[0].parameters.username = principalUserName;
                 }
 
