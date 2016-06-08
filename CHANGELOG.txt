@@ -1,13 +1,17 @@
-ideas-studio v0.9.3.2, 2/06/2016
+ideas-studio v0.9.3.3, 08/06/2016
+----------------------------------------------
+- Fix syntax check #213
+
+ideas-studio v0.9.3.2, 02/06/2016
 ----------------------------------------------
 - Add support to new generatePortal #211
 
-ideas-studio v0.9.3.1, 1/06/2016
+ideas-studio v0.9.3.1, 01/06/2016
 ----------------------------------------------
 - HTML code in changelog.txt is processed as HTML #207
 - Update studioConfiguration #209
 
-ideas-studio v0.9.3, 1/06/2016
+ideas-studio v0.9.3, 01/06/2016
 ----------------------------------------------
 - Update title #206
 - Error message is always shown to user while creating files/directories/projects #205 
