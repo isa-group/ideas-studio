@@ -21,8 +21,7 @@
        "ideas-json-language": "https://labs.isa.us.es:8181/ideas-json-language",
        "ideas-yaml-language": "https://labs.isa.us.es:8181/ideas-yaml-language",
        "ideas-language-angular": "https://labs.isa.us.es:8181/ideas-language-angular",
-       "ideas-language-angular-controller": "https://labs.isa.us.es:8181/ideas-language-angular-controller",
-       "ideas-R-language": "https://labs.isa.us.es:8181/ideas-R-language"
+       "ideas-language-angular-controller": "https://labs.isa.us.es:8181/ideas-language-angular-controller"
    },
    "configurationFiles": {
        "application": "classpath*:application.properties",
