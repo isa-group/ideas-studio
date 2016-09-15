@@ -19,7 +19,13 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
 
                         if (currentFormat === "json" && ("json" in formatSessions || "yaml" in formatSessions)) {
                             if (newValue !== document.editor.getValue()) {
-                                document.editor.setValue(angular.toJson(newValue, 2), -1);
+                                document.editor.setValue(JSON.stringify(newValue, function( key, value ) {
+                                    if( key === "$$hashKey" ) {
+                                        return undefined;
+                                    }
+
+                                    return value;
+                                }), -1);
                                 // Update editor to previous view
                                 document.editor.selection.setRange(editorRange);
                                 document.editor.renderer.scrollToY(editorCursorPos);
@@ -46,7 +52,13 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
 
                             // Convert json to currentFormat
                             var promise = $q(function (resolve, reject) {
-                                CommandApi.callConverter(model, "json", currentFormat, currentUri, angular.toJson(newValue), converterUri,
+                                CommandApi.callConverter(model, "json", currentFormat, currentUri, JSON.stringify(newValue, function( key, value ) {
+                                            if( key === "$$hashKey" ) {
+                                                return undefined;
+                                            }
+
+                                            return value;
+                                        }), converterUri,
                                         function (result) {
                                             resolve(result.data);
                                         }
@@ -143,6 +155,27 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
                 $compile(angular.element(selector)[0])($scope);
             }
         };
+        
+        $scope.showAllFiles = false;
+        $scope.extensionsFilter = []; // will be populated by studio-configuration.json
+        $scope.toggleShowAllFiles = function () {
+            var all = $(".dynatree-title");
+            if ($scope.showAllFiles === true) {
+                all.each(function () {
+                    if ($scope.extensionsFilter.indexOf($(this).text().split('.').pop()) !== -1) {
+                        $(this).closest("li").show();
+                    }
+                })
+            } else {
+                all.each(function () {
+                    var isFolder = $(this).closest("span").hasClass("dynatree-folder");
+                    if (!isFolder && $scope.extensionsFilter.indexOf($(this).text().split('.').pop()) !== -1) {
+                        $(this).closest("li").hide();
+                        //TODO: close files
+                    }
+                })
+            }
+        };
 
     }])
         .directive("contenteditable", function () {
@@ -153,7 +186,12 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
                 link: function (scope, element, attrs, ngModel) {
 
                     function read() {
-                        ngModel.$setViewValue(element.html());
+                        var data = element.text();
+                        if (!isNaN(parseFloat(data)) && isFinite(data)) { // if is number
+                            ngModel.$setViewValue(parseFloat(data));
+                        } else {
+                            ngModel.$setViewValue(data);
+                        } 
                     }
 
                     ngModel.$render = function () {
