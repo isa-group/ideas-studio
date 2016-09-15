@@ -23,6 +23,7 @@
         <!-- STYLES        -->
         <!-- Bootstrap css -->
         <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/toggle-button.css">
         <!-- Other css styles of our components -->
         <link rel="stylesheet" href="css/jmenu.css" media="screen">
         <link rel="stylesheet" href="css/jquery-ui.css">
@@ -95,7 +96,7 @@
 	        	<div id="appMainContentBlocker" class="hidden"></div>
 		        <tiles:insertAttribute name="header" />
 		        <div id="appBody" ng-app="mainApp" ng-controller="MainCtrl">
-                    <input id="editorContent" style="display:none;" type="text" ng-change="editorContentToModel()" ng-model="modelString" />
+                    <input id="editorContent" style="display:block;" type="text" ng-change="editorContentToModel()" ng-model="modelString" />
                     <input id="compileModel" style="display:none;" type="text" ng-change="compileModel()" ng-model="compilationFlag" />
                     <input id="compileModelFormatView" style="display:none;" type="text" ng-change="compileModelFormatView()" ng-model="compilationFlagFormatView" />
 		        	<div id="appBodyBlocker"></div>

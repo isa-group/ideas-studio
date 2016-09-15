@@ -33,5 +33,6 @@
    "helpURI": "https://labs.isa.us.es/IDEAS-help/",
    "helpMode": "dynamic",
    "googleAnalyticsID": "UA-68297022-1",
-   "advancedMode": true
+   "advancedMode": true,
+   "extensionsFilter": ["ang", "ctl", "html"]
 }

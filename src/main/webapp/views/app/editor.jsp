@@ -67,6 +67,18 @@
         <a id="delete-ws" data-toggle="tooltip" data-placement="bottom" title="Delete workspace">
             <i class="material-icons">delete</i>
         </a>
+        <label class="switch">
+            <input ng-model="showAllFiles" ng-change="toggleShowAllFiles()" type="checkbox">
+            <div class="slider round"></div>
+            <span style="
+                position: absolute;
+                bottom: 0;
+                margin-bottom: -25px;
+                right: 10%;
+                text-align: center;
+                color: #777;
+            ">Show all</span>
+        </label>
     </div>
 </div>
 

@@ -73,6 +73,7 @@ public class ConfigurationController extends AbstractController {
                 studioConfiguration.setWorkbenchName(newStudioConfiguration.getWorkbenchName());
                 studioConfiguration.setAdvancedMode(newStudioConfiguration.getAdvancedMode());
                 studioConfiguration.setModules(newStudioConfiguration.getModules());
+                studioConfiguration.setExtensionsFilter(newStudioConfiguration.getExtensionsFilter());
             } catch (IOException ex) {
                 Logger.getLogger(StudioConfiguration.class.getName()).log(Level.SEVERE, null, ex);
             }
