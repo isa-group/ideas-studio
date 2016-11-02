@@ -68,7 +68,7 @@
             <i class="material-icons">delete</i>
         </a>
         <label class="switch">
-            <input ng-model="showAllFiles" ng-change="toggleShowAllFiles()" type="checkbox">
+            <input onchange="toggleShowAllFiles()" type="checkbox">
             <div class="slider round"></div>
             <span style="
                 position: absolute;

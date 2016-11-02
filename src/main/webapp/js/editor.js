@@ -9,20 +9,30 @@
 //------------------------------------------------------------------------------
 // Editor window initialization:
 var initializeEditor = function () {
-    intializeEditorWindow();
-    initializeCommandLine();
-    $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function () {
-        MenuManager.setupGlobalMenu("Create $1 file");
+    intializeEditorWindow(function () {
+        initializeCommandLine(function () {
+            $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function () {
+                MenuManager.setupGlobalMenu("Create $1 file");
+            });
+            if (localStorage.getItem("demo") == "demo") {
+                $.ajaxSetup({
+                    cache: false,
+                    headers: { 
+                        "Cache-Control": "no-cache",
+                        "Pragma": "no-cache"
+                    }
+                });
+                if (localStorage.getItem("ws") != "") {
+                    auxGenerateDemo(localStorage.getItem("ws"), localStorage.getItem("ws"), undefined, function () {
+                        $("#menuToggler").hide();
+                        $("#userTab").hide();
+                        userDemoInfo.onClick();
+                        $.ajaxSetup({ cache: true });
+                    });
+                }
+            }
+        }); 
     });
-
-    if (localStorage.getItem("demo") == "demo") {
-        $("#menuToggler").hide();
-        $("#userTab").hide();
-        userDemoInfo.onClick();
-        if (localStorage.getItem("ws") != "") {
-            auxGenerateDemo(localStorage.getItem("ws"));
-        }
-    }
 };
 
 //	location.href='j_spring_security_logout';
@@ -31,7 +41,7 @@ var initializeEditor = function () {
 
 // Initialization of the command line, basically adds the file, project and 
 // workspace management commands.
-var initializeCommandLine = function () {
+var initializeCommandLine = function (callback) {
     require(['gcli/index', 'demo/index'], function (gcli) {
         gcli.createDisplay();
         gcli.addCommand(CommandsRegistry.generateTemplateWorkspace);
@@ -54,6 +64,9 @@ var initializeCommandLine = function () {
         gcli.addCommand(CommandsRegistry.convertCurrentWorkspacetoDemo);
         gcli.addCommand(CommandsRegistry.convertCurrentWorkspacetoTemplate);
         gcli.addCommand(CommandsRegistry.clearConsole);
+        
+        if (callback) callback();
+        
     });
 };
 
@@ -61,7 +74,7 @@ var initializeCommandLine = function () {
 var currentSelectedNode = null;
 var previousSizes = new Object();
 var maximizing = false;
-var intializeEditorWindow = function () {
+var intializeEditorWindow = function (callback) {
 
     //For demo user, session expired
     window.onload = function () {
@@ -145,6 +158,8 @@ var intializeEditorWindow = function () {
     });
     // Finally we show and fit the editor :
     fitEditor();
+    
+    if (callback) callback();
 };
 
 //------------------------------------------------------------------------------

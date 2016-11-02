@@ -444,11 +444,11 @@ var auxCopyNode = function (origin, destination) {
     CommandApi.copy(origin, destination);
 };
 
-var auxGenerateDemo = function (demoName, destinationWorkspaceName, overwrite) {
+var auxGenerateDemo = function (demoName, destinationWorkspaceName, overwrite, callback) {
     if (destinationWorkspaceName == undefined
             || destinationWorkspaceName == null)
         destinationWorkspaceName = demoName;
-    CommandApi.importDemoWorkspace(demoName, destinationWorkspaceName, overwrite);
+    CommandApi.importDemoWorkspace(demoName, destinationWorkspaceName, overwrite, callback);
 };
     
 var auxDeleteWorkspace = function (fileUri) {

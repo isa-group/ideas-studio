@@ -56,10 +56,9 @@ var ModeManager = {
             "success": function (configuration) {
                 studioConfiguration = configuration;
                 setupModels(configuration);
-                angular.element(document.getElementById("appBody")).scope().extensionsFilter = configuration.extensionsFilter;
-                angular.element(document.getElementById("appBody")).scope().$apply();
-                setTimeout(function () {angular.element(document.getElementById("appBody")).scope().toggleShowAllFiles();}, 150);
                 
+                // Filter file extensions
+                FILE_EXTENSIONS_TO_FILTER = configuration.extensionsFilter; // will be populated by studio-configuration.json
             },
             "error": function (result) {
                 console.error("Could not load app configuration: " + result.statusText);

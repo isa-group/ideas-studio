@@ -1,5 +1,26 @@
 // App. Initialization:
 jQuery(function () {
+    
+    toggleShowAllFiles = function () {
+        var all = $(".dynatree-title");
+        if (DEFAULT_FILTER_FILES === true) {
+            all.each(function () {
+                if (FILE_EXTENSIONS_TO_FILTER.indexOf($(this).text().split('.').pop()) !== -1) {
+                    $(this).closest("li").show();
+                }
+            });
+            DEFAULT_FILTER_FILES = false;
+        } else {
+            all.each(function () {
+                var isFolder = $(this).closest("span").hasClass("dynatree-folder");
+                if (!isFolder && FILE_EXTENSIONS_TO_FILTER.indexOf($(this).text().split('.').pop()) !== -1) {
+                    $(this).closest("li").hide();
+                    //TODO: close files
+                }
+            });
+            DEFAULT_FILTER_FILES = true;
+        }
+    };
 
     $('.dropdown-toggle').click(function (e) {
         e.preventDefault();

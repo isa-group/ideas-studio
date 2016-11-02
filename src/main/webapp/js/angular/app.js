@@ -1,5 +1,5 @@
 // AngularJS initialization
-angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$compile", "$q", function ($scope, $compile, $q) {
+var mainApp = angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$compile", "$q", function ($scope, $compile, $q) {
 
         $scope.model = {};
 
@@ -153,27 +153,6 @@ angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$co
             if ($scope.compilationFlagFormatView == 1) {
                 var selector = "#editorWrapper";
                 $compile(angular.element(selector)[0])($scope);
-            }
-        };
-        
-        $scope.showAllFiles = false;
-        $scope.extensionsFilter = []; // will be populated by studio-configuration.json
-        $scope.toggleShowAllFiles = function () {
-            var all = $(".dynatree-title");
-            if ($scope.showAllFiles === true) {
-                all.each(function () {
-                    if ($scope.extensionsFilter.indexOf($(this).text().split('.').pop()) !== -1) {
-                        $(this).closest("li").show();
-                    }
-                })
-            } else {
-                all.each(function () {
-                    var isFolder = $(this).closest("span").hasClass("dynatree-folder");
-                    if (!isFolder && $scope.extensionsFilter.indexOf($(this).text().split('.').pop()) !== -1) {
-                        $(this).closest("li").hide();
-                        //TODO: close files
-                    }
-                })
             }
         };
 

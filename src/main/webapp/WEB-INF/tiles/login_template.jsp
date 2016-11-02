@@ -44,6 +44,7 @@
 <script type="text/javascript" src="js/vendor/bootstrap.js"></script>
 
 <script>
+    
 	var setupLogin = function() {
 		
 		$('#loginForm').submit(function() {
@@ -192,21 +193,29 @@
         <script>
             //DEMO USERS
             $("#username").ready(function(){
-                    if ($("#username").val()!="") {
-                        $("#password").val($("#username").val());
-                        //$("#loginForm").submit();
-                        console.log(location.href);
-                        localStorage.setItem('demo', 'demo');
-                        localStorage.setItem('ws', location.href.split("demo/")[1]);
-                        console.log(">>>>>>>>>>>>>>"+location.href.split("demo/")[1]);
-                        //$("#loginButton").click();
-                        $("#loginForm").submit();
-                    } else {
-                        localStorage.setItem('demo', '');
-                        localStorage.setItem('ws', '');
-                    }
+                if ($("#username").val()!="") {
+                    
+                    
+                    $('#dontRememberLogin').hide();
+                    $('#loginButtons').hide();
+                    $('#socialSigninButtons').hide();
+                    $('#loginContent').height('auto')
+                            .append('<p style="text-align:center;">Loading ${studioConfiguration.workbenchName} workbench with demo user...</p>');
+                    
+                    $("#password").val($("#username").val());
+                    //$("#loginForm").submit();
+                    console.log(location.href);
+                    localStorage.setItem('demo', 'demo');
+                    localStorage.setItem('ws', location.href.split("demo/")[1]);
+                    console.log(">>>>>>>>>>>>>>"+location.href.split("demo/")[1]);
+                    //$("#loginButton").click();
+                    $("#loginForm").submit();
+                } else {
+                    localStorage.setItem('demo', '');
+                    localStorage.setItem('ws', '');
+                }
             });
-		</script>
+        </script>
 	
 </body>
 </html>
