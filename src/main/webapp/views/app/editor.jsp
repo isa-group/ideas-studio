@@ -14,7 +14,13 @@
 <script src="js/gcli-console/gcli-uncompressed.js" type="text/javascript"></script>
 <script src='js/vendor/bootstrap.tooltip-popover.min.js' type="text/javascript"></script>
 <script src='js/descriptionInspector.js' type="text/javascript"></script>
+<script src='js/vendor/moment.js' type="text/javascript"></script>
+<script src='js/vendor/datetimepicker.js' type="text/javascript"></script>
+<script src='js/vendor/datetimepicker.templates.js' type="text/javascript"></script>
+<script src='js/vendor/dateTimeInput.js' type="text/javascript"></script>
+<script src='js/vendor/angular-ui-router.min.js' type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="css/descriptionInspector.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/vendor/datetimepicker.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/gcli-console.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css" media="screen" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

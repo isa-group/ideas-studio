@@ -1,5 +1,6 @@
 // AngularJS initialization
-var mainApp = angular.module("mainApp", ['ngSanitize']).controller("MainCtrl", ["$scope", "$compile", "$q", function ($scope, $compile, $q) {
+var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstrap.datetimepicker', 'ui.dateTimeInput'])
+        .controller("MainCtrl", ["$scope", "$compile", "$q", "$http", "$timeout", "$state", "$location", "$stateParams", function ($scope, $compile, $q, $http, $timeout, $state, $location, $stateParams) {
 
         $scope.model = {};
 
