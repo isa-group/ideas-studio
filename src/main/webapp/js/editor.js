@@ -302,6 +302,7 @@ var toggleMaximization = function () {
     }, 500);
 
     if (appMainContent.hasClass("maximizedEditor")) {
+        // Minimize
         appMainContent.removeClass("maximizedEditor");
 
         editorSidePanel.css("max-width", +"0px");
@@ -312,14 +313,14 @@ var toggleMaximization = function () {
 // 		    		editorMainPanel.css("max-width", previousSizes.editorWidth + "px");
 // 		    		editorSidePanel.css("min-width", previousSizes.sidePanelWidth + "px");
             editorMainPanel.css("min-width", previousSizes.editorWidth + "px");
-            setTimeout(
-                    function () {
-                        editorSidePanel.css("max-width", "100%");
-                        editorMainPanel.css("max-width", "");
-                        editorSidePanel.css("min-width", "");
-                        editorMainPanel.css("min-width", "0px");
-                        fitEditor();
-                    }, 900);
+            setTimeout(function () { $("#editorSidePanelHeaderWorkspaceInfo").fadeIn(); }, 450);
+            setTimeout(function () {
+                editorSidePanel.css("max-width", "100%");
+                editorMainPanel.css("max-width", "");
+                editorSidePanel.css("min-width", "");
+                editorMainPanel.css("min-width", "0px");
+                fitEditor();
+            }, 900);
         }, 1);
 
         max_min.removeClass("minimize");
@@ -329,6 +330,7 @@ var toggleMaximization = function () {
         }, 900);
 
     } else {
+        // Maximize
         appMainContent.addClass("maximizedEditor");
 
         previousSizes.sidePanelWidth = editorSidePanel.width();
@@ -339,6 +341,7 @@ var toggleMaximization = function () {
         setTimeout(function () {
             editorSidePanel.css("max-width", "0px");
             editorMainPanel.css("min-width", $(window).width() - $("#editorInspector").width());
+            $("#editorSidePanelHeaderWorkspaceInfo").fadeOut();
         }, 1);
 
         max_min.addClass("minimize");
