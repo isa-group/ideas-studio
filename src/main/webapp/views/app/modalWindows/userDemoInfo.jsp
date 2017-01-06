@@ -3,7 +3,7 @@
 
 
 <div class="modal-header">
-    <img id="imgLogoModal" src="/img/${studioConfiguration.images.logo}">
+    <img id="imgLogoModal" src="./img/${studioConfiguration.images.logo}">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <%--     <h4 class="modal-title"><spring:message code="editor.actions.modal.userDemoInfo.title"/></h4> --%>
 
