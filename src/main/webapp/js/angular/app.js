@@ -167,7 +167,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
 
                     function read() {
                         var data = element.text();
-                        if (!isNaN(parseFloat(data)) && isFinite(data)) { // if is number
+                        if (!isNaN(parseFloat(data)) && isFinite(data) && typeof data !== "string") { // if is number
                             ngModel.$setViewValue(parseFloat(data));
                         } else {
                             ngModel.$setViewValue(data);
@@ -175,7 +175,10 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                     }
 
                     ngModel.$render = function () {
-                        element.html(ngModel.$viewValue || "");
+                        if (ngModel.$viewValue === undefined)
+                            element.html("");
+                        else
+                            element.html(ngModel.$viewValue);
                     };
 
                     element.bind("blur keyup change", function () {
