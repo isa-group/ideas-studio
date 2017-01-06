@@ -616,7 +616,8 @@ var EditorManager = {
 
                 var potentialNextTab = Object.keys(EditorManager.tabsMap)[0];
                 if (potentialNextTab != undefined && potentialNextTab != null) {
-                    EditorManager.openFile("" + potentialNextTab);
+                    if (!(EditorManager.currentUri in EditorManager.tabsMap))
+                        EditorManager.openFile("" + potentialNextTab);
                 } else {
                     EditorManager.reset();
                     $("#selectOperationDiv").remove();
