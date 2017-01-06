@@ -19,6 +19,7 @@
 <script src='js/vendor/datetimepicker.templates.js' type="text/javascript"></script>
 <script src='js/vendor/dateTimeInput.js' type="text/javascript"></script>
 <script src='js/vendor/angular-ui-router.min.js' type="text/javascript"></script>
+<script src='js/vendor/ng-google-chart.min.js' type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="css/descriptionInspector.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/vendor/datetimepicker.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/gcli-console.css" media="screen" />
