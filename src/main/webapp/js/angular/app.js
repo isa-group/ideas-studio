@@ -156,6 +156,36 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                 $compile(angular.element(selector)[0])($scope);
             }
         };
+        
+        var print = function (styleData) {
+            var prtContent = document.getElementById("modelBoardContent");
+            var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+            if (styleData)
+                WinPrint.document.write(styleData + prtContent.innerHTML);
+            else
+                WinPrint.document.write(prtContent.innerHTML);
+            WinPrint.document.close();
+            WinPrint.focus();
+            WinPrint.print();
+            WinPrint.close();
+        };
+        
+        /**
+         * This function prints current Binding view in a new page
+         */
+        $scope.print = function () {
+            var style = "";
+            $.when(
+                $.get("css/bootstrap.css", function(data) {style += "<style>" + data + "</style>";}),
+                $.get("css/print.css", function(data) {style += "<style>" + data + "</style>";})
+            ).then( function() {
+                print(style);
+            }, function() {
+                CommandApi.echo("There was an error to download default style. Generating print page(s) without style.");
+                console.warn("There was an error to download default style. Generating print page(s) without style.");
+                print();
+            });
+        };
 
     }])
         .directive("contenteditable", function () {
