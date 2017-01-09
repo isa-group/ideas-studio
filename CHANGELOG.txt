@@ -1,3 +1,20 @@
+ideas-studio v0.9.4, 09/01/2017
+----------------------------------------------
+- After closing a tab, sometimes editor activates a random tab #234
+- Add print support for Binding #233
+- Add support for Google Chart in Binding #232
+- Binding always turns a number into string #231
+- Editor will always load the first item of "tabsMap" after closing any file #229
+- Modal window doesn't show IDEAS logo #227
+- Don't show register anchor in modal window #225
+- Hide login button when demo user is logging #224
+- Modal window content doesn't fit well #223
+- Filter file extensions from studio config file #222
+- '$hashkey' inserted by angular.toJson #221
+- Number is converted to string when updated from Binding #220
+- "show all" toggle button doesn't filter files after loading application in designer #219
+- Bad interface in fullscreen #217
+
 ideas-studio v0.9.3.3, 08/06/2016
 ----------------------------------------------
 - Fix syntax check #213
