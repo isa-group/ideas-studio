@@ -1,5 +1,6 @@
 ideas-studio v0.9.4, 10/01/2017
 ----------------------------------------------
+- Unable to use workbecnh while angular print() function is called #239
 - Resolve blank string on Binding interaction #238
 - Create new filter in angularjs to capilize strings on template #237
 - Add a javascript library to convert markdown to html #236
