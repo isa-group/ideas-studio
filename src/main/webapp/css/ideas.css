@@ -2262,3 +2262,12 @@ div#resetLoader {
 @media all {
     .only-printable { display: none; }
 }
+
+span[contenteditable] {
+    display: inline-block;
+    min-width: 1em;
+}
+
+span[contenteditable].ng-empty {
+    border: 1px dotted #ff3d3d !important;
+}
