@@ -157,17 +157,33 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                     }
                 };
 
+                $scope.WinPrint = null;
                 var print = function (styleData) {
                     var prtContent = document.getElementById("modelBoardContent");
-                    var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+                    $scope.WinPrint = 1;
+                    
+                    showModal("Print view is enabled", "Please, close print window before using " + studioConfiguration.workbenchName + " workbench.",
+                        "Ok", closeWinPrint,
+                        closeWinPrint, closeWinPrint);
+                    
+                    $scope.$apply();
+                    $scope.WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
                     if (styleData)
-                        WinPrint.document.write(styleData + prtContent.innerHTML);
+                        $scope.WinPrint.document.write(styleData + prtContent.innerHTML);
                     else
-                        WinPrint.document.write(prtContent.innerHTML);
-                    WinPrint.document.close();
-                    WinPrint.focus();
-                    WinPrint.print();
-                    WinPrint.close();
+                        $scope.WinPrint.document.write(prtContent.innerHTML);
+                    $scope.WinPrint.document.close();
+                    $scope.WinPrint.focus();
+                    $scope.WinPrint.print();
+                    $scope.WinPrint.close();
+                    $scope.WinPrint = null;
+                    $scope.$apply();
+                    
+                    hideModal();
+                };
+                
+                var closeWinPrint = function () {
+                    $scope.WinPrint.close();
                 };
 
                 /**
