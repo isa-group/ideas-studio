@@ -26,7 +26,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                                             }
 
                                             return value;
-                                        }), -1);
+                                        }, 2), -1);
                                         // Update editor to previous view
                                         document.editor.selection.setRange(editorRange);
                                         document.editor.renderer.scrollToY(editorCursorPos);
@@ -59,7 +59,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                                             }
 
                                             return value;
-                                        }), converterUri,
+                                        }, 2), converterUri,
                                                 function (result) {
                                                     resolve(result.data);
                                                 }
