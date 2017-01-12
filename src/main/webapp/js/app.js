@@ -127,6 +127,12 @@ var showModal = function (title, content, primaryText, primaryHandler,
     $('#appGenericModal').modal({
         show: true
     });
+    $("#appGenericModal").click(function() {
+        cancelHandler();
+    });
+    $(".modal-dialog").click(function(event){
+        event.stopPropagation();
+    });
 };
 
 var showContentAsModal = function (url, primaryHandler, cancelHandler,
