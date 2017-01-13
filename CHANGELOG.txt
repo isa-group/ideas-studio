@@ -1,5 +1,8 @@
-ideas-studio v0.9.4, 10/01/2017
+ideas-studio v0.9.4, 13/01/2017
 ----------------------------------------------
+- Update a file content in JSON format implies losing JSON format #243
+- Clicking outside of a modal window won't execute cancel/close callback #242
+- Update js-yaml library to fix problem with multiline bindings #241
 - Unable to use workbecnh while angular print() function is called #239
 - Resolve blank string on Binding interaction #238
 - Create new filter in angularjs to capilize strings on template #237
