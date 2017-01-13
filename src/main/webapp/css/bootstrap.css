@@ -214,6 +214,7 @@ table {
   border-spacing: 0;
 }
 
+/**
 @media print {
   * {
     color: #000 !important;
@@ -288,7 +289,7 @@ table {
     border: 1px solid #ddd !important;
   }
 }
-
+*/
 *,
 *:before,
 *:after {

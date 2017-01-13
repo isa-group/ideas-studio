@@ -1,0 +1,86 @@
+@media print {
+
+    /* Hide non-printable content */
+    #appLeftMenu, #appMainContentBlocker, #appHeader,
+    #appFooter, #versions, #editorSidePanel, #editorInspector,
+    #shareDocumentModal, #editorHeader, #editorFooter, #editor,
+    #editorTopShadow, #editorItself > div.ui-resizable-handle.ui-resizable-s,
+    #editorBottomPanel,
+    #editor > textarea,
+    .not-printable, button
+    {
+        display:none;
+    }
+    
+    /* Set default background */
+    #editorWrapper {
+        background: white;
+    }
+
+    /* Fit binding panel to paper */
+    #editorMainPanel, #modelBoardContent {
+        position:relative;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+    }
+    
+    /* Set page-break */
+    body, table,
+    #appWrapper, #appMainContent, #appBody, #appBodyLoader, #editorMainPanel,
+    #editorItself, #editorWrapper, #modelBoardContent {
+        position:relative !important;
+        page-break-inside: auto !important;
+    }
+    
+/*    p {
+        page-break-after: always !important;
+        page-break-inside: avoid !important;
+    }*/
+    
+    /* Set space */
+    @page {
+        margin: 2cm;
+    }
+    body {
+        margin: 0; padding: 0;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+    }
+    #appBody {
+        width: 100% !important; height: 100% !important;
+        margin: 0 !important; padding: 0 !important;
+        top: 0 !important; bottom: 0 !important;
+        left: 0 !important; right: 0 !important;
+    }
+    
+    .only-printable {
+        display: block;
+    }
+    
+    .page-break-after {
+        page-break-after: always !important;
+    }
+    
+    .page-break-before {
+        page-break-before: always !important;
+    }
+    
+    .print-header, .print-footer {
+        display: block;
+        text-align:center;
+        position: fixed;
+        width: 100%;
+    }
+    
+    .print-header {
+        top: 0;
+    }
+    
+    .print-footer {
+        bottom: 0;
+    }
+}

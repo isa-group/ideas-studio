@@ -30,6 +30,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -514,7 +516,7 @@ public class FileController extends AbstractController {
     
     @RequestMapping(value = "/workspaces/selected", method = RequestMethod.POST)
     @ResponseBody
-    public boolean setSelectedWorkspace(@RequestParam("workspaceName") String workspaceName) {
+    public boolean setSelectedWorkspace(@RequestParam("workspaceName") String workspaceName, final HttpServletResponse response) {
 
         initRepoLab();
         
@@ -534,6 +536,11 @@ public class FileController extends AbstractController {
             res = false;
             logger.log(Level.SEVERE, e.getMessage());
         }
+        
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
+        
         return res;
 
     }

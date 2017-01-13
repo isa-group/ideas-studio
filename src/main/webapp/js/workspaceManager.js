@@ -34,10 +34,11 @@ var selectedWorkspace;
 var workspaces;
 
 var WorkspaceManager = {
-    setSelectedWorkspace: function (wsName) {
+    setSelectedWorkspace: function (wsName, callback) {
         selectedWorkspace = wsName;
         FileApi.setSelectedWorkspace(wsName, function (ts) {
             console.log("WS setted: " + selectedWorkspace);
+            if (callback) callback();
         });
     },
     getSelectedWorkspace: function () {
@@ -76,7 +77,7 @@ var WorkspaceManager = {
             callback(wss);
         });
     },
-    loadWorkspace: function () {
+    loadWorkspace: function (callback) {
         var workspaceName = WorkspaceManager.getSelectedWorkspace();
         console.log("Loading WS " + workspaceName + " ...");
         FileApi.loadWorkspace(workspaceName, function (ts) {
@@ -154,6 +155,12 @@ var WorkspaceManager = {
                     }
                 });
             });
+            
+            if (callback) callback();
+            
+            // Filter extensions
+            DEFAULT_FILTER_FILES = false;
+            toggleShowAllFiles();
 
         });
     },

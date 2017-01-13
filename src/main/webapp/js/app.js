@@ -1,5 +1,26 @@
 // App. Initialization:
 jQuery(function () {
+    
+    toggleShowAllFiles = function () {
+        var all = $(".dynatree-title");
+        if (DEFAULT_FILTER_FILES === true) {
+            all.each(function () {
+                if (FILE_EXTENSIONS_TO_FILTER.indexOf($(this).text().split('.').pop()) !== -1) {
+                    $(this).closest("li").show();
+                }
+            });
+            DEFAULT_FILTER_FILES = false;
+        } else {
+            all.each(function () {
+                var isFolder = $(this).closest("span").hasClass("dynatree-folder");
+                if (!isFolder && FILE_EXTENSIONS_TO_FILTER.indexOf($(this).text().split('.').pop()) !== -1) {
+                    $(this).closest("li").hide();
+                    //TODO: close files
+                }
+            });
+            DEFAULT_FILTER_FILES = true;
+        }
+    };
 
     $('.dropdown-toggle').click(function (e) {
         e.preventDefault();
@@ -106,6 +127,12 @@ var showModal = function (title, content, primaryText, primaryHandler,
     $('#appGenericModal').modal({
         show: true
     });
+    $("#appGenericModal").click(function() {
+        cancelHandler();
+    });
+    $(".modal-dialog").click(function(event){
+        event.stopPropagation();
+    });
 };
 
 var showContentAsModal = function (url, primaryHandler, cancelHandler,
@@ -178,8 +205,20 @@ var toggleMenu = function () {
 var compareObjects = function equals(obj1, obj2) {
     function _equals(obj1, obj2) {
         var clone = $.extend(true, {}, obj1),
-            cloneStr = JSON.stringify(clone);
-        return cloneStr === JSON.stringify($.extend(true, clone, obj2));
+            cloneStr = JSON.stringify(clone, function( key, value ) {
+                                    if( key === "$$hashKey" ) {
+                                        return undefined;
+                                    }
+
+                                    return value;
+                                });
+        return cloneStr === JSON.stringify($.extend(true, clone, obj2), function( key, value ) {
+                                    if( key === "$$hashKey" ) {
+                                        return undefined;
+                                    }
+
+                                    return value;
+                                });
     }
 
     return _equals(obj1, obj2) && _equals(obj2, obj1);

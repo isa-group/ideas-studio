@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ public class StudioConfiguration implements Serializable {
     private String helpMode;
     private String googleAnalyticsID;
     private Boolean advancedMode;
+    private List<String> extensionsFilter;
 
     public StudioConfiguration() {
         super();
@@ -109,5 +111,13 @@ public class StudioConfiguration implements Serializable {
 
     public void setAdvancedMode(Boolean advancedMode) {
         this.advancedMode = advancedMode;
+    }
+
+    public List<String> getExtensionsFilter() {
+        return extensionsFilter;
+    }
+
+    public void setExtensionsFilter(List<String> extensionsFilter) {
+        this.extensionsFilter = extensionsFilter;
     }
 }

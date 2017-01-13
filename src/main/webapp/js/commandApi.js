@@ -190,7 +190,7 @@ var CommandApi = {
     copy: function (originFileUri, targetFileUri) {
         EditorManager.moveNode(originFileUri, targetFileUri, true);
     },
-    importDemoWorkspace: function (demoWorkspaceName, targetWorkspaceName, overwrite) {
+    importDemoWorkspace: function (demoWorkspaceName, targetWorkspaceName, overwrite, callback) {
         closeAllTabs();
         WorkspaceManager.getWorkspaces(function (workspacesArray) {
             var exists = false;
@@ -201,17 +201,21 @@ var CommandApi = {
                 }
 
             if (overwrite) {
-                switchToDemoWorkspace(demoWorkspaceName, targetWorkspaceName);
+                switchToDemoWorkspace(demoWorkspaceName, targetWorkspaceName, callback);
             } else if (exists) {
-                var continueHandler = function () {
-                    switchToDemoWorkspace(demoWorkspaceName, targetWorkspaceName);
-                    hideModal();
-                };
-                showModal("Confirm workspace overwriting", "The name for the workspace <b>'" + targetWorkspaceName + "'</b> already exists.<BR/><BR/><b>Do you want to overwrite the existing workspace?</b><BR/>If you want to regenerate without overwriting, try the command <BR/><i>generateDemoWorkspaceWithDestination</i>.",
-                        "Continue", continueHandler,
-                        function () {}, function () {});
+                if (localStorage.getItem("demo") === "demo") {
+                    switchToDemoWorkspace(demoWorkspaceName, targetWorkspaceName, callback);
+                } else {
+                    var continueHandler = function () {
+                        switchToDemoWorkspace(demoWorkspaceName, targetWorkspaceName, callback);
+                        hideModal();
+                    };
+                    showModal("Confirm workspace overwriting", "The name for the workspace <b>'" + targetWorkspaceName + "'</b> already exists.<BR/><BR/><b>Do you want to overwrite the existing workspace?</b><BR/>If you want to regenerate without overwriting, try the command <BR/><i>generateDemoWorkspaceWithDestination</i>.",
+                            "Continue", continueHandler,
+                            function () {}, function () {});
+                }
             } else {
-                switchToDemoWorkspace(demoWorkspaceName, targetWorkspaceName);
+                switchToDemoWorkspace(demoWorkspaceName, targetWorkspaceName, callback);
             }
 
         });
@@ -385,7 +389,7 @@ var CommandApi = {
     }
 };
 
-var switchToDemoWorkspace = function (demoWorkspaceName, targetWorkspaceName) {
+var switchToDemoWorkspace = function (demoWorkspaceName, targetWorkspaceName, callback) {
     RequestHelper.ajax("files/importDemoWorkspace", {
         "type": "get",
         "data": {
@@ -396,9 +400,12 @@ var switchToDemoWorkspace = function (demoWorkspaceName, targetWorkspaceName) {
             CommandApi.echo("Switching to workspace...");
             WorkspaceManager.getWorkspaces(function (wss) {
                 $("#projectsTree").dynatree("getTree").reload();
-                WorkspaceManager.setSelectedWorkspace(targetWorkspaceName);
-                WorkspaceManager.loadWorkspace();
-                EditorManager.reset();
+                WorkspaceManager.setSelectedWorkspace(targetWorkspaceName, function () {
+                    WorkspaceManager.loadWorkspace(function () {
+                        EditorManager.reset();
+                        if (callback) callback();
+                    });
+                });
             });
 
         },
