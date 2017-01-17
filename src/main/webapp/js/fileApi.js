@@ -105,6 +105,7 @@ var FileApi = {
 		$.ajax("files?fileUri=" + fileUri +"&fileType=file", {
 			"type" : "DELETE",
 			"success" : function(result) {
+                            if (callback)
 				callback(result);
 			},
 			"error" : function(result) {

@@ -779,8 +779,10 @@ var EditorManager = {
 
         // Recurs. remove children files
         for (potentialUri in EditorManager.tabsMap) {
-            if (potentialUri.indexOf(fileUri) != -1 && potentialUri != fileUri)
-                EditorManager.deleteFile(potentialUri, true);
+            if (potentialUri.indexOf(fileUri) != -1 && potentialUri != fileUri) {
+                EditorManager.closeFile(potentialUri);
+                FileApi.deleteFile(potentialUri);
+            }
         }
 
         // Remove from tree
