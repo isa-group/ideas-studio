@@ -104,6 +104,8 @@ var showModal = function (title, content, primaryText, primaryHandler,
     cancelHandler, closeHandler) {
     if ($("#appGenericModal"))
         $("#appGenericModal").remove();
+    if (!cancelHandler)
+        cancelHandler = function () { hideModal(); };
     $("body")
         .append(
             '<!-- Modal for all app -->'
