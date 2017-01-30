@@ -218,16 +218,16 @@ var loadExistingTabbedInstance = function (fileUri, content) {
     optButton.click(function () {
         loadOperations.onClick();
     });
-    var expandButton = $('<button class="btn btn-link" style="{float:left}" id="expandConsole"><span class="glyphicon glyphicon-chevron-up"></span></button>');
-    expandButton.click(function () {
-        DescriptionInspector.expandConsole('second');
-    });
+//    var expandButton = $('<button class="btn btn-link" style="{float:left}" id="expandConsole"><span class="glyphicon glyphicon-chevron-up"></span></button>');
+//    expandButton.click(function () {
+//        DescriptionInspector.expandConsole('second');
+//    });
     var clearButton = $('<button class="btn btn-link" style="{float:left}" id="clearConsole"><span class="glyphicon glyphicon-remove-sign"></span></button>');
     clearButton.click(function () {
         DescriptionInspector.clearConsole();
     });
     divContentNonLanguageOpts.append(optButton);
-    divContentNonLanguageOpts.append(expandButton);
+//    divContentNonLanguageOpts.append(expandButton);
     divContentNonLanguageOpts.append(clearButton);
     divContent.append(divContentNonLanguageOpts);
 
@@ -530,7 +530,7 @@ var EditorManager = {
 
     },
     // FM
-    openFile: function (fileUri) {
+    openFile: function (fileUri, callback) {
 
         if (EditorManager.getCurrentUri() !== fileUri
                 && getNodeByFileUri(fileUri) !== undefined) {
@@ -594,6 +594,14 @@ var EditorManager = {
                 } else {
                     document.editor.focus();
                 }
+                
+                if (!DEFAULT_FILTER_FILES) {
+                    DEFAULT_FILTER_FILES = true;
+                    toggleShowAllFiles();
+                }
+                
+                if (callback)
+                    callback(content);
             });
 
         }

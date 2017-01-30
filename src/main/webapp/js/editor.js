@@ -321,6 +321,7 @@ var toggleMaximization = function () {
                 editorMainPanel.css("min-width", "0px");
                 fitEditor();
             }, 900);
+            $("#wsactions").fadeIn();
         }, 1);
 
         max_min.removeClass("minimize");
@@ -328,6 +329,9 @@ var toggleMaximization = function () {
         setTimeout(function () {
             maximizing = false;
         }, 900);
+        
+        $("#appFooter").show();
+        $("#editorSidePanel").show();
 
     } else {
         // Maximize
@@ -350,8 +354,11 @@ var toggleMaximization = function () {
             maximizing = false;
             editorMainPanel.css("width", $(window).width() - $("#editorInspector").width());
             editorMainPanel.css("min-width", "");
-// 	    			fitEditorMainPanel();
         }, 700);
+        
+        $("#wsactions").hide();
+        $("#appFooter").hide();
+        $("#editorSidePanel").hide();
     }
 };
 

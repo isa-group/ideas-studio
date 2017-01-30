@@ -510,7 +510,7 @@ var DescriptionInspector = {
                 });
             });
         } else if (menu == 'hide') {
-            editor.animate({height: "94%"}, function () {
+            editor.animate({height: "94.1%"}, function () {
                 expandButton.children('span').toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
                 //expandButton.children('span').toggleClass("glyphicon-triangle-bottom");
                 expandButton.off('click').click(function () {

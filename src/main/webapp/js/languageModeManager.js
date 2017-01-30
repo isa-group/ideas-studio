@@ -58,7 +58,8 @@ var ModeManager = {
                 setupModels(configuration);
                 
                 // Filter file extensions
-                FILE_EXTENSIONS_TO_FILTER = configuration.extensionsFilter; // will be populated by studio-configuration.json
+                CONFIG_FILE_EXTENSIONS_TO_FILTER = configuration.extensionsFilter;
+                CONFIG_EXTENSIONS_PREFERENCES = configuration.extensionsPreferences;
             },
             "error": function (result) {
                 console.error("Could not load app configuration: " + result.statusText);

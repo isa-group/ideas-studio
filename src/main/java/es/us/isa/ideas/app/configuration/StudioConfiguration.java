@@ -30,6 +30,7 @@ public class StudioConfiguration implements Serializable {
     private String googleAnalyticsID;
     private Boolean advancedMode;
     private List<String> extensionsFilter;
+    private List<String> extensionsPreferences;
 
     public StudioConfiguration() {
         super();
@@ -119,5 +120,13 @@ public class StudioConfiguration implements Serializable {
 
     public void setExtensionsFilter(List<String> extensionsFilter) {
         this.extensionsFilter = extensionsFilter;
+    }
+
+    public List<String> getExtensionsPreferences() {
+        return extensionsPreferences;
+    }
+
+    public void setExtensionsPreferences(List<String> extensionsPreferences) {
+        this.extensionsPreferences = extensionsPreferences;
     }
 }

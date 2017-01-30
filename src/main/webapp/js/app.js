@@ -1,24 +1,54 @@
 // App. Initialization:
 jQuery(function () {
     
-    toggleShowAllFiles = function () {
-        var all = $(".dynatree-title");
-        if (DEFAULT_FILTER_FILES === true) {
-            all.each(function () {
-                if (FILE_EXTENSIONS_TO_FILTER.indexOf($(this).text().split('.').pop()) !== -1) {
+    toggleShowAllFiles = function () {        
+        var allFiles = $(".dynatree-title");
+        // 
+        if (DEFAULT_FILTER_FILES === false) {
+            // Disable filter
+            allFiles.each(function () {
+                if (CONFIG_FILE_EXTENSIONS_TO_FILTER.indexOf($(this).text().split('.').pop()) !== -1) {
                     $(this).closest("li").show();
                 }
             });
-            DEFAULT_FILTER_FILES = false;
+            
+            // Show inspector
+            $("#editorToggleInspector").show();
+            
+            if (EditorManager.currentUri !== "") {
+                // Show format tabs
+                if ($("#editorFooter li").length > 0)
+                    $("#editorFooter").show();
+                if ($("#editorWrapper").css("bottom") == "0px") {
+                    $("#editorWrapper").css("bottom", "28px");
+                    // Show console
+                    DescriptionInspector.expandConsole('contract');
+                }
+            }
+            DEFAULT_FILTER_FILES = !DEFAULT_FILTER_FILES;
         } else {
-            all.each(function () {
+            // Enable filter
+            allFiles.each(function () {
                 var isFolder = $(this).closest("span").hasClass("dynatree-folder");
-                if (!isFolder && FILE_EXTENSIONS_TO_FILTER.indexOf($(this).text().split('.').pop()) !== -1) {
+                if (!isFolder && CONFIG_FILE_EXTENSIONS_TO_FILTER.indexOf($(this).text().split('.').pop()) !== -1) {
                     $(this).closest("li").hide();
                     //TODO: close files
                 }
             });
-            DEFAULT_FILTER_FILES = true;
+            
+            // Hide inspector
+            if ( $("#editorToggleInspector").hide().hasClass("hdd") ) toggleInspector();
+            
+            if (EditorManager.currentUri !== "") {
+                // Hide format tabs
+                $("#editorFooter").hide();
+                $("#editorWrapper").css("bottom", "0");
+                
+                // Hide console
+                DescriptionInspector.expandConsole('hide');
+            }
+            
+            DEFAULT_FILTER_FILES = !DEFAULT_FILTER_FILES;
         }
     };
 
@@ -104,8 +134,6 @@ var showModal = function (title, content, primaryText, primaryHandler,
     cancelHandler, closeHandler) {
     if ($("#appGenericModal"))
         $("#appGenericModal").remove();
-    if (!cancelHandler)
-        cancelHandler = function () { hideModal(); };
     $("body")
         .append(
             '<!-- Modal for all app -->'
