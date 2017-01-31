@@ -159,8 +159,47 @@ var WorkspaceManager = {
             if (callback) callback();
             
             // Filter extensions
-            DEFAULT_FILTER_FILES = false;
+            DEFAULT_FILTER_FILES = true;
             toggleShowAllFiles();
+            
+            //TODO: default open Demo
+            // Check if there is a project called "Demo"
+            // Search for Binding file at root 
+            $("#projectsTree").dynatree("getRoot").visit(function (node) {
+                // If there is a project named Demo
+                if (node.data.isFolder && node.getLevel() === 1 && node.data.keyPath === "Demo") {
+                    var found = false;
+                    var auxTargetNode = null;
+                    CONFIG_EXTENSIONS_PREFERENCES.forEach(function (ext) {
+                        if (!found) {
+                            node.getChildren().forEach(function (nodeChild) {
+                                if (!found) {
+                                    var fileUri = getFileUriByNode(nodeChild);
+                                    var angFileUri = fileUri.replace(/\.[^/.]+$/, "") + ".ang";
+                                    var htmlFileUri = fileUri.replace(/\.[^/.]+$/, "") + ".html";
+                                    if (!!getNodeByFileUri(angFileUri) || !!getNodeByFileUri(htmlFileUri)) {
+                                        auxTargetNode = nodeChild;
+                                        if (ext.toLowerCase() === extractFileExtension(nodeChild.data.title).toLowerCase()) {
+                                            EditorManager.openFile(getFileUriByNode(nodeChild), function () {
+                                                maximize();
+                                            });
+                                            found = true;
+                                            return false; // break
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    
+                    // There is a binding but it wasn't considered in extension list
+                    if (!found && auxTargetNode != null) {
+                        EditorManager.openFile(getFileUriByNode(auxTargetNode), function () {
+                            maximize();
+                        });
+                    }
+                }
+            });
 
         });
     },

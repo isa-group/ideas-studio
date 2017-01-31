@@ -494,6 +494,7 @@ var DescriptionInspector = {
                 expandButton.off('click').click(function () {
                     DescriptionInspector.expandConsole('second');
                 });
+                fitEditor();
             });
         } else if (menu == 'second') {
             editor.animate({height: "18%"}, function () {
@@ -502,20 +503,23 @@ var DescriptionInspector = {
                 expandButton.off('click').click(function () {
                     DescriptionInspector.expandConsole('contract');
                 });
+                fitEditor();
             });
         } else if (menu == 'contract') {
             editor.animate({height: "65%"}, function () {
                 expandButton.off('click').click(function () {
                     DescriptionInspector.expandConsole('hide');
                 });
+                fitEditor();
             });
         } else if (menu == 'hide') {
-            editor.animate({height: "94%"}, function () {
+            editor.animate({height: "94.1%"}, function () {
                 expandButton.children('span').toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
                 //expandButton.children('span').toggleClass("glyphicon-triangle-bottom");
                 expandButton.off('click').click(function () {
                     DescriptionInspector.expandConsole('first');
                 });
+                fitEditor();
             });
         }
         console.css("height", "100%");

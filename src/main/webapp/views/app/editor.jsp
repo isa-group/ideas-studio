@@ -85,7 +85,7 @@
                 right: 10%;
                 text-align: center;
                 color: #777;
-            ">Show all</span>
+            ">Advanced</span>
         </label>
     </div>
 </div>

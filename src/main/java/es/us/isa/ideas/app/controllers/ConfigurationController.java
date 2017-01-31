@@ -74,6 +74,7 @@ public class ConfigurationController extends AbstractController {
                 studioConfiguration.setAdvancedMode(newStudioConfiguration.getAdvancedMode());
                 studioConfiguration.setModules(newStudioConfiguration.getModules());
                 studioConfiguration.setExtensionsFilter(newStudioConfiguration.getExtensionsFilter());
+                studioConfiguration.setExtensionsPreferences(newStudioConfiguration.getExtensionsPreferences());
             } catch (IOException ex) {
                 Logger.getLogger(StudioConfiguration.class.getName()).log(Level.SEVERE, null, ex);
             }

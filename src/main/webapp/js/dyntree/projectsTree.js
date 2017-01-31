@@ -157,22 +157,12 @@ function bindContextMenu(span) {
                 });
                 break;
             case "delete":
-                var nodeUri = WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath;
-                showModal("Please, confirm your decision", "<strong>Are you sure you want to delete \"" + nodeUri + "\"?</strong>", "Delete",
-                        function () {
-                            if (node.data.keyPath !== "undefined") {
-                                CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, function (result) {
-                                    hideModal();
-                                });
-                            } else {
-                                CommandApi.deleteNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.title, function (result) {
-                                    hideModal();
-                                });
-                            }
-                        },
-                        function () {
-                            hideModal();
-                        });
+                var nodeUri = (node.data.keyPath !== "undefined") ? WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath : WorkspaceManager.getSelectedWorkspace() + "/" + node.data.title;
+                showModal("Please, confirm your decision", "<strong>Are you sure you want to delete \"" + nodeUri + "\"?</strong>", "Delete", function () {
+                    CommandApi.deleteNode(nodeUri, function (result) {
+                        hideModal();
+                    });
+                });
                 break;
             case "cut":
                 pasteMode = "cut";
