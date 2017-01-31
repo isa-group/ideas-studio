@@ -195,7 +195,7 @@
             $("#username").ready(function(){
                 if ($("#username").val()!="") {
                     
-                    
+                    $("#loginForm div.control-group").hide();
                     $('#dontRememberLogin').hide();
                     $('#loginButtons').hide();
                     $('#socialSigninButtons').hide();
