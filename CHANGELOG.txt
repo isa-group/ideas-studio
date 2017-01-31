@@ -1,3 +1,15 @@
+ideas-studio v0.9.4.1, 31/01/2017
+----------------------------------------------
+- Automatically show console when something is printed #252
+- Bad interface on "isa firm" when you maximize #251
+- Simplify demo view #249
+- Add default 'cancelHandler' for modal windows #248
+- Unable to delete a recent project #247
+- Change "show all" to "advanced mode" #246
+- Project cannot be named like user #216
+- Can't delete a project/folder with existing elements #215
+- Problems while creating json file inside existent folder #214
+
 ideas-studio v0.9.4, 13/01/2017
 ----------------------------------------------
 - Update a file content in JSON format implies losing JSON format #243
