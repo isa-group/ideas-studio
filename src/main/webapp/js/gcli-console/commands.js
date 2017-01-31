@@ -293,6 +293,7 @@ var CommandsRegistry = {
                     + args.message + "</div></div>");
             var display = $("#gcli-root .gcli-display");
             display.scrollTop(display.prop("scrollHeight"));
+            DescriptionInspector.expandConsole('contract');
             return "";
         }
     },

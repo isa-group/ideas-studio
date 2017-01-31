@@ -34,5 +34,6 @@
    "helpMode": "dynamic",
    "googleAnalyticsID": "UA-68297022-1",
    "advancedMode": true,
-   "extensionsFilter": ["ang", "ctl", "html"]
+   "extensionsFilter": ["ang", "ctl", "html"],
+   "extensionsPreferences": ["json"]
 }
