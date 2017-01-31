@@ -168,22 +168,36 @@ var WorkspaceManager = {
             $("#projectsTree").dynatree("getRoot").visit(function (node) {
                 // If there is a project named Demo
                 if (node.data.isFolder && node.getLevel() === 1 && node.data.keyPath === "Demo") {
-                    node.getChildren().forEach(function (nodeChild) {
-                        CONFIG_EXTENSIONS_PREFERENCES.forEach(function (ext) {
-                            var fileUri = getFileUriByNode(nodeChild);
-                            var angFileUri = fileUri.replace(/\.[^/.]+$/, "") + ".ang";
-                            var htmlFileUri = fileUri.replace(/\.[^/.]+$/, "") + ".html";
-                            if (!!getNodeByFileUri(angFileUri) || !!getNodeByFileUri(htmlFileUri)) {
-                                if (ext.toLowerCase() === extractFileExtension(nodeChild.data.title).toLowerCase()) {
-                                    EditorManager.openFile(getFileUriByNode(nodeChild), function () {
-                                        maximize();
-                                    });
-                                    return false; // break
+                    var found = false;
+                    var auxTargetNode = null;
+                    CONFIG_EXTENSIONS_PREFERENCES.forEach(function (ext) {
+                        if (!found) {
+                            node.getChildren().forEach(function (nodeChild) {
+                                if (!found) {
+                                    var fileUri = getFileUriByNode(nodeChild);
+                                    var angFileUri = fileUri.replace(/\.[^/.]+$/, "") + ".ang";
+                                    var htmlFileUri = fileUri.replace(/\.[^/.]+$/, "") + ".html";
+                                    if (!!getNodeByFileUri(angFileUri) || !!getNodeByFileUri(htmlFileUri)) {
+                                        auxTargetNode = nodeChild;
+                                        if (ext.toLowerCase() === extractFileExtension(nodeChild.data.title).toLowerCase()) {
+                                            EditorManager.openFile(getFileUriByNode(nodeChild), function () {
+                                                maximize();
+                                            });
+                                            found = true;
+                                            return false; // break
+                                        }
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     });
                     
+                    // There is a binding but it wasn't considered in extension list
+                    if (!found && auxTargetNode != null) {
+                        EditorManager.openFile(getFileUriByNode(auxTargetNode), function () {
+                            maximize();
+                        });
+                    }
                 }
             });
 

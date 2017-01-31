@@ -35,5 +35,5 @@
    "googleAnalyticsID": "UA-68297022-1",
    "advancedMode": true,
    "extensionsFilter": ["ang", "ctl", "html"],
-   "extensionsPreferences": ["json"]
+   "extensionsPreferences": ["ag", "at", "oai-spec", "json", "yaml"]
 }

@@ -653,6 +653,11 @@ var EditorManager = {
 
             if (DescriptionInspector)
                 DescriptionInspector.loaders.onEditorCloseFile();
+            
+            // There is no file to show with editor maximized
+            if (Object.keys(EditorManager.tabsMap).length === 0 && $("#appMainContent").hasClass("maximizedEditor") && !maximizing) {
+                toggleMaximization();
+            }
         });
     },
     reset: function () {
