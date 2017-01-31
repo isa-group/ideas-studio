@@ -598,6 +598,8 @@ var EditorManager = {
                 if (!DEFAULT_FILTER_FILES) {
                     DEFAULT_FILTER_FILES = true;
                     toggleShowAllFiles();
+                } else {
+                    $("#editorFooter").show();
                 }
                 
                 if (callback)
