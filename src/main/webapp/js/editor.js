@@ -298,6 +298,7 @@ var toggleMaximization = function () {
     var appMainContent = $("#appMainContent");
     var editorSidePanel = $("#editorSidePanel");
     var editorMainPanel = $("#editorMainPanel");
+    var editorInspector = $("#editorInspector");
     var max_min = $("#editorMaximize");
 
     // Fit inspector content
@@ -310,63 +311,41 @@ var toggleMaximization = function () {
     }, 500);
 
     if (appMainContent.hasClass("maximizedEditor")) {
-        // Minimize
+        // Quit maximized editor
         appMainContent.removeClass("maximizedEditor");
-
-        editorSidePanel.css("max-width", +"0px");
-        editorMainPanel.css("min-width", editorMainPanel.width() + "px");
-        editorMainPanel.css("width", previousSizes.editorWidth + "px");
-        setTimeout(function () {
-            editorSidePanel.css("max-width", previousSizes.sidePanelWidth + 2 + "px");
-// 		    		editorMainPanel.css("max-width", previousSizes.editorWidth + "px");
-// 		    		editorSidePanel.css("min-width", previousSizes.sidePanelWidth + "px");
-            editorMainPanel.css("min-width", previousSizes.editorWidth + "px");
-            setTimeout(function () { $("#editorSidePanelHeaderWorkspaceInfo").fadeIn(); }, 450);
-            setTimeout(function () {
-                editorSidePanel.css("max-width", "100%");
-                editorMainPanel.css("max-width", "");
-                editorSidePanel.css("min-width", "");
-                editorMainPanel.css("min-width", "0px");
-                fitEditor();
-            }, 900);
-            $("#wsactions").fadeIn();
-        }, 1);
-
         max_min.removeClass("minimize");
-
-        setTimeout(function () {
-            maximizing = false;
-        }, 900);
         
-        $("#appFooter").show();
         $("#editorSidePanel").show();
+        editorSidePanel.animate({width: previousSizes.sidePanelWidth + 2 + "px"}, function () {
+            $("#editorSidePanelHeaderWorkspaceInfo").fadeIn();
+            $("#wsactions").show();
+            $("#appFooter").show();
+            
+            fitEditor();
+        });
+        
+        editorMainPanel.animate({width: previousSizes.editorWidth + "px"}, function () {
+            maximizing = false;
+        });
 
     } else {
         // Maximize
         appMainContent.addClass("maximizedEditor");
+        max_min.addClass("minimize");
 
         previousSizes.sidePanelWidth = editorSidePanel.width();
         previousSizes.editorWidth = editorMainPanel.width();
-
-        editorSidePanel.css("max-width", editorSidePanel.width());
-        editorMainPanel.css("min-width", editorMainPanel.width());
-        setTimeout(function () {
-            editorSidePanel.css("max-width", "0px");
-            editorMainPanel.css("min-width", $(window).width() - $("#editorInspector").width());
-            $("#editorSidePanelHeaderWorkspaceInfo").fadeOut();
-        }, 1);
-
-        max_min.addClass("minimize");
-
-        setTimeout(function () {
-            maximizing = false;
-            editorMainPanel.css("width", $(window).width() - $("#editorInspector").width());
-            editorMainPanel.css("min-width", "");
-        }, 700);
         
-        $("#wsactions").hide();
-        $("#appFooter").hide();
-        $("#editorSidePanel").hide();
+        editorSidePanel.animate({width: 0}, function () {
+            $("#editorSidePanelHeaderWorkspaceInfo").fadeOut();
+            $("#wsactions").hide();
+            $("#appFooter").hide();
+            $("#editorSidePanel").hide();
+        });
+        
+        editorMainPanel.animate({width: $(window).width() - editorInspector.width()}, function () {
+            maximizing = false;
+        });
     }
 };
 
@@ -374,7 +353,9 @@ var toggleInspector = function () {
     var inspector = $("#editorInspector");
     if (inspector.hasClass("hdd")) {
         EditorManager.showInspector();
+        previousSizes.editorWidth -= inspector.width();
     } else {
+        previousSizes.editorWidth += inspector.width();
         EditorManager.hideInspector();
     }
 
