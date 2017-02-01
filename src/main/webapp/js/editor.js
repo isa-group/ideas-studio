@@ -139,7 +139,15 @@ var intializeEditorWindow = function (callback) {
         $("#editorInspector").css("left", "0");
         fitEditorMainPanel();
     });
-    $(window).resize(fitEditor);
+    $(window).resize(function (e) {
+        if (e.originalEvent.type !== "mousemove") {
+            $("#editorItself").height(($(window).height() - $("#appHeader").height()
+            - $("#appFooter").height() - 52)/$("#editorMainPanel").height()*100 + "%");
+                fitEditor();
+        } else {
+            fitEditor();
+        }
+    });
     $("#editorMaximize").click(maximize);
     $("#editorToggleInspector").click(toggleInspector);
     //share Document
