@@ -153,7 +153,9 @@ var MenuManager = {
     buildMenu: function (menu, languageFileMessage) {
         menu.empty();
         // Read dinyamically the potential language files
-        for (var languageId in ModeManager.getModes()) {
+        $.map(ModeManager.getModes(), function(value, index) {return [value];})
+                .sort(function (a,b) {return a.name.toLowerCase() > b.name.toLowerCase() ? 1: a.name.toLowerCase() < b.name.toLowerCase() ? -1: 0;}).forEach(function (obj) {
+            var languageId = obj.id;
             var languageMode = ModeManager.getMode(languageId);
             var languageName = languageMode.name;
             languageExtension = ModeManager.getExtension(languageId, null);
@@ -169,7 +171,7 @@ var MenuManager = {
             menu.append($newLanguageFileElem);
 
             setupClickForNewFile($newLanguageFileElem, languageName, languageId, languageExtension);
-        }
+        });
 
         var $itemElement = null;
         for (var myItem in this.genericMenuItems) {
