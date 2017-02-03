@@ -38,20 +38,17 @@ var WorkspaceManager = {
         selectedWorkspace = wsName;
         FileApi.setSelectedWorkspace(wsName, function (ts) {
             console.log("WS setted: " + selectedWorkspace);
-            if (callback) callback();
+            if (callback) callback(ts);
         });
     },
     getSelectedWorkspace: function () {
         return selectedWorkspace;
     },
     readSelectedWorkspace: function (callback) {
-
         FileApi.getSelectedWorkspace(function (ts) {
             selectedWorkspace = ts;
-            callback(ts);
-
+            if (callback) callback(ts);
         });
-
     },
     getWorkspaces: function (callback) {
         console.log("Loading all workspaces.");
@@ -74,7 +71,7 @@ var WorkspaceManager = {
 
             }
 
-            callback(wss);
+            if (callback) callback(wss);
         });
     },
     loadWorkspace: function (callback) {
@@ -156,13 +153,10 @@ var WorkspaceManager = {
                 });
             });
             
-            if (callback) callback();
-            
             // Filter extensions
             DEFAULT_FILTER_FILES = true;
             toggleShowAllFiles();
             
-            //TODO: default open Demo
             // Check if there is a project called "Demo"
             // Search for Binding file at root 
             $("#projectsTree").dynatree("getRoot").visit(function (node) {
@@ -191,7 +185,6 @@ var WorkspaceManager = {
                             });
                         }
                     });
-                    
                     // There is a binding but it wasn't considered in extension list
                     if (!found && auxTargetNode != null) {
                         EditorManager.openFile(getFileUriByNode(auxTargetNode), function () {
@@ -200,7 +193,7 @@ var WorkspaceManager = {
                     }
                 }
             });
-
+            if (callback) callback();
         });
     },
     createWorkspace: function (workspaceName, description, tags, callback) {
@@ -243,8 +236,7 @@ var WorkspaceManager = {
                 showModal("Confirm demos delete",
                     "Your demos for <b>'" + workspaceName + "'</b> will be erased too.<BR/><BR/>\n\
                       <b>Do you want to delete your existing demos?</b><BR/></i>",
-                    "Continue", deleteDemosHandler,
-                    function () {}, function () {});
+                    "Continue", deleteDemosHandler);
             }
         };
 
