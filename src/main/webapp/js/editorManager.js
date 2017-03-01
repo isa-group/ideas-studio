@@ -116,6 +116,37 @@ var mayCheckLanguageSyntax = function (fileUri) {
         }
     }
 };
+var mayCheckLanguageConsistency = function (fileUri) {
+    var agSession = EditorManager.sessionsMap[fileUri];
+    if (agSession == undefined || agSession == "undefined") {
+        CommandApi.echo("Please open the document you want to check consistency before applying the command");
+    } else {
+        var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
+        var consistencyCheckLanguageUri = agSession.getCheckConsistencyLanguageURI(currentFormat);
+
+        if (consistencyCheckLanguageUri !== undefined && consistencyCheckLanguageUri !== null && consistencyCheckLanguageUri.length > 0) {
+
+            var content = agSession.getBaseSession().getValue();
+
+            content = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentSession().getValue();
+
+            CommandApi.checkModel(content, currentFormat, consistencyCheckLanguageUri, fileUri, function (ts) {
+                console.log("Checking consistency... " + ts);
+                if (ts.status === "OK" || ts === "true") {
+                    console.log("Consistency is OK.");
+                    EditorManager.setAnnotations(eval('(' + "[]" + ')'));
+                    DescriptionInspector.onEditorCheckedLanguage();
+                    checkSyntaxFlag = true;
+                } else {
+                    console.log(ts);
+                    EditorManager.setAnnotations(ts.annotations);
+                    checkSyntaxFlag = false;
+                }
+
+            });
+        }
+    }
+};
 
 var initAceEditor = function () {
     ace.require("ace/ext/language_tools");
@@ -156,6 +187,8 @@ var loadExistingTabbedInstance = function (fileUri, content) {
                                         }
 
                                         mayCheckLanguageSyntax(EditorManager.currentUri);
+                                        mayCheckLanguageConsistency(EditorManager.currentUri);
+                                        
                                         DescriptionInspector.editorContentToModel();
 
                                     }, 1000);
@@ -551,6 +584,7 @@ var EditorManager = {
 
                 loadExistingTabbedInstance(fileUri, content);
                 mayCheckLanguageSyntax(fileUri);
+                mayCheckLanguageConsistency(fileUri);
 
                 var node = getNodeByFileUri(fileUri);
                 if (node !== undefined)
@@ -1055,6 +1089,7 @@ function SessionAggregation() {
     this.current = null;
     this.formatsSessions = {};
     this.checkLanguageURI = {};
+    this.checkConsistencyLanguageURI = {};
 }
 
 SessionAggregation.prototype.getFormatsSessions = function () {
@@ -1100,4 +1135,13 @@ SessionAggregation.prototype.getCheckLanguageURI = function (formatKey) {
 SessionAggregation.prototype.setCheckLanguageURI = function (formatKey,
         checkLanguageURI) {
     this.checkLanguageURI[formatKey] = checkLanguageURI;
+};
+
+SessionAggregation.prototype.getCheckConsistencyLanguageURI = function (formatKey) {
+    return this.checkConsistencyLanguageURI[formatKey];
+};
+
+SessionAggregation.prototype.setCheckConsistencyLanguageURI = function (formatKey,
+        checkConsistencyLanguageURI) {
+    this.checkConsistencyLanguageURI[formatKey] = checkConsistencyLanguageURI;
 };

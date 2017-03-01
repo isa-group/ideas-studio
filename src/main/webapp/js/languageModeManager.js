@@ -5,6 +5,7 @@ var DEPRECATED_EXEC_OP_URI = "/language/operation/$opId/execute";
 
 var CONVERTER_URI = "/models/$modelId/syntaxes/$srcSyntaxId/translate/$destSyntaxId";
 var CHECK_LANGUAGE_URI = "/models/$modelId/syntaxes/$syntaxId/check";
+var CHECK_CONSISTENCY_LANGUAGE_URI = "/models/$modelId/consistency/$syntaxId/check";
 var EXEC_OP_URI = "/models/$modelId/operations/$operationId";
 
 var setupModels = function (configuration) {
@@ -201,6 +202,10 @@ var ModeManager = {
 
                     if (eval(s.syntaxCheck))
                         sessionAg.setCheckLanguageURI(s.id, ModeManager.idUriMap[modelId] + CHECK_LANGUAGE_URI.replace("$modelId", model.id)
+                                .replace("$syntaxId", s.id));
+
+                    if (eval(s.consistencyCheck))
+                        sessionAg.setCheckConsistencyLanguageURI(s.id, ModeManager.idUriMap[modelId] + CHECK_CONSISTENCY_LANGUAGE_URI.replace("$modelId", model.id)
                                 .replace("$syntaxId", s.id));
                 }
             }
