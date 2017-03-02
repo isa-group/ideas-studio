@@ -101,10 +101,9 @@ var mayCheckLanguageSyntax = function (fileUri, callback) {
                 console.log("Checking syntax... " + ts);
                 if (ts.status === "OK" || ts === "true") {
                     console.log("Syntax is OK.");
+                    
                     EditorManager.setAnnotations(eval('(' + "[]" + ')'));
-
                     DescriptionInspector.onEditorCheckedLanguage();
-
                     checkSyntaxFlag = true;
                     
                     if (callback) callback();
@@ -115,6 +114,10 @@ var mayCheckLanguageSyntax = function (fileUri, callback) {
                 }
 
             });
+        } else {
+            
+            if (callback) callback();
+            
         }
     }
 };
