@@ -82,7 +82,7 @@ var createNewTabbedInstance = function (fileUri, content) {
 
 var checkSyntaxFlag = false;
 
-var mayCheckLanguageSyntax = function (fileUri) {
+var mayCheckLanguageSyntax = function (fileUri, callback) {
     var agSession = EditorManager.sessionsMap[fileUri];
     if (agSession == undefined || agSession == "undefined") {
         CommandApi.echo("Please open the document you want to check before applying the command");
@@ -106,6 +106,8 @@ var mayCheckLanguageSyntax = function (fileUri) {
                     DescriptionInspector.onEditorCheckedLanguage();
 
                     checkSyntaxFlag = true;
+                    
+                    if (callback) callback();
                 } else {
                     console.log(ts);
                     EditorManager.setAnnotations(ts.annotations);
@@ -186,8 +188,10 @@ var loadExistingTabbedInstance = function (fileUri, content) {
                                                     content);
                                         }
 
-                                        mayCheckLanguageSyntax(EditorManager.currentUri);
-                                        mayCheckLanguageConsistency(EditorManager.currentUri);
+                                        mayCheckLanguageSyntax(EditorManager.currentUri, function () {
+                                            mayCheckLanguageConsistency(EditorManager.currentUri);
+                                        });
+                                        
                                         
                                         DescriptionInspector.editorContentToModel();
 
@@ -583,8 +587,10 @@ var EditorManager = {
                 }
 
                 loadExistingTabbedInstance(fileUri, content);
-                mayCheckLanguageSyntax(fileUri);
-                mayCheckLanguageConsistency(fileUri);
+                mayCheckLanguageSyntax(fileUri, function () {
+                    mayCheckLanguageConsistency(fileUri);
+                });
+                
 
                 var node = getNodeByFileUri(fileUri);
                 if (node !== undefined)
