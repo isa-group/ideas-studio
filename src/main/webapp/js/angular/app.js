@@ -228,30 +228,42 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
             }])
         .directive("contenteditable", function () {
             return {
+                restrict: "A",
                 require: "ngModel",
                 transclude: true,
-                scope: {ngModel: '='},
+                scope: {ngModel: '=', format: '='},
                 link: function (scope, element, attrs, ngModel) {
 
-                    var read = function () {
+                    var read = function (attrs) {
                         var data = element.text();
-                        if (isNumber(data)) { // if is number
-                            ngModel.$setViewValue(parseFloat(data));
-                        } else {
-                            ngModel.$setViewValue(data);
+                        var format = attrs.format;
+                        if (!!format && !!data) {
+                            if (format === "number" || format === "double") {
+                                data = parseFloat(data);
+                            } else if (format === "string") {
+                                data = String(data);
+                            } else if (format === "int" || format === "integer") {
+                                data = parseInt(data, 10);
+                            }
                         }
+                        ngModel.$setViewValue(data);
                     };
 
                     ngModel.$render = function () {
-                        if (ngModel.$viewValue === undefined)
-                            element.html("");
-                        else
-                            element.html(ngModel.$viewValue);
+                        var value = ngModel.$viewValue;
+                        element.html((value === undefined) ? "" : value);
                     };
 
                     element.bind("blur keyup change", function () {
-                        scope.$apply(read);
+                        scope.$apply(read(attrs));
                     });
+
+//                    element.bind("click", function () {
+//                        if (!isNaN($(this).text())) {
+//                            debugger;
+//                            this.setSelectionRange(0, $(this).text().length);
+//                        }
+//                    });
                 }
             };
         }).filter('capitalize', function () {
@@ -259,8 +271,3 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
         return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
     }
 });
-;
-
-var isNumber = function (data) {
-    return !isNaN(Number(data)) && data !== "" && typeof data !== "string";
-};
