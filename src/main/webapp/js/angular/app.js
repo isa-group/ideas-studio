@@ -1,8 +1,10 @@
 // AngularJS initialization
-var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstrap.datetimepicker', 'ui.dateTimeInput', 'googlechart'])
+var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstrap.datetimepicker', 'ui.dateTimeInput', 'googlechart', 'chart.js'])
         .controller("MainCtrl", ["$scope", "$compile", "$q", "$http", "$timeout", "$state", "$location", "$stateParams", function ($scope, $compile, $q, $http, $timeout, $state, $location, $stateParams) {
 
                 $scope.model = {};
+        
+                $scope.$timeout = $timeout;
 
                 // Update editor content from model
                 $scope.$watch(
@@ -10,8 +12,17 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                             return $scope.model;
                         },
                         function (newValue, oldValue) {
+                            var nodeName = '';
+                            var tabName = '';
+                            try {
+                                if (EditorManager.currentUri !== "") {
+                                    nodeName = currentSelectedNode.data.title;
+                                    tabName = EditorManager.tabsMap[EditorManager.currentUri].text();
+                                }
+                            } catch (err) {
+                            }
 
-                            if (document.editor && newValue && oldValue && !compareObjects(newValue, oldValue)) {
+                            if (document.editor && (newValue && (oldValue || oldValue === "") || ((newValue || newValue === "") && oldValue)) && !compareObjects(newValue, oldValue) && nodeName === tabName) {
 
                                 var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
                                         formatSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions(),
@@ -202,6 +213,13 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                         print();
                     });
                 };
+                
+                $scope.clearModel = function () {
+                    if (!!$scope.model && typeof $scope.model === "object") {
+                        $scope.model = '';
+                        $scope.$apply();
+                    }
+                };
 
             }])
         .directive("contenteditable", function () {
@@ -213,7 +231,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
 
                     function read() {
                         var data = element.text();
-                        if (!isNaN(parseFloat(data)) && isFinite(data) && typeof data !== "string") { // if is number
+                        if (!isNaN(Number(data)) && data !== "") { // if is number
                             ngModel.$setViewValue(parseFloat(data));
                         } else {
                             ngModel.$setViewValue(data);

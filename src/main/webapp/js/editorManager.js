@@ -4,21 +4,22 @@ var operationArray = [];
 var fileUriOperation = "";
 var opMap = "";
 
-var saveCurrentSession = function () {
+var saveCurrentSession = function (callback) {
     if (document.editor != null
             && (EditorManager.currentUri in EditorManager.sessionsMap)) {
-        saveSession(EditorManager.currentUri);
+        saveSession(EditorManager.currentUri, callback);
+    } else {
+        if (callback) callback();
     }
 };
 
 var saveSession = function (uri, callback) {
     if (document.editor != null) {
         // TODO!!!
-        FileApi.saveFileContents(uri, EditorManager.sessionsMap[uri]
-                .getBaseSession().getValue(), function () {
-            if (callback != null)
-                callback();
-        });
+        FileApi.saveFileContents(uri, 
+            EditorManager.sessionsMap[uri].getBaseSession().getValue(),
+            callback
+        );
     }
 };
 
@@ -87,6 +88,8 @@ var mayCheckLanguageSyntax = function (fileUri, callback) {
     if (agSession == undefined || agSession == "undefined") {
         CommandApi.echo("Please open the document you want to check before applying the command");
     } else {
+        EditorCheckerIcon.loading();
+        
         var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
 
         var checkLanguageUri = agSession.getCheckLanguageURI(currentFormat);
@@ -110,6 +113,7 @@ var mayCheckLanguageSyntax = function (fileUri, callback) {
                 } else {
                     console.log(ts);
                     EditorManager.setAnnotations(ts.annotations);
+                    EditorCheckerIcon.error(({type: "syntax", annotations: ts.annotations}));
                     checkSyntaxFlag = false;
                 }
 
@@ -121,7 +125,7 @@ var mayCheckLanguageSyntax = function (fileUri, callback) {
         }
     }
 };
-var mayCheckLanguageConsistency = function (fileUri) {
+var mayCheckLanguageConsistency = function (fileUri, callback) {
     var agSession = EditorManager.sessionsMap[fileUri];
     if (agSession == undefined || agSession == "undefined") {
         CommandApi.echo("Please open the document you want to check consistency before applying the command");
@@ -141,14 +145,22 @@ var mayCheckLanguageConsistency = function (fileUri) {
                     console.log("Consistency is OK.");
                     EditorManager.setAnnotations(eval('(' + "[]" + ')'));
                     DescriptionInspector.onEditorCheckedLanguage();
+                    EditorCheckerIcon.success();
                     checkSyntaxFlag = true;
                 } else {
                     console.log(ts);
                     EditorManager.setAnnotations(ts.annotations);
+                    EditorCheckerIcon.error({type: "consistency", annotations: ts.annotations});
                     checkSyntaxFlag = false;
                 }
+                
+                if (callback) callback();
 
+            }, function (err) {
+                EditorCheckerIcon.error({type: "consistency", annotations: [{type: "error", row: "1", column: "1", text: err}]});
             });
+        } else {
+            EditorCheckerIcon.success();
         }
     }
 };
@@ -176,6 +188,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
                 .on(
                         "change",
                         function (changesDeltas) {
+                            EditorCheckerIcon.loading();
                             if (checkerTimer)
                                 clearTimeout(checkerTimer);
 
@@ -276,8 +289,9 @@ var loadExistingTabbedInstance = function (fileUri, content) {
     var caretLI = "";
 
     fileUriOperation = EditorManager.getCurrentUri();
-    opMap = ModeManager.getOperations(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)));
-    var model = ModeManager.getMode(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)));
+    var opId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri));
+    opMap = ModeManager.getOperations(opId);
+    var model = ModeManager.getMode(opId);
 
     var ops_name_length = 0;
     var use_caret = false;
@@ -289,7 +303,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
 
             if (typeof opMap[i].icon != "undefined") {
                 if (typeof opMap[i].iconOnly != "undefined" && opMap[i].iconOnly) {
-                    var op = $('<button class="btn btn-primary opButton" title="' + opMap[i].name + '" id="' + opMap[i].id + '"><span class="' + opMap[i].icon + '"></span></button>');
+                    var op = $('<button class="btn btn-primary opButton" title="' + opMap[i].name + '" id="' + opMap[i].id + '" data="' + opMap[i].advancedMode + '"><span class="' + opMap[i].icon + '"></span></button>');
                     operationArray.push(opMap[i]);
                     op.click(function () {
                         launchOperation(model, $(this).attr('id'), $(this).attr('title'));
@@ -297,7 +311,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
                     });
                     ops.push(op);
                 } else {
-                    var op = $('<button class="btn btn-primary opButton" name="' + opMap[i].name + '" id="' + opMap[i].id + '"><span class="' + opMap[i].icon + '"></span> ' + opMap[i].name + '</button>');
+                    var op = $('<button class="btn btn-primary opButton" name="' + opMap[i].name + '" id="' + opMap[i].id + '" data="' + opMap[i].advancedMode + '"><span class="' + opMap[i].icon + '"></span> ' + opMap[i].name + '</button>');
                     operationArray.push(opMap[i]);
                     op.click(function () {
                         launchOperation(model, $(this).attr('id'), $(this).attr('name'));
@@ -575,78 +589,82 @@ var EditorManager = {
         if (EditorManager.getCurrentUri() !== fileUri
                 && getNodeByFileUri(fileUri) !== undefined) {
 
-            saveCurrentSession();
-
-            var exists = fileUri in EditorManager.tabsMap;
-
-            FileApi.loadFileContents(fileUri, function (content) {
-
-                if (!exists) {
-                    var tabbedInstance = createNewTabbedInstance(fileUri,
-                            content);
-                    if (tabbedInstance === null) // The editor cannot hande this
-                        // resource:
-                        return;
-                }
-
-                loadExistingTabbedInstance(fileUri, content);
-                mayCheckLanguageSyntax(fileUri, function () {
-                    mayCheckLanguageConsistency(fileUri);
-                });
+            saveCurrentSession(function () {
                 
+                // Clear Binding model before loading file
+                            Binding.clearModel();
+                
+                var exists = fileUri in EditorManager.tabsMap;
 
-                var node = getNodeByFileUri(fileUri);
-                if (node !== undefined)
-                    node.activate();
+                FileApi.loadFileContents(fileUri, function (content) {
 
-                // Change editor theme
-                var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri));
-                var editorThemeId;
-                var model = ModeManager.modelMap[modelId];
-
-                if (model.apiVersion >= 2) {
-                    var formats = ModeManager.modelMap[modelId].syntaxes;
-                    var currentFormat = EditorManager.sessionsMap[fileUri].getCurrentFormat();
-                    // TODO: Refactor!
-                    for (var f in formats) {
-                        if (formats[f].id === currentFormat)
-                            editorThemeId = formats[f].editorThemeId;
+                    if (!exists) {
+                        var tabbedInstance = createNewTabbedInstance(fileUri,
+                                content);
+                        if (tabbedInstance === null) // The editor cannot hande this
+                            // resource:
+                            return;
                     }
-                } else {
-                    var formats = ModeManager.modelMap[modelId].formats;
-                    var currentFormat = EditorManager.sessionsMap[fileUri].getCurrentFormat();
-                    // TODO: Refactor!
-                    for (var f in formats) {
-                        if (formats[f].format === currentFormat)
-                            editorThemeId = formats[f].editorThemeId;
+
+                    loadExistingTabbedInstance(fileUri, content);
+
+                    mayCheckLanguageSyntax(fileUri, function () {
+                        mayCheckLanguageConsistency(fileUri);
+                    });
+
+                    var node = getNodeByFileUri(fileUri);
+                    if (node !== undefined)
+                        node.activate();
+
+                    // Change editor theme
+                    var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri));
+                    var editorThemeId;
+                    var model = ModeManager.modelMap[modelId];
+
+                    if (model.apiVersion >= 2) {
+                        var formats = ModeManager.modelMap[modelId].syntaxes;
+                        var currentFormat = EditorManager.sessionsMap[fileUri].getCurrentFormat();
+                        // TODO: Refactor!
+                        for (var f in formats) {
+                            if (formats[f].id === currentFormat)
+                                editorThemeId = formats[f].editorThemeId;
+                        }
+                    } else {
+                        var formats = ModeManager.modelMap[modelId].formats;
+                        var currentFormat = EditorManager.sessionsMap[fileUri].getCurrentFormat();
+                        // TODO: Refactor!
+                        for (var f in formats) {
+                            if (formats[f].format === currentFormat)
+                                editorThemeId = formats[f].editorThemeId;
+                        }
                     }
-                }
 
-                console.log("## editorThemeId: " + editorThemeId);
-                document.editor.setTheme(editorThemeId);
+                    console.log("## editorThemeId: " + editorThemeId);
+                    document.editor.setTheme(editorThemeId);
 
-                // Inspector
-                EditorManager.loadInspector(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)),
-                        EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat());
+                    // Inspector
+                    EditorManager.loadInspector(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)),
+                            EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat());
 
-                if (DescriptionInspector) {
-                    if (!DescriptionInspector.existBinding())
+                    if (DescriptionInspector) {
+                        if (!DescriptionInspector.existBinding())
+                            document.editor.focus();
+
+                        DescriptionInspector.loaders.onEditorOpenFile();
+                    } else {
                         document.editor.focus();
+                    }
 
-                    DescriptionInspector.loaders.onEditorOpenFile();
-                } else {
-                    document.editor.focus();
-                }
-                
-                if (!DEFAULT_FILTER_FILES) {
-                    DEFAULT_FILTER_FILES = true;
-                    toggleShowAllFiles();
-                } else {
-                    $("#editorFooter").show();
-                }
-                
-                if (callback)
-                    callback(content);
+                    if (!DEFAULT_FILTER_FILES) {
+                        DEFAULT_FILTER_FILES = true;
+                        toggleAdvancedMode();
+                    } else {
+                        $("#editorFooter").show();
+                    }
+
+                    if (callback)
+                        callback(content);
+                });
             });
 
         }
@@ -706,6 +724,7 @@ var EditorManager = {
         });
     },
     reset: function () {
+        EditorCheckerIcon.stop();
         EditorManager.currentUri = "";
         // document.editor.destroy();
         document.editor = null;

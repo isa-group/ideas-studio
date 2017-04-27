@@ -5,7 +5,7 @@ var CommandApi = {
         // TODO
         alert("Function analyzeSEDLDocument() here");
     },
-    checkModel: function (content, format, checkModelURI, fileUri, callback) {
+    checkModel: function (content, format, checkModelURI, fileUri, callbackSuccess, callbackError) {
 
         var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri));
         var model = ModeManager.modelMap[modelId];
@@ -25,10 +25,11 @@ var CommandApi = {
             contentType: contentType,
             data: data,
             success: function (result) {
-                callback(result);
+                callbackSuccess(result);
             },
             error: function (result) {
                 console.error(result.statusText);
+                callbackError(result.statusText);
             },
             async: true
         });

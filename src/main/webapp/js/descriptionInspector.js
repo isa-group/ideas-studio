@@ -4411,6 +4411,10 @@ function Binding(id, textNote, startRows, endRows, startColumns, endColumns) {
     }
 }
 
+Binding.clearModel = function () {
+    angular.element("#appBody").scope().clearModel();
+};
+
 /*
  * Obtiene el ID asociado a un Binding a partir de su objeto HTML. @memberof
  * Binding

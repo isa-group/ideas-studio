@@ -47,14 +47,14 @@
         <ul id="myMenu" class="contextMenu">
             <c:if test="${studioConfiguration.advancedMode}">
                 <li class="edit"><a href="#edit">Edit</a></li>
-            </c:if>
+                </c:if>
             <li class="cut separator"><a href="#cut">Cut</a></li>
             <li class="copy"><a href="#copy">Copy</a></li>
             <li class="paste"><a href="#paste">Paste</a></li>
             <li class="delete"><a href="#delete">Delete</a></li>
-            <c:if test="${studioConfiguration.advancedMode}">
+                <c:if test="${studioConfiguration.advancedMode}">
                 <li class="upload separator"><a href="#upload">Upload</a></li>
-            </c:if>
+                </c:if>
         </ul>
         <div id="projectsTree"> </div>
     </div>
@@ -76,16 +76,16 @@
             <i class="material-icons">delete</i>
         </a>
         <label class="switch">
-            <input onchange="toggleShowAllFiles()" type="checkbox">
+            <input onchange="toggleAdvancedMode()" type="checkbox">
             <div class="slider round"></div>
             <span style="
-                position: absolute;
-                bottom: 0;
-                margin-bottom: -25px;
-                right: 10%;
-                text-align: center;
-                color: #777;
-            ">Advanced</span>
+                  position: absolute;
+                  bottom: 0;
+                  margin-bottom: -25px;
+                  right: 10%;
+                  text-align: center;
+                  color: #777;
+                  ">Advanced</span>
         </label>
     </div>
 </div>
@@ -111,6 +111,18 @@
         <div id="editorWrapper">
             <div id="editorTopShadow"></div>
             <div id="editor"></div>
+
+            <!-- Icon checker -->
+            <div class="ball-clip-rotate">
+                <div class="editor-checker-loading" title="Validating current file content..."></div>
+                <div class="editor-checker-icon editor-checker-icon-ok" title="Current file content is valid">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </div>
+                <div class="editor-checker-icon editor-checker-icon-error" onclick="EditorCheckerIcon.toggleBoard()" title="Current file content is invalid">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="ball-clip-rotate editor-checker-board"></div>
         </div>
 
         <div id="editorFooter">

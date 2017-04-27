@@ -277,6 +277,7 @@ var fitBottomPanel = function () {
 var fitEditor = function () {
     fitEditorMainPanel();
     fitBottomPanel();
+    EditorCheckerIcon.fitScrollbar();
     $("#editorItself").resizable(
             "option",
             "maxHeight",

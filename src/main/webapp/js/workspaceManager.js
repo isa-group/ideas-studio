@@ -155,7 +155,7 @@ var WorkspaceManager = {
             
             // Filter extensions
             DEFAULT_FILTER_FILES = true;
-            toggleShowAllFiles();
+            toggleAdvancedMode();
             
             // Check if there is a project called "Demo"
             // Search for Binding file at root 

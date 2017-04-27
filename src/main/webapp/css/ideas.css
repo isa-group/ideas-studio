@@ -2273,3 +2273,76 @@ span[contenteditable] {
 span[contenteditable].ng-empty {
     border: 1px dotted #ff3d3d !important;
 }
+
+span[contentEditable]:empty:not(:focus):before{
+  content:attr(place-text);
+  color:grey;
+}
+
+
+/*  */
+.ball-clip-rotate {
+    position: absolute;
+    z-index: 10;
+    bottom: 1em;
+    right: 1em;
+    display: none;
+}
+.ball-clip-rotate.editor-checker-board p {
+    padding: 0.5em;
+    margin: 0;
+}
+.ball-clip-rotate.editor-checker-board {
+    position: absolute;
+    line-height: 1.2em;
+    white-space: initial;
+    margin-right: 3.7em;
+    width: auto;
+    max-width: 53%;
+    min-width: 20em;
+    right: 1.5em;
+    bottom: 3.5em;
+    border: 1px solid #ffd4d1;
+    font-family: monospace;
+    background: rgba(255, 232, 232, 0.89);
+    color: #e75146;
+    opacity: 1;
+}
+.ball-clip-rotate .editor-checker-loading {
+    border-radius: 100%;
+    border: 2px solid #fff;
+    border-bottom-color: transparent;
+    height: 26px;
+    width: 26px;
+    background: none;
+    display: inline-block;
+    -webkit-animation: rotate .75s 0s linear infinite;
+    animation: rotate .75s 0s linear infinite;
+
+    /*Circle color*/ 
+    border-top-color: #28b473;
+    border-right-color: #28b473;
+    border-left-color: #28b473;
+}
+
+.ball-clip-rotate .editor-checker-icon {
+    display: block;
+    width: 26px;
+    height: 26px;
+    border-radius: 50px;
+    font-size: 1em;
+    line-height: 27px;
+    text-align: center;
+}
+.ball-clip-rotate .editor-checker-icon-ok {
+    background: #28b473;
+    color: #fff;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+.ball-clip-rotate .editor-checker-icon-error {
+    background: rgb(231, 81, 70);
+    color: #fff;
+    cursor: pointer;
+    font-family: monospace;
+}

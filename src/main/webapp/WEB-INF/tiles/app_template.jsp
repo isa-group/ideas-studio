@@ -43,7 +43,7 @@
         <script type="text/javascript" src="js/vendor/jquery.ui.resizable.js"></script>
         <script src='js/vendor/jquery.cookie.js' type="text/javascript"></script>
         <script src='js/dyntree/jquery.dynatree.js' type="text/javascript"></script>
-       <script src="js/vendor/jquery.ui.widget.js"></script>
+        <script src="js/vendor/jquery.ui.widget.js"></script>
         <script src="js/vendor/jquery.iframe-transport.js"></script><!-- Iframe Transport is required for file AJAX upload
                                                              in browsers without support for XHR file uploads -->
         <script src="js/vendor/jquery.fileupload.js"></script>
@@ -71,10 +71,17 @@
         <script src='js/vendor/FileSaver.min.js' type="text/javascript"></script>
         <script type="text/javascript" src="js/appPresenter.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="js/vendor/jsep.min.js"></script>
 
         <script type="text/javascript" src="js/vendor/js-yaml.min.js"></script> <!-- yaml parser -->
         <script type="text/javascript" src="js/vendor/angular.min.js"></script>
         <script type="text/javascript" src="js/vendor/angular-sanitize.min.js"></script>
+
+        <!-- angular-chart -->
+        <script src="js/vendor/Chart.min.js"></script>
+        <script src="js/vendor/angular-chart.min.js"></script>
+
+        <!-- angular app -->
         <script type="text/javascript" src="js/angular/app.js"></script>
         <script type="text/javascript" src="js/angular/directives/ppinotDirective.js"></script>
         <script type="text/javascript" src="js/angular/filters/unquoteFilter.js"></script>
@@ -82,41 +89,48 @@
     </head>
 
     <body id="appTemplateFullBody">
-    	<div id="appLoaderBlocker"></div>
+        <div id="appLoaderBlocker"></div>
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
         <div id="appWrapper">
-		<security:authorize access="hasRole('ADMIN')||hasRole('RESEARCHER')">
-                    <div id="appLeftMenu" class="menuClose">
-                            <tiles:insertAttribute name="left_menu" />
-                    </div>
-                </security:authorize>
-	        <div id="appMainContent">
-	        	<div id="appMainContentBlocker" class="hidden"></div>
-		        <tiles:insertAttribute name="header" />
-		        <div id="appBody" ng-app="mainApp" ng-controller="MainCtrl">
+            <security:authorize access="hasRole('ADMIN')||hasRole('RESEARCHER')">
+                <div id="appLeftMenu" class="menuClose">
+                    <tiles:insertAttribute name="left_menu" />
+                </div>
+            </security:authorize>
+            <div id="appMainContent">
+                <div id="appMainContentBlocker" class="hidden"></div>
+                <tiles:insertAttribute name="header" />
+                <div id="appBody" ng-app="mainApp" ng-controller="MainCtrl">
                     <input id="editorContent" style="display:block;" type="text" ng-change="editorContentToModel()" ng-model="modelString" />
                     <input id="compileModel" style="display:none;" type="text" ng-change="compileModel()" ng-model="compilationFlag" />
                     <input id="compileModelFormatView" style="display:none;" type="text" ng-change="compileModelFormatView()" ng-model="compilationFlagFormatView" />
-		        	<div id="appBodyBlocker"></div>
-		        	<div id="appBodyLoader">
-		        		<tiles:insertAttribute name="body"/>
-		        	</div>
-		        </div>
-		        <tiles:insertAttribute name="footer" />
-	       	</div>
-	    </div>
+                    <div id="appBodyBlocker"></div>
+                    <div id="appBodyLoader">
+                        <tiles:insertAttribute name="body"/>
+                    </div>
+                </div>
+                <tiles:insertAttribute name="footer" />
+            </div>
+        </div>
 
         <!-- Google Analytics. -->
         <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-        ga('create', '${studioConfiguration.googleAnalyticsID}', 'auto');
-        ga('send', 'pageview');
+            ga('create', '${studioConfiguration.googleAnalyticsID}', 'auto');
+            ga('send', 'pageview');
 
         </script>
     </body>

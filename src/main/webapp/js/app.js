@@ -1,7 +1,9 @@
 // App. Initialization:
 jQuery(function () {
-    
-    toggleShowAllFiles = function () {        
+
+    toggleAdvancedMode = function () {
+
+        var operationId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(EditorManager.currentUri));
         var allFiles = $(".dynatree-title");
         // 
         if (DEFAULT_FILTER_FILES === false) {
@@ -11,10 +13,10 @@ jQuery(function () {
                     $(this).closest("li").show();
                 }
             });
-            
+
             // Show inspector
             $("#editorToggleInspector").show();
-            
+
             if (EditorManager.currentUri !== "") {
                 // Show format tabs
                 if ($("#editorFooter li").length > 0)
@@ -25,7 +27,18 @@ jQuery(function () {
                     DescriptionInspector.expandConsole('contract');
                 }
             }
+
+            // Show advanced operations
+            if (!!opMap && typeof opMap === "object") {
+                Object.keys(opMap).forEach(function (e) {
+                    if (opMap[e].advanced === true) {
+                        $("#" + opMap[e].id).show();
+                    }
+                })
+            }
+
             DEFAULT_FILTER_FILES = !DEFAULT_FILTER_FILES;
+
         } else {
             // Enable filter
             allFiles.each(function () {
@@ -35,19 +48,29 @@ jQuery(function () {
                     //TODO: close files
                 }
             });
-            
+
             // Hide inspector
-            if ( $("#editorToggleInspector").hide().hasClass("hdd") ) toggleInspector();
-            
+            if ($("#editorToggleInspector").hide().hasClass("hdd"))
+                toggleInspector();
+
             if (EditorManager.currentUri !== "") {
                 // Hide format tabs
                 $("#editorFooter").hide();
                 $("#editorWrapper").css("bottom", "0");
-                
+
                 // Hide console
                 DescriptionInspector.expandConsole('hide');
             }
-            
+
+            // Hide advanced operations
+            if (!!opMap && typeof opMap === "object") {
+                Object.keys(opMap).forEach(function (e) {
+                    if (opMap[e].advanced === true) {
+                        $("#" + opMap[e].id).hide();
+                    }
+                })
+            }
+
             DEFAULT_FILTER_FILES = !DEFAULT_FILTER_FILES;
         }
     };
@@ -74,7 +97,7 @@ jQuery(function () {
             var workspaceName = normalizeWSName($("#modalCreationField input").val());
             var description = $("#descriptionInput textarea").val();
             var tags = $("#tagsInput textarea").val();
-            
+
             if (workspaceName !== "") {
                 $("#workspacesNavContainer li").removeClass("active");
                 WorkspaceManager.createWorkspace(workspaceName, description, tags, function () {
@@ -85,14 +108,14 @@ jQuery(function () {
             } else {
                 alert("Unable to create workspace");
             }
-            
+
         });
         // Update workspace name from file
         setTimeout(function () {
             $(".modal-body").find('[data-toggle="collapse"][data-target="#zipFileDiv"]').unbind("click").on("click", function () {
                 $("#zipFile").unbind("change").on("change", function () {
                     var fpath = $(this).val().replace(/\\/g, '/');
-                    var fname = fpath.substring(fpath.lastIndexOf('/')+1, fpath.lastIndexOf('.'));
+                    var fname = fpath.substring(fpath.lastIndexOf('/') + 1, fpath.lastIndexOf('.'));
                     $("#modalCreationField input").val(fname);
                 });
             });
@@ -108,7 +131,7 @@ jQuery(function () {
                     WorkspaceManager.loadWorkspace();
                 } else if (wss.length == 0) {
                     CommandApi.importDemoWorkspace("SampleWorkspace",
-                        "SampleWorkspace");
+                            "SampleWorkspace");
                 }
             } else {
                 WorkspaceManager.loadWorkspace();
@@ -131,22 +154,22 @@ jQuery(function () {
 
 // Modal:
 var showModal = function (title, content, primaryText, primaryHandler,
-    cancelHandler, closeHandler) {
+        cancelHandler, closeHandler) {
     if ($("#appGenericModal"))
         $("#appGenericModal").remove();
     $("body")
-        .append(
-            '<!-- Modal for all app -->'
-            + '<div class="modal" id="appGenericModal" data-backdrop="true" data-keyboard="true">'
-            + '<div class="modal-dialog">'
-            + '<div class="modal-content">'
-            + '<div class="modal-header">'
-            + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'
-            + '<h4 class="modal-title">Modal title</h4></div>'
-            + '<div class="modal-body">  ...</div>'
-            + '<div class="modal-footer">'
-            + '  <a data-dismiss="modal" class="btn dismiss">Close</a>'
-            + '  <a class="btn btn-primary continue"></a></div>  </div></div></div>');
+            .append(
+                    '<!-- Modal for all app -->'
+                    + '<div class="modal" id="appGenericModal" data-backdrop="true" data-keyboard="true">'
+                    + '<div class="modal-dialog">'
+                    + '<div class="modal-content">'
+                    + '<div class="modal-header">'
+                    + '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'
+                    + '<h4 class="modal-title">Modal title</h4></div>'
+                    + '<div class="modal-body">  ...</div>'
+                    + '<div class="modal-footer">'
+                    + '  <a data-dismiss="modal" class="btn dismiss">Close</a>'
+                    + '  <a class="btn btn-primary continue"></a></div>  </div></div></div>');
     $('#appGenericModal .modal-title').text(title);
     $('#appGenericModal .modal-body').empty();
     $('#appGenericModal .modal-body').append(content);
@@ -157,16 +180,16 @@ var showModal = function (title, content, primaryText, primaryHandler,
     $('#appGenericModal').modal({
         show: true
     });
-    $("#appGenericModal").click(function() {
+    $("#appGenericModal").click(function () {
         cancelHandler();
     });
-    $(".modal-dialog").click(function(event){
+    $(".modal-dialog").click(function (event) {
         event.stopPropagation();
     });
 };
 
 var showContentAsModal = function (url, primaryHandler, cancelHandler,
-    closeHandler) {
+        closeHandler) {
     if ($("#appGenericModal"))
         $("#appGenericModal").remove();
     $.ajax({
@@ -195,8 +218,8 @@ var showError = function (title, content, primaryHandler) {
     if ($("#appGenericError"))
         $("#appGenericError").remove();
     $("body")
-        .append(
-            '<!-- Modal for all app --><div class="modal" id="appGenericError"><div class="modal-dialog">  <div class="modal-content"><div class="modal-header">  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>  <h4 class="modal-title">Modal title</h4></div><div class="modal-body"> </div><div class="modal-footer">   <a class="btn btn-primary continue"></a></div>  </div></div></div>');
+            .append(
+                    '<!-- Modal for all app --><div class="modal" id="appGenericError"><div class="modal-dialog">  <div class="modal-content"><div class="modal-header">  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>  <h4 class="modal-title">Modal title</h4></div><div class="modal-body"> </div><div class="modal-footer">   <a class="btn btn-primary continue"></a></div>  </div></div></div>');
     $('#appGenericError .modal-title').text(title);
     $('#appGenericError .modal-body').html(content);
     $('#appGenericError .continue').text("OK");
@@ -235,25 +258,105 @@ var toggleMenu = function () {
 var compareObjects = function equals(obj1, obj2) {
     function _equals(obj1, obj2) {
         var clone = $.extend(true, {}, obj1),
-            cloneStr = JSON.stringify(clone, function( key, value ) {
-                                    if( key === "$$hashKey" ) {
-                                        return undefined;
-                                    }
+                cloneStr = JSON.stringify(clone, function (key, value) {
+                    if (key === "$$hashKey") {
+                        return undefined;
+                    }
 
-                                    return value;
-                                });
-        return cloneStr === JSON.stringify($.extend(true, clone, obj2), function( key, value ) {
-                                    if( key === "$$hashKey" ) {
-                                        return undefined;
-                                    }
+                    return value;
+                });
+        return cloneStr === JSON.stringify($.extend(true, clone, obj2), function (key, value) {
+            if (key === "$$hashKey") {
+                return undefined;
+            }
 
-                                    return value;
-                                });
+            return value;
+        });
     }
 
     return _equals(obj1, obj2) && _equals(obj2, obj1);
 }
 
 var normalizeWSName = function (s) {
-    return s.replace(/\s+/g,"-").replace(/[|&;:$%@"<>()+,]/g, "");
+    return s.replace(/\s+/g, "-").replace(/[|&;:$%@"<>()+,]/g, "");
 }
+
+
+var EditorCheckerIcon = {
+    loading: function () {
+        this.fitScrollbar();
+        $(".ball-clip-rotate").show();
+        $(".editor-checker-loading").show();
+        $(".editor-checker-icon-ok").hide();
+        $(".editor-checker-icon-error").hide();
+        $(".editor-checker-board").hide();
+        this.clearBoard();
+    },
+    success: function () {
+        this.fitScrollbar();
+        $(".ball-clip-rotate").show();
+        $(".editor-checker-loading").hide();
+        $(".editor-checker-icon-ok").fadeIn();
+        $(".editor-checker-icon-error").hide();
+        $(".editor-checker-board").hide();
+        this.clearBoard();
+    },
+    error: function (obj) {
+        this.fitScrollbar();
+        $(".ball-clip-rotate").show();
+        $(".editor-checker-loading").hide();
+        $(".editor-checker-icon-ok").hide();
+        $(".editor-checker-icon-error").text(obj.annotations.length).fadeIn();
+        $(".editor-checker-board").hide();
+        this.clearBoard();
+        obj.annotations.forEach(function (annotation) {
+            var row = parseInt(annotation.row, 10) + 1;
+            var col = parseInt(annotation.column, 10) + 1;
+            $(".editor-checker-board").append("<p style='cursor: pointer;' onclick='document.editor.gotoLine(" + row + ", " + col + ", true);'><u>" + annotation.text + ":" + row + ":" + col + "</u></p>");
+        });
+    },
+    stop: function () {
+        $(".ball-clip-rotate").hide();
+        $(".editor-checker-board").hide();
+    },
+    clearBoard: function () {
+        $(".editor-checker-board").html("");
+    },
+    goLine: function (annotation) {
+        document.editor.gotoLine(annotation.row, annotation.column, true);
+    },
+    toggleBoard: function () {
+        if (!$(".editor-checker-board").is(':animated')) {
+            if ($(".editor-checker-board").is(':visible')) {
+                $(".editor-checker-board").toggle('slide', {
+                    direction: 'right'
+                }, 500);
+            } else {
+                $(".editor-checker-board").toggle('slide', {
+                    direction: 'right'
+                }, 500);
+            }
+        }
+    },
+    fitScrollbar: function () {
+        var editorHasScrollV = $(".ace_scrollbar-v").is(":visible");
+        var editorHasScrollH = $(".ace_scrollbar-h").is(":visible");
+        
+        if (editorHasScrollV) {
+            $(".ball-clip-rotate").css("right", "2.5em");
+            $(".ball-clip-rotate.editor-checker-board").css({"right": "1.5em", "margin-right": "3.7em"});
+        } else {
+            $(".ball-clip-rotate").css("right", "1em");
+            $(".ball-clip-rotate.editor-checker-board").css({"right": "0", "margin-right": "5.2em"});
+        }
+        
+        if (editorHasScrollH) {
+            $(".ball-clip-rotate").css("bottom", "2.5em");
+            $(".editor-checker-board").css("bottom", "4.5em");
+        } else {
+            $(".ball-clip-rotate").css("bottom", "1em");
+            $(".editor-checker-board").css("bottom", "3.5em");
+        }
+        
+    }
+};
