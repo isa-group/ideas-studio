@@ -245,6 +245,10 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                             } else if (format === "int" || format === "integer") {
                                 data = parseInt(data, 10);
                             }
+                        } else if (!!data) {
+                            if (!isNaN(data)) {
+                                data = parseFloat(data);
+                            }
                         }
                         ngModel.$setViewValue(data);
                     };
@@ -257,13 +261,6 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                     element.bind("blur keyup change", function () {
                         scope.$apply(read(attrs));
                     });
-
-//                    element.bind("click", function () {
-//                        if (!isNaN($(this).text())) {
-//                            debugger;
-//                            this.setSelectionRange(0, $(this).text().length);
-//                        }
-//                    });
                 }
             };
         }).filter('capitalize', function () {
