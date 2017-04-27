@@ -3,7 +3,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
         .controller("MainCtrl", ["$scope", "$compile", "$q", "$http", "$timeout", "$state", "$location", "$stateParams", function ($scope, $compile, $q, $http, $timeout, $state, $location, $stateParams) {
 
                 $scope.model = {};
-        
+
                 $scope.$timeout = $timeout;
 
                 // Update editor content from model
@@ -172,11 +172,11 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                 var print = function (styleData) {
                     var prtContent = document.getElementById("modelBoardContent");
                     $scope.WinPrint = 1;
-                    
+
                     showModal("Print view is enabled", "Please, close print window before using " + studioConfiguration.workbenchName + " workbench.",
-                        "Ok", closeWinPrint,
-                        closeWinPrint, closeWinPrint);
-                    
+                            "Ok", closeWinPrint,
+                            closeWinPrint, closeWinPrint);
+
                     $scope.$apply();
                     $scope.WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
                     if (styleData)
@@ -189,10 +189,10 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                     $scope.WinPrint.close();
                     $scope.WinPrint = null;
                     $scope.$apply();
-                    
+
                     hideModal();
                 };
-                
+
                 var closeWinPrint = function () {
                     $scope.WinPrint.close();
                 };
@@ -203,8 +203,12 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                 $scope.print = function () {
                     var style = "";
                     $.when(
-                $.get("css/bootstrap.css", function(data) {style += "<style>" + data + "</style>";}),
-                $.get("css/print.css", function(data) {style += "<style>" + data + "</style>";})
+                            $.get("css/bootstrap.css", function (data) {
+                                style += "<style>" + data + "</style>";
+                            }),
+                            $.get("css/print.css", function (data) {
+                                style += "<style>" + data + "</style>";
+                            })
                             ).then(function () {
                         print(style);
                     }, function () {
@@ -213,7 +217,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                         print();
                     });
                 };
-                
+
                 $scope.clearModel = function () {
                     if (!!$scope.model && typeof $scope.model === "object") {
                         $scope.model = '';
@@ -229,14 +233,14 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                 scope: {ngModel: '='},
                 link: function (scope, element, attrs, ngModel) {
 
-                    function read() {
+                    var read = function () {
                         var data = element.text();
-                        if (!isNaN(Number(data)) && data !== "") { // if is number
+                        if (isNumber(data)) { // if is number
                             ngModel.$setViewValue(parseFloat(data));
                         } else {
                             ngModel.$setViewValue(data);
                         }
-                    }
+                    };
 
                     ngModel.$render = function () {
                         if (ngModel.$viewValue === undefined)
@@ -256,3 +260,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
     }
 });
 ;
+
+var isNumber = function (data) {
+    return !isNaN(Number(data)) && data !== "" && typeof data !== "string";
+};
