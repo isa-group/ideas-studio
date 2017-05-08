@@ -80,6 +80,7 @@
         <!-- angular-chart -->
         <script src="js/vendor/Chart.min.js"></script>
         <script src="js/vendor/angular-chart.min.js"></script>
+        <script src="js/vendor/chartjs-plugin-annotation.min.js"></script>
 
         <!-- angular app -->
         <script type="text/javascript" src="js/angular/app.js"></script>
