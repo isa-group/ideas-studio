@@ -270,7 +270,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                         element.html((value === undefined) ? "" : value);
                     };
 
-                    element.bind("blur keyup change", function () {
+                    element.bind("keyup change", function () {
                         scope.$apply(read(attrs));
                     });
                 }
