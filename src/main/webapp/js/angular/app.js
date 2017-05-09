@@ -227,55 +227,60 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
 
             }])
         .directive("contenteditable", ['$timeout', function ($timeout) {
-            return {
-                restrict: "A",
-                require: "ngModel",
-                transclude: true,
-                scope: {ngModel: '=', format: '=', timeout: '='},
-                link: function (scope, element, attrs, ngModel) {
-                    
-                    var timer = undefined;
+                return {
+                    restrict: "A",
+                    require: "ngModel",
+                    transclude: true,
+                    scope: {ngModel: '=', format: '=', timeout: '='},
+                    link: function (scope, element, attrs, ngModel) {
 
-                    var read = function (attrs) {
-                        var data = element.text();
-                        var format = attrs.format;
-                        
-                        if (!!timer) {
-                            $timeout.cancel(timer);
-                        }
-                        
-                        timer = $timeout(function () {
-                            
-                            if (!!format && !!data) {
-                                if (format === "number" || format === "double") {
-                                    data = parseFloat(data);
-                                } else if (format === "string") {
-                                    data = String(data);
-                                } else if (format === "int" || format === "integer") {
-                                    data = parseInt(data, 10);
-                                }
-                            } else if (!!data) {
-                                if (!isNaN(data)) {
-                                    data = parseFloat(data);
-                                }
+                        var timer = undefined;
+
+                        var read = function (attrs, fileUri) {
+
+                            var data = element.text();
+                            var format = attrs.format;
+
+                            if (!!timer) {
+                                $timeout.cancel(timer);
                             }
-                            
-                            ngModel.$setViewValue(data);
-                            
-                        }, !isNaN(attrs.timeout) ? Number(attrs.timeout): 0);
-                    };
 
-                    ngModel.$render = function () {
-                        var value = ngModel.$viewValue;
-                        element.html((value === undefined) ? "" : value);
-                    };
+                            timer = $timeout(function () {
 
-                    element.bind("keyup change", function () {
-                        scope.$apply(read(attrs));
-                    });
-                }
-            };
-        }]).filter('capitalize', function () {
+                                if (fileUri === EditorManager.currentUri) {
+
+                                    if (!!format && !!data) {
+                                        if (format === "number" || format === "double") {
+                                            data = parseFloat(data);
+                                        } else if (format === "string") {
+                                            data = String(data);
+                                        } else if (format === "int" || format === "integer") {
+                                            data = parseInt(data, 10);
+                                        }
+                                    } else if (!!data) {
+                                        if (!isNaN(data)) {
+                                            data = parseFloat(data);
+                                        }
+                                    }
+
+                                    ngModel.$setViewValue(data);
+
+                                }
+
+                            }, !isNaN(attrs.timeout) ? Number(attrs.timeout) : 0);
+                        };
+
+                        ngModel.$render = function () {
+                            var value = ngModel.$viewValue;
+                            element.html((value === undefined) ? "" : value);
+                        };
+
+                        element.bind("keyup change", function () {
+                            scope.$apply(read(attrs, EditorManager.currentUri));
+                        });
+                    }
+                };
+            }]).filter('capitalize', function () {
     return function (input) {
         return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
     }
