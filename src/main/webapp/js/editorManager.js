@@ -180,8 +180,11 @@ var initAceEditor = function () {
 };
 
 var loadExistingTabbedInstance = function (fileUri, content) {
+    
+    Binding.clearModel();
 
     if (document.editor == null) {
+        
         initAceEditor();
 
         document.editor
@@ -591,9 +594,6 @@ var EditorManager = {
 
             saveCurrentSession(function () {
                 
-                // Clear Binding model before loading file
-                            Binding.clearModel();
-                
                 var exists = fileUri in EditorManager.tabsMap;
 
                 FileApi.loadFileContents(fileUri, function (content) {
@@ -646,6 +646,7 @@ var EditorManager = {
                     EditorManager.loadInspector(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)),
                             EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat());
 
+                    // Load Binding content
                     if (DescriptionInspector) {
                         if (!DescriptionInspector.existBinding())
                             document.editor.focus();

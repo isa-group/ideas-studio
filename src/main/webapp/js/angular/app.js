@@ -220,7 +220,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
 
                 $scope.clearModel = function () {
                     if (!!$scope.model && typeof $scope.model === "object") {
-                        $scope.model = '';
+                        $scope.model = undefined;
                         $scope.$apply();
                     }
                 };
