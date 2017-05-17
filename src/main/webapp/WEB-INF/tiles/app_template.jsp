@@ -72,6 +72,7 @@
         <script type="text/javascript" src="js/appPresenter.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
         <script type="text/javascript" src="js/vendor/jsep.min.js"></script>
+        <script type="text/javascript" src="js/vendor/mustache.min.js"></script>
 
         <script type="text/javascript" src="js/vendor/js-yaml.min.js"></script> <!-- yaml parser -->
         <script type="text/javascript" src="js/vendor/angular.min.js"></script>
@@ -81,6 +82,7 @@
         <script src="js/vendor/Chart.min.js"></script>
         <script src="js/vendor/angular-chart.min.js"></script>
         <script src="js/vendor/chartjs-plugin-annotation.min.js"></script>
+        <script src="js/vendor/chartjs-plugin-draggable.min.js"></script>
 
         <!-- angular app -->
         <script type="text/javascript" src="js/angular/app.js"></script>
