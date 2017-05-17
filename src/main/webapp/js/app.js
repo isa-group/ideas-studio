@@ -1,6 +1,44 @@
 // App. Initialization:
 jQuery(function () {
 
+    var AdvancedModeManager = {
+        getNodes: function () {
+            return $(".dynatree-title");
+        },
+        getFilterLanguageExtensions: function () {
+            return CONFIG_FILE_EXTENSIONS_TO_FILTER;
+        },
+        getFilterValue: function () {
+            return DEFAULT_FILTER_FILES;
+        },
+        showFilteredNodes: function () {
+            var _this = this;
+            this.getNodes().each(function () {
+                if (_this.getFilterLanguageExtensions().indexOf($(this).text().split('.').pop()) !== -1) {
+                    $(this).closest("li").show();
+                }
+            });
+        },
+        hideFilteredNodes: function () {
+            var _this = this;
+            this.getNodes().each(function () {
+                var isFolder = $(this).closest("span").hasClass("dynatree-folder");
+                if (!isFolder && _this.getFilterLanguageExtensions().indexOf($(this).text().split('.').pop()) !== -1) {
+                    $(this).closest("li").hide();
+                    //TODO: close files
+                }
+            });
+        },
+        apply: function () {
+            if (this.getFilterValue() === false) {
+                this.showFilteredNodes();
+            } else {
+                this.hideFilteredNodes();
+            }
+        }
+
+    };
+
     toggleAdvancedMode = function () {
 
         var operationId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(EditorManager.currentUri));
@@ -341,7 +379,7 @@ var EditorCheckerIcon = {
     fitScrollbar: function () {
         var editorHasScrollV = $(".ace_scrollbar-v").is(":visible");
         var editorHasScrollH = $(".ace_scrollbar-h").is(":visible");
-        
+
         if (editorHasScrollV) {
             $(".ball-clip-rotate").css("right", "2.5em");
             $(".ball-clip-rotate.editor-checker-board").css({"right": "1.5em", "margin-right": "3.7em"});
@@ -349,7 +387,7 @@ var EditorCheckerIcon = {
             $(".ball-clip-rotate").css("right", "1em");
             $(".ball-clip-rotate.editor-checker-board").css({"right": "0", "margin-right": "5.2em"});
         }
-        
+
         if (editorHasScrollH) {
             $(".ball-clip-rotate").css("bottom", "2.5em");
             $(".editor-checker-board").css("bottom", "4.5em");
@@ -357,6 +395,6 @@ var EditorCheckerIcon = {
             $(".ball-clip-rotate").css("bottom", "1em");
             $(".editor-checker-board").css("bottom", "3.5em");
         }
-        
+
     }
 };
