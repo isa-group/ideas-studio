@@ -280,7 +280,19 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                         });
                     }
                 };
-            }]).filter('capitalize', function () {
+            }]).directive('dynamic', function ($compile) {
+	  return {
+	    restrict: 'A',
+	    replace: true,
+	    link: function (scope, ele, attrs) {
+	      scope.$watch(attrs.dynamic, function(html) {
+	        ele.html(html);
+	        $compile(ele.contents())(scope);
+	      });
+	    }
+	  };
+	})
+                .filter('capitalize', function () {
     return function (input) {
         return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
     }
