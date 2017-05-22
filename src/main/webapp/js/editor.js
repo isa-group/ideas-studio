@@ -15,13 +15,13 @@ var initializeEditor = function () {
                 MenuManager.setupGlobalMenu("Create $1 file");
             });
             if (localStorage.getItem("demo") == "demo") {
-                $.ajaxSetup({
-                    cache: false,
-                    headers: { 
-                        "Cache-Control": "no-cache",
-                        "Pragma": "no-cache"
-                    }
-                });
+//                $.ajaxSetup({
+//                    cache: false,
+//                    headers: { 
+//                        "Cache-Control": "no-cache",
+//                        "Pragma": "no-cache"
+//                    }
+//                });
                 if (localStorage.getItem("ws") != "") {
                     auxGenerateDemo(localStorage.getItem("ws"), localStorage.getItem("ws"), undefined, function () {
                         $("#menuToggler").hide();
