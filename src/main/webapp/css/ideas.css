@@ -2346,3 +2346,16 @@ span[contentEditable]:empty:not(:focus):before{
     cursor: pointer;
     font-family: monospace;
 }
+
+
+/* Blurring */
+
+@-webkit-keyframes appMainContent_blur {
+    0% { -webkit-filter: blur(0px);}
+    100% { -webkit-filter: blur(0.75px);}
+}
+
+@-webkit-keyframes appMainContent_focus {
+    0% { -webkit-filter: blur(0.75px);}
+    100% { -webkit-filter: blur(0px);}
+}

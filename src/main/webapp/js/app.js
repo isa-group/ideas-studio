@@ -242,16 +242,19 @@ var hideModal = function () {
 var toggleMenu = function () {
     var leftMenu = $("#appLeftMenu");
     var contentBlocker = $("#appMainContentBlocker");
+    var appMainContentWrapper = $("#appMainContent");
     if (leftMenu.hasClass("menuClose")) {
         leftMenu.addClass("menuOpen");
         leftMenu.removeClass("menuClose");
         contentBlocker.addClass("visible");
         contentBlocker.removeClass("hidden");
+        appMainContentWrapper.css({"-webkit-animation": "appMainContent_blur 1s normal forwards", "cursor": "pointer"});
     } else {
         leftMenu.addClass("menuClose");
         leftMenu.removeClass("menuOpen");
         contentBlocker.addClass("hidden");
         contentBlocker.removeClass("visible");
+        appMainContentWrapper.css({"-webkit-animation": "appMainContent_focus 1s normal forwards", "cursor": ""});
     }
 };
 
