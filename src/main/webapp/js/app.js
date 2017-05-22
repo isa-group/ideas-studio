@@ -1,44 +1,6 @@
 // App. Initialization:
 jQuery(function () {
 
-    var AdvancedModeManager = {
-        getNodes: function () {
-            return $(".dynatree-title");
-        },
-        getFilterLanguageExtensions: function () {
-            return CONFIG_FILE_EXTENSIONS_TO_FILTER;
-        },
-        getFilterValue: function () {
-            return DEFAULT_FILTER_FILES;
-        },
-        showFilteredNodes: function () {
-            var _this = this;
-            this.getNodes().each(function () {
-                if (_this.getFilterLanguageExtensions().indexOf($(this).text().split('.').pop()) !== -1) {
-                    $(this).closest("li").show();
-                }
-            });
-        },
-        hideFilteredNodes: function () {
-            var _this = this;
-            this.getNodes().each(function () {
-                var isFolder = $(this).closest("span").hasClass("dynatree-folder");
-                if (!isFolder && _this.getFilterLanguageExtensions().indexOf($(this).text().split('.').pop()) !== -1) {
-                    $(this).closest("li").hide();
-                    //TODO: close files
-                }
-            });
-        },
-        apply: function () {
-            if (this.getFilterValue() === false) {
-                this.showFilteredNodes();
-            } else {
-                this.hideFilteredNodes();
-            }
-        }
-
-    };
-
     toggleAdvancedMode = function () {
 
         var operationId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(EditorManager.currentUri));
@@ -397,4 +359,45 @@ var EditorCheckerIcon = {
         }
 
     }
+};
+
+/**
+ * AdvancedModeManager to modify workbench views.
+ */
+var AdvancedModeManager = {
+    getNodes: function () {
+        return $(".dynatree-title");
+    },
+    getFilterLanguageExtensions: function () {
+        return !!window["CONFIG_FILE_EXTENSIONS_TO_FILTER"] && CONFIG_FILE_EXTENSIONS_TO_FILTER ? CONFIG_FILE_EXTENSIONS_TO_FILTER: [];
+    },
+    getFilterValue: function () {
+        return !!window["DEFAULT_FILTER_FILES"] && DEFAULT_FILTER_FILES ? DEFAULT_FILTER_FILES: false;
+    },
+    showFilteredNodes: function () {
+        var _this = this;
+        this.getNodes().each(function () {
+            if (_this.getFilterLanguageExtensions().indexOf($(this).text().split('.').pop()) !== -1) {
+                $(this).closest("li").show();
+            }
+        });
+    },
+    hideFilteredNodes: function () {
+        var _this = this;
+        this.getNodes().each(function () {
+            var isFolder = $(this).closest("span").hasClass("dynatree-folder");
+            if (!isFolder && _this.getFilterLanguageExtensions().indexOf($(this).text().split('.').pop()) !== -1) {
+                $(this).closest("li").hide();
+                //TODO: close files
+            }
+        });
+    },
+    apply: function () {
+        if (this.getFilterValue() === false) {
+            this.hideFilteredNodes();
+        } else {
+            this.showFilteredNodes();
+        }
+    }
+
 };

@@ -254,6 +254,16 @@ $(function () {
                 // return false;
             }
         },
+        onExpand: function (flag, dtnode) {
+            
+            // Check if AdvancedMode manager exist since it is located in app.js
+            if (window["AdvancedModeManager"]) { 
+                if (flag) {
+                    AdvancedModeManager.apply();
+                }
+            }
+            
+        },
         onKeydown: function (node, event) {
             // Eat keyboard events, when a menu is open
             if ($(".contextMenu:visible").length > 0)
