@@ -46,6 +46,11 @@ public class DemoController extends AbstractController {
     public DemoController() {
     }
 
+    @RequestMapping("/*/wizard")
+    public ModelAndView generateWizardDemoUser(HttpServletRequest request) {
+        return this.generateDemoUser(request);
+    }
+
     @RequestMapping("/*")
     public ModelAndView generateDemoUser(HttpServletRequest request) {
 

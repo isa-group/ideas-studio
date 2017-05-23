@@ -404,3 +404,39 @@ var AdvancedModeManager = {
     }
 
 };
+
+var WizardViewManager = {
+    mayApply: function () {
+        return !!localStorage && !!localStorage.getItem("isWizard") && localStorage.getItem("isWizard") === "true";
+    },
+    apply: function () {
+        
+        if (this.mayApply()) {
+            
+            // Hide css contents with jQuery
+            // #appHeader
+            ["#editorSidePanel", "#editorHeader", "#editorBottomPanel", ".ui-resizable-handle"].forEach(function (e){
+                $(e).hide();
+            });
+            
+            setTimeout(function () {
+                $("#editorMainPanel").css({
+                    width: "100%"
+                });
+
+                $("#editorItself").css({
+                    height: "100%"
+                });
+
+                $("#appBody").css({
+                    top: "33px"
+                });
+
+                $("#editorWrapper").css({
+                    top: "0"
+                }); 
+            }, 2000);
+
+        }
+    }
+};

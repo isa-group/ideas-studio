@@ -31,7 +31,8 @@ var initializeEditor = function () {
                     });
                 }
             }
-        }); 
+        });
+        WizardViewManager.apply();
     });
 };
 
@@ -114,58 +115,63 @@ var intializeEditorWindow = function (callback) {
         }
     });
 
-    // Setup editor interface and editor window events:
-    $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function () {
-        MenuManager.setupGlobalMenu("Create $1 file");
-    });
-    $("#editorSidePanel").resizable({
-        maxWidth: 900,
-        minWidth: 150,
-        handles: "e"
-    });
-    $("#editorSidePanel").resize(fitEditorMainPanel);
-    $("#editorItself").resizable({
-        maxHeight: 800,
-        minHeight: 51,
-        handles: "s"
-    });
-    $("#editorItself").resize(fitBottomPanel);
-    $("#editorInspector").resizable({
-        maxWidth: 900,
-        minWidth: 150,
-        handles: "w"
-    });
-    $("#editorInspector").resize(function () {
-        $("#editorInspector").css("left", "0");
-        fitEditorMainPanel();
-    });
-    $(window).resize(function (e) {
-        if (e.originalEvent.type !== "mousemove") {
-            $("#editorItself").height(($(window).height() - $("#appHeader").height()
-            - $("#appFooter").height() - 52)/$("#editorMainPanel").height()*100 + "%");
+    // Allow editor resize only if it is not a Wizard.
+    if (!WizardViewManager.mayApply()) {
+
+        // Setup editor interface and editor window events:
+        $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function () {
+            MenuManager.setupGlobalMenu("Create $1 file");
+        });
+        $("#editorSidePanel").resizable({
+            maxWidth: 900,
+            minWidth: 150,
+            handles: "e"
+        });
+        $("#editorSidePanel").resize(fitEditorMainPanel);
+        $("#editorItself").resizable({
+            maxHeight: 800,
+            minHeight: 51,
+            handles: "s"
+        });
+        $("#editorItself").resize(fitBottomPanel);
+        $("#editorInspector").resizable({
+            maxWidth: 900,
+            minWidth: 150,
+            handles: "w"
+        });
+        $("#editorInspector").resize(function () {
+            $("#editorInspector").css("left", "0");
+            fitEditorMainPanel();
+        });
+        $(window).resize(function (e) {
+            if (e.originalEvent.type !== "mousemove") {
+                $("#editorItself").height(($(window).height() - $("#appHeader").height()
+                        - $("#appFooter").height() - 52) / $("#editorMainPanel").height() * 100 + "%");
                 fitEditor();
-        } else {
-            fitEditor();
-        }
-    });
-    $("#editorMaximize").click(maximize);
-    $("#editorToggleInspector").click(toggleInspector);
-    //share Document
-    $("#shareDocument").click(function () {
-        $("#shareDocumentModal").show();
-        $("#mailContent").val(EditorManager.getCurrentEditorContent());
-    });
-    $("#shareDocClosed").click(function () {
-        $("#shareDocumentModal").hide();
-    });
-    $("#sendMail").click(function () {
-        var to = $("#mailTo").val();
-        var content = $("#mailContent").val();
-        share(to, content);
-        $("#shareDocumentModal").hide();
-    });
-    // Finally we show and fit the editor :
-    fitEditor();
+            } else {
+                fitEditor();
+            }
+        });
+        $("#editorMaximize").click(maximize);
+        $("#editorToggleInspector").click(toggleInspector);
+        //share Document
+        $("#shareDocument").click(function () {
+            $("#shareDocumentModal").show();
+            $("#mailContent").val(EditorManager.getCurrentEditorContent());
+        });
+        $("#shareDocClosed").click(function () {
+            $("#shareDocumentModal").hide();
+        });
+        $("#sendMail").click(function () {
+            var to = $("#mailTo").val();
+            var content = $("#mailContent").val();
+            share(to, content);
+            $("#shareDocumentModal").hide();
+        });
+        // Finally we show and fit the editor :
+        fitEditor();
+
+    }
     
     if (callback) callback();
 };
