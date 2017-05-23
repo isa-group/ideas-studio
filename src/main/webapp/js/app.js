@@ -438,5 +438,35 @@ var WizardViewManager = {
             }, 2000);
 
         }
+    },
+    mock: function (flag) {
+        
+        if (this.mayApply()) {
+            
+            var CLONE_CLASS = "cloned";
+
+            if (flag) {
+
+                var clone = $("#modelBoardContent").clone();
+                clone.css({
+                    //filter: "blur(3px)"
+                }).addClass(CLONE_CLASS).removeAttr("id");
+
+                $("#modelBoardContent").hide();
+                $("#editorWrapper").append(clone);
+                $("#editor").hide();
+
+
+            } else {
+
+                setTimeout(function () {
+                    $("." + CLONE_CLASS).remove();
+                    $("#editor").show();
+                }, 3000);
+
+            }
+
+        }
+        
     }
 };

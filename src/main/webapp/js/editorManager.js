@@ -588,7 +588,7 @@ var EditorManager = {
     },
     // FM
     openFile: function (fileUri, callback) {
-
+        
         if (EditorManager.getCurrentUri() !== fileUri
                 && getNodeByFileUri(fileUri) !== undefined) {
 
@@ -597,6 +597,8 @@ var EditorManager = {
                 var exists = fileUri in EditorManager.tabsMap;
 
                 FileApi.loadFileContents(fileUri, function (content) {
+                    
+                    WizardViewManager.mock(true);
 
                     if (!exists) {
                         var tabbedInstance = createNewTabbedInstance(fileUri,
@@ -665,6 +667,9 @@ var EditorManager = {
 
                     if (callback)
                         callback(content);
+                    
+                    WizardViewManager.mock(false);
+                    
                 });
             });
 
