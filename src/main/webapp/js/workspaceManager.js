@@ -161,7 +161,7 @@ var WorkspaceManager = {
             // Search for Binding file at root 
             $("#projectsTree").dynatree("getRoot").visit(function (node) {
                 // If there is a project named Demo
-                if (node.data.isFolder && node.getLevel() === 1 && node.data.keyPath === "Demo") {
+                if (node.data.isFolder && node.getLevel() === 1 && (node.data.keyPath === "Demo" || WizardViewManager.mayApply())) {
                     var found = false;
                     var auxTargetNode = null;
                     CONFIG_EXTENSIONS_PREFERENCES.forEach(function (ext) {
