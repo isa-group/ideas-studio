@@ -71,6 +71,7 @@
         <script src='js/vendor/FileSaver.min.js' type="text/javascript"></script>
         <script type="text/javascript" src="js/appPresenter.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="js/wizardViewManager.js"></script> <!-- for editor initialization -->
         <script type="text/javascript" src="js/vendor/jsep.min.js"></script>
         <script type="text/javascript" src="js/vendor/mustache.min.js"></script>
 

@@ -591,14 +591,14 @@ var EditorManager = {
         
         if (EditorManager.getCurrentUri() !== fileUri
                 && getNodeByFileUri(fileUri) !== undefined) {
+            
+            WizardViewManager.loading(true);
 
             saveCurrentSession(function () {
                 
                 var exists = fileUri in EditorManager.tabsMap;
 
                 FileApi.loadFileContents(fileUri, function (content) {
-                    
-                    WizardViewManager.mock(true);
 
                     if (!exists) {
                         var tabbedInstance = createNewTabbedInstance(fileUri,
@@ -668,7 +668,9 @@ var EditorManager = {
                     if (callback)
                         callback(content);
                     
-                    WizardViewManager.mock(false);
+                    setTimeout(function () {
+                        WizardViewManager.loading(false);
+                    }, 1000);
                     
                 });
             });

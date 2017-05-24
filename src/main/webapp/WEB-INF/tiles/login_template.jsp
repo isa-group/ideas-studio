@@ -42,6 +42,7 @@
         <script type="text/javascript" src="js/vendor/jquery-ui.js"></script>
         <script src='js/vendor/jquery.cookie.js' type="text/javascript"></script>
         <script type="text/javascript" src="js/vendor/bootstrap.js"></script>
+        <script type="text/javascript" src="js/wizardViewManager.js"></script>
 
         <script>
 
@@ -198,12 +199,17 @@
 
 
         <script>
+            
             //DEMO USERS
             $("#username").ready(function () {
-                if ($("#username").val() != "") {
-
-                    var ws = location.href.split("demo/")[1].replace(/(.*)\/wizard$/, "$1");
-                    var isWizard = location.href.match(/(.*)\/wizard$/, "$1") !== null;
+                
+                var href = location.href;
+                var isWizard = href.match(WizardViewManager.REG_EXP, "$1") !== null;
+                
+                if ($("#username").val() != "") { // This is a demo
+                    
+                    var ws = href.split("demo/")[1]
+                            .replace(WizardViewManager.REG_EXP, "$1");
 
                     $("#loginForm div.control-group").hide();
                     $('#dontRememberLogin').hide();
@@ -217,15 +223,21 @@
                     console.log(location.href);
                     localStorage.setItem('demo', 'demo');
                     localStorage.setItem('ws', ws);
-                    localStorage.setItem('isWizard', isWizard);
                     console.log(">>>>>>>>>>>>>>" + ws);
                     //$("#loginButton").click();
                     $("#loginForm").submit();
+                    
                 } else {
+                    
                     localStorage.setItem('demo', '');
                     localStorage.setItem('ws', '');
+                    
                 }
+                
+                WizardViewManager.save(isWizard);
+                
             });
+            
         </script>
 
     </body>
