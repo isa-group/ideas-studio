@@ -752,15 +752,14 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
 }
 
 #appMainContentBlocker,#appMainContentBlocker.visible {
-    background-color: white;
-    opacity: 0.05;
+    background-color: rgba(175, 175, 175, 0.24);
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     visibility: visible;
-    z-index: 10;
+    z-index: 100;
 }
 
 #appMainContentBlocker.hidden {
@@ -2351,11 +2350,21 @@ span[contentEditable]:empty:not(:focus):before{
 /* Blurring */
 
 @-webkit-keyframes appMainContent_blur {
-    0% { -webkit-filter: blur(0px);}
-    100% { -webkit-filter: blur(0.75px);}
+    0% { 
+        -webkit-filter: blur(0px);
+    }
+    100% { 
+        -webkit-filter: blur(0.75px);
+        background: #e4e4e4;
+    }
 }
 
 @-webkit-keyframes appMainContent_focus {
-    0% { -webkit-filter: blur(0.75px);}
-    100% { -webkit-filter: blur(0px);}
+    0% { 
+        -webkit-filter: blur(0.75px);
+    }
+    100% { 
+        -webkit-filter: blur(0px);
+        background: white;
+    }
 }
