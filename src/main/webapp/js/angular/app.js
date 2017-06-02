@@ -9,20 +9,29 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
          * @param {Binding} currentBinding
          */
         $scope.applyBinding = function (currentBinding) {
-            debugger;
             console.log("apply binding", currentBinding);
 
             try {
                 currentBinding = JSON.parse(currentBinding);
             } catch (err) {
+                DescriptionInspector.angularFormatView.destroy();
                 return;
             }
 
             var manageBindingError = function (resp) {
                 console.error(resp);
+                blockerView.css({
+                    opacity: "0",
+                    visibility: "hidden"
+                });
             };
 
             // Get Binding content
+            var blockerView = $("#appLoaderBlocker");
+            blockerView.css({
+                opacity: "0.8",
+                visibility: "visible"
+            });
             $http({
                 method: 'GET',
                 url: currentBinding.templateURL
@@ -35,6 +44,10 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                         template: resp1.data,
                         controller: resp2.data,
                         idSelector: "modelBoardContent"
+                    });
+                    blockerView.css({
+                        opacity: "0",
+                        visibility: "hidden"
                     });
                 }, manageBindingError);
             }, manageBindingError);
@@ -195,6 +208,8 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                 $compile(angular.element("#editorInspectorLoader .modelInspectorContent")[0])($scope);
             }
         };
+        
+        $scope.$compile = $compile;
 
         // Compile model from angular format view
         $scope.compilationFlagFormatView = 0;

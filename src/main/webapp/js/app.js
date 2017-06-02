@@ -408,7 +408,6 @@ var AdvancedModeManager = {
 var $scope = null;
 var LanguageBindingsManifestManager = {
     apply: function (obj) {
-        debugger;
         
         DescriptionInspector.angularFormatView.destroy();
         
@@ -451,14 +450,18 @@ var LanguageBindingsManifestManager = {
         }
     },
     clear: function () {
-        debugger;
         DescriptionInspector.angularFormatView.destroy();
         $scope = angular.element(document.getElementById("appBody")).scope();
-        $scope.languageBindingsManifest = [];
-        $scope.$apply();
+        setTimeout(function () {
+            $scope.languageBindingsManifest = [];
+            $scope.currentBinding = "";
+            $scope.$apply();
+        }, 150);
+    },
+    reloadPanel: function () {
+        return !!$scope.$compile && $scope.$compile(angular.element("#bindingManagerPanel")[0])($scope);
     },
     load: function () {
-        debugger;
         
         if (!window["$scope"]) {
             $scope = angular.element(document.getElementById("appBody")).scope();
@@ -476,7 +479,6 @@ var LanguageBindingsManifestManager = {
         }
     },
     mayApply: function () {
-        debugger;
         return !!window["$scope"] && !!$scope.languageBindingsManifest && 
                 !!$scope.languageBindingsManifest.templateURL !== '' &&
                 !!$scope.languageBindingsManifest.controllerURL !== '' &&

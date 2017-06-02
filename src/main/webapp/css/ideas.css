@@ -2371,12 +2371,16 @@ span[contentEditable]:empty:not(:focus):before{
 
 /* Binding manager panel */ 
 #bindingManagerPanel {
-    width: 80px;
-    height: 32px;
+    width: 10em;
+    height: 22px;
     float: right;
     position: relative;
     cursor: pointer;
     opacity: 0.25;
     background-size: 20px;
+    margin-top: 0.45em;
     margin-right: 10px;
+    font-size: 11px;
+    vertical-align: middle !important;
+    cursor: pointer;
 }

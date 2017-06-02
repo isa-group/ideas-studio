@@ -193,6 +193,8 @@ var WorkspaceManager = {
                     }
                 }
             });
+            // Re-compiles binding engine to show model content in binding panel
+            LanguageBindingsManifestManager.reloadPanel();
             if (callback) callback();
         });
     },
