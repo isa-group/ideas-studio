@@ -175,7 +175,7 @@ var DescriptionInspector = {
     },
     existCurrentAngularFile: function () {
         var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");
-        return getNodeByFileUri(fileUriWithoutExt + ".ang") ? true : false;
+        return (getNodeByFileUri(fileUriWithoutExt + ".ang") ? true : false);
     },
     existCurrentCtrlFile: function () {
         var fileUriWithoutExt = EditorManager.getCurrentUri().replace(/\.[^/.]+$/, "");

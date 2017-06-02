@@ -2368,3 +2368,15 @@ span[contentEditable]:empty:not(:focus):before{
         background: white;
     }
 }
+
+/* Binding manager panel */ 
+#bindingManagerPanel {
+    width: 80px;
+    height: 32px;
+    float: right;
+    position: relative;
+    cursor: pointer;
+    opacity: 0.25;
+    background-size: 20px;
+    margin-right: 10px;
+}

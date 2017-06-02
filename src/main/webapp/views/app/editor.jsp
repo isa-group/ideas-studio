@@ -105,6 +105,14 @@
                 <span id="shareDocument" class="shareDocument"></span>
                 <!-- 				<span id="editorOutLink"></span> -->
                 <!-- 				<span id="editorSocial"></span> -->
+                <span ng-show="languageBindingsManifest.length">
+                    <select id="bindingManagerPanel" ng-model="currentBinding" ng-change="applyBinding(currentBinding)">
+                        <option>---</option>
+                        <option ng-repeat="manifest in languageBindingsManifest track by manifest.id" value="{{manifest}}">
+                            {{manifest.id}}
+                        </option>
+                    </select>
+                </span>
             </div>
         </div>
 

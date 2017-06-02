@@ -664,6 +664,8 @@ var EditorManager = {
                     } else {
                         $("#editorFooter").show();
                     }
+                    
+                    LanguageBindingsManifestManager.load();
 
                     if (callback)
                         callback(content);
@@ -729,6 +731,9 @@ var EditorManager = {
             if (Object.keys(EditorManager.tabsMap).length === 0 && $("#appMainContent").hasClass("maximizedEditor") && !maximizing) {
                 toggleMaximization();
             }
+            
+            LanguageBindingsManifestManager.clear();
+            
         });
     },
     reset: function () {

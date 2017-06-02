@@ -404,3 +404,84 @@ var AdvancedModeManager = {
     }
 
 };
+
+var $scope = null;
+var LanguageBindingsManifestManager = {
+    apply: function (obj) {
+        debugger;
+        
+        DescriptionInspector.angularFormatView.destroy();
+        
+        if (this.mayApply()) {
+        
+            var ang = obj.template;
+            var ctl = obj.controller;
+            var idSelector = obj.idSelector;
+
+            if ($("#" + idSelector).length === 0) {
+                $("#editorWrapper").append('<div id="'+idSelector+'"/>');
+            }
+
+            // Keep $scope.model saved
+//            var cloneModel = Object.assign({}, $scope.model);
+//            $scope = {};
+//            $scope.model = cloneModel;
+
+            // Clear current Binding visualization
+//            $("#" + idSelector).empty().html(ang).append(
+//                '<script>' +
+//                'setTimeout(function() {' +
+//                '  var $scope = angular.element(document.getElementById("appBody")).scope();' +
+//                '  $scope.$apply(function () {' + ctl + '});' +
+//                '}, 150);' +
+//                '</script>'
+//            );
+//    
+            
+            setTimeout(function() {
+                $("#" + idSelector).empty().html(ang);
+                $scope.$apply(function () {
+                    eval(ctl);
+                });
+                DescriptionInspector.tabs.angularCompileModelInspectorFormatView();
+                DescriptionInspector.angularFormatView.formatTab.build();
+                DescriptionInspector.angularFormatView.show();
+            }, 150);
+        
+        }
+    },
+    clear: function () {
+        debugger;
+        DescriptionInspector.angularFormatView.destroy();
+        $scope = angular.element(document.getElementById("appBody")).scope();
+        $scope.languageBindingsManifest = [];
+        $scope.$apply();
+    },
+    load: function () {
+        debugger;
+        
+        if (!window["$scope"]) {
+            $scope = angular.element(document.getElementById("appBody")).scope();
+        }
+        
+        if (this.mayApply()) {
+            setTimeout(function () {
+                var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(EditorManager.currentUri));
+                var bindings = ModeManager.modelMap[modelId].bindings;
+                
+                $scope.model = jsyaml.safeLoad(document.editor.getValue());
+                $scope.languageBindingsManifest = !!bindings && bindings.length > 0 ? bindings : [];
+                $scope.$apply();
+            }, 500);
+        }
+    },
+    mayApply: function () {
+        debugger;
+        return !!window["$scope"] && !!$scope.languageBindingsManifest && 
+                !!$scope.languageBindingsManifest.templateURL !== '' &&
+                !!$scope.languageBindingsManifest.controllerURL !== '' &&
+                !DescriptionInspector.existCurrentCtrlFile() &&
+                !DescriptionInspector.existCurrentCtrlFile() &&
+                !DescriptionInspector.existCurrentAngularFile();
+    }
+};
