@@ -459,7 +459,7 @@ var LanguageBindingsManifestManager = {
         }, 150);
     },
     reloadPanel: function () {
-        return !!$scope.$compile && $scope.$compile(angular.element("#bindingManagerPanel")[0])($scope);
+        return !!$scope && !!$scope.$compile && $scope.$compile(angular.element("#bindingManagerPanel")[0])($scope);
     },
     load: function () {
         
@@ -472,6 +472,7 @@ var LanguageBindingsManifestManager = {
                 var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(EditorManager.currentUri));
                 var bindings = ModeManager.modelMap[modelId].bindings;
                 
+                $scope.currentBinding = "";
                 $scope.model = jsyaml.safeLoad(document.editor.getValue());
                 $scope.languageBindingsManifest = !!bindings && bindings.length > 0 ? bindings : [];
                 $scope.$apply();
