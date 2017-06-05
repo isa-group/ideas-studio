@@ -4,6 +4,14 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
 
         $scope.model = {};
 
+        $scope.currentBinding = "";
+        $scope.$watch(function () {
+            return $scope.currentBinding;
+        }, function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                $scope.applyBinding(newValue);
+            }
+        });
         /**
          * Update current Binding visualization.
          * @param {Binding} currentBinding
@@ -154,7 +162,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                     formatSessions = sessionMap.getFormatsSessions(),
                     editorContent = document.editor.getValue();
 
-                if (editorContent && DescriptionInspector.existCurrentAngularFile() && ("json" in formatSessions || "yaml" in formatSessions)) {
+                if (editorContent && (DescriptionInspector.existCurrentAngularFile() || LanguageBindingsManifestManager.mayApply()) && ("json" in formatSessions || "yaml" in formatSessions)) {
 
                     //TODO: check if it's a "JSONable" content
 

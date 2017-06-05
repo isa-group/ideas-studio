@@ -374,7 +374,7 @@ var AdvancedModeManager = {
     getFilterLanguageExtensions: function () {
         return !!window["CONFIG_FILE_EXTENSIONS_TO_FILTER"] && CONFIG_FILE_EXTENSIONS_TO_FILTER ? CONFIG_FILE_EXTENSIONS_TO_FILTER: [];
     },
-    getFilterValue: function () {
+    isActivated: function () {
         return !!window["DEFAULT_FILTER_FILES"] && DEFAULT_FILTER_FILES ? DEFAULT_FILTER_FILES: false;
     },
     showFilteredNodes: function () {
@@ -396,7 +396,7 @@ var AdvancedModeManager = {
         });
     },
     apply: function () {
-        if (this.getFilterValue() === false) {
+        if (this.isActivated() === false) {
             this.hideFilteredNodes();
         } else {
             this.showFilteredNodes();
@@ -412,13 +412,13 @@ var LanguageBindingsManifestManager = {
         DescriptionInspector.angularFormatView.destroy();
         
         if (this.mayApply()) {
-        
+
             var ang = obj.template;
             var ctl = obj.controller;
             var idSelector = obj.idSelector;
 
             if ($("#" + idSelector).length === 0) {
-                $("#editorWrapper").append('<div id="'+idSelector+'"/>');
+                $("#editorWrapper").append('<div id="' + idSelector + '"/>');
             }
 
             // Keep $scope.model saved
@@ -458,10 +458,17 @@ var LanguageBindingsManifestManager = {
             $scope.$apply();
         }, 150);
     },
+    /**
+     * This function fixes showing a blank selector after load a workspace
+     * through the toggle menu.
+     * @returns {Boolean}
+     */
     reloadPanel: function () {
         return !!$scope && !!$scope.$compile && $scope.$compile(angular.element("#bindingManagerPanel")[0])($scope);
     },
     load: function () {
+        
+        var _this = this;
         
         if (!window["$scope"]) {
             $scope = angular.element(document.getElementById("appBody")).scope();
@@ -472,10 +479,21 @@ var LanguageBindingsManifestManager = {
                 var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(EditorManager.currentUri));
                 var bindings = ModeManager.modelMap[modelId].bindings;
                 
-                $scope.currentBinding = "";
                 $scope.model = jsyaml.safeLoad(document.editor.getValue());
                 $scope.languageBindingsManifest = !!bindings && bindings.length > 0 ? bindings : [];
+                
+                // Apply first Binding element
+                setTimeout(function () {
+                    if (!AdvancedModeManager.isActivated() && $scope.languageBindingsManifest.length > 0) {
+                        $scope.currentBinding = JSON.stringify($scope.languageBindingsManifest[0]);
+                        _this.apply($scope.languageBindingsManifest[0]);
+                    }
+                    
+                    $scope.$apply();
+                }, 150);
+                
                 $scope.$apply();
+                
             }, 500);
         }
     },

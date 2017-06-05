@@ -106,7 +106,7 @@
                 <!-- 				<span id="editorOutLink"></span> -->
                 <!-- 				<span id="editorSocial"></span> -->
                 <span ng-show="languageBindingsManifest.length">
-                    <select id="bindingManagerPanel" ng-model="currentBinding" ng-change="applyBinding(currentBinding)">
+                    <select id="bindingManagerPanel" ng-model="currentBinding">
                         <option value="">---</option>
                         <option ng-repeat="manifest in languageBindingsManifest track by manifest.id" value="{{manifest}}">
                             {{manifest.id}}
