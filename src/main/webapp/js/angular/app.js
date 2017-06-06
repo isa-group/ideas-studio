@@ -30,10 +30,10 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
             $scope.getBindingContent(
                 currentBinding.templateURL,
                 currentBinding.controllerURL
-            ).then(function (templateContent, controllerContent) {
+            ).then(function (data) {
                 LanguageBindingsManifestManager.apply({
-                    template: templateContent,
-                    controller: controllerContent,
+                    template: data.template,
+                    controller: data.controller,
                     idSelector: "modelBoardContent"
                 });
             }).catch(function (err) {
@@ -65,7 +65,10 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                         method: 'GET',
                         url: ctlUrl
                     }).then(function (resp2) {
-                        resolve(resp1.data, resp2.data);
+                        resolve({
+                            template: resp1.data, 
+                            controller: resp2.data
+                        });
                         blockerView.css({
                             opacity: "0",
                             visibility: "hidden"
@@ -117,7 +120,12 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
 
         };
 
-        $scope.languageBindingsManifest = [];
+        $scope.languageBindingsManifest = {};
+        $scope.$watch(function () {
+            return $scope.languageBindingsManifest;
+        }, function (newValue, oldValue) {
+            $scope.languageBindingsManifestLen = Object.keys(newValue).length;
+        });
         $scope.$timeout = $timeout;
 
         // Update editor content from model

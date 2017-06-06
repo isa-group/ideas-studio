@@ -448,7 +448,7 @@ var LanguageBindingsManifestManager = {
         DescriptionInspector.angularFormatView.destroy();
         $scope = angular.element(document.getElementById("appBody")).scope();
         setTimeout(function () {
-            $scope.languageBindingsManifest = [];
+            $scope.languageBindingsManifest = {};
             $scope.currentBinding = "";
             $scope.$apply();
         }, 150);
@@ -459,7 +459,18 @@ var LanguageBindingsManifestManager = {
      * @returns {Boolean}
      */
     reloadPanel: function () {
-        return !!$scope && !!$scope.$compile && $scope.$compile(angular.element("#bindingManagerPanel")[0])($scope);
+        
+        $scope = angular.element(document.getElementById("appBody")).scope();
+        
+        if (!!$scope) {
+            $scope.languageBindingsManifest = {};
+            $scope.$apply();
+            $scope.$compile(angular.element("#bindingManagerPanelWrapper")[0])($scope);
+//            $scope.$compile(angular.element("#bindingManagerPanel")[0])($scope);
+//            return !!$scope.$compile && $scope.$compile(angular.element("#bindingManagerPanel")[0])($scope);
+        } else {
+            console.error("Cannot find angular scope");
+        }
     },
     load: function () {
 
@@ -484,10 +495,10 @@ var LanguageBindingsManifestManager = {
                         if (!!obj) {
 
                             $scope.currentBinding = JSON.stringify(obj);
-                            $scope.getBindingContent(obj.templateURL, obj.controllerURL).then(function (tplContent, ctlContent) {
+                            $scope.getBindingContent(obj.templateURL, obj.controllerURL).then(function (data) {
                                 _this.apply({
-                                    template: tplContent,
-                                    controller: ctlContent,
+                                    template: data.template,
+                                    controller: data.controller,
                                     idSelector: "modelBoardContent"
                                 });
                             }).catch(function (err) {
