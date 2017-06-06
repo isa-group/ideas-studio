@@ -459,15 +459,13 @@ var LanguageBindingsManifestManager = {
      * @returns {Boolean}
      */
     reloadPanel: function () {
-        
+
         $scope = angular.element(document.getElementById("appBody")).scope();
-        
+
         if (!!$scope) {
             $scope.languageBindingsManifest = {};
             $scope.$apply();
             $scope.$compile(angular.element("#bindingManagerPanelWrapper")[0])($scope);
-//            $scope.$compile(angular.element("#bindingManagerPanel")[0])($scope);
-//            return !!$scope.$compile && $scope.$compile(angular.element("#bindingManagerPanel")[0])($scope);
         } else {
             console.error("Cannot find angular scope");
         }

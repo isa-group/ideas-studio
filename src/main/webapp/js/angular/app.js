@@ -208,6 +208,17 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                         });
 
                     }
+                    
+                    // Update Binding panel
+                    var model = $scope.transformSerializableToObject(document.editor.getValue());
+                    if (!!model && "bindings" in model) {
+                        $timeout(function () {
+                            $scope.languageBindingsManifest = model.bindings;
+                            if ( $("#bindingManagerPanel").val() === "" ) {
+                                $("#bindingManagerPanel").trigger("change");                                
+                            }
+                        }, 150)
+                    }
                 }
             }, true);
 

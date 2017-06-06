@@ -193,8 +193,6 @@ var WorkspaceManager = {
                     }
                 }
             });
-            // Re-compiles binding engine to show model content in binding panel
-            LanguageBindingsManifestManager.reloadPanel();
             if (callback) callback();
         });
     },
@@ -365,6 +363,8 @@ var createWSLine = function (wsName) {
         $("#workspacesNavContainer li").removeClass("active");
         AppPresenter.loadSection("editor", wsName, function () {
             WorkspaceManager.loadWorkspace();
+            // Re-compiles binding engine to show model content in binding panel
+            LanguageBindingsManifestManager.reloadPanel();
         });
     });
 
