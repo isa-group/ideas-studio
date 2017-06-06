@@ -25,45 +25,99 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                 DescriptionInspector.angularFormatView.destroy();
                 return;
             }
-
-            var manageBindingError = function (resp) {
-                console.error(resp);
-                blockerView.css({
-                    opacity: "0",
-                    visibility: "hidden"
-                });
-            };
-
+            
             // Get Binding content
+            $scope.getBindingContent(
+                currentBinding.templateURL,
+                currentBinding.controllerURL
+            ).then(function (templateContent, controllerContent) {
+                LanguageBindingsManifestManager.apply({
+                    template: templateContent,
+                    controller: controllerContent,
+                    idSelector: "modelBoardContent"
+                });
+            }).catch(function (err) {
+                console.error(err);
+            });
+        };
+        
+        /**
+         * Get remote Binding content
+         * @param {type} angUrl
+         * @param {type} ctlUrl
+         * @returns {Promise}
+         */
+        $scope.getBindingContent = function (angUrl, ctlUrl) {
+            
             var blockerView = $("#appLoaderBlocker");
+            
             blockerView.css({
                 opacity: "0.8",
                 visibility: "visible"
             });
-            $http({
-                method: 'GET',
-                url: currentBinding.templateURL
-            }).then(function (resp1) {
+            
+            return new Promise(function (resolve, reject) {
                 $http({
                     method: 'GET',
-                    url: currentBinding.controllerURL
-                }).then(function (resp2) {
-                    LanguageBindingsManifestManager.apply({
-                        template: resp1.data,
-                        controller: resp2.data,
-                        idSelector: "modelBoardContent"
+                    url: angUrl
+                }).then(function (resp1) {
+                    $http({
+                        method: 'GET',
+                        url: ctlUrl
+                    }).then(function (resp2) {
+                        resolve(resp1.data, resp2.data);
+                        blockerView.css({
+                            opacity: "0",
+                            visibility: "hidden"
+                        });
+                    }, function () {
+                        blockerView.css({
+                            opacity: "0",
+                            visibility: "hidden"
+                        });
+                        reject();
                     });
+                }, function () {
                     blockerView.css({
                         opacity: "0",
                         visibility: "hidden"
                     });
-                }, manageBindingError);
-            }, manageBindingError);
+                    reject();
+                });
+            });
+        };
+        
+        /**
+         * Transform serializable object based on editor selected format.
+         * @param {type} value
+         * @returns {Array|Object}
+         */
+        $scope.transformSerializableToObject = function (value) {
+            
+            var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat().toLowerCase();
+            var ret = undefined;
+            
+            if (currentFormat === "yaml") {
+                ret = jsyaml.safeLoad(value);
+            } else if (currentFormat = "json") {
+                ret = JSON.parse(value);
+            }
+            
+            return ret;
+        };
+        
+        $scope.updateModel = function (value) {
+            
+            var ret = $scope.transformSerializableToObject(value);
+            if (!!ret) {
+                $scope.model = ret;
+            } else {
+                console.warn("Cannot update Binding model");
+            }
 
         };
 
         $scope.languageBindingsManifest = [];
-
         $scope.$timeout = $timeout;
 
         // Update editor content from model
@@ -81,7 +135,9 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                     }
                 } catch (err) {}
 
-                if (document.editor && (newValue && (oldValue || oldValue === "") || ((newValue || newValue === "") && oldValue)) && !compareObjects(newValue, oldValue) && nodeName === tabName) {
+                if (document.editor && (
+                        newValue && (oldValue || !oldValue || oldValue === "") || ((newValue || !newValue || newValue === "") && oldValue)
+                    ) && !compareObjects(newValue, oldValue) && nodeName === tabName) {
 
                     var currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat(),
                         formatSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions(),
@@ -358,5 +414,10 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
     .filter('capitalize', function () {
         return function (input) {
             return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+        }
+    })
+    .filter('numkeys', function() {
+        return function(object) {
+            return Object.keys(object).length;
         }
     });

@@ -407,6 +407,16 @@ var AdvancedModeManager = {
 
 var $scope = null;
 var LanguageBindingsManifestManager = {
+    
+    getBindings: function () {
+        return $scope.transformSerializableToObject(document.editor.getValue()).bindings;
+    },
+    isLoaded: function () {
+        return this.params.bindingIsLoaded;
+    },
+    setLoaded: function (value) {
+        return this.params.bindingIsLoaded = !!value;
+    },
     apply: function (obj) {
         
         DescriptionInspector.angularFormatView.destroy();
@@ -420,25 +430,10 @@ var LanguageBindingsManifestManager = {
             if ($("#" + idSelector).length === 0) {
                 $("#editorWrapper").append('<div id="' + idSelector + '"/>');
             }
-
-            // Keep $scope.model saved
-//            var cloneModel = Object.assign({}, $scope.model);
-//            $scope = {};
-//            $scope.model = cloneModel;
-
-            // Clear current Binding visualization
-//            $("#" + idSelector).empty().html(ang).append(
-//                '<script>' +
-//                'setTimeout(function() {' +
-//                '  var $scope = angular.element(document.getElementById("appBody")).scope();' +
-//                '  $scope.$apply(function () {' + ctl + '});' +
-//                '}, 150);' +
-//                '</script>'
-//            );
-//    
             
             setTimeout(function() {
                 $("#" + idSelector).empty().html(ang);
+                $scope.updateModel(document.editor.getValue());
                 $scope.$apply(function () {
                     eval(ctl);
                 });
@@ -467,34 +462,48 @@ var LanguageBindingsManifestManager = {
         return !!$scope && !!$scope.$compile && $scope.$compile(angular.element("#bindingManagerPanel")[0])($scope);
     },
     load: function () {
-        
+
         var _this = this;
-        
+
         if (!window["$scope"]) {
             $scope = angular.element(document.getElementById("appBody")).scope();
         }
-        
+
         if (this.mayApply()) {
-            setTimeout(function () {
-                var modelId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(EditorManager.currentUri));
-                var bindings = ModeManager.modelMap[modelId].bindings;
-                
-                $scope.model = jsyaml.safeLoad(document.editor.getValue());
-                $scope.languageBindingsManifest = !!bindings && bindings.length > 0 ? bindings : [];
-                
-                // Apply first Binding element
-                setTimeout(function () {
-                    if (!AdvancedModeManager.isActivated() && $scope.languageBindingsManifest.length > 0) {
-                        $scope.currentBinding = JSON.stringify($scope.languageBindingsManifest[0]);
-                        _this.apply($scope.languageBindingsManifest[0]);
+
+            // Populate select element
+            $scope.languageBindingsManifest = _this.getBindings();
+
+            // Apply first Binding element
+            if (!!$scope.languageBindingsManifest) {
+                if (!AdvancedModeManager.isActivated() && Object.keys($scope.languageBindingsManifest).length > 0) {
+                    if ("default" in $scope.languageBindingsManifest) {
+                        // Apply default Binding
+                        var obj = $scope.languageBindingsManifest[ $scope.languageBindingsManifest.default ];
+                        
+                        if (!!obj) {
+
+                            $scope.currentBinding = JSON.stringify(obj);
+                            $scope.getBindingContent(obj.templateURL, obj.controllerURL).then(function (tplContent, ctlContent) {
+                                _this.apply({
+                                    template: tplContent,
+                                    controller: ctlContent,
+                                    idSelector: "modelBoardContent"
+                                });
+                            }).catch(function (err) {
+                                console.error(err);
+                            });
+                            
+                        } else {
+                            console.warn("Cannot load default Binding from model");
+                        }
+
+                    } else {
+                        // Don't load any Binding
+                        $scope.currentBinding = "";
                     }
-                    
-                    $scope.$apply();
-                }, 150);
-                
-                $scope.$apply();
-                
-            }, 500);
+                }
+            }
         }
     },
     mayApply: function () {

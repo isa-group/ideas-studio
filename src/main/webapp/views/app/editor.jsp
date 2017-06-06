@@ -105,11 +105,11 @@
                 <span id="shareDocument" class="shareDocument"></span>
                 <!-- 				<span id="editorOutLink"></span> -->
                 <!-- 				<span id="editorSocial"></span> -->
-                <span ng-show="languageBindingsManifest.length">
+                <span ng-show="!!languageBindingsManifest && (languageBindingsManifest | numkeys)">
                     <select id="bindingManagerPanel" ng-model="currentBinding">
                         <option value="">---</option>
-                        <option ng-repeat="manifest in languageBindingsManifest track by manifest.id" value="{{manifest}}">
-                            {{manifest.id}}
+                        <option ng-repeat="(k,v) in languageBindingsManifest" value="{{v}}" ng-show="k !== 'default'">
+                            {{v.name}}
                         </option>
                     </select>
                 </span>
