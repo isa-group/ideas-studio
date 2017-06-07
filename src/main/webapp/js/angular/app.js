@@ -102,7 +102,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
             
             if (currentFormat === "yaml") {
                 ret = jsyaml.safeLoad(value);
-            } else if (currentFormat = "json") {
+            } else if (currentFormat === "json") {
                 ret = JSON.parse(value);
             }
             
@@ -124,7 +124,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
         $scope.$watch(function () {
             return $scope.languageBindingsManifest;
         }, function (newValue, oldValue) {
-            $scope.languageBindingsManifestLen = Object.keys(newValue).length;
+            $scope.languageBindingsManifestLen = (!!newValue) ? Object.keys(newValue).length: 0;
         });
         $scope.$timeout = $timeout;
 

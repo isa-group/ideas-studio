@@ -418,7 +418,14 @@ var LanguageBindingsManifestManager = {
     // Functions
     
     getBindings: function () {
-        return $scope.transformSerializableToObject(document.editor.getValue()).bindings;
+        var ret = $scope.transformSerializableToObject(document.editor.getValue());
+        if (!ret) {
+            ret = [];
+        } else {
+            // Default path to get Binding definitions from model.
+            ret = ret.bindings;
+        }
+        return ret;
     },
     isLoaded: function () {
         return this.params.bindingIsLoaded;
