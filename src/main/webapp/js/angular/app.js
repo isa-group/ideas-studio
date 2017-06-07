@@ -34,7 +34,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                 LanguageBindingsManifestManager.apply({
                     template: data.template,
                     controller: data.controller,
-                    idSelector: "modelBoardContent"
+                    selectors: ["modelBoardContent", "inspectorModelContent"]
                 });
             }).catch(function (err) {
                 console.error(err);

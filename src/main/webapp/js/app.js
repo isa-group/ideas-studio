@@ -408,6 +408,15 @@ var AdvancedModeManager = {
 var $scope = null;
 var LanguageBindingsManifestManager = {
     
+    // Parameters
+    params: {
+        selectors: {
+            managerPanel: "#bindingManagerPanel"
+        }
+    },
+    
+    // Functions
+    
     getBindings: function () {
         return $scope.transformSerializableToObject(document.editor.getValue()).bindings;
     },
@@ -418,21 +427,23 @@ var LanguageBindingsManifestManager = {
         return this.params.bindingIsLoaded = !!value;
     },
     apply: function (obj) {
-        
+
         DescriptionInspector.angularFormatView.destroy();
-        
+
         if (this.mayApply()) {
 
             var ang = obj.template;
             var ctl = obj.controller;
-            var idSelector = obj.idSelector;
+            var mainWrapper = obj.selectors[0];
+            var inspectorWrapper = obj.selectors[1];
 
-            if ($("#" + idSelector).length === 0) {
-                $("#editorWrapper").append('<div id="' + idSelector + '"/>');
+            if ($("#" + mainWrapper).length === 0) {
+                $("#editorWrapper").append('<div id="' + mainWrapper + '"/>');
             }
-            
-            setTimeout(function() {
-                $("#" + idSelector).empty().html(ang);
+
+            setTimeout(function () {
+                $("#" + mainWrapper).empty().html(ang);
+                $("#" + inspectorWrapper).empty().html($("#" + mainWrapper).html());
                 $scope.updateModel(document.editor.getValue());
                 $scope.$apply(function () {
                     eval(ctl);
@@ -440,8 +451,10 @@ var LanguageBindingsManifestManager = {
                 DescriptionInspector.tabs.angularCompileModelInspectorFormatView();
                 DescriptionInspector.angularFormatView.formatTab.build();
                 DescriptionInspector.angularFormatView.show();
+                
+                $scope.$compile(angular.element("#" + inspectorWrapper)[0])($scope);
+                
             }, 150);
-        
         }
     },
     clear: function () {
@@ -497,7 +510,7 @@ var LanguageBindingsManifestManager = {
                                 _this.apply({
                                     template: data.template,
                                     controller: data.controller,
-                                    idSelector: "modelBoardContent"
+                                    selectors: ["modelBoardContent", "inspectorModelContent"]
                                 });
                             }).catch(function (err) {
                                 console.error(err);

@@ -514,7 +514,7 @@ var DescriptionInspector = {
             });
         } else if (menu == 'hide') {
             editor.animate({height: ($(window).height() - $("#appHeader").height()
-            - $("#appFooter").height() - 52)/$("#editorMainPanel").height()*100 + "%"}, function () {
+                        - $("#appFooter").height() - 52) / $("#editorMainPanel").height() * 100 + "%"}, function () {
                 expandButton.children('span').toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
                 //expandButton.children('span').toggleClass("glyphicon-triangle-bottom");
                 expandButton.off('click').click(function () {
