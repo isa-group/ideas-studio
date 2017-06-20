@@ -3,6 +3,9 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
     .controller("MainCtrl", ["$scope", "$compile", "$q", "$http", "$timeout", "$state", "$location", "$stateParams", function ($scope, $compile, $q, $http, $timeout, $state, $location, $stateParams) {
 
         $scope.model = {};
+        $scope.config = {
+            autoremoveModel: true
+        };
 
         $scope.currentBinding = "";
         $scope.$watch(function () {
@@ -210,14 +213,16 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                     }
                     
                     // Update Binding panel
-                    var model = $scope.transformSerializableToObject(document.editor.getValue());
-                    if (!!model && "bindings" in model) {
-                        $timeout(function () {
-                            $scope.languageBindingsManifest = model.bindings;
-                            if ( $("#bindingManagerPanel").val() === "" ) {
-                                $("#bindingManagerPanel").trigger("change");                                
-                            }
-                        }, 150)
+                    if (LanguageBindingsManifestManager.mayApply()) {
+                        var model = $scope.transformSerializableToObject(document.editor.getValue());
+                        if (!!model && "bindings" in model) {
+                            $timeout(function () {
+                                $scope.languageBindingsManifest = model.bindings;
+                                if ( $("#bindingManagerPanel").val() === "" ) {
+                                    $("#bindingManagerPanel").trigger("change");                                
+                                }
+                            }, 150)
+                        }
                     }
                 }
             }, true);
@@ -354,7 +359,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
         };
 
         $scope.clearModel = function () {
-            if (!!$scope.model && typeof $scope.model === "object") {
+            if (!!$scope.model && typeof $scope.model === "object" && !!$scope.config.autoremoveModel) {
                 $scope.model = undefined;
                 $scope.$apply();
             }
