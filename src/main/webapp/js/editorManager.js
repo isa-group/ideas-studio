@@ -3,6 +3,7 @@ var checkerTimer;
 var operationArray = [];
 var fileUriOperation = "";
 var opMap = "";
+var advModeOperationOriginalIndexes = [];
 
 var saveCurrentSession = function (callback) {
     if (document.editor != null
@@ -300,58 +301,124 @@ var loadExistingTabbedInstance = function (fileUri, content) {
     var use_caret = false;
     var ops = [];
     if (opMap && typeof opMap != "undefined") {
+        
+        // Declare a collapse element to set all secondary operation
+        var DEFAULT_COLLAPSED_OPERATION_VALUE = "Other operations...";
+        var opVisibility = $(
+            '<div id="opGrouperContainer" class="form-group opButton">'+
+                '<select class="selectpicker" style="cursor:pointer;" data-style="btn-primary">'+
+                '<option>' + DEFAULT_COLLAPSED_OPERATION_VALUE + '</option>'+
+                '</select>'+
+            '</div>');
 
+        advModeOperationOriginalIndexes = [];
+        var auxAdvMode = []; // each element contains: "name", "index"
+        
+        // Iterating language operations and creating buttons for each operation
         for (var i = 0; i < opMap.length; i++) {
-            ops_name_length += opMap[i].name.length;
-
-            if (typeof opMap[i].icon != "undefined") {
-                if (typeof opMap[i].iconOnly != "undefined" && opMap[i].iconOnly) {
-                    var op = $('<button class="btn btn-primary opButton" title="' + opMap[i].name + '" id="' + opMap[i].id + '" data="' + opMap[i].advancedMode + '"><span class="' + opMap[i].icon + '"></span></button>');
-                    operationArray.push(opMap[i]);
-                    op.click(function () {
-                        launchOperation(model, $(this).attr('id'), $(this).attr('title'));
-                        operationArray = [];
-                    });
-                    ops.push(op);
-                } else {
-                    var op = $('<button class="btn btn-primary opButton" name="' + opMap[i].name + '" id="' + opMap[i].id + '" data="' + opMap[i].advancedMode + '"><span class="' + opMap[i].icon + '"></span> ' + opMap[i].name + '</button>');
-                    operationArray.push(opMap[i]);
-                    op.click(function () {
-                        launchOperation(model, $(this).attr('id'), $(this).attr('name'));
-                        operationArray = [];
-
-                    });
-                    ops.push(op);
+            
+            // Manage selection picker for operations
+            if ("visibility" in opMap[i] && opMap[i].visibility === "secondary") {
+                
+                // Manage advanced mode operations
+                var advancedModeDataAttrStr = "";
+                if ("advanced" in opMap[i]) {
+                    // With advanced mode declared on manifest
+                    advancedModeDataAttrStr += 'data-advanced-mode="' + opMap[i].advanced + '"';
+                    if (opMap[i].advanced === true) {
+                        // i+1 since first element of picker is "Other operations..."
+                        auxAdvMode.push(opMap[i].name);
+                    }
                 }
+                
+                // Group operation for selection picker
+                if ("group" in opMap[i]) {
+                    var opGrouped = opVisibility.find("select optgroup[label='"+ opMap[i].group +"']");
+                    if (opGrouped.length > 0) {
+                        opGrouped.append(
+                            $('<option id="' + opMap[i].id + '_collapsed" value="' + opMap[i].id + '" ' + advancedModeDataAttrStr + ' style="cursor:pointer;">' + opMap[i].name + '</option>')
+                        );
+                    } else {
+                        opVisibility.find("select").append(
+                            $('<optgroup id="' + opMap[i].id + '_collapsed_group" label="'+ opMap[i].group +'">'+
+                                '<option id="' + opMap[i].id + '_collapsed" value="' + opMap[i].id + '" ' + advancedModeDataAttrStr + ' style="cursor:pointer;">' + opMap[i].name + '</option>'+
+                            '</optgroup>')
+                        );
+                    }
+                } else {
+                    opVisibility.find("select").append(
+                        $('<option id="' + opMap[i].id + '_collapsed" value="' + opMap[i].id + '" ' + advancedModeDataAttrStr + ' style="cursor:pointer;">' + opMap[i].name + '</option>')
+                    );
+                }
+                operationArray.push(opMap[i]);
 
             } else {
+            
+                ops_name_length += opMap[i].name.length;
 
-                if (ops_name_length <= 75) {
+                if (typeof opMap[i].icon != "undefined") {
+                    if (typeof opMap[i].iconOnly != "undefined" && opMap[i].iconOnly) {
+                        var op = $('<button class="btn btn-primary opButton" title="' + opMap[i].name + '" id="' + opMap[i].id + '" data="' + opMap[i].advancedMode + '"><span class="' + opMap[i].icon + '"></span></button>');
+                        operationArray.push(opMap[i]);
+                        op.click(function () {
+                            launchOperation(model, $(this).attr('id'), $(this).attr('title'));
+                            operationArray = [];
+                        });
+                        ops.push(op);
+                    } else {
+                        var op = $('<button class="btn btn-primary opButton" name="' + opMap[i].name + '" id="' + opMap[i].id + '" data="' + opMap[i].advancedMode + '"><span class="' + opMap[i].icon + '"></span> ' + opMap[i].name + '</button>');
+                        operationArray.push(opMap[i]);
+                        op.click(function () {
+                            launchOperation(model, $(this).attr('id'), $(this).attr('name'));
+                            operationArray = [];
 
-                    var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '>' + opMap[i].name + '</button>');
-                    operationArray.push(opMap[i]);
-                    op.click(function () {
-                        launchOperation(model, $(this).attr('id'), $(this).text());
-                        operationArray = [];
-                    });
-                    ops.push(op);
-
+                        });
+                        ops.push(op);
+                    }
 
                 } else {
-                    use_caret = true;
-                    caretLI = $('<li><a id="' + opMap[i].id
-                            + '" class="continue onlyOne">' + opMap[i].name
-                            + '</a></li>');
-                    caretUL.append(caretLI);
-                    operationArray.push(opMap[i]);
-                    caretLI.click(function () {
-                        launchOperation(model, $(this).children('a').attr('id'), $(this).children('a').html());
-                        operationArray = [];
-                    });
-                }
 
+                    if (ops_name_length <= 75) {
+
+                        var op = $('<button class="btn btn-primary opButton" id=' + opMap[i].id + '>' + opMap[i].name + '</button>');
+                        operationArray.push(opMap[i]);
+                        op.click(function () {
+                            launchOperation(model, $(this).attr('id'), $(this).text());
+                            operationArray = [];
+                        });
+                        ops.push(op);
+
+
+                    } else {
+                        use_caret = true;
+                        caretLI = $('<li><a id="' + opMap[i].id
+                                + '" class="continue onlyOne">' + opMap[i].name
+                                + '</a></li>');
+                        caretUL.append(caretLI);
+                        operationArray.push(opMap[i]);
+                        caretLI.click(function () {
+                            launchOperation(model, $(this).children('a').attr('id'), $(this).children('a').html());
+                            operationArray = [];
+                        });
+                    }
+                }
             }
         }
+        
+        // Add collapsed operations
+        if (opVisibility.find("select option").length > 0) {
+            // Added "opButton" class to fit with operation buttons bar
+            opVisibility.addClass("opButton").find("select").change(function () {
+                if ($(this).val() !== "") {
+                    launchOperation(model, $(this).val(), $(this).val());
+                    operationArray = [];
+                    $(this).val(DEFAULT_COLLAPSED_OPERATION_VALUE);
+                }
+            });
+            opVisibility.find("select").attr("data-advanced-mode-options", advModeOperationOriginalIndexes.toString());
+            ops.push(opVisibility);
+        }
+        
         if (use_caret) {
             divContent.append(caret);
             divContent.append(caretUL);
@@ -359,6 +426,23 @@ var loadExistingTabbedInstance = function (fileUri, content) {
 
         for (var k = 0; k < ops.length; k++)
             divContent.append(ops[k]);
+        
+        // Load select picker style
+        if (divContent.find('.selectpicker').length > 0 && !divContent.find('.selectpicker').is(":visible")) {
+            // This will always show picker
+            divContent.find('.selectpicker').selectpicker();
+            // Hide first elements and fit picker
+            divContent.find("#opGrouperContainer > div > div > ul > li:nth-child(1)").hide();
+            divContent.find("#opGrouperContainer > div > div > ul > li:nth-child(2)").hide();
+            divContent.find("#opGrouperContainer > div").css("width", "auto");
+            divContent.find("#opGrouperContainer > div > div > ul > li").each(function () {
+                var index = $(this).attr("data-original-index");
+                if (index && auxAdvMode.indexOf($(this).text()) !== -1) {
+                    advModeOperationOriginalIndexes.push(Number(index));
+                }
+            });
+            
+        }
     }
 
     comMap = ModeManager.getCommands(ModeManager

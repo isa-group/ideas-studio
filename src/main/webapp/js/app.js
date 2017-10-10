@@ -5,7 +5,7 @@ jQuery(function () {
 
         var operationId = ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(EditorManager.currentUri));
         var allFiles = $(".dynatree-title");
-        // 
+        
         if (DEFAULT_FILTER_FILES === false) {
             // Disable filter
             allFiles.each(function () {
@@ -33,8 +33,41 @@ jQuery(function () {
                 Object.keys(opMap).forEach(function (e) {
                     if (opMap[e].advanced === true) {
                         $("#" + opMap[e].id).show();
+                        $("#" + opMap[e].id + "_collapsed").show();
+                        $("#" + opMap[e].id + "_collapsed_group").show();
                     }
                 })
+            }
+            
+            if ($("#selectOperationDiv > div.form-group.opButton > select:visible").length === 0) {
+                $("#selectOperationDiv > div.form-group.opButton > select option").each(function () {
+                    if ($(this).css("display") !== "none") {
+                        $("#selectOperationDiv > div.form-group.opButton > select").show();
+                    }
+                });
+            } else {
+                $("#selectOperationDiv > div.form-group.opButton > select option").each(function () {
+                    if ($(this).css("display") === "none") {
+                        $("#selectOperationDiv > div.form-group.opButton > select").hide();
+                    }
+                });
+            }
+            
+            // Try to show operation grouper
+            var showIndexes = [];
+            $("#opGrouperContainer li").each(function () {
+                var index = $(this).attr("data-original-index");
+                if (index && index !== "0") {
+                    if (advModeOperationOriginalIndexes.indexOf(Number(index)) !== -1) {
+                        showIndexes.push(Number(index));
+                    }
+                    $(this).show();
+                }
+            });
+            if (showIndexes.length === 0) {
+                $("#opGrouperContainer").hide();
+            } else{
+                $("#opGrouperContainer").show();
             }
 
             DEFAULT_FILTER_FILES = !DEFAULT_FILTER_FILES;
@@ -67,12 +100,48 @@ jQuery(function () {
                 Object.keys(opMap).forEach(function (e) {
                     if (opMap[e].advanced === true) {
                         $("#" + opMap[e].id).hide();
+                        $("#" + opMap[e].id + "_collapsed").hide();
+                        $("#" + opMap[e].id + "_collapsed_group").hide();
                     }
-                })
+                });
             }
 
+            // Try to hide operation grouper
+            var showIndexes = [];
+            $("#opGrouperContainer li").each(function () {
+                var index = $(this).attr("data-original-index");
+                if (index && index !== "0") {
+                    if (advModeOperationOriginalIndexes.indexOf(Number(index)) === -1) {
+                        showIndexes.push(Number(index));
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                }
+            });
+            if (showIndexes.length > 0) {
+                $("#opGrouperContainer").show();
+            } else{
+                $("#opGrouperContainer").hide();
+            }
+
+            //if ($("#selectOperationDiv > div.form-group.opButton > select:visible").length === 0) {
+            //    $("#selectOperationDiv > div.form-group.opButton > select option").each(function () {
+            //        if ($(this).css("display") !== "none") {
+            //            $("#selectOperationDiv > div.form-group.opButton > select").show();
+            //        }
+            //    });
+            //} else {
+            //    $("#selectOperationDiv > div.form-group.opButton > select option").each(function () {
+            //        if ($(this).css("display") === "none") {
+            //            $("#selectOperationDiv > div.form-group.opButton > select").hide();
+            //        }
+            //    });
+            //}
+            
             DEFAULT_FILTER_FILES = !DEFAULT_FILTER_FILES;
         }
+        
     };
 
     $('.dropdown-toggle').click(function (e) {
