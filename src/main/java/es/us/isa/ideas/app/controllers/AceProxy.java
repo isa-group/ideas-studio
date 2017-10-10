@@ -263,7 +263,7 @@ public class AceProxy extends AbstractController {
 
                 if (fileName.startsWith(MODE_PREFIX) && editorModeURI != null && editorModeURI.equals(fileName + JS_EXT)) {
                     String uri = "";
-                    uri = languageModuleUri + DEPRECATED_MANIFEST_ENDPOINT + "/" + DEPRECATED_FORMAT_ENDPOINT + "/" + syntaxId + "/mode";
+                    uri = languageModuleUri + DEPRECATED_MANIFEST_ENDPOINT + DEPRECATED_FORMAT_ENDPOINT + "/" + syntaxId + "/mode";
 
                     LOGGER.log(Level.INFO, "Loading mode from: {0}", uri);
                     result = requestContent(uri);
@@ -299,7 +299,7 @@ public class AceProxy extends AbstractController {
                     if (editorThemeURI != null
                             && editorThemeURI.equals(fileName + JS_EXT)) {
                         String uri = "";
-                        uri = languageModuleUri + DEPRECATED_MANIFEST_ENDPOINT + "/" + DEPRECATED_FORMAT_ENDPOINT + "/" + syntaxId + "/theme";
+                        uri = languageModuleUri + DEPRECATED_MANIFEST_ENDPOINT + DEPRECATED_FORMAT_ENDPOINT + "/" + syntaxId + "/theme";
 
                         LOGGER.log(Level.INFO, "Loading theme from: {0}", uri);
                         result = requestContent(uri);
