@@ -406,7 +406,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
         }
         
         // Add collapsed operations
-        if (opVisibility.find("select option").length > 0) {
+        if (opVisibility.find("select option").length > 1) {
             // Added "opButton" class to fit with operation buttons bar
             opVisibility.addClass("opButton").find("select").change(function () {
                 if ($(this).val() !== "") {
