@@ -48,18 +48,18 @@ public class CustomMailer {
     
     public void sendMailGrid(String to, String subject, String msg)
     {
-        Email from = new Email(getFrom());
-        Email _to = new Email(to);
-        Content content = new Content("text/plain", msg);
-        Mail mail = new Mail(from, subject, _to, content);
-
-        String env = System.getenv("SENDGRID_API_KEY");
-        if (env == null) {
-            env = "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";
-        }
-        SendGrid sg = new SendGrid(env);
-        Request request = new Request();
         try {
+            Email from = new Email(getFrom());
+            Email _to = new Email(to);
+            Content content = new Content("text/plain", msg);
+            Mail mail = new Mail(from, subject, _to, content);
+
+            String env = System.getenv("SENDGRID_API_KEY");
+            if (env == null) {
+                System.out.println("No environment SENDGRID_API_KEY found. Please, declare SENDGRID_API_KEY to send emails from workbench");
+            }
+            SendGrid sg = new SendGrid(env);
+            Request request = new Request();
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
@@ -67,7 +67,7 @@ public class CustomMailer {
             System.out.println(response.getStatusCode());
             System.out.println(response.getBody());
             System.out.println(response.getHeaders());
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.out.println("ERROR: " + ex.getMessage());
         }
     }
