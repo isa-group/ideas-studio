@@ -306,7 +306,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
         var DEFAULT_COLLAPSED_OPERATION_VALUE = "Other operations...";
         var opVisibility = $(
             '<div id="opGrouperContainer" class="form-group opButton">'+
-                '<select class="selectpicker" style="cursor:pointer;" data-style="btn-primary">'+
+                '<select class="selectpicker" style="cursor:pointer;" data-style="btn-secondary">'+
                 '<option>' + DEFAULT_COLLAPSED_OPERATION_VALUE + '</option>'+
                 '</select>'+
             '</div>');
