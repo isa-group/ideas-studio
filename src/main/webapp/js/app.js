@@ -64,7 +64,7 @@ jQuery(function () {
                     $(this).show();
                 }
             });
-            if (showIndexes.length === 0) {
+            if (showIndexes.length === 0 && advModeOperationOriginalIndexes.length !== 0) {
                 $("#opGrouperContainer").hide();
             } else{
                 $("#opGrouperContainer").show();
