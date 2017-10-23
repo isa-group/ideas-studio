@@ -1,7 +1,16 @@
 package es.us.isa.ideas.app.mail;
 
+import com.sendgrid.Content;
+import com.sendgrid.Email;
+import com.sendgrid.Mail;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import org.hibernate.annotations.common.util.impl.Log_$logger;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -34,14 +43,33 @@ public class CustomMailer {
     
     public void sendMail(String to, String subject, String msg)
     {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(getFrom());
-        message.setTo(to);
-        message.setCc(getCc());
-        message.setBcc(getBcc());
-        message.setSubject(subject);
-        message.setText(msg);
-        getMailSender().send(message);
+        this.sendMailGrid(to, subject, msg);
+    }
+    
+    public void sendMailGrid(String to, String subject, String msg)
+    {
+        Email from = new Email(getFrom());
+        Email _to = new Email(to);
+        Content content = new Content("text/plain", msg);
+        Mail mail = new Mail(from, subject, _to, content);
+
+        String env = System.getenv("SENDGRID_API_KEY");
+        if (env == null) {
+            env = "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";
+        }
+        SendGrid sg = new SendGrid(env);
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+            System.out.println(response.getStatusCode());
+            System.out.println(response.getBody());
+            System.out.println(response.getHeaders());
+        } catch (IOException ex) {
+            System.out.println("ERROR: " + ex.getMessage());
+        }
     }
     
     public void sendMail(String to, Map<String,String> customizations, TemplateMail template)

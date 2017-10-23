@@ -163,6 +163,11 @@
     <!-- DEPENDENCIES MANAGEMENT -->
     <dependencies>
         <dependency>
+            <groupId>com.sendgrid</groupId>
+            <artifactId>sendgrid-java</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-security</artifactId>
             <version>1.1.0.RELEASE</version>
@@ -357,7 +362,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.3.2</version>
+            <version>4.5.3</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-logging</artifactId>
