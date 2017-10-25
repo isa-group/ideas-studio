@@ -483,7 +483,7 @@ var DescriptionInspector = {
         }
 
     },
-    expandConsole: function (menu) {
+    expandConsole: function (menu, callback) {
         var editor = $("#editorItself");
         var console = $("#editorBottomPanel");
         var expandButton = $("#expandConsole");
@@ -511,6 +511,9 @@ var DescriptionInspector = {
                     DescriptionInspector.expandConsole('hide');
                 });
                 fitEditor();
+                if (callback) {
+                    callback();
+                }
             });
         } else if (menu == 'hide') {
             editor.animate({height: ($(window).height() - $("#appHeader").height()

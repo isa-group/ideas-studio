@@ -291,9 +291,11 @@ var CommandsRegistry = {
             $("#gcli-root .gcli-in-top").last().before(
                     "<div class=\"gcli-row-out\" aria-live=\"assertive\"><div>"
                     + args.message + "</div></div>");
-            var display = $("#gcli-root .gcli-display");
-            display.scrollTop(display.prop("scrollHeight"));
-            DescriptionInspector.expandConsole('contract');
+            
+            DescriptionInspector.expandConsole('contract', function () {
+                var display = $("#gcli-root .gcli-display");
+                display.scrollTop(display.prop("scrollHeight"));
+            });
             return "";
         }
     },
