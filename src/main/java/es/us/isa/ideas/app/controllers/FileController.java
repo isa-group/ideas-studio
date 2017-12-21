@@ -625,12 +625,10 @@ public class FileController extends AbstractController {
             extensionIndex = mpf.getOriginalFilename().length() - 1;
         }
         
-        String folderUri = workspace + "/" + mpf.getOriginalFilename().substring(0, extensionIndex);
-        
         try {
             File temp = File.createTempFile("uploadExtraction", "zipFiles");
             mpf.transferTo(temp);
-            FSFacade.extractInNew(folderUri, LoginService.getPrincipal().getUsername(), temp);
+            FSFacade.extractIn(workspace, LoginService.getPrincipal().getUsername(), temp);
             temp.delete();
             workspaceService.updateTime(workspace, username);
         } 
