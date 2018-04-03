@@ -4,8 +4,10 @@ var FileApi = {
 		$.ajax("workspaces/" + workspaceName + "/load", {
 			"type" : "GET",
 			"success" : function(result) {
+                            if(result!==""){
 				var treeStruct = eval("(" + result + ")");
 				callback(treeStruct);
+                            }
 			},
 			"error" : function(result) {
 				console.error(result.statusText);
@@ -103,6 +105,7 @@ var FileApi = {
 		$.ajax("files?fileUri=" + fileUri +"&fileType=file", {
 			"type" : "DELETE",
 			"success" : function(result) {
+                            if (callback)
 				callback(result);
 			},
 			"error" : function(result) {

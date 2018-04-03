@@ -27,34 +27,16 @@
                     <i class="icon-user"></i> 
                     <spring:message code="master.page.login" />
                 </a>
-                <div id="socialSinginButtons" class="form-inline">		
-                    <span>Sign in  with:</span>
-                    <table><tr><td>
-                                <form id="fa_signin" action="signin/facebook" method="POST" class="form-horizontal">
-                                    <input type="hidden" name="scope" value="email">
-                                    <button type="submit" class="btn btn-social btn-xs btn-facebook"> 
-                                        <i class="fa fa-facebook"></i> Facebook 
-                                    </button> 
-                                </form>
-                            </td>
-                            <td>
-                                <form id="tw_signin" action="signin/twitter" method="POST" class="form-horizontal">                                        
-                                    <button type="submit" class="btn btn-social btn-xs btn-twitter">
-                                        <i class="fa fa-twitter"></i> Twitter
-                                    </button>
-                                </form>
-                            </td>
-                            <td>
-                                <form id="go_signin" action="signin/google" method="POST" class="form-inline">
-                                    <input type="hidden" name="scope" value="https://www.googleapis.com/auth/userinfo.email">					
-                                    <button type="submit" class="btn btn-social btn-xs btn-google-plus" href="/signin/google">
-                                        <i class="fa fa-google-plus"></i> Google
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+<!--                <form id="tw_signin" action="signin/twitter" method="POST">
+                    <button type="submit">
+                        <img src="img/Facebook.png"/>
+                    </button>
+                </form>-->
+<!--                <form id="fb_signin" action="signin/facebook" method="POST">
+                    <button type="submit">
+                         <img src="img/sign-in-with-facebook.png" />
+                    </button>
+                </form>-->
                 <a class="btn btn-success" href="researcher/create">
                     <spring:message code="master.page.register" />
                 </a>

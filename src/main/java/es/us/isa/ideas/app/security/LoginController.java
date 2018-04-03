@@ -18,82 +18,83 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import es.us.isa.ideas.app.controllers.AbstractController;
+import es.us.isa.ideas.app.controllers.ConfigurationController;
 
 @Controller
 @Transactional
 @RequestMapping("/security")
 public class LoginController extends AbstractController {
 
-	private static final Logger LOGGER = Logger.getLogger(LoginController.class
-			.getName());
+    private static final Logger LOGGER = Logger.getLogger(LoginController.class
+            .getName());
 
-	// Supporting services ----------------------------------------------------
+    // Supporting services ----------------------------------------------------
+    @Autowired
+    LoginService service;
+    
+    @Autowired
+    ConfigurationController configurationController;
 
-	@Autowired
-	LoginService service;
+    // Constructors -----------------------------------------------------------
+    public LoginController() {
+        super();
+    }
 
-	// Constructors -----------------------------------------------------------
+    // Login ------------------------------------------------------------------
+    @RequestMapping("/login")
+    public ModelAndView login(HttpServletRequest request,
+            @Valid @ModelAttribute Credentials credentials,
+            BindingResult bindingResult,
+            @RequestParam(required = false) boolean showError) {
 
-	public LoginController() {
-		super();
-	}
+        Assert.notNull(credentials);
+        Assert.notNull(bindingResult);
 
-	// Login ------------------------------------------------------------------
+        ModelAndView result;
+        
+        // Configure studioConfiguration
+        configurationController.getConfiguration(request);
 
-	@RequestMapping("/login")
-	public ModelAndView login(HttpServletRequest request,
-			@Valid @ModelAttribute Credentials credentials,
-			BindingResult bindingResult,
-			@RequestParam(required = false) boolean showError) {
+        DefaultSavedRequest originalRequest = (DefaultSavedRequest) request
+                .getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 
-		Assert.notNull(credentials);
-		Assert.notNull(bindingResult);
+        LOGGER.log(Level.INFO, "Login - originalRequest: " + originalRequest);
 
-		ModelAndView result;
+        String originalUrl;
 
-		DefaultSavedRequest originalRequest = (DefaultSavedRequest) request
-				.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+        try {
+            originalUrl = originalRequest.getRedirectUrl();
+        } catch (Exception e) {
+            originalUrl = "https://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/app/editor";
+        }
 
-		LOGGER.log(Level.INFO, "Login - originalRequest: " + originalRequest);
+        LOGGER.log(Level.SEVERE, "Login - redirecting to: " + originalUrl);
 
-		String originalUrl = null;
+        result = new ModelAndView("security/login");
 
-		try {
-			originalUrl = originalRequest.getRedirectUrl();
-		} catch (Exception e) {
-			originalUrl = "https://" + request.getServerName() + ":"
-					+ request.getServerPort() + request.getContextPath()
-					+ "/app/editor";
-		}
+        result.addObject("credentials", credentials);
+        result.addObject("showError", showError);
+        result.addObject("originalRequestUrl", originalUrl);
 
-		LOGGER.log(Level.SEVERE, "Login - redirecting to: " + originalUrl);
+        return result;
+    }
 
-		result = new ModelAndView("security/login");
+    // LoginFailure -----------------------------------------------------------
+    @RequestMapping("/loginFailure")
+    public ModelAndView failure(@Valid @ModelAttribute Credentials credentials,
+            BindingResult bindingResult, String originalUrl) {
+        Assert.notNull(credentials);
+        Assert.notNull(bindingResult);
 
-		result.addObject("credentials", credentials);
-		result.addObject("showError", showError);
-		result.addObject("originalRequestUrl", originalUrl);
+        ModelAndView result;
 
-		return result;
-	}
+        result = new ModelAndView("security/login_inview");
+        result.addObject("credentials", credentials);
+        result.addObject("showError", true);
+        result.addObject("inview", true);
+        result.addObject("originalRequestUrl", originalUrl);
 
-	// LoginFailure -----------------------------------------------------------
-
-	@RequestMapping("/loginFailure")
-	public ModelAndView failure(@Valid @ModelAttribute Credentials credentials,
-			BindingResult bindingResult, String originalUrl) {
-		Assert.notNull(credentials);
-		Assert.notNull(bindingResult);
-
-		ModelAndView result;
-
-		result = new ModelAndView("security/login_inview");
-		result.addObject("credentials", credentials);
-		result.addObject("showError", true);
-		result.addObject("inview", true);
-		result.addObject("originalRequestUrl", originalUrl);
-
-		return result;
-	}
+        return result;
+    }
 
 }

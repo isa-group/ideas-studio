@@ -11,6 +11,7 @@ $(window).load(function() {
 });
 
 var principalUser ="";
+var principalUserName ="";
 var currentSectionElement;
 var currentSection;
 
@@ -53,6 +54,7 @@ var AppPresenter = {
 					}
 					$('#principalUserInfo span').first().append(user.name);
 					principalUser=user.name;
+                    principalUserName=user.username;
 					
 					var auths2 = [];
 					$.each(auths, function(ident, value) {                    
@@ -68,7 +70,9 @@ var AppPresenter = {
 						callback();
 				},
 				"error" : function(result) {
-					console.error(result.statusText);
+                                    if(result.statusText){
+					console.log(result.statusText);
+                                    }
 				},
 				"async" : true,
 			});
@@ -102,13 +106,22 @@ var AppPresenter = {
 			$("#workspacesNavContainer li").removeClass("active");
 			
 			history.pushState({}, section, "app/" + section);
+            
+            var appSectionUri = "app/app_" + section + "_content";
 			
 			if ( section == "editor") {
 				WorkspaceManager.setSelectedWorkspace(params);
 				console.log("Section: " + section + "// Switching workspace to: " +  WorkspaceManager.getSelectedWorkspace());
 			}
+            
+            if (section == "help" && "helpMode" in studioConfiguration) {
+                var helpMode = studioConfiguration.helpMode;
+                if (helpMode == "static") {
+                    appSectionUri = studioConfiguration.helpURI;
+                }
+            }
 			
-			$.ajax("app/app_" + section + "_content", {
+			$.ajax(appSectionUri, {
 				"type" : "get",
 				"success" : function(result) {
 					setTimeout(function(){

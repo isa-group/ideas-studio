@@ -1,3 +1,92 @@
+ideas-studio v0.9.4.1, 31/01/2017
+----------------------------------------------
+- Automatically show console when something is printed #252
+- Bad interface on "isa firm" when you maximize #251
+- Simplify demo view #249
+- Add default 'cancelHandler' for modal windows #248
+- Unable to delete a recent project #247
+- Change "show all" to "advanced mode" #246
+- Project cannot be named like user #216
+- Can't delete a project/folder with existing elements #215
+- Problems while creating json file inside existent folder #214
+
+ideas-studio v0.9.4, 13/01/2017
+----------------------------------------------
+- Update a file content in JSON format implies losing JSON format #243
+- Clicking outside of a modal window won't execute cancel/close callback #242
+- Update js-yaml library to fix problem with multiline bindings #241
+- Unable to use workbecnh while angular print() function is called #239
+- Resolve blank string on Binding interaction #238
+- Create new filter in angularjs to capilize strings on template #237
+- Add a javascript library to convert markdown to html #236
+- After closing a tab, sometimes editor activates a random tab #234
+- Add print support for Binding #233
+- Add support for Google Chart in Binding #232
+- Binding always turns a number into string #231
+- Editor will always load the first item of "tabsMap" after closing any file #229
+- Modal window doesn't show IDEAS logo #227
+- Don't show register anchor in modal window #225
+- Hide login button when demo user is logging #224
+- Modal window content doesn't fit well #223
+- Filter file extensions from studio config file #222
+- '$hashkey' inserted by angular.toJson #221
+- Number is converted to string when updated from Binding #220
+- "show all" toggle button doesn't filter files after loading application in designer #219
+- Bad interface in fullscreen #217
+
+ideas-studio v0.9.3.3, 08/06/2016
+----------------------------------------------
+- Fix syntax check #213
+
+ideas-studio v0.9.3.2, 02/06/2016
+----------------------------------------------
+- Add support to new generatePortal #211
+
+ideas-studio v0.9.3.1, 01/06/2016
+----------------------------------------------
+- HTML code in changelog.txt is processed as HTML #207
+- Update studioConfiguration #209
+
+ideas-studio v0.9.3, 01/06/2016
+----------------------------------------------
+- Update title #206
+- Error message is always shown to user while creating files/directories/projects #205 
+- Operation buttons bad overflow  #202 
+- Problems with enconding in Dynatree #201 
+- 'generateDemoWorkspace' removes dynatree bottom menu #200 
+- Nullpointer when accessing to user properties in demo user #198 
+- Improve errors display  #197 
+- Implement all queued tests for v0.9.3 #196 
+- New command alias #195 
+- Enable "Advanced Mode" configuration #194 
+- Integrate IDEAS dockerized #193 
+- Unable to hide dynatree context menu by clicking in any other place of IDEAS #187 
+- Improve (or disable) help #186 
+- Require file/project/workspace name #184 
+- Update copyright #183 
+- Hide modals with outside clicks #179 
+- Log error when there is no workspace #177 
+- Modal error when you create a directory by pressing "enter" #172 
+- Format tabs don't fit well when "form" is selected #149 
+- Changelog modal window doesn't fit well #144 
+- "EditorManager is not defined" error in Workspace Manager page #141 
+- Unable to delete a recently created project #129 
+- Rename a file with an already existing name #113 
+- Avoiding display generic error messages #104 
+- Description inspector with wrong mode. Reader mode expected #97 
+- Support new language modules #78 
+- "Save changes" button disappears when you change tab #61 
+- Fixed project templates logic #54 
+- Share document modal is shown when something goes wrong when trying to create a new workspace #38 
+- "null" string on username after registering by social network #28 
+- The input title doesn't fit well in a modal window #26 
+- Implement modal window confirmation when user tries to delete a project, directory or file #20 
+- "User Account" menu redirects to "Login information" tab #13 
+- Cannot update UserAccount profile with special characters like "ñ" or "ç" #11 
+- Dynatree projects are reordered only by a page refresh #7 
+- /security/loginFailure page has no format #3 
+- generateDemoWorkspace doesn't overwrite an already existent workspace #2 
+
 ideas-studio v0.9.2.7, 19/05/2016
 ----------------------------------------------
 - Drag and drop project into project #14

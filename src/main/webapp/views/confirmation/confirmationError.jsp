@@ -7,23 +7,13 @@
 <%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 
 <script type="text/javascript">
-	function redirecToLogin(){
-		window.location.href = $('base').attr('href');
-	}
+    function redirectToApp() {
+        window.location.href = $('base').attr('href');
+    }
 </script>
 
-<div id="message" class="modal show" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Error validating account</h4>
-      </div>
-      <div class="modal-body">
-        <p><spring:message code="registration.confirmationError"/></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick='redirecToLogin()'>Login</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+<div>
+    <h2><spring:message code="registration.errorTitle"/></h2>
+    <spring:message code="registration.confirmationError"/>
+</div>
+<button class="btn goToApp" onclick="redirectToApp()">Go to ${studioConfiguration.workbenchName}</button>

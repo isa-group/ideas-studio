@@ -5,6 +5,7 @@
  */
 package es.us.isa.ideas.app.controllers;
 
+import es.us.isa.ideas.app.configuration.StudioConfiguration;
 import es.us.isa.ideas.app.entities.Tag;
 import es.us.isa.ideas.app.entities.Workspace;
 import es.us.isa.ideas.app.security.LoginService;
@@ -38,11 +39,18 @@ public class WSMController {
     @Autowired
     private TagService tagService;
     
+    @Autowired
+    private StudioConfiguration studioConfiguration;
+    
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView index(Model model,
                               @RequestParam(value="filter",required=false) String filter) {
         
         ModelAndView result;
+        
+        if (!studioConfiguration.getAdvancedMode()) {
+            return new ModelAndView("redirect:/app/editor");
+        }
         result = new ModelAndView("app/wsm");
         
         Collection<Workspace> taggedWS = null;

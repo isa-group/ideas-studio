@@ -12,7 +12,6 @@ var spreadsheet_icon = "../../../css/dyntree/skin/eSpreadsheet.png";
 var slideshow_icon = "../../../css/dyntree/skin/eSlides.png";
 var csv_icon = "../../../css/dyntree/skin/eCSV.png";
 var binary_file_icon = "../../../css/dyntree/skin/eBinaryFile.png";
-var r_icon = "../../../css/dyntree/skin/Rlogo.png";
 
 var extensionsIcons = {
     'gif': 'image_icon',
@@ -28,7 +27,6 @@ var extensionsIcons = {
     'pptx': 'slideshow_icon',
     'pdf': 'pdf_icon',
     'csv': 'csv_icon',
-    'r': 'r_icon',
     '': 'binary_file_icon'
 };
 
@@ -36,23 +34,21 @@ var selectedWorkspace;
 var workspaces;
 
 var WorkspaceManager = {
-    setSelectedWorkspace: function (wsName) {
+    setSelectedWorkspace: function (wsName, callback) {
         selectedWorkspace = wsName;
         FileApi.setSelectedWorkspace(wsName, function (ts) {
             console.log("WS setted: " + selectedWorkspace);
+            if (callback) callback(ts);
         });
     },
     getSelectedWorkspace: function () {
         return selectedWorkspace;
     },
     readSelectedWorkspace: function (callback) {
-
         FileApi.getSelectedWorkspace(function (ts) {
             selectedWorkspace = ts;
-            callback(ts);
-
+            if (callback) callback(ts);
         });
-
     },
     getWorkspaces: function (callback) {
         console.log("Loading all workspaces.");
@@ -75,15 +71,13 @@ var WorkspaceManager = {
 
             }
 
-            callback(wss);
+            if (callback) callback(wss);
         });
     },
-    loadWorkspace: function () {
+    loadWorkspace: function (callback) {
         var workspaceName = WorkspaceManager.getSelectedWorkspace();
         console.log("Loading WS " + workspaceName + " ...");
         FileApi.loadWorkspace(workspaceName, function (ts) {
-            $("#wsactions").empty();
-            var wsactions = $('#wsActions');
             var wsLabel = $("#editorSidePanelHeaderWorkspaceInfo");
             wsLabel.empty(WorkspaceManager.getSelectedWorkspace());
             wsLabel.append(WorkspaceManager.getSelectedWorkspace());
@@ -91,49 +85,26 @@ var WorkspaceManager = {
                 var treeStruct = ts;
                 $("#projectsTree").dynatree("getRoot").addChild(treeStruct);
                 $(".indented.apl_editor_"
-                  + WorkspaceManager.getSelectedWorkspace())
-                  .parent().addClass("active");
-
-                var wsActions = "";
-
-                var workspaceDownload = "<a style=\"cursor: pointer\" id=\"download-ws\" ";
-                workspaceDownload += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Download workspace as a single zip file\">";
-                workspaceDownload += "<span class=\"glyphicon glyphicon-download\" aria-hidden=\"true\"> </span>";
-                workspaceDownload += "</a>";
-
-                var workspaceEdit = "<a style=\"cursor: pointer\" id=\"edit-ws\" ";
-                workspaceEdit += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit workspace\">";
-                workspaceEdit += "<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"> </span></a>";
-
-                var workspaceToDemo = "<a style=\"cursor: pointer\" id=\"demo-ws\" ";
-                workspaceToDemo += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Publish as Demo\">";
-                workspaceToDemo += "<span class=\"glyphicon glyphicon-cloud-upload\" aria-hidden=\"true\"> </span></a>";
-
-
-                var workspaceDelete = "<a style=\"cursor: pointer\" id=\"delete-ws\"";
-                workspaceDelete += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete workspace\">";
-                workspaceDelete += "<span class=\"glyphicon glyphicon-trash\" aria-hidden=\"true\"> </span></a>";
-
-//            var workspaceScreenshot =  "<a style=\"cursor: pointer\" id=\"screenshot-ws\"";
-//                workspaceScreenshot += "data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Screenshot\">";
-//                workspaceScreenshot += "<span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"> </span></a>";
-
-                wsActions += "<br>&nbsp;&nbsp;" + workspaceEdit + "";
-                wsActions += "&nbsp;&nbsp;" + workspaceDownload + "";
-                wsActions += "&nbsp;&nbsp;" + workspaceToDemo + "";
-                wsActions += "&nbsp;&nbsp;" + workspaceDelete + "<br>";
-//                wsActions+="&nbsp;&nbsp;"+workspaceScreenshot+"<br>";
-                wsActions += "";
-
-
-                $("#wsactions").append(wsActions);
-
+                        + WorkspaceManager.getSelectedWorkspace())
+                        .parent().addClass("active");
             }
-            if (typeof EditorManager !== 'undefined')
-                EditorManager.reset();
-            $(".dynatree-expander").click();
 
-            $("#edit-ws").click(function (e) {
+            if ($("#projectsTree").length === 0) {
+                $("#wsactions").css("display", "none");
+            }
+
+            // Only for editor page
+            if (typeof EditorManager !== "undefined") {
+                EditorManager.reset();
+                if ($("#projectsTree").length > 0) { // Reorder tree
+                    sortProjectsTree();
+                    $("#projectsTree").dynatree("getRoot").visit(function(node){ 
+                        if (node.getLevel() < 2) node.expand(true);
+                    });
+                }
+            }
+
+            $("#edit-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 var oldName = WorkspaceManager.getSelectedWorkspace();
                 $("#modalCreationField input").val(oldName);
@@ -148,17 +119,17 @@ var WorkspaceManager = {
                 });
             });
 
-            $("#download-ws").click(function (e) {
+            $("#download-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 var name = WorkspaceManager.getSelectedWorkspace();
                 WorkspaceManager.downloadAsZip(name);
             });
 
-            $("#delete-ws").click(function (e) {
+            $("#delete-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 WorkspaceManager.deleteWorkspace(WorkspaceManager.getSelectedWorkspace());
             });
-            $("#demo-ws").click(function (e) {
+            $("#demo-ws").unbind("click").click(function (e) {
                 e.preventDefault();
                 var name = WorkspaceManager.getSelectedWorkspace();
                 WorkspaceManager.publishWorskspaceAsDemo(name);
@@ -166,7 +137,7 @@ var WorkspaceManager = {
                     WorkspaceManager.loadWorkspace();
                 });
             });
-            $("#screenshot-ws").click(function (e) {
+            $("#screenshot-ws").unbind("click").click(function (e) {
                 e.preventDefault();
 
                 var name = WorkspaceManager.getSelectedWorkspace();
@@ -181,7 +152,48 @@ var WorkspaceManager = {
                     }
                 });
             });
-
+            
+            // Filter extensions
+            DEFAULT_FILTER_FILES = true;
+            toggleAdvancedMode();
+            
+            // Check if there is a project called "Demo"
+            // Search for Binding file at root 
+            $("#projectsTree").dynatree("getRoot").visit(function (node) {
+                // If there is a project named Demo
+                if (node.data.isFolder && node.getLevel() === 1 && (node.data.keyPath === "Demo" || WizardViewManager.mayApply())) {
+                    var found = false;
+                    var auxTargetNode = null;
+                    CONFIG_EXTENSIONS_PREFERENCES.forEach(function (ext) {
+                        if (!found) {
+                            node.getChildren().forEach(function (nodeChild) {
+                                if (!found) {
+                                    var fileUri = getFileUriByNode(nodeChild);
+                                    var angFileUri = fileUri.replace(/\.[^/.]+$/, "") + ".ang";
+                                    var htmlFileUri = fileUri.replace(/\.[^/.]+$/, "") + ".html";
+                                    if (!!getNodeByFileUri(angFileUri) || !!getNodeByFileUri(htmlFileUri)) {
+                                        auxTargetNode = nodeChild;
+                                        if (ext.toLowerCase() === extractFileExtension(nodeChild.data.title).toLowerCase()) {
+                                            EditorManager.openFile(getFileUriByNode(nodeChild), function () {
+                                                maximize();
+                                            });
+                                            found = true;
+                                            return false; // break
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    // There is a binding but it wasn't considered in extension list
+                    if (!found && auxTargetNode != null) {
+                        EditorManager.openFile(getFileUriByNode(auxTargetNode), function () {
+                            maximize();
+                        });
+                    }
+                }
+            });
+            if (callback) callback();
         });
     },
     createWorkspace: function (workspaceName, description, tags, callback) {
@@ -193,7 +205,7 @@ var WorkspaceManager = {
                 });
                 if ($("#zipFile").val() !== "")
                     WorkspaceManager.initializeWithZipFile();
-                
+
                 if (callback)
                     callback();
             } else {
@@ -220,11 +232,12 @@ var WorkspaceManager = {
                 }
             });
             hideModal();
-            showModal("Confirm demos delete",
-              "Your demos for <b>'" + workspaceName + "'</b> will be erased too.<BR/><BR/>\n\
+            if (studioConfiguration.advancedMode === true) {
+                showModal("Confirm demos delete",
+                    "Your demos for <b>'" + workspaceName + "'</b> will be erased too.<BR/><BR/>\n\
                       <b>Do you want to delete your existing demos?</b><BR/></i>",
-              "Continue", deleteDemosHandler,
-              function () {}, function () {});
+                    "Continue", deleteDemosHandler);
+            }
         };
 
         var deleteDemosHandler = function () {
@@ -240,8 +253,8 @@ var WorkspaceManager = {
             $(location).attr('href', "app/wsm");
         };
         showModal("Confirm workspace delete", "The workspace <b>'" + workspaceName + "'</b> will be erased and all data will be lost.<BR/><BR/><b>Do you want to delete the existing workspace?</b><BR/></i>",
-          "Continue", continueHandler,
-          function () {}, function () {});
+                "Continue", continueHandler,
+                function () {}, function () {});
 
 
     },
@@ -283,8 +296,8 @@ var WorkspaceManager = {
             hideModal();
         };
         showModal("Confirm workspace delete", "The workspace <b>'" + workspaceName + "'</b> will be erased and all data will be lost.<BR/><BR/><b>Do you want to delete the existing workspace?</b><BR/></i>",
-          "Continue", continueHandler,
-          function () {}, function () {});
+                "Continue", continueHandler,
+                function () {}, function () {});
 
     },
     downloadAsZip: function (workspaceName, callback) {
@@ -309,8 +322,8 @@ var WorkspaceManager = {
                     <BR/> All data will be accessible from:\n\
                     <BR/><BR/><span id=\"demoURL\">" + $("base").attr('href').valueOf() + "demo/" + workspaceName + "</span>\n\
                     <BR/><BR/><b>Do you want to create a demo for the existing workspace?</b><BR/></i>",
-          "Continue", continueHandler,
-          function () {}, function () {});
+                "Continue", continueHandler,
+                function () {}, function () {});
     },
     updateDemoWorkspace: function (workspaceName, callback) {
         var continueHandler = function () {
@@ -321,8 +334,8 @@ var WorkspaceManager = {
         showModal("Confirm demo update", "The demo for the workspace <b>'" + workspaceName + "'</b> will be overwritten and new data will be accessible from:\n\
                     <BR/><BR/><span id=\"demoURL\">" + $("base").attr('href').valueOf() + "demo/" + workspaceName + "</span>\n\
                     <BR/><BR/><b>Do you want to update the demo for the existing workspace?</b><BR/></i>",
-          "Continue", continueHandler,
-          function () {}, function () {});
+                "Continue", continueHandler,
+                function () {}, function () {});
     },
     importNewDemoWorkspace: function (workspaceName, callback) {
         var continueHandler = function () {
@@ -334,22 +347,24 @@ var WorkspaceManager = {
         showModal("Confirm clone", "A clone for the demo workspace <b>'" + workspaceName + "'</b> will be created in your workspaces\n\
                     You will be redirected to the editor after the clone action\n\
                     <BR/><BR/><b>Do you want to clone the public demo ?</b><BR/></i>",
-          "Continue", continueHandler,
-          function () {}, function () {});
+                "Continue", continueHandler,
+                function () {}, function () {});
     }
 };
 
 var createWSLine = function (wsName) {
     var wsLi = $("<li><a class=\"indented apl_editor_"
-      + wsName
-      + "\">"
-      + wsName
-      + "</a><span class=\"glyphicon glyphicon-chevron-right\"></span></li>");
+            + wsName
+            + "\">"
+            + wsName
+            + "</a><span class=\"glyphicon glyphicon-chevron-right\"></span></li>");
     $("#workspacesNavContainer").append(wsLi);
     wsLi.click(function () {
         $("#workspacesNavContainer li").removeClass("active");
         AppPresenter.loadSection("editor", wsName, function () {
             WorkspaceManager.loadWorkspace();
+            // Re-compiles binding engine to show model content in binding panel
+            LanguageBindingsManifestManager.reloadPanel();
         });
     });
 

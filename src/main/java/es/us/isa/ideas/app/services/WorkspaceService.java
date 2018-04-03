@@ -18,6 +18,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -218,7 +220,9 @@ public class WorkspaceService extends BusinessService<Workspace> {
             Workspace ws = findByNameAndOwner(workspaceName, username);
             ws.setLastMod(Calendar.getInstance().getTime());
             workspaceRepository.saveAndFlush(ws);
+
         } catch (Exception e) {
+            Logger.getLogger(WorkspaceService.class.getName()).log(Level.SEVERE, "Problems while updating time in workspace {0}", workspaceName);
         }
     }
 

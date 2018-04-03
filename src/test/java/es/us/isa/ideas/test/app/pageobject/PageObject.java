@@ -1,5 +1,6 @@
 package es.us.isa.ideas.test.app.pageobject;
 
+import es.us.isa.ideas.test.app.utils.IdeasURLType;
 import es.us.isa.ideas.test.app.utils.TestProperty;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -58,11 +59,13 @@ public class PageObject<T> {
     }
 
     public T clickOnClickableElement(WebElement element) {
+        PageObject.waitForElementVisible(element, 10);
         element.click();
         return (T) this;
     }
 
     public T clickOnNotClickableElement(WebElement element) {
+        PageObject.waitForElementVisible(element, 10);
         Actions actions = new Actions(driver);
         actions.moveToElement(element).click().perform();
         return (T) this;
@@ -70,6 +73,7 @@ public class PageObject<T> {
 
     public T clickOnNotClickableLocator(By locator) {
         WebElement element = driver.findElement(locator);
+        PageObject.waitForElementVisible(element, 10);
         return clickOnNotClickableElement(element);
     }
 
@@ -142,6 +146,11 @@ public class PageObject<T> {
     public static void close() {
         getWebDriver().close();
     }
+    
+    public static void waitForElementVisible(WebElement element, int seconds) {
+        new WebDriverWait(PageObject.getWebDriver(), seconds)
+            .until(ExpectedConditions.visibilityOf(element));
+    }
 
     /**
      * Tries to confirm an alert message window in the specified time.
@@ -164,6 +173,10 @@ public class PageObject<T> {
             LOG.severe(ex.getMessage());
         }
 
+    }
+    
+    public static boolean currentPageContainsURLType(IdeasURLType urlType) {
+        return PageObject.getWebDriver().getCurrentUrl().contains(urlType.toString());
     }
 
 }

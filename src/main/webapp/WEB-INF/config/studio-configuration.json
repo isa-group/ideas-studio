@@ -1,10 +1,10 @@
 {
         "workbenchName": "EXEMPLAR",
-        "images": {
+   "images": {
                 "logo": "exemplar/appLogoBig.png",
                 "search": "exemplar/ExperimentsSearch.png"
-        },
-	"languages": {
+   },
+   "modules": {
             "sedl-language": "/ideas-sedl-language",
             "ideas-plaintext-language": "/ideas-plaintext-language",
             "ideas-csv-language": "/ideas-csv-language",
@@ -23,4 +23,9 @@
         },
     "helpURI":"exemplar.html",
     "googleAnalyticsID":"UA-56725341-1" 
-} 
+ 
+   "helpMode": "dynamic",
+   "advancedMode": true,
+   "extensionsFilter": ["ang", "ctl", "html"],
+   "extensionsPreferences": ["ag", "at", "oai-spec", "json", "yaml"]
+}

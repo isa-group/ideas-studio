@@ -21,7 +21,15 @@
 // 2013-05-09 Martin Wendt:
 //            Added polyfil for $.browser (fixes compatibility with jQuery 1.9)
 //
+
+
 if(jQuery)( function() {
+    
+        $(document).on('click', function (event) { //hide contextMenu on outside click
+            if (!$(event.target).closest('.contextMenu').length) {
+                $(".contextMenu").hide();
+            }
+        });
 
 	/* Check browser version, since $.browser was removed in jQuery 1.9 */
 	function _checkBrowser(){

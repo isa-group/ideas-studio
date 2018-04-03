@@ -7,7 +7,6 @@ import es.us.isa.ideas.test.app.pageobject.login.RegisterPage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialGooglePage;
 import es.us.isa.ideas.test.app.pageobject.login.RegisterSocialTwitterPage;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -23,6 +22,8 @@ public class RegisterTestCase {
 
     @Test
     public void step01_registerFormFieldMaxLength() {
+        PageObject.logout();
+        
         String bigString = "1729374981723894719283749812734987192834719827398417293847198237489173417293749817238947192837498127349871928347198273984172938471982374891734172937498172389471928374981273498719283471982739841729384719823748917341729374981723894719283749812734987192834719827398417293847198237489173417293749817238947192837498127349871928347198273984172938471982374891734172937498172389471928374981273498719283471982739841729384719823748917341729374981723894719283749812734987192834719827398417293847198237489173417293749817238947192837498127349871928347198273984172938471982374891734";
         String name = bigString;
         String email = bigString;
@@ -39,24 +40,20 @@ public class RegisterTestCase {
         RegisterSocialTwitterPage.testTwitterSocialRegister(twUser, twPass);
     }
 
-    @Ignore
-    public void step06_googleRegister() {
+    @Test
+    public void step03_googleRegister() {
         PageObject.logout();
-
+        
         String goUser = TestProperty.getTestGoogleUser();
         String goPass = TestProperty.getTestGooglePassword();
         RegisterSocialGooglePage.testGoogleSocialRegister(goUser, goPass);
-    }
-
-    @Ignore
-    public void step06_googleRegisterb() {
+        
+        PageObject.logout();
         RegisterSocialGooglePage.testGoogleSocialLogout();
     }
 
     @Test
-    public void step10_register() {
-        PageObject.logout();
-
+    public void step04_register() {
         String user = TestProperty.getTestRegisterUser();
         String name = TestProperty.getTestRegisterUserName();
         String email = TestProperty.getTestRegisterUserEmail();
@@ -68,7 +65,7 @@ public class RegisterTestCase {
     }
 
     @Test
-    public void step12_recoverPassword() {
+    public void step05_recoverPassword() {
         PageObject.logout();
 
         String user = TestProperty.getTestRegisterUser();

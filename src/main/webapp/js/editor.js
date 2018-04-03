@@ -9,20 +9,31 @@
 //------------------------------------------------------------------------------
 // Editor window initialization:
 var initializeEditor = function () {
-    intializeEditorWindow();
-    initializeCommandLine();
-    $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function () {
-        MenuManager.setupGlobalMenu("Create $1 file");
+    intializeEditorWindow(function () {
+        initializeCommandLine(function () {
+            $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function () {
+                MenuManager.setupGlobalMenu("Create $1 file");
+            });
+            if (localStorage.getItem("demo") == "demo") {
+//                $.ajaxSetup({
+//                    cache: false,
+//                    headers: { 
+//                        "Cache-Control": "no-cache",
+//                        "Pragma": "no-cache"
+//                    }
+//                });
+                if (localStorage.getItem("ws") != "") {
+                    auxGenerateDemo(localStorage.getItem("ws"), localStorage.getItem("ws"), undefined, function () {
+                        $("#menuToggler").hide();
+                        $("#userTab").hide();
+                        userDemoInfo.onClick();
+                        $.ajaxSetup({ cache: true });
+                    });
+                }
+            }
+        });
+        WizardViewManager.apply();
     });
-
-    if (localStorage.getItem("demo") == "demo") {
-        $("#menuToggler").hide();
-        $("#userTab").hide();
-        userDemoInfo.onClick();
-        if (localStorage.getItem("ws") != "") {
-            auxGenerateDemo(localStorage.getItem("ws"));
-        }
-    }
 };
 
 //	location.href='j_spring_security_logout';
@@ -31,9 +42,11 @@ var initializeEditor = function () {
 
 // Initialization of the command line, basically adds the file, project and 
 // workspace management commands.
-var initializeCommandLine = function () {
+var initializeCommandLine = function (callback) {
     require(['gcli/index', 'demo/index'], function (gcli) {
         gcli.createDisplay();
+        gcli.addCommand(CommandsRegistry.generateTemplateWorkspace);
+        gcli.addCommand(CommandsRegistry.generateTemplateWorkspaceWithDestination);
         gcli.addCommand(CommandsRegistry.generateDemoWorkspace);
         gcli.addCommand(CommandsRegistry.generateDemoWorkspaceWithDestination);
         gcli.addCommand(CommandsRegistry.checkDocument);
@@ -50,7 +63,11 @@ var initializeCommandLine = function () {
         gcli.addCommand(CommandsRegistry.testModule);
         gcli.addCommand(CommandsRegistry.testModules);
         gcli.addCommand(CommandsRegistry.convertCurrentWorkspacetoDemo);
+        gcli.addCommand(CommandsRegistry.convertCurrentWorkspacetoTemplate);
         gcli.addCommand(CommandsRegistry.clearConsole);
+        
+        if (callback) callback();
+        
     });
 };
 
@@ -58,7 +75,7 @@ var initializeCommandLine = function () {
 var currentSelectedNode = null;
 var previousSizes = new Object();
 var maximizing = false;
-var intializeEditorWindow = function () {
+var intializeEditorWindow = function (callback) {
 
     //For demo user, session expired
     window.onload = function () {
@@ -98,51 +115,65 @@ var intializeEditorWindow = function () {
         }
     });
 
-    // Setup editor interface and editor window events:
-    $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function () {
-        MenuManager.setupGlobalMenu("Create $1 file");
-    });
-    $("#editorSidePanel").resizable({
-        maxWidth: 900,
-        minWidth: 150,
-        handles: "e"
-    });
-    $("#editorSidePanel").resize(fitEditorMainPanel);
-    $("#editorItself").resizable({
-        maxHeight: 800,
-        minHeight: 51,
-        handles: "s"
-    });
-    $("#editorItself").resize(fitBottomPanel);
-    $("#editorInspector").resizable({
-        maxWidth: 900,
-        minWidth: 150,
-        handles: "w"
-    });
-    $("#editorInspector").resize(function () {
-        $("#editorInspector").css("left", "0");
-        fitEditorMainPanel();
-    });
-    $(window).resize(fitEditor);
-    $("#editorMaximize").click(maximize);
-    $("#editorToggleInspector").click(toggleInspector);
-    //share Document
-    $("#shareDocumentModal").hide();
-    $("#shareDocument").click(function () {
-        $("#shareDocumentModal").show();
-        $("#mailContent").val(EditorManager.getCurrentEditorContent());
-    });
-    $("#shareDocClosed").click(function () {
-        $("#shareDocumentModal").hide();
-    });
-    $("#sendMail").click(function () {
-        var to = $("#mailTo").val();
-        var content = $("#mailContent").val();
-        share(to, content);
-        $("#shareDocumentModal").hide();
-    });
-    // Finally we show and fit the editor :
-    fitEditor();
+    // Allow editor resize only if it is not a Wizard.
+    if (!WizardViewManager.mayApply()) {
+
+        // Setup editor interface and editor window events:
+        $("#editorSidePanelHeaderAddProject .dropdown-toggle").click(function () {
+            MenuManager.setupGlobalMenu("Create $1 file");
+        });
+        $("#editorSidePanel").resizable({
+            maxWidth: 900,
+            minWidth: 150,
+            handles: "e"
+        });
+        $("#editorSidePanel").resize(fitEditorMainPanel);
+        $("#editorItself").resizable({
+            maxHeight: 800,
+            minHeight: 51,
+            handles: "s"
+        });
+        $("#editorItself").resize(fitBottomPanel);
+        $("#editorInspector").resizable({
+            maxWidth: 900,
+            minWidth: 150,
+            handles: "w"
+        });
+        $("#editorInspector").resize(function () {
+            $("#editorInspector").css("left", "0");
+            fitEditorMainPanel();
+        });
+        $(window).resize(function (e) {
+            if (e.originalEvent.type !== "mousemove") {
+                $("#editorItself").height(($(window).height() - $("#appHeader").height()
+                        - $("#appFooter").height() - 52) / $("#editorMainPanel").height() * 100 + "%");
+                fitEditor();
+            } else {
+                fitEditor();
+            }
+        });
+        $("#editorMaximize").click(maximize);
+        $("#editorToggleInspector").click(toggleInspector);
+        //share Document
+        $("#shareDocument").click(function () {
+            $("#shareDocumentModal").show();
+            $("#mailContent").val(EditorManager.getCurrentEditorContent());
+        });
+        $("#shareDocClosed").click(function () {
+            $("#shareDocumentModal").hide();
+        });
+        $("#sendMail").click(function () {
+            var to = $("#mailTo").val();
+            var content = $("#mailContent").val();
+            share(to, content);
+            $("#shareDocumentModal").hide();
+        });
+        // Finally we show and fit the editor :
+        fitEditor();
+
+    }
+    
+    if (callback) callback();
 };
 
 //------------------------------------------------------------------------------
@@ -252,6 +283,7 @@ var fitBottomPanel = function () {
 var fitEditor = function () {
     fitEditorMainPanel();
     fitBottomPanel();
+    EditorCheckerIcon.fitScrollbar();
     $("#editorItself").resizable(
             "option",
             "maxHeight",
@@ -273,6 +305,7 @@ var toggleMaximization = function () {
     var appMainContent = $("#appMainContent");
     var editorSidePanel = $("#editorSidePanel");
     var editorMainPanel = $("#editorMainPanel");
+    var editorInspector = $("#editorInspector");
     var max_min = $("#editorMaximize");
 
     // Fit inspector content
@@ -285,53 +318,41 @@ var toggleMaximization = function () {
     }, 500);
 
     if (appMainContent.hasClass("maximizedEditor")) {
+        // Quit maximized editor
         appMainContent.removeClass("maximizedEditor");
-
-        editorSidePanel.css("max-width", +"0px");
-        editorMainPanel.css("min-width", editorMainPanel.width() + "px");
-        editorMainPanel.css("width", previousSizes.editorWidth + "px");
-        setTimeout(function () {
-            editorSidePanel.css("max-width", previousSizes.sidePanelWidth + 2 + "px");
-// 		    		editorMainPanel.css("max-width", previousSizes.editorWidth + "px");
-// 		    		editorSidePanel.css("min-width", previousSizes.sidePanelWidth + "px");
-            editorMainPanel.css("min-width", previousSizes.editorWidth + "px");
-            setTimeout(
-                    function () {
-                        editorSidePanel.css("max-width", "100%");
-                        editorMainPanel.css("max-width", "");
-                        editorSidePanel.css("min-width", "");
-                        editorMainPanel.css("min-width", "0px");
-                        fitEditor();
-                    }, 900);
-        }, 1);
-
         max_min.removeClass("minimize");
-
-        setTimeout(function () {
+        
+        $("#editorSidePanel").show();
+        editorSidePanel.animate({width: previousSizes.sidePanelWidth + 2 + "px"}, function () {
+            $("#editorSidePanelHeaderWorkspaceInfo").fadeIn();
+            $("#wsactions").show();
+            $("#appFooter").show();
+            
+            fitEditor();
+        });
+        
+        editorMainPanel.animate({width: previousSizes.editorWidth + "px"}, function () {
             maximizing = false;
-        }, 900);
+        });
 
     } else {
+        // Maximize
         appMainContent.addClass("maximizedEditor");
+        max_min.addClass("minimize");
 
         previousSizes.sidePanelWidth = editorSidePanel.width();
         previousSizes.editorWidth = editorMainPanel.width();
-
-        editorSidePanel.css("max-width", editorSidePanel.width());
-        editorMainPanel.css("min-width", editorMainPanel.width());
-        setTimeout(function () {
-            editorSidePanel.css("max-width", "0px");
-            editorMainPanel.css("min-width", $(window).width() - $("#editorInspector").width());
-        }, 1);
-
-        max_min.addClass("minimize");
-
-        setTimeout(function () {
+        
+        editorSidePanel.animate({width: 0}, function () {
+            $("#editorSidePanelHeaderWorkspaceInfo").fadeOut();
+            $("#wsactions").hide();
+            $("#appFooter").hide();
+            $("#editorSidePanel").hide();
+        });
+        
+        editorMainPanel.animate({width: $(window).width() - editorInspector.width()}, function () {
             maximizing = false;
-            editorMainPanel.css("width", $(window).width() - $("#editorInspector").width());
-            editorMainPanel.css("min-width", "");
-// 	    			fitEditorMainPanel();
-        }, 700);
+        });
     }
 };
 
@@ -339,7 +360,9 @@ var toggleInspector = function () {
     var inspector = $("#editorInspector");
     if (inspector.hasClass("hdd")) {
         EditorManager.showInspector();
+        previousSizes.editorWidth -= inspector.width();
     } else {
+        previousSizes.editorWidth += inspector.width();
         EditorManager.hideInspector();
     }
 

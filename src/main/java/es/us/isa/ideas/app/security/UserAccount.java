@@ -48,7 +48,7 @@ public class UserAccount extends DomainEntity implements UserDetails, Cloneable 
 	private Collection<Authority> authorities;
 
 	@NotBlank
-	@Size(min = 5, max = 32)
+	@Size(min = 1, max = 32)
 	@Column(unique = true)
 	@Override
 	public String getUsername() {
