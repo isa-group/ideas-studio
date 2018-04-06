@@ -21,11 +21,10 @@
           "social":"classpath*:social-exemplar.properties",
           "email":"classpath*:email-exemplar.properties"
         },
-    "helpURI":"exemplar.html",
-    "googleAnalyticsID":"UA-56725341-1" 
- 
+    "helpURI":"exemplar.html",    
    "helpMode": "dynamic",
    "advancedMode": true,
    "extensionsFilter": ["ang", "ctl", "html"],
-   "extensionsPreferences": ["ag", "at", "oai-spec", "json", "yaml"]
+   "extensionsPreferences": ["ag", "at", "oai-spec", "json", "yaml"],
+    "googleAnalyticsID":"UA-56725341-1"
 }

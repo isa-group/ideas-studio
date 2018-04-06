@@ -10,12 +10,12 @@ and open the template in the editor.
 
 /* The switch - the box around the slider */
 .switch {
-  margin-left: 15px;
+  margin-left: 8px;
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
-  zoom: 0.5;
+  width: 42px;
+  height: 24px;
+  zoom: 0.3;
 }
 
 /* Hide default HTML checkbox */
@@ -37,10 +37,10 @@ and open the template in the editor.
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
+  height: 22px;
+  width: 22px;
+  left: 2px;
+  bottom: 1px;
   background-color: white;
   -webkit-transition: .4s;
   transition: .4s;
@@ -55,14 +55,14 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
 }
 
 /* Rounded sliders */
 .slider.round {
-  border-radius: 34px;
+  border-radius: 22px;
 }
 
 .slider.round:before {
