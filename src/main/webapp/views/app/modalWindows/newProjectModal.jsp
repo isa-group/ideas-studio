@@ -22,12 +22,12 @@
             </jstl:forEach>
         </select>
 
-        <!--<dir id="specificModuleTemplates">
+        <dir id="specificModuleTemplates">
             <label> <spring:message code="editor.actions.modal.create_project.from_template_of_module" /></label>
-                <select >
-
+                <select id="ProjectTemplate">
+                    <option value="">Empty project</option>
                 </select>
-        </dir> -->
+        </dir>
     </div>
 </div>
 <div class="modal-footer">
@@ -36,9 +36,9 @@
 </div>
 <script>
     var mytemplates,mytemplate,index;
-    $("#template-selection").remove(); //enable it when project templates become active
+    $("#template-selection").hide(); //enable it when project templates become active
     <jstl:forEach var="language" items="${studioConfiguration.modules}">        
-        /*$.ajax({"url": '${language.value}/template/project',
+        $.ajax({"url": '${language.value}/template/project',
         success: function(result, textStatus, request) {
                 console.log("Templates provided by the ${language.key} module:" + result + "");
                 mytemplates=$.parseJSON(result);
@@ -55,6 +55,7 @@
             error: function(result, textStatus, request){
             	$("#template-selection").remove();
             }
-        });*/
+        });
     </jstl:forEach>
+    $("#template-selection").show();
 </script>

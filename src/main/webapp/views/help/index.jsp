@@ -1,4 +1,3 @@
-
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -52,7 +51,7 @@
                             <core:set var="languageNameAux" value="${fn:replace(language.key, '-language','')}"/>
                             <core:set var="languageName" value="${fn:replace(languageNameAux, 'ideas-','')}"/>
                             <core:set var="languageNameFinal" value="${fn:toUpperCase(languageName)}" />                      
-                            <h3><a href="/${language.key}/help/">${languageNameFinal}</a></h3>
+                            <h3><a href="${language.value}/help/">${languageNameFinal}</a></h3>
                         </li>
 
                     </core:forEach>  
@@ -60,7 +59,6 @@
                 </ul>
             </li>       
         </ul>
-
     </div>
     <!-- /.container -->
 </body>

@@ -309,8 +309,47 @@ function instantiateFileContentFromTemplate(languageId, templateName, fileUri)
         success: function (result, textStatus, request) {
             console.log("Content of the template '" + templateName + "':" + result);
             FileApi.saveFileContents(fileUri, result, function (result) {
-                EditorManager.openFile(fileUri);
+                $.ajax({"url": ModeManager.idUriMap[languageId] + '/template/dependences/document/'+ templateName,
+                success: function (result, textStatus, request) {
+                    console.log("Dependences of the template '" + templateName + "':" + result);
+                    var mytemplates;
+                    var node = currentSelectedNode;
+                    var nodeUri = FileApi.calculateNodeUri(node);
+                    var newChild;
+                    var keyPath;
+                    var fileName=fileUri.substring(fileUri.lastIndexOf('/')+1);
+                    var index,processed=0;
+                    fileName=fileName.replace(".sedl","");
+                    mytemplates=result;
+                    if(mytemplates !== null && mytemplates.length != 0){                    
+                        for(index=0;index<mytemplates.length;index++){                            
+                            $.ajax({"url": ModeManager.idUriMap[languageId] + '/template/document/'+ mytemplates[index],
+                                success: function (result, textStatus, request) {                                    
+                                     var newFileName=mytemplates[processed].replace(templateName.replace(".sedl",""),fileName);
+                                     var dependenceFileUri = WorkspaceManager.getSelectedWorkspace() + "/" + nodeUri + "/" + newFileName;
+                                        processed++;
+                                        FileApi.createFile(dependenceFileUri, function (ts) {
+                                            if(ts){
+                                                keyPath = nodeUri + "/" + newFileName;
+                                                newChild = buildChild(newFileName, false, "file_icon", keyPath);
+                                                node.addChild(newChild);
+                                                node.sortChildren();
+                                                FileApi.saveFileContents(dependenceFileUri, result, function (result) {
+                                                    if(processed>=mytemplates.length-1)
+                                                        EditorManager.openFile(fileUri);
+                                            
+                                                });
+                                            }
+                                        
+                                     });
+                                     }
+                                 });
+                        }
+                    }
+                }
+                });                
             });
+            
         }
     });
 }

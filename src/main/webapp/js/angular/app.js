@@ -4,7 +4,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
 
         $scope.model = {};
         $scope.config = {
-            autoremoveModel: true
+            autoremoveModel: false
         };
 
         $scope.currentBinding = "";

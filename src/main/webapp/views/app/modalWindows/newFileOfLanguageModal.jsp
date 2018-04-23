@@ -30,11 +30,14 @@
         $.ajax({"url": '${studioConfiguration.modules[languageId]}/template/document',
         success: function(result, textStatus, request) {
                 console.log("Templates provided by the ${language} module:" + result + "");
-                mytemplates=$.parseJSON(result);                ;
+                if (typeof result === 'string' || result instanceof String)
+                    mytemplates=$.parseJSON(result);                
+                else
+                    mytemplates=result;
                 if(mytemplates !== null && mytemplates.length != 0){                    
                     for(index=0;index<mytemplates.length;index++){
                         mytemplate=mytemplates[index];
-                        $("#template-file").append('<option value="'+mytemplate.name+'">'+mytemplate.name+'</option>');                                    
+                        $("#template-file").append('<option value="'+mytemplate.name+'"'+(index==0?' selected':'')+'>'+mytemplate.name+'</option>');                                    
                     }
                 }else
                     $("#createFileFromTemplate").remove();
