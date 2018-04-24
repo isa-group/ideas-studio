@@ -322,26 +322,28 @@ function instantiateFileContentFromTemplate(languageId, templateName, fileUri)
                     fileName=fileName.replace(".sedl","");
                     mytemplates=result;
                     if(mytemplates !== null && mytemplates.length != 0){                    
-                        for(index=0;index<mytemplates.length;index++){                            
+                        for(index=0;index<mytemplates.length;index++){ 
+                            
                             $.ajax({"url": ModeManager.idUriMap[languageId] + '/template/document/'+ mytemplates[index],
                                 success: function (result, textStatus, request) {                                    
                                      var newFileName=mytemplates[processed].replace(templateName.replace(".sedl",""),fileName);
                                      var dependenceFileUri = WorkspaceManager.getSelectedWorkspace() + "/" + nodeUri + "/" + newFileName;
                                         processed++;
-                                        FileApi.createFile(dependenceFileUri, function (ts) {
+                                        (function (fname,furi){
+                                        FileApi.createFile(furi, function (ts) {
                                             if(ts){
-                                                keyPath = nodeUri + "/" + newFileName;
-                                                newChild = buildChild(newFileName, false, "file_icon", keyPath);
+                                                keyPath = nodeUri + "/" + fname;
+                                                newChild = buildChild(fname, false, "file_icon", keyPath);
                                                 node.addChild(newChild);
                                                 node.sortChildren();
-                                                FileApi.saveFileContents(dependenceFileUri, result, function (result) {
+                                                FileApi.saveFileContents(furi, result, function (result) {
                                                     if(processed>=mytemplates.length-1)
                                                         EditorManager.openFile(fileUri);
                                             
                                                 });
                                             }
                                         
-                                     });
+                                     });})(newFileName,dependenceFileUri);
                                      }
                                  });
                         }
