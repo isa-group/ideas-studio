@@ -215,7 +215,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
                                         
                                         DescriptionInspector.editorContentToModel();
 
-                                    }, 1000);
+                                    }, 3000);
 
                         });
 
