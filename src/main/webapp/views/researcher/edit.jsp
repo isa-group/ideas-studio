@@ -11,6 +11,7 @@
 <script>
 	jQuery(function() {
     //Connected with
+    var isAutheniticated=<security:authorize access="isAuthenticated()">true</security:authorize><security:authorize access="isAnonymous()">false</security:authorize>;
     var social = localStorage.getItem('social');
     if (social == "facebook" || social == "twitter" || social == "google") {
         var element = $('div#connect-' + social);
@@ -174,10 +175,8 @@ function redirecToLogin() {
 				<h4 class="modal-title">Account created successfully</h4>
 			</div>
 			<div class="modal-body">
-				<p>Thanks for signing up, please go to our login page to access
-					the application.</p>
-				<p>In brief you will receive an email with the information
-					necessary for the activation of the account.</p>
+				<p>Thanks for signing up, please go to our login page to access the application.</p>
+				<p>In brief you will receive an email with the information necessary for the activation of the account.</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary"

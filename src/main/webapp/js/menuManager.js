@@ -318,18 +318,17 @@ function instantiateFileContentFromTemplate(languageId, templateName, fileUri)
                     var newChild;
                     var keyPath;
                     var fileName=fileUri.substring(fileUri.lastIndexOf('/')+1);
-                    var index,processed=0;
+                    var index=0;
                     fileName=fileName.replace(".sedl","");
                     mytemplates=result;
                     if(mytemplates !== null && mytemplates.length != 0){                    
                         for(index=0;index<mytemplates.length;index++){ 
-                            
-                            $.ajax({"url": ModeManager.idUriMap[languageId] + '/template/document/'+ mytemplates[index],
+                            (function (j){
+                            $.ajax({"url": ModeManager.idUriMap[languageId] + '/template/document/'+ mytemplates[j],
                                 success: function (result, textStatus, request) {                                    
-                                     var newFileName=mytemplates[processed].replace(templateName.replace(".sedl",""),fileName);
-                                     var dependenceFileUri = WorkspaceManager.getSelectedWorkspace() + "/" + nodeUri + "/" + newFileName;
-                                        processed++;
-                                        (function (fname,furi){
+                                     var newFileName=mytemplates[j].replace(templateName.replace(".sedl",""),fileName);
+                                     var dependenceFileUri = WorkspaceManager.getSelectedWorkspace() + "/" + nodeUri + "/" + newFileName;                                        
+                                        (function (fname,furi,processed){
                                         FileApi.createFile(furi, function (ts) {
                                             if(ts){
                                                 keyPath = nodeUri + "/" + fname;
@@ -343,9 +342,10 @@ function instantiateFileContentFromTemplate(languageId, templateName, fileUri)
                                                 });
                                             }
                                         
-                                     });})(newFileName,dependenceFileUri);
+                                     });})(newFileName,dependenceFileUri,j);
                                      }
                                  });
+                        })(index);
                         }
                     }
                 }

@@ -191,29 +191,28 @@ var loadExistingTabbedInstance = function (fileUri, content) {
         document.editor
                 .on(
                         "change",
-                        function (changesDeltas) {
-                            EditorCheckerIcon.loading();
+                        function (changesDeltas) {                            
                             if (checkerTimer)
-                                clearTimeout(checkerTimer);
-
+                                clearTimeout(checkerTimer);                                                            
                             checkerTimer = setTimeout(
                                     function () {
-                                        if (fileUri != "") {
-
+                                        if (fileUri != "") {                                            
                                             var content = EditorManager.sessionsMap[EditorManager.currentUri]
                                                     .getBaseSession()
                                                     .getValue();
-                                            EditorManager.saveFile(
+                                            if(content!="")
+                                                EditorManager.saveFile(
                                                     EditorManager.currentUri,
                                                     content);
                                         }
-
+                                        
                                         mayCheckLanguageSyntax(EditorManager.currentUri, function () {
+                                            DescriptionInspector.editorContentToModel();
                                             mayCheckLanguageConsistency(EditorManager.currentUri);
                                         });
                                         
                                         
-                                        DescriptionInspector.editorContentToModel();
+                                        
 
                                     }, 3000);
 
