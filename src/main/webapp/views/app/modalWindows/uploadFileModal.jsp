@@ -27,14 +27,27 @@
                     dataType: 'json',
                     done: function(e, data) {
                         $.each(data.result, function(index, file) {
+                            console.info("Uploaded: "+file.fileName+" of "+file.fileSize+" bytes");
                             var myfileExtension = extractFileExtension(file.fileName);
-                            var nodeUri = FileApi.calculateNodeUri(currentSelectedNode);
+                            var node=currentSelectedNode;                            
+                            var tittleAsArray = (node.data.title).split(".");
+                            var parent=null;
+                            if (tittleAsArray.length > 1) {
+                                parent = node.getParent();
+                                if (parent != null) {
+                                    node = parent;                                    
+                                }
+                            }
+                            var nodeUri = FileApi.calculateNodeUri(node);
                             fileUri = WorkspaceManager.getSelectedWorkspace() + "/" + nodeUri + "/" + file.fileName;
                             var keyPath = nodeUri + "/" + file.fileName;
                             var newChild = buildChild(file.fileName, false, getIconName(myfileExtension),keyPath); //"file_icon");                                                            
-                            currentSelectedNode.addChild(newChild);
-                            currentSelectedNode.sortChildren();
+                            node.addChild(newChild);
+                            node.sortChildren();
                             $('<p/>').text(file.fileName + " (" + file.fileSize + ") Uploaded to: " + fileUri).appendTo('#files');
+                            if(fileUploadCallback){
+                                fileUploadCallback(nodeUri+"/"+file.fileName)
+                            }
                         });
                     },
                     progressall: function(e, data) {

@@ -230,7 +230,7 @@ var setupClickForNewFile = function ($newLanguageFileElem, languageName, languag
     });
 };
 
-var createNewFile = function (languageId, languageExtension) {
+var createNewFile = function (languageId, languageExtension,callback) {
     var fileName = $("#modalCreationField input").val(),
         fileExt = $("#modalCreationField .extension").text().split(".")[1];
     console.log("result-->" + nameFileChecker(fileName, fileExt));
@@ -270,9 +270,13 @@ var createNewFile = function (languageId, languageExtension) {
             if (templateName && templateName != "")
                 instantiateFileContentFromTemplate(languageId, templateName, fileUri);
             else {
-                EditorManager.openFile(fileUri);
+                if(callback)
+                    callback(fileUri);
+                else
+                    EditorManager.openFile(fileUri);
                 console.log("---->>" + fileUri);
             }
+            
         });
     } else {
         alert("Please choose another name, this already exist.");

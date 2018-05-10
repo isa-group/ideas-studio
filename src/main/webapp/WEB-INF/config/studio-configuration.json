@@ -13,7 +13,8 @@
             "ideas-json-language": "/ideas-json-language",
             "ideas-yaml-language": "/ideas-yaml-language",
             "ideas-language-angular": "/ideas-language-angular",
-            "ideas-language-angular-controller": "/ideas-language-angular-controller"
+            "ideas-language-angular-controller": "/ideas-language-angular-controller",
+            "ideas-latex-language": "/ideas-latex-language"
 	},
         "configurationFiles":{
           "application":"classpath*:application.properties",
