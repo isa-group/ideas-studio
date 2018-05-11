@@ -82,7 +82,7 @@
                   position: absolute;
                   bottom: 0;
                   font-size: 8px;
-                  margin-bottom: -24px;
+                  margin-bottom: -20px;
                   right: 6%;
                   text-align: center;
                   color: #777;
