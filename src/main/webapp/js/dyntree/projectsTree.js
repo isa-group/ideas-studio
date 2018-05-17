@@ -162,7 +162,7 @@ function bindContextMenu(span) {
                     CommandApi.deleteNode(nodeUri, function (result) {
                         hideModal();
                     });
-                });
+                },function(){hideModal();},function(){hideModal();});
                 break;
             case "cut":
                 pasteMode = "cut";
@@ -200,6 +200,14 @@ function bindContextMenu(span) {
                     }
                 };
                 uploadFileItem.onClick();
+                break;
+            case "download":
+                var tmpNode = currentSelectedNode;
+                originNode = node;
+                if (!originNode.data.isFolder) {
+                    var url="files/get/"+WorkspaceManager.getSelectedWorkspace()+"/"+originNode.data.keyPath;
+                    window.open(url,"_blank");                    
+                }
                 break;
             default:
                 alert("Todo: appply action '" + action + "' to node " + node);

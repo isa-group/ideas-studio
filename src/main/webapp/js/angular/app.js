@@ -197,7 +197,10 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                                 return value;
                                 }, 2), converterUri,
                                 function (result) {
-                                    resolve(result.data);
+                                    if(result.status!="ERROR")
+                                        resolve(result.data);
+                                    else
+                                        console.log("ERROR while transforming from "+currentFormat+" to JSON!. "+result.message);
                                 }
                             );
                         });
@@ -268,7 +271,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                         var promise = $q(function (resolve, reject) {
                             CommandApi.callConverter(model, currentFormat, "json", EditorManager.currentUri, editorContent, converterUri,
                                 function (result) {
-                                    if (result.data) {
+                                    if (result && result.data) {
                                         resolve(JSON.parse(result.data));
                                     }
                                 }

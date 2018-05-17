@@ -55,6 +55,7 @@
                 <c:if test="${studioConfiguration.advancedMode}">
                 <li class="upload separator"><a href="#upload">Upload</a></li>
                 </c:if>
+                <li class="upload separator"><a href="#download">Download</a></li>
         </ul>
         <div id="projectsTree"> </div>
     </div>

@@ -142,6 +142,27 @@ var uploadFileItem = {
     }
 };
 
+var uploadFileItem = {
+    elementClass: "DownloadFile",
+    folderDisabled: true,
+    titleCode: "editor.actions.modal.download_file.title",
+    buttonCode: "editor.actions.modal.downloadload_file.button",
+    contentUrl: "app/modalWindows/uploadFile",
+    onClick: function () {
+        var estate = $('.uploadFile');
+        if (!(estate.parent().attr('class') == 'disabled')) {
+            genericMenuOption(uploadFileItem);
+        }
+        //genericMenuOption(uploadFileItem);
+    },
+    onCreate: function () {
+        hideModal();
+    },
+    onCancel: function () {
+        hideModal();
+    }
+};
+
 var menuSeparator = 0;
 
 //------------------------------------------------------------------------------

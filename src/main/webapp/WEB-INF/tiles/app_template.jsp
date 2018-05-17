@@ -28,8 +28,7 @@
         <link rel="stylesheet" href="css/jmenu.css" media="screen">
         <link rel="stylesheet" href="css/jquery-ui.css">
         <link rel="stylesheet" href="css/jquery.fileupload.css">
-        <link rel="stylesheet" href="css/jquery.fileupload-ui.css">
-        <link rel="stylesheet" href="css/displaytag.css" type="text/css">
+        <link rel="stylesheet" href="css/jquery.fileupload-ui.css">        
         <link rel="stylesheet" href="css/passfield.min.css" type="text/css">
         <!-- Custom css styles -->
         <link href="css/jquery.contextMenu.css" rel="stylesheet" type="text/css" >
@@ -91,6 +90,7 @@
         <!-- angular app -->
         <script type="text/javascript" src="js/angular/app.js"></script>
         <script type="text/javascript" src="js/angular/directives/ppinotDirective.js"></script>
+        <script type="text/javascript" src="js/angular/directives/existingfileDirective.js"></script>
         <script type="text/javascript" src="js/angular/filters/unquoteFilter.js"></script>
 
     </head>

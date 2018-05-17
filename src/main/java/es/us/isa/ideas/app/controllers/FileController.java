@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.ResourceNotFoundException;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -256,8 +257,10 @@ public class FileController extends AbstractController {
         try {
             fileContent = FSFacade.getFileContent(fileUri, LoginService.getPrincipal().getUsername());
         } 
-        catch (Exception e) {
-            logger.log(Level.SEVERE, null , e);
+        catch (AuthenticationException ex){
+            logger.log(Level.SEVERE, null , ex);
+        }catch( BadUriException e) {
+            throw new ResourceNotFoundException("FileController","Bad uri");
         }
         return fileContent;
     }
@@ -666,7 +669,7 @@ public class FileController extends AbstractController {
         String pathUrl = request.getRequestURI().substring(request.getRequestURI().indexOf("files/get/") + 9);
         
         try {
-            String fileUri = java.net.URLDecoder.decode(pathUrl, "UTF-8");
+            String fileUri = java.net.URLDecoder.decode(pathUrl, "UTF-8");            
             response.addHeader("Content-Type", URLConnection.guessContentTypeFromName(pathUrl));
             FileCopyUtils.copy(FSFacade.getFileContentAsBytes(fileUri, username), response.getOutputStream());
             response.flushBuffer();
