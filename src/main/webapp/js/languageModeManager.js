@@ -144,6 +144,15 @@ var ModeManager = {
     getOperations: function (modelId) {
         return ModeManager.operationsMap[modelId];
     },
+    getOperation: function (modelId,operationId) {
+        var modeOperations=ModeManager.operationsMap[modelId];
+        var result=null;
+        for (var i = 0; i < modeOperations.length; i++) {       
+            if (modeOperations[i].id === id)
+                result=modeOperations[i];
+        }
+        return result;
+    },
     getCommands: function (modelId) {
         return ModeManager.commandsMap[modelId];
     },

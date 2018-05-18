@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.social.ResourceNotFoundException;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -670,12 +671,20 @@ public class FileController extends AbstractController {
         
         try {
             String fileUri = java.net.URLDecoder.decode(pathUrl, "UTF-8");            
+            byte[] bytes=FSFacade.getFileContentAsBytes(fileUri, username);
             response.addHeader("Content-Type", URLConnection.guessContentTypeFromName(pathUrl));
-            FileCopyUtils.copy(FSFacade.getFileContentAsBytes(fileUri, username), response.getOutputStream());
+            FileCopyUtils.copy(bytes, response.getOutputStream());
             response.flushBuffer();
         } 
         catch (Exception ex) {
-            logger.log(Level.SEVERE, null, ex);
+            try {
+                logger.log(Level.SEVERE, null, ex);
+                response.setStatus(HttpStatus.NOT_FOUND.value());
+                FileCopyUtils.copy(ex.getMessage().getBytes(), response.getOutputStream());
+                response.flushBuffer();
+            } catch (IOException ex1) {
+                Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, "Unable to send 404 error!", ex1);
+            }
         }
     }
 

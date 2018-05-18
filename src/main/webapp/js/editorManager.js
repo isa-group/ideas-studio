@@ -480,10 +480,13 @@ var loadExistingTabbedInstance = function (fileUri, content) {
 
 // Operation buttons auxiliar function
 var launchOperation = function (model, id, name) {
-    for (var i = 0; i < opMap.length; i++) {
+    var operationsMap=ModeManager.getOperations(model);
+    if(!operationsMap)
+        operationsMap=opMap;
+    for (var i = 0; i < operationsMap.length; i++) {
         try {
-            if (opMap[i].id === id) {
-                var operation = opMap[i];
+            if (operationsMap[i].id === id) {
+                var operation = operationsMap[i];
                 if (model.apiVersion >= 2.0) {
                     switch (operation.type) {
                         case 'simple':
