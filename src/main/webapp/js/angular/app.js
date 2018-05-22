@@ -1,13 +1,15 @@
 // AngularJS initialization
 var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstrap.datetimepicker', 'ui.dateTimeInput', 'googlechart', 'chart.js'])
     .controller("MainCtrl", ["$scope", "$compile", "$q", "$http", "$timeout", "$state", "$location", "$stateParams", function ($scope, $compile, $q, $http, $timeout, $state, $location, $stateParams) {
-
+                    
         $scope.model = {};
         $scope.config = {
             autoremoveModel: false
         };
+        
 
         $scope.currentBinding = "";
+        
         $scope.$watch(function () {
             return $scope.currentBinding;
         }, function (newValue, oldValue) {
@@ -15,6 +17,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                 $scope.applyBinding(newValue);
             }
         });
+        
         /**
          * Update current Binding visualization.
          * @param {Binding} currentBinding
@@ -124,6 +127,7 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
         };
 
         $scope.languageBindingsManifest = {};
+        
         $scope.$watch(function () {
             return $scope.languageBindingsManifest;
         }, function (newValue, oldValue) {
@@ -131,8 +135,11 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
         });
         $scope.$timeout = $timeout;
 
+        $scope.regenerateModelWacthers=function(){
+         if($scope.clearModelWhatchers)
+             $scope.clearModelWhatchers();
         // Update editor content from model
-        $scope.$watch(
+        $scope.clearModelWhatchers=$scope.$watch(
             function () {
                 return $scope.model;
             },
@@ -229,6 +236,11 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
                     }
                 }
             }, true);
+        };
+        
+        $scope.regenerateModelWacthers();
+        
+        
 
         /**
          * Update model from ace editor. 
@@ -236,10 +248,10 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
          * @returns {undefined}
          */
         $scope.editorContentToModel = function () {
-
+            
             // Try-catch block for bad JSON parsing.
             try {
-
+                
                 var sessionMap = EditorManager.sessionsMap[EditorManager.currentUri],
                     currentFormat = sessionMap.getCurrentFormat(),
                     formatSessions = sessionMap.getFormatsSessions(),
@@ -361,11 +373,12 @@ var mainApp = angular.module("mainApp", ['ngSanitize', 'ui.router', 'ui.bootstra
             });
         };
 
-        $scope.clearModel = function () {
-            if (!!$scope.model && typeof $scope.model === "object" && !!$scope.config.autoremoveModel) {
+        $scope.clearModel = function () {            
+            $scope.regenerateModelWacthers();
+            if (!!$scope.model && typeof $scope.model === "object" && !!$scope.config.autoremoveModel) {                                
                 $scope.model = undefined;
-                $scope.$apply();
-            }
+                $scope.$apply();                
+            }                        
         };
 
     }]).directive("contenteditable", ['$timeout', function ($timeout) {

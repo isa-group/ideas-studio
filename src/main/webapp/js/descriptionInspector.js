@@ -2842,7 +2842,7 @@ var DescriptionInspector = {
          */
         destroy: function () {
             this.getHtmlObj().remove();
-            this.formatTab.getHtmlObj().remove();
+            this.formatTab.getHtmlObj().remove();            
         },
         /**
          * @namespace DescriptionInspector.angularFormatView.formatTab

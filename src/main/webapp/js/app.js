@@ -537,6 +537,7 @@ var LanguageBindingsManifestManager = {
         DescriptionInspector.angularFormatView.destroy();
         $scope = angular.element(document.getElementById("appBody")).scope();
         setTimeout(function () {
+            //$scope.clearWhatchers();
             $scope.languageBindingsManifest = {};
             $scope.currentBinding = "";
             $scope.$apply();

@@ -91,6 +91,7 @@
         <script type="text/javascript" src="js/angular/app.js"></script>
         <script type="text/javascript" src="js/angular/directives/ppinotDirective.js"></script>
         <script type="text/javascript" src="js/angular/directives/existingfileDirective.js"></script>
+        <script type="text/javascript" src="js/angular/directives/gravatarDirective.js"></script>
         <script type="text/javascript" src="js/angular/filters/unquoteFilter.js"></script>
 
     </head>
