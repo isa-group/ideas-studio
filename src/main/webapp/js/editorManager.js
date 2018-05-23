@@ -889,7 +889,23 @@ var EditorManager = {
         return document.editor.getSession().setValue(content);
     },
     getEditorContentByUri: function (fileUri) {
-        return EditorManager.sessionsMap[fileUri].getBaseSession().getValue();
+        var result=null;
+        if(EditorManager.sessionsMap[fileUri])
+            result=EditorManager.sessionsMap[fileUri].getBaseSession().getValue();
+        else{
+            $.ajax({
+                type: "GET",
+                async: "false",
+                url: "files/get/"+fileUri,
+                data: "{}",
+                success: function(content) {                                        
+                        result=content;
+                        return content;                    
+                    }
+                
+             });
+        }
+        return result;
     },
     setAnnotations: function (annotations) {
         document.editor.getSession().setAnnotations(annotations);
