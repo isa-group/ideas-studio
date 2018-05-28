@@ -893,17 +893,11 @@ var EditorManager = {
         if(EditorManager.sessionsMap[fileUri])
             result=EditorManager.sessionsMap[fileUri].getBaseSession().getValue();
         else{
-            $.ajax({
+            result=$.ajax({
                 type: "GET",
-                async: "false",
-                url: "files/get/"+fileUri,
-                data: "{}",
-                success: function(content) {                                        
-                        result=content;
-                        return content;                    
-                    }
-                
-             });
+                async: false,
+                url: "files/get/"+fileUri 
+             }).responseText;
         }
         return result;
     },

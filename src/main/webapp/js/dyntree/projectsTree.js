@@ -156,6 +156,35 @@ function bindContextMenu(span) {
                     }
                 });
                 break;
+            case "editDescription":
+                var fileType="directory";
+                if(!node.data.isFolder)
+                    fileType="file";
+                
+                    var nodeUri = (node.data.keyPath !== "undefined") ? WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath : WorkspaceManager.getSelectedWorkspace() + "/" + node.data.title;                
+                
+                
+                    $.get("/files/description/"+nodeUri+"?fileType="+fileType,
+                        function(content){
+                            showModal("Please, edit the description of '"+node.data.keyPath+"'", "<label>Description:</label><textarea id='description' name='description' cols='30' rows='3'>"+ content + "</textarea>", "Save", 
+                                function () {
+                                    
+                                    $.post("/files/description/"+nodeUri+"?content="+encodeURI($('#description').val()+"&fileType="+fileType),
+                                            function (result) {
+                                                FileApi.loadWorkspace(WorkspaceManager.getSelectedWorkspace(), function (ts) {
+                                                    hideModal();
+                                                });
+                                            }
+                                        );
+                                },
+                                function(){hideModal();},
+                                function(){hideModal();}
+                             );
+                        }
+                    );
+                //}else
+                //    window.alert("You can´t set a description to a file, descriptions are only supported for directories.")
+                break;
             case "delete":
                 var nodeUri = (node.data.keyPath !== "undefined") ? WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath : WorkspaceManager.getSelectedWorkspace() + "/" + node.data.title;
                 showModal("Please, confirm your decision", "<strong>Are you sure you want to delete \"" + nodeUri + "\"?</strong>", "Delete", function () {

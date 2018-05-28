@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.social.ResourceNotFoundException;
@@ -745,6 +746,57 @@ public class FileController extends AbstractController {
        
        FSFacade.copytoProject(workspace, project, owner, temDirectory);
      
+    }
+    
+    @RequestMapping(value="/description/**", method = RequestMethod.GET)
+    public void getDescription(HttpServletRequest request, HttpServletResponse response) {
+        
+         String username = LoginService.getPrincipal().getUsername();
+        String fileType = request.getParameter("fileType");
+        String pathUrl = request.getRequestURI().substring(request.getRequestURI().indexOf("files/get/") + 20);
+        String separator="/";
+        if(FILE_TYPE_FILE.equals(fileType)){
+            if(pathUrl.contains("."))
+                pathUrl=pathUrl.substring(0,pathUrl.lastIndexOf(".")-1);        
+            separator="";
+        }
+        try{
+            String fileUri = java.net.URLDecoder.decode(pathUrl, "UTF-8")+separator+".description";        
+            byte[] bytes=FSFacade.getFileContentAsBytes(fileUri, username);
+            response.addHeader("Content-Type", URLConnection.guessContentTypeFromName(pathUrl));
+            FileCopyUtils.copy(bytes, response.getOutputStream());
+            response.flushBuffer();
+        }catch (Exception ex) {            
+            logger.log(Level.SEVERE, null, ex);                            
+        }                
+    }
+    
+    @RequestMapping(value="/description/**", method = RequestMethod.POST)
+    public void saveDescription(HttpServletRequest request, HttpServletResponse response) {
+        
+        String username = LoginService.getPrincipal().getUsername();
+        String fileType = request.getParameter("fileType");
+        String pathUrl = request.getRequestURI().substring(request.getRequestURI().indexOf("files/get/") + 20);
+        String separator="/";
+        if(FILE_TYPE_FILE.equals(fileType)){
+            if(pathUrl.contains("."))
+                pathUrl=pathUrl.substring(0,pathUrl.lastIndexOf(".")-1);        
+            separator="";
+        }
+        try{
+            String fileUri = java.net.URLDecoder.decode(pathUrl, "UTF-8")+separator+".description";                   
+            String content=IOUtils.toString(request.getReader());
+            if(content==null || "".equals(content))
+                content=request.getParameter("content");
+            if(content==null)
+                content="";
+            FSFacade.createFile(fileUri,username);
+            FSFacade.setFileContent(fileUri, username, content.getBytes());                                        
+        } catch (UnsupportedEncodingException exc) {
+            logger.log(Level.SEVERE, null, exc);        
+        }catch (Exception ex) {            
+            logger.log(Level.SEVERE, null, ex);                            
+        }                
     }
 
 }

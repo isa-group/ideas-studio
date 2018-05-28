@@ -47,6 +47,7 @@
         <ul id="myMenu" class="contextMenu">
             <c:if test="${studioConfiguration.advancedMode}">
                 <li class="edit"><a href="#edit">Edit</a></li>
+                <li class="edit"><a href="#editDescription">Edit description</a></li>
                 </c:if>
             <li class="cut separator"><a href="#cut">Cut</a></li>
             <li class="copy"><a href="#copy">Copy</a></li>

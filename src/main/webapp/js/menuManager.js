@@ -142,7 +142,7 @@ var uploadFileItem = {
     }
 };
 
-var uploadFileItem = {
+var downloadFileItem = {
     elementClass: "DownloadFile",
     folderDisabled: true,
     titleCode: "editor.actions.modal.download_file.title",
