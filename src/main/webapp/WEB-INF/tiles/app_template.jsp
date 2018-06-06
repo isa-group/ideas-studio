@@ -30,6 +30,8 @@
         <link rel="stylesheet" href="css/jquery.fileupload.css">
         <link rel="stylesheet" href="css/jquery.fileupload-ui.css">        
         <link rel="stylesheet" href="css/passfield.min.css" type="text/css">
+        <link rel="stylesheet" href="css/textAngular.css" type="text/css">
+        <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
         <!-- Custom css styles -->
         <link href="css/jquery.contextMenu.css" rel="stylesheet" type="text/css" >
         <link rel='stylesheet' type='text/css' href='css/dyntree/skin/exemplar-dynatree.css'>
@@ -93,6 +95,11 @@
         <script type="text/javascript" src="js/angular/directives/existingfileDirective.js"></script>
         <script type="text/javascript" src="js/angular/directives/gravatarDirective.js"></script>
         <script type="text/javascript" src="js/angular/filters/unquoteFilter.js"></script>
+        
+        <!-- TexAngular editor -->
+        <script src='js/vendor/textAngular-rangy.min.js'></script>    
+        <script src='js/vendor/textAngular-sanitize.min.js'></script>    
+        <script src='js/vendor/textAngular.min.js'></script>
 
     </head>
 

@@ -93,8 +93,12 @@ var handleResponse = function(responseFunctions, result, textStatus, exc,
 					responseFunctions["onSessionError"](result);
 				location.reload();
 			} else { // Errors
-				CommandApi
-						.echo("<pre>There is a problem with the document, operation can not be resolved</pre>");
+				CommandApi.echo("<pre>There is a problem with the document, operation can not be resolved</pre>");
+                                if (resObj.htmlMessage == null)
+                                    if (resObj.message == null)
+                                        CommandApi.echo(resObj.message);
+				else 
+                                    CommandApi.echo(resObj.htmlMessage);
 				if (responseFunctions["onError"])
 					responseFunctions["onError"](result, exc);
 				console.error("ERROR HANDLING X-RESPONSE!");
