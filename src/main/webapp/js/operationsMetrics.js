@@ -4,6 +4,7 @@ var displayTime;
 var OperationMetrics = {
 	init : "",
 	end : "",
+        timeout: null,
 	getInit : function() {
 		return OperationMetrics.init;
 	},
@@ -40,8 +41,8 @@ var OperationMetrics = {
 		CommandApi.echo(div);
 
 		$(".btn-primary").attr("disabled", "disabled");
-
-		timeOut = setTimeout(
+                if(OperationMetrics.timeout==null){
+                    OperationMetrics.timeout = setTimeout(
 				function() {
 
 					if ($("#executingPopup") != undefined) {
@@ -75,8 +76,11 @@ var OperationMetrics = {
 					displayTime = setInterval(OperationMetrics.updateTime, 1000);
 
 				}, 2000);
+                            }
 	},
 	stop : function() {
+                clearTimeout(OperationMetrics.timeout);
+                OperationMetrics.timeout=null;
 		OperationMetrics.end = new Date();
 
 		$(".btn-primary").removeAttr("disabled");
@@ -106,7 +110,7 @@ var OperationMetrics = {
 
 	reset : function() {
 		OperationMetrics.resetTime();
-		clearTimeout(timeOut);
+		clearTimeout(OperationMetrics.timeout);
 		clearInterval(displayTime);
 	},
 

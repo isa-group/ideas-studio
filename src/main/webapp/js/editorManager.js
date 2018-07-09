@@ -479,7 +479,7 @@ var loadExistingTabbedInstance = function (fileUri, content) {
 };
 
 // Operation buttons auxiliar function
-var launchOperation = function (model, id, name) {
+var launchOperation = function (model, id, name,callback) {
     var operationsMap=ModeManager.getOperations(model);
     if(!operationsMap)
         operationsMap=opMap;
@@ -544,13 +544,19 @@ var launchOperation = function (model, id, name) {
                                 if (result.annotations)
                                     EditorManager.setAnnotations(result.annotations);
                                 action(operation, fileUriOperation, result);
+                                if(callback)
+                                    callback(result);
                             }
 
                             OperationReport.launchedOperations.push(operation.name);
                             OperationReport.resultLaunchedOperations.push(result.message);
                         });
                     } else if (action !== undefined && action !== null) {
-                        action(operation, fileUriOperation);
+                        
+                        if(callback)
+                            result = action(operation, fileUriOperation,callback);
+                        else
+                            result = action(operation, fileUriOperation);
                     }
                 }
                 OperationReport.timeOfOperations.push(OperationMetrics.getOperationMilliseconds());

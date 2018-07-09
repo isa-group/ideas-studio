@@ -100,6 +100,16 @@
         <script src='js/vendor/textAngular-rangy.min.js'></script>    
         <script src='js/vendor/textAngular-sanitize.min.js'></script>    
         <script src='js/vendor/textAngular.min.js'></script>
+        
+        <!-- HighCharts -->
+        <script src="js/vendor/highcharts/highcharts.js"></script>
+        <script src="js/vendor/highcharts/highcharts-more.js"></script>
+        <script src="js/vendor/highcharts/highcharts-3d.js"></script>
+        <script src="js/vendor/highcharts/modules/data.js"></script>
+        <script src="js/vendor/highcharts/modules/exporting.js"></script>
+        <script src="js/vendor/highcharts/modules/export-data.js"></script>
+        <script src="js/vendor/highcharts/modules/funnel.js"></script>
+        <script src="js/vendor/highcharts/modules/solid-gauge.js"></script>
 
     </head>
 
