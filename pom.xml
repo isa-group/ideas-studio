@@ -57,10 +57,10 @@
 
         <!--- VERSIONING -->
         <java.version>1.7</java.version>
-        <spring.version>4.0.1.RELEASE</spring.version>
-        <spring.security.version>3.2.0.RELEASE</spring.security.version>
-        <spring.data.version>1.4.3.RELEASE</spring.data.version>
-        <spring.data.solr.version>1.1.0.RELEASE</spring.data.solr.version>
+        <spring.version>4.0.5.RELEASE</spring.version>
+        <spring.security.version>4.0.0.RELEASE</spring.security.version>
+        <spring.data.version>1.5.0.RELEASE</spring.data.version>
+        <spring.data.solr.version>1.3.0.RELEASE</spring.data.solr.version>
         <spring.social.version>1.1.0.M4</spring.social.version>
         <org.socialsignin.spring.security.version>1.1.0-SNAPSHOT</org.socialsignin.spring.security.version>
         <spring.social.facebook.version>1.1.0.M4</spring.social.facebook.version>
@@ -392,7 +392,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.21</version>
+            <version>5.1.42</version>
         </dependency>
 
         <!-- Javax -->
@@ -463,7 +463,7 @@
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.8.0</version>
+            <version>1.9.2</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -784,12 +784,11 @@
                     </components>
                     <hibernatetool>
                         <classpath>
-                            <path location="${project.build.directory}/classes" />
-                            <path location="${project.basedir}/src/main/resources/META-INF/" />
+                            <path location="${project.build.directory}/classes"/>
+                            <path location="${project.basedir}/src/main/resources/META-INF/"/>
                         </classpath>
-                        <jpaconfiguration persistenceunit="persistenceUnit" />
-                        <hbm2ddl create="true" export="true" update="true" drop="true"
-                                 outputfilename="configuration.sql" format="true" />
+                        <jpaconfiguration persistenceunit="persistenceUnit"/>
+                        <hbm2ddl create="true" export="true" update="true" drop="true" outputfilename="configuration.sql" format="true"/>
                     </hibernatetool>
                 </configuration>
 
