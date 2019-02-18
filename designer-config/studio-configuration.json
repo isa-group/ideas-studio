@@ -1,0 +1,44 @@
+{
+    "images": {
+        "logo": "designer/appLogoBig.png",
+        "search": "designer/Search.png"
+    },
+    "configurationFiles": {
+        "application": "classpath*:application.properties",
+        "security": "classpath*:security.properties",
+        "social": "classpath*:social.properties",
+        "email": "classpath*:email.properties"
+    },
+    "workbenchName": "DESIGNER",
+    "helpURI": "https://designer.governify.io/IDEAS-help/",
+    "helpMode": "none",
+    "googleAnalyticsID": "UA-68297022-1",
+    "advancedMode": false,
+    "extensionsFilter": [
+        "ang",
+        "ctl",
+        "html",
+        "cfg"
+    ],
+    "extensionsPreferences": [
+        "ag",
+        "at",
+        "oai-at",
+        "json",
+        "yaml"
+    ],
+    "modules": {
+        "module-agreement-lite": "https://agreement-lite.modules.designer.governify.io/api/v2",
+        "minizinc-module": "https://minizinc.modules.designer.governify.io/api/v2",
+        "fama-module": "https://fama.modules.designer.governify.io/api/v2",
+        "ideas-plaintext-language": "https://plaintext.modules.designer.governify.io/ideas-plaintext-language",
+        "ideas-html-language": "https://html.modules.designer.governify.io/ideas-html-language",
+        "ideas-json-language": "https://json.modules.designer.governify.io/ideas-json-language",
+        "ideas-oai-spec-language": "https://yaml.modules.designer.governify.io/ideas-oai-spec-language",
+        "ideas-yaml-language": "https://yaml.modules.designer.governify.io/ideas-yaml-language",
+        "ideas-language-angular": "https://angular.modules.designer.governify.io/ideas-language-angular",
+        "ideas-language-angular-controller": "https://angular-controller.modules.designer.governify.io/ideas-language-angular-controller",
+        "ideas-opl-language": "https://opl.modules.designer.governify.io/ideas-opl-language",
+        "ideas-cfg-language": "https://json.modules.designer.governify.io/ideas-cfg-language"
+    }
+}
