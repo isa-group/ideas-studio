@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
+import org.springframework.context.annotation.Configuration;
 
 public class StudioConfiguration implements Serializable {
 
@@ -46,7 +47,7 @@ public class StudioConfiguration implements Serializable {
         } catch (IOException e) {
             LOG.log(Level.SEVERE, null, e);
         }
-
+        
         return config;
     }
 

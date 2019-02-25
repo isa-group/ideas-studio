@@ -1,6 +1,7 @@
 package es.us.isa.ideas.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -74,6 +75,15 @@ public class LoginService implements UserDetailsService {
             Authentication authentication=new UsernamePasswordAuthenticationToken(account,null);
             
             context.setAuthentication(authentication);            
+        }
+        
+        public static boolean isAuthenticated()
+        {
+            return SecurityContextHolder.getContext().getAuthentication() != null &&
+                    SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+                    //when Anonymous Authentication is enabled
+                    !(SecurityContextHolder.getContext().getAuthentication() 
+                            instanceof AnonymousAuthenticationToken) ;
         }
 
 }

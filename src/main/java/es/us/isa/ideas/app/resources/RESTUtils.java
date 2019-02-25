@@ -4,6 +4,7 @@
  */
 package es.us.isa.ideas.app.resources;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +16,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+
 
 import com.google.common.base.Function;
 

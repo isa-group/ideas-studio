@@ -11,21 +11,27 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import org.hibernate.annotations.common.util.impl.Log_$logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Component;
 
 
 
-/**
- *
- * @author japarejo
- */
+@Component
 public class CustomMailer {
     
+    @Autowired
     private MailSender mailSender;
+    
+    @Autowired
     private CustomizationsExtractor customizationExtrator;
-    private String from;    
+    
+    @Value("${mail.from}")
+    private String from;  
+    
     private String [] bcc;
     private String [] cc;
     

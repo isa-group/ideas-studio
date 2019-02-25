@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,7 +54,7 @@ public class SettingsController extends AbstractController {
             clonedResearcher.getUserAccount().setPassword(""); // Do not send password
 
             mv = createModelAndView(clonedResearcher, "researcher.commit.error");
-            mv.setViewName("settings/user");
+            mv.setViewName("researcher/edit");
             mv.addObject("url", "settings/user");
         } else {
             mv = new ModelAndView("redirect:/app/editor");
@@ -180,8 +181,8 @@ public class SettingsController extends AbstractController {
             researcher = updateResearcher(res.getId(), researcher, changingPass);
 
             if (changingPass) {
-                Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-                String newpasshash = encoder.encodePassword(settedPass, null);
+                PasswordEncoder encoder = new MessageDigestPasswordEncoder("MD5");
+                String newpasshash = encoder.encode(settedPass);
                 researcher.getUserAccount().setPassword(newpasshash);
             }
             // Save Researcher

@@ -30,7 +30,7 @@ public class TagService extends BusinessService<Tag> {
     }
     
     public Tag findByName(String tagName) {
-        return tagRepository.findByName(tagName);
+        return tagRepository.findByName(tagName).get();
     }
     
     @Override
