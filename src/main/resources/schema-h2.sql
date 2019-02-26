@@ -1,11 +1,9 @@
-
 DROP TABLE  hibernate_sequences IF EXISTS;
 
 CREATE TABLE hibernate_sequences (
   sequence_name VARCHAR(255) DEFAULT NULL,
   sequence_next_hi_value INTEGER DEFAULT NULL
 );
-
 
 DROP TABLE UserAccount IF EXISTS;
 
@@ -16,7 +14,6 @@ CREATE TABLE UserAccount (
   username VARCHAR(255) DEFAULT NULL,
   UNIQUE KEY username (username)
 );
-
 
 DROP TABLE SocialNetworkAccount IF EXISTS;
 
@@ -53,8 +50,6 @@ CREATE TABLE Researcher (
   userAccount_id INTEGER DEFAULT NULL  
 );
 ALTER TABLE Researcher ADD CONSTRAINT IF NOT EXISTS fk_researcher_useraccount FOREIGN KEY (userAccount_id) REFERENCES UserAccount (id);
-
-
 
 DROP TABLE Confirmation IF EXISTS;
 CREATE TABLE Confirmation (
@@ -119,7 +114,6 @@ CREATE TABLE UserAccount_authorities (
 );
 
 ALTER TABLE UserAccount_authorities ADD CONSTRAINT IF NOT EXISTS fk_authorities_useraccount FOREIGN KEY (UserAccount_id) REFERENCES UserAccount (id);
-
 
 DROP TABLE Workspace IF EXISTS;
 

@@ -214,9 +214,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-       /* http
+       http
             .authorizeRequests()
-                .antMatchers("/", "/home","/welcome/**","/views/help/**","/welcome/**",
+                .antMatchers("/","/h2-console/*", "/home","/welcome/**",
+                            "/views/help/**","/welcome/**",
                             // Static resources:
                             "/favicon.ico","/img/**", "/js/**","/fonts/**","/css/**",
                             // Spring Social controllers:
@@ -231,7 +232,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                            // Error pages and other resources:
                            "/resources/**","/errorpages/**",
                            // Soma additiona domain-specific public pages:
-                           "/researcher/create","/app/wsm", "/h2-console**")
+                           "/researcher/create","/app/wsm")
                             .permitAll()                                
                 .anyRequest().authenticated()
             .and()
@@ -240,7 +241,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .passwordParameter("password")
                     .usernameParameter("username")
                     .failureUrl("/security/loginFailure")
-                    .defaultSuccessUrl("/app/wsm")
+                    .defaultSuccessUrl("/app/wsm")*/
             .and()
                 .logout()
                     .logoutSuccessUrl("/welcome");
