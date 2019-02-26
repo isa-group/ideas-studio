@@ -123,7 +123,7 @@ public class AppController extends AbstractController {
         
         @RequestMapping("/modalWindows/{window}")
         public ModelAndView modalWindow(@PathVariable String window,@RequestParam Map<String,String> allRequestParams){
-            ModelAndView result=new ModelAndView("app_modal/"+window);
+            ModelAndView result=new ModelAndView("app/modalWindows/"+window);
             for(String key:allRequestParams.keySet())
                 result.addObject(key, allRequestParams.get(key));
             return result;

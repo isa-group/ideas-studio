@@ -94,12 +94,12 @@
         <script type="text/javascript" src="js/angular/directives/existingfileDirective.js"></script>
         <script type="text/javascript" src="js/angular/directives/gravatarDirective.js"></script>
         <script type="text/javascript" src="js/angular/filters/unquoteFilter.js"></script>
-        
+
         <!-- TexAngular editor -->
         <script src='js/vendor/textAngular-rangy.min.js'></script>    
         <script src='js/vendor/textAngular-sanitize.min.js'></script>    
         <script src='js/vendor/textAngular.min.js'></script>
-        
+
         <!-- HighCharts -->
         <script src="js/vendor/highcharts/highcharts.js"></script>
         <script src="js/vendor/highcharts/highcharts-more.js"></script>
@@ -120,7 +120,7 @@
         <div id="appWrapper">
             <security:authorize access="hasRole('ADMIN')||hasRole('RESEARCHER')">
                 <div id="appLeftMenu" class="menuClose">
-                    <ideas:app-leftmenu />
+                    <ideas:app-left-menu />
                 </div>
             </security:authorize>
             <div id="appMainContent">
@@ -132,10 +132,10 @@
                     <input id="compileModelFormatView" style="display:none;" type="text" ng-change="compileModelFormatView()" ng-model="compilationFlagFormatView" />
                     <div id="appBodyBlocker"></div>
                     <div id="appBodyLoader">
-                        <jsp:doBody
+                        <jsp:doBody/>
                     </div>
                 </div>
-                            <ideas:app-footer/>
+                <ideas:app-footer/>
             </div>
         </div>
 
