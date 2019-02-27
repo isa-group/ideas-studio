@@ -47,7 +47,8 @@
             </div>
         </div>
         <div id="projectsTreeContainer">
-            <ul id="myMenu" class="contextMenu">
+            <%--
+            <!--ul id="myMenu" class="contextMenu">
                 <c:if test="${studioConfiguration.advancedMode}">
                     <li class="edit"><a href="#edit">Edit</a></li>
                     <li class="edit"><a href="#editDescription">Edit description</a></li>
@@ -60,7 +61,8 @@
                     <li class="upload separator"><a href="#upload">Upload</a></li>
                     </c:if>
                 <li class="upload separator"><a href="#download">Download</a></li>
-            </ul>
+            </ul-->
+            --%>
             <div id="projectsTree"> </div>
         </div>
         <div id="wsactions">

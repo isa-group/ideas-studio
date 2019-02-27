@@ -24,7 +24,7 @@
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/toggle-button.css">
         <!-- Other css styles of our components -->
-        <link rel="stylesheet" href="css/jmenu.css" media="screen">
+        <!-- link rel="stylesheet" href="css/jmenu.css" media="screen" -->
         <link rel="stylesheet" href="css/jquery-ui.css">
         <link rel="stylesheet" href="css/jquery.fileupload.css">
         <link rel="stylesheet" href="css/jquery.fileupload-ui.css">        
@@ -51,7 +51,7 @@
                                                              in browsers without support for XHR file uploads -->
         <script src="js/vendor/jquery.fileupload.js"></script>
 
-        <script src="js/vendor/jquery.contextMenu-custom.js" type="text/javascript"></script>
+        <script src="js/vendor/jquery.contextMenu.js" type="text/javascript"></script>
 
         <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/ace-build/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
