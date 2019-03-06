@@ -237,8 +237,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
-                    /*.loginPage("/security/login")
-                    .passwordParameter("password")
+                    .loginPage("/security/login")
+                    .loginProcessingUrl("/security/login")
+                    /*.passwordParameter("password")
                     .usernameParameter("username")
                     .failureUrl("/security/loginFailure")
                     .defaultSuccessUrl("/app/wsm")*/

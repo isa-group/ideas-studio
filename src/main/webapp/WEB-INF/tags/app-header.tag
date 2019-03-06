@@ -38,7 +38,7 @@
 			<li><a href="settings/admin" target="_self"><spring:message code="master.page.admin" /></a></li>
 		</security:authorize>
 		<li class="divider"></li>
-		<li><a href="j_spring_security_logout" target="_self"><spring:message code="master.page.logout" /></a></li>
+		<li><a href="/logout" target="_self"><spring:message code="master.page.logout" /></a></li>
 	</ul>
         </security:authorize>
 	<!-- 	<div id="sectionText"> -->

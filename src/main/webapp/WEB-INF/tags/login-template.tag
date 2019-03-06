@@ -119,43 +119,8 @@
         <div id="loginLogo" style="background-image: url('./img/${studioConfiguration.images['logo']}')">            
         </div>
         <div id="lcWrapper">
-            <div id="loginContent">
-                <div id="loginLoader">
-                    <jsp:doBody/>
-                </div>
-                <div id="loginButtons">
-                    <div class="btn btn-primary" id="loginButton">
-                        <spring:message code="security.login" />
-                        <span class="glyphicon glyphicon-log-in"></span>
-                    </div>
-
-                </div>
-
-                <div id="socialSigninButtons" class="form-inline">
-                    <span>Or Sign in with:</span>
-                    <!--<form id="fa_signin" action="signin/facebook" method="POST"
-                            class="form-horizontal">
-                            <input type="hidden" name="scope" value="email">
-                            <button type="submit" class="btn btn-social btn-xs btn-facebook"> 
-                                    <i class="fa fa-facebook"></i> Facebook 
-                            </button> 
-                    </form>-->
-                    <form id="tw_signin" action="signin/twitter" method="POST"
-                          class="form-horizontal">                                        
-                        <button type="submit" class="btn btn-social btn-xs btn-twitter">
-                            <i class="fa fa-twitter"></i> Twitter
-                        </button>
-                    </form>
-                    <form id="go_signin" action="signin/google" method="POST"
-                          class="form-inline">
-                        <input type="hidden" name="scope" value="https://www.googleapis.com/auth/userinfo.email">					
-                        <button type="submit" class="btn btn-social btn-xs btn-google-plus"
-                                href="/signin/google">
-                            <i class="fa fa-google-plus"></i> Google
-                        </button>
-                    </form>
-                </div>
-
+            <div id="loginContent">            
+                    <jsp:doBody/>                                                
             </div>
 
         </div>
