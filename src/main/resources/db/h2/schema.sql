@@ -2,7 +2,7 @@ DROP TABLE  hibernate_sequences IF EXISTS;
 
 CREATE TABLE hibernate_sequences (
   sequence_name VARCHAR(255) DEFAULT NULL,
-  sequence_next_hi_value INTEGER DEFAULT NULL
+  next_val INTEGER DEFAULT NULL
 );
 
 DROP TABLE UserAccount IF EXISTS;

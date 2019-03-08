@@ -1,4 +1,4 @@
-INSERT INTO hibernate_sequences (sequence_name, sequence_next_hi_value)
+INSERT INTO hibernate_sequences (sequence_name, next_val)
 VALUES	('DomainEntity',10);
 
 

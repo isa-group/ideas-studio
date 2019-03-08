@@ -8,20 +8,33 @@
  * Created: 21-feb-2019
  */
 
+UNLOCK TABLES;
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `hibernate_sequences`;
+DROP TABLE IF EXISTS `Confirmation`;
+DROP TABLE IF EXISTS `Experiment`;
+DROP TABLE IF EXISTS `SocialNetworkConfiguration`;
+DROP TABLE IF EXISTS `SocialNetworkAccount`;
+DROP TABLE IF EXISTS `WorkspaceTags`;
+DROP TABLE IF EXISTS `Tag`;
+DROP TABLE IF EXISTS `Workspace`;
+DROP TABLE IF EXISTS `UserAccount_authorities`;
+DROP TABLE IF EXISTS `Researcher`;
+DROP TABLE IF EXISTS `UserAccount` ;
+SET FOREIGN_KEY_CHECKS = 1;
+
+
 # hibernate_sequences
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `hibernate_sequences`;
-
 CREATE TABLE `hibernate_sequences` (
   `sequence_name` varchar(255) DEFAULT NULL,
-  `sequence_next_hi_value` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `next_val` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 # UserAccount
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `UserAccount`;
 
 CREATE TABLE `UserAccount` (
   `id` int(11) NOT NULL,
@@ -30,12 +43,10 @@ CREATE TABLE `UserAccount` (
   `username` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # SocialNetworkAccount
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `SocialNetworkAccount`;
 
 CREATE TABLE `SocialNetworkAccount` (
   `id` int(11) NOT NULL,
@@ -55,13 +66,11 @@ CREATE TABLE `SocialNetworkAccount` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `userId` (`userId`,`providerId`,`rank`),
   UNIQUE KEY `userId_2` (`userId`,`providerId`,`providerUserId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Researcher
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `Researcher`;
 
 CREATE TABLE `Researcher` (
   `id` int(11) NOT NULL,
@@ -76,14 +85,13 @@ CREATE TABLE `Researcher` (
   CONSTRAINT `FK3C2B9D5FFC733F2f37dafa8` FOREIGN KEY (`userAccount_id`) REFERENCES `UserAccount` (`id`)
    	ON DELETE CASCADE
     ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # Confirmation
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `Confirmation`;
 CREATE TABLE `Confirmation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `version` int(11) NOT NULL,
   `confirmationCode` varchar(255) DEFAULT NULL,
   `confirmationDate` datetime DEFAULT NULL,
@@ -96,17 +104,15 @@ CREATE TABLE `Confirmation` (
   CONSTRAINT `FK86E9E05535D39501` FOREIGN KEY (`researcher_id`) REFERENCES `Researcher` (`id`)
    	ON DELETE CASCADE
     ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
 # Experiment
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `Experiment`;
-
 CREATE TABLE `Experiment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `version` int(11) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `experimentId` varchar(255) DEFAULT NULL,
@@ -118,21 +124,10 @@ CREATE TABLE `Experiment` (
   CONSTRAINT `FK71BBB81D7956A1F6` FOREIGN KEY (`owner_id`) REFERENCES `Researcher` (`id`)
    	ON DELETE CASCADE
     ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-
-
-
-
-
-
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # SocialNetworkConfiguration
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `SocialNetworkConfiguration`;
 
 CREATE TABLE `SocialNetworkConfiguration` (
   `id` int(11) NOT NULL,
@@ -149,25 +144,21 @@ CREATE TABLE `SocialNetworkConfiguration` (
   CONSTRAINT `FK3B9FB495B3D38B74` FOREIGN KEY (`actor_id`) REFERENCES `Researcher` (`id`)
    	ON DELETE CASCADE
     ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Tag
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `Tag`;
-
 CREATE TABLE `Tag` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) NOT NULL,
   `version` int(11) NOT NULL,
   `name` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 # UserAccount_authorities
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `UserAccount_authorities`;
 
 CREATE TABLE `UserAccount_authorities` (
   `UserAccount_id` int(11) NOT NULL,
@@ -176,15 +167,13 @@ CREATE TABLE `UserAccount_authorities` (
   CONSTRAINT `FKA380F224FFC733F2` FOREIGN KEY (`UserAccount_id`) REFERENCES `UserAccount` (`id`)
    	ON DELETE CASCADE
     ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # Workspace
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `Workspace`;
-
 CREATE TABLE `Workspace` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) NOT NULL,
   `version` varchar(20)  NOT NULL,
   `owner_id` int(11) NOT NULL,
   `description` varchar(200) CHARACTER SET utf8 DEFAULT '""',
@@ -192,25 +181,23 @@ CREATE TABLE `Workspace` (
   `launches` int(11) DEFAULT '0',
   `lastMod` datetime DEFAULT NULL,
   `name` varchar(100)  NOT NULL DEFAULT '',
-  `origin_id` int(11) unsigned DEFAULT NULL,
-  `wsVersion` int(11) unsigned NOT NULL DEFAULT '0',
+  `origin_id` int(11) DEFAULT NULL,
+  `wsVersion` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `owner` (`owner_id`),
   KEY `origin` (`origin_id`),
   CONSTRAINT `origin` FOREIGN KEY (`origin_id`) REFERENCES `Workspace` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `owner` FOREIGN KEY (`owner_id`) REFERENCES `Researcher` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 # WorkspaceTags
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `WorkspaceTags`;
-
 CREATE TABLE `WorkspaceTags` (
-  `id_ws` int(11) unsigned NOT NULL,
-  `id_tag` int(11) unsigned NOT NULL,
+  `id_ws` int(11) NOT NULL,
+  `id_tag` int(11) NOT NULL,
   KEY `taggedWorkspaces` (`id_ws`),
   KEY `workspaceTags` (`id_tag`),
   CONSTRAINT `taggedWorkspaces` FOREIGN KEY (`id_ws`) REFERENCES `Workspace` (`id`),
   CONSTRAINT `workspaceTags` FOREIGN KEY (`id_tag`) REFERENCES `Tag` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
