@@ -31,6 +31,7 @@ import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -98,7 +99,7 @@ public class UserAccountService extends BusinessService<UserAccount> {
             uac_res = userRepository.save(uac);
 
             if (notificationEmail != null && !notificationEmail.isEmpty()) {
-                sendWelcomeMail(notificationEmail, uac, password);
+                sendWelcomeMail(notificationEmail, uac_res, password);
             }
         } else {
             UserAccount uac = new UserAccount();            
@@ -162,8 +163,21 @@ public class UserAccountService extends BusinessService<UserAccount> {
         Object[] templateCustomizers = {account};
         Map<String, String> finalCustomizations = mailer.extractCustomizations(templateCustomizers);
         finalCustomizations.put("$password", password);
-        mailer.sendMail(email, finalCustomizations, confirmationDoneTemplate);
+        mailer.sendMail(email, replaceNullValues(finalCustomizations, ""), confirmationDoneTemplate);
     }
+    
+    private <K, T> Map<K, T> replaceNullValues(Map<K, T> map, T defaultValue) {
+        map = map.entrySet().stream().map((entry) -> {
+           if(entry.getValue() == null) {
+               entry.setValue(defaultValue);
+           }
+           
+           return entry;
+        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        
+        return map;
+    }
+    
 
     public void resetPassword(UserAccount account, String notificationEmail) {
         String password = UUID.randomUUID().toString();
