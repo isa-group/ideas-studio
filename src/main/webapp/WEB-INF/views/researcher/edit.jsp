@@ -262,7 +262,7 @@
                                             code="researcher.name" />
                                     </span>
                                     <form:input path="name" placeholder="Name Surname" type="text"
-                                                class="form-control" maxlength="25" />
+                                                class="form-control" />
                                 </div>
                                 <span class="label label-danger"><form:errors path="name" /></span>
                             </div>
