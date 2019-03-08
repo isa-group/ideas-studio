@@ -10,7 +10,7 @@
     <groupId>es.us.isa</groupId>
     <artifactId>ideas-studio</artifactId>
     <version>0.9.5</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>ideas-studio-boot</name>
     <description>The Integrated Development Environment for domain specic lAnguageS (IDEAS) is a web project developed in order to provide an IDE for formal modeling documents using language modules.</description>
     <properties>
@@ -25,6 +25,8 @@
         <ideas.repo.version>0.8-SNAPSHOT</ideas.repo.version>
         <!-- IDE-specific properties -->
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -213,7 +215,7 @@
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
             <version>1.4.01</version>
-        </dependency>                      
+        </dependency>
     </dependencies>
     <build>
         <plugins>            
