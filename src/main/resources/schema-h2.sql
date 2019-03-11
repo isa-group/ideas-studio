@@ -23,7 +23,7 @@ CREATE TABLE SocialNetworkAccount (
   accessToken VARCHAR(255) DEFAULT NULL,
   createDate datetime DEFAULT NULL,
   displayName VARCHAR(255) DEFAULT NULL,
-  expireTime bigint(20) DEFAULT NULL,
+  expireTime BIGINT DEFAULT NULL,
   imageUrl VARCHAR(255) DEFAULT NULL,
   profileUrl VARCHAR(255) DEFAULT NULL,
   providerId VARCHAR(255) DEFAULT NULL,
@@ -34,6 +34,23 @@ CREATE TABLE SocialNetworkAccount (
   userId VARCHAR(255) DEFAULT NULL,
   UNIQUE KEY userId (userId,providerId,rank),
   UNIQUE KEY userId_2 (userId,providerId,providerUserId)
+);
+
+DROP TABLE UserConnection IF EXISTS;
+CREATE TABLE UserConnection (
+        userId VARCHAR(255) NOT NULL,
+	providerId VARCHAR(255) NOT NULL,
+	providerUserId VARCHAR(255) NOT NULL,
+	rank INT NOT NULL,
+	displayName VARCHAR(255),
+	profileUrl VARCHAR(512),
+	imageUrl VARCHAR(512),
+	accessToken VARCHAR(512) NOT NULL,
+	secret VARCHAR(512),
+	refreshToken VARCHAR(512),
+	expireTime BIGINT,
+        UNIQUE KEY userConnection_ordered(userId,providerId,rank),
+        PRIMARY KEY (userId,providerId,providerUserId) 
 );
 
 

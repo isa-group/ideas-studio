@@ -6,6 +6,7 @@
 package es.us.isa.ideas.app.configuration;
 
 
+import es.us.isa.ideas.app.social.SocialConnectionSignup;
 import es.us.isa.ideas.app.social.SocialSignInAdapter;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,15 @@ public class SocialConfiguration implements SocialConfigurer {
     
     @Autowired
     private SocialSignInAdapter signInAdapter;
+    
+    @Autowired 
+    private SocialConnectionSignup socialConnectionSignup;
    
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {        
-        return new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
+        JdbcUsersConnectionRepository usersConnectionRepository=new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
+        usersConnectionRepository.setConnectionSignUp(socialConnectionSignup);
+        return usersConnectionRepository;
     }
     
     @Override
@@ -82,7 +88,8 @@ public class SocialConfiguration implements SocialConfigurer {
     @Bean
     public ProviderSignInController providerSignInController(
             ConnectionFactoryLocator connectionFactoryLocator,
-            UsersConnectionRepository usersConnectionRepository) {
+            UsersConnectionRepository usersConnectionRepository) {                
+        
         return new ProviderSignInController(
             connectionFactoryLocator,
             usersConnectionRepository,

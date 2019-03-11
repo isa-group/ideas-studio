@@ -87,12 +87,7 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <!-- Soporte para MySQL -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
+        </dependency>        
         <!-- Soporte para JSPs -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -239,6 +234,22 @@
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                 </dependency>  
+            </dependencies>
+        </profile>
+        <profile>
+            <id>MYSQLDB</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <spring.datasource.platform>mysql</spring.datasource.platform>                
+            </properties>
+            <dependencies>
+                <!-- Soporte para MySQL -->
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>        
+                </dependency>
             </dependencies>
         </profile>
     </profiles>

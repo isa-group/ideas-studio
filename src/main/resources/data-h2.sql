@@ -1,5 +1,5 @@
 INSERT INTO hibernate_sequences (sequence_name, next_val)
-VALUES	('DomainEntity',10);
+VALUES	('DomainEntity',10),('default',10);
 
 
 INSERT INTO UserAccount (id, version, password, username)
