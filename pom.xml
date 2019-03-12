@@ -143,6 +143,11 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>        
         </dependency>
+        <!-- dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-orcid</artifactId>
+            <version>1.1.0</version>
+        </dependency -->
         <!-- Custom dependencies -->
         <dependency>
             <groupId>com.sendgrid</groupId>

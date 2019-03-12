@@ -67,19 +67,19 @@
         </div>
         <div id="wsactions">
             <c:if test="${studioConfiguration.advancedMode}">
-                <a id="demo-ws" data-toggle="tooltip" data-placement="bottom" title="Publish as Demo">
+                <a id="demo-ws" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="editor.actions.publish_demo" />">
                     <i class="material-icons">cloud_upload</i>
                 </a>
             </c:if>
-            <a id="download-ws" data-toggle="tooltip" data-placement="bottom" title="Download workspace as a single zip file">
+            <a id="download-ws" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="editor.actions.download_zip" />">
                 <i class="material-icons">file_download</i>
             </a>
             <c:if test="${studioConfiguration.advancedMode}">
-                <a id="edit-ws" data-toggle="tooltip" data-placement="bottom" title="Edit workspace">
+                <a id="edit-ws" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="editor.actions.edit_workspace" />">
                     <i class="material-icons">edit</i>
                 </a>
             </c:if>
-            <a id="delete-ws" data-toggle="tooltip" data-placement="bottom" title="Delete workspace">
+            <a id="delete-ws" data-toggle="tooltip" data-placement="bottom" title="<spring:message code="editor.actions.delete_workspace" />">
                 <i class="material-icons">delete</i>
             </a>
             <label class="switch">
