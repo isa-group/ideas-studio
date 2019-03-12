@@ -170,9 +170,7 @@ jQuery(function () {
             if (workspaceName !== "") {
                 $("#workspacesNavContainer li").removeClass("active");
                 WorkspaceManager.createWorkspace(workspaceName, description, tags, function () {
-                    AppPresenter.loadSection("editor", workspaceName, function () {
-                        WorkspaceManager.loadWorkspace();
-                    });
+                    AppPresenter.loadSection("editor", workspaceName);
                 });
             } else {
                 alert("Unable to create workspace");

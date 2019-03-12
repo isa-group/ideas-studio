@@ -18,9 +18,7 @@
 $(".openWS").click(function(e){
     e.preventDefault();
     var name = $(this).attr('href');
-    AppPresenter.loadSection("editor", name, function () {
-        WorkspaceManager.loadWorkspace();
-    });
+    AppPresenter.loadSection("editor");
 });
 
 $(".editWS").click(function(e) {

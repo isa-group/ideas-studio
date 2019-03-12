@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <div id="appHeader">
-        <security:authorize access="hasRole('ADMIN')||hasRole('RESEARCHER')">
+        <security:authorize access="hasAuthority('ADMIN') || hasAuthority('RESEARCHER')">
             <div id="menuToggler"></div>
         </security:authorize>
         

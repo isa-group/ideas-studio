@@ -63,35 +63,35 @@ public class AppController extends AbstractController {
 	@RequestMapping("/app_editor_content")
 	public ModelAndView app_editor_content(){
 		ModelAndView result;
-		result = new ModelAndView("app_content/app_editor_content");
+		result = new ModelAndView("app/editor");
 		return result;
 	}
 	
 	@RequestMapping("/app_social_content")
 	public ModelAndView app_social_content(){
 		ModelAndView result;
-		result = new ModelAndView("app_content/app_social_content");
+		result = new ModelAndView("app/social");
 		return result;
 	}
 	
 	@RequestMapping("/app_settings_content")
 	public ModelAndView app_settings_content(){
 		ModelAndView result;
-		result = new ModelAndView("app_content/app_settings_content");
+		result = new ModelAndView("app/settings");
 		return result;
 	}
 	
 	@RequestMapping("/app_administration_content")
 	public ModelAndView app_administration_content(){
 		ModelAndView result;
-		result = new ModelAndView("app_content/app_administration_content");
+		result = new ModelAndView("app/administration");
 		return result;
 	}
 	
 	@RequestMapping("/app_help_content")
 	public ModelAndView app_help_content(){
 		ModelAndView result;
-		result = new ModelAndView("app_content/app_help_content");
+		result = new ModelAndView("app/help");
 		return result;
 	}
 	
@@ -117,7 +117,7 @@ public class AppController extends AbstractController {
 //        }
 //        return result;
 		ModelAndView result;
-		result = new ModelAndView("app_content/app_settings_content_user");
+		result = new ModelAndView("app/settings");
 		return result;
 	}
         

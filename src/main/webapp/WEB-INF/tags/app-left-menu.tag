@@ -83,7 +83,7 @@
 
                 <%-- 			<li><a class="apl_social"><spring:message code="app.leftmenu.social" /></a><span class="glyphicon glyphicon-chevron-right"></span></li> --%>
                 <%-- 			<li><a class="apl_settings"><spring:message code="app.leftmenu.settings" /></a><span class="glyphicon glyphicon-chevron-right"></span></li> --%>
-                <security:authorize access="hasRole('ADMIN')">
+                <security:authorize access="hasAuthority('ADMIN')">
                     <li><a class="apl_administration"><spring:message code="app.leftmenu.administration" /></a><span class="glyphicon glyphicon-chevron-right"></span></li>
                         </security:authorize>
             </ul>

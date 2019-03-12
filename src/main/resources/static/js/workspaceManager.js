@@ -118,9 +118,7 @@ var WorkspaceManager = {
                     var description = $("#descriptionInput textarea").val();
                     $("#workspacesNavContainer li").removeClass("active");
                     WorkspaceManager.updateWorkspace(workspaceName, description);
-                    AppPresenter.loadSection("editor", workspaceName, function () {
-                        WorkspaceManager.loadWorkspace();
-                    });
+                    AppPresenter.loadSection("editor", workspaceName);
                 });
             });
 
@@ -138,9 +136,7 @@ var WorkspaceManager = {
                 e.preventDefault();
                 var name = WorkspaceManager.getSelectedWorkspace();
                 WorkspaceManager.publishWorskspaceAsDemo(name);
-                AppPresenter.loadSection("editor", name, function () {
-                    WorkspaceManager.loadWorkspace();
-                });
+                // AppPresenter.loadSection("editor", name);
             });
             $("#screenshot-ws").unbind("click").click(function (e) {
                 e.preventDefault();
@@ -271,9 +267,7 @@ var WorkspaceManager = {
                 }
                 createWSLine(workspaceName, function () {
                     WorkspaceManager.setSelectedWorkspace(workspaceName);
-                    AppPresenter.loadSection("editor", workspaceName, function () {
-                        WorkspaceManager.loadWorkspace();
-                    });
+                    AppPresenter.loadSection("editor", workspaceName);
                 });
 
             } else {
@@ -323,9 +317,12 @@ var WorkspaceManager = {
             FileApi.currentWSAsDemoWS(workspaceName, callback);
             hideModal();
         };
+        
+        var fullDemoURL = $("base").attr('href').valueOf() + "demo/" + workspaceName;
+        
         showModal("Confirm publication as demo", "A demo for the workspace <b>'" + workspaceName + "'</b> will be published. \n\
                     <BR/> All data will be accessible from:\n\
-                    <BR/><BR/><span id=\"demoURL\">" + $("base").attr('href').valueOf() + "demo/" + workspaceName + "</span>\n\
+                    <BR/><BR/><span id=\"demoURL\">" + fullDemoURL + "</span>\n\
                     <BR/><BR/><b>Do you want to create a demo for the existing workspace?</b><BR/></i>",
                 "Continue", continueHandler,
                 function () {}, function () {});
@@ -366,11 +363,7 @@ var createWSLine = function (wsName) {
     $("#workspacesNavContainer").append(wsLi);
     wsLi.click(function () {
         $("#workspacesNavContainer li").removeClass("active");
-        AppPresenter.loadSection("editor", wsName, function () {
-            WorkspaceManager.loadWorkspace();
-            // Re-compiles binding engine to show model content in binding panel
-            LanguageBindingsManifestManager.reloadPanel();
-        });
+        AppPresenter.loadSection("editor", wsName);
     });
 
 };
@@ -386,9 +379,7 @@ var deleteWSLine = function (wsName) {
                 workspaces = eval('(' + result + ')');
                 var wsName = workspaces[0].name;
                 WorkspaceManager.setSelectedWorkspace(wsName);
-                AppPresenter.loadSection("editor", wsName, function () {
-                    WorkspaceManager.loadWorkspace();
-                });
+                AppPresenter.loadSection("editor", wsName);
             } catch (err) {
                 console.log(err);
             }
