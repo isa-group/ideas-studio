@@ -126,12 +126,11 @@ public class UserAccountService extends BusinessService<UserAccount> {
         }
         researcher.setAddress("Unknown address");
         researcher.setPhone("Unknown phone");
-        if (null == userProfile.getFirstName()) {
-            researcher.setName("Unknown");
-        }
-        if (null != userProfile.getLastName()) {
+        if (null == userProfile.getFirstName() || userProfile.getFirstName().isEmpty()) {
+            researcher.setName(userProfile.getUsername());
+        } else if (null != userProfile.getLastName()) {
             researcher.setName(userProfile.getFirstName() + " " + userProfile.getLastName());
-        }else{
+        }else {
             researcher.setName(userProfile.getFirstName());
         }
 

@@ -211,6 +211,15 @@
             <artifactId>xml-apis</artifactId>
             <version>1.4.01</version>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency -->  
     </dependencies>
     <build>
         <plugins>            
@@ -224,31 +233,31 @@
         <profile>
             <id>HSQLDB</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <spring.datasource.platform>h2</spring.datasource.platform>                
+                <spring.datasource.platform>h2</spring.datasource.platform>
+                <spring.h2.console.enabled>true</spring.h2.console.enabled>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                </dependency>  
-            </dependencies>
         </profile>
         <profile>
             <id>MYSQLDB</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <spring.datasource.platform>mysql</spring.datasource.platform>                
+                <spring.datasource.platform>mysql</spring.datasource.platform>      
+                <spring.datasource.url>jdbc:mysql://localhost:3306/ideas</spring.datasource.url>
+                <spring.datasource.username>root</spring.datasource.username>
+                <spring.datasource.password>1d345l4b54dm1n_root</spring.datasource.password>
+                <!-- spring.datasource.initialization-mode>always</spring.datasource.initialization-mode-->
             </properties>
             <dependencies>
                 <!-- Soporte para MySQL -->
                 <dependency>
                     <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>        
+                    <artifactId>mysql-connector-java</artifactId>
+                    <scope>runtime</scope>
                 </dependency>
             </dependencies>
         </profile>
