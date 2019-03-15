@@ -76,7 +76,7 @@
         <jackson.version>1.9.12</jackson.version>
         <apache.poi.version>3.7</apache.poi.version>
         <org.slf4j.version>1.7.1</org.slf4j.version>
-        <selenium.version>2.53.0</selenium.version>
+        <selenium.version>3.0.0</selenium.version>
         <ideas.repo.version>0.8-SNAPSHOT</ideas.repo.version>
 
         <!-- IDE-specific properties -->
@@ -784,12 +784,11 @@
                     </components>
                     <hibernatetool>
                         <classpath>
-                            <path location="${project.build.directory}/classes" />
-                            <path location="${project.basedir}/src/main/resources/META-INF/" />
+                            <path location="${project.build.directory}/classes"/>
+                            <path location="${project.basedir}/src/main/resources/META-INF/"/>
                         </classpath>
-                        <jpaconfiguration persistenceunit="persistenceUnit" />
-                        <hbm2ddl create="true" export="true" update="true" drop="true"
-                                 outputfilename="configuration.sql" format="true" />
+                        <jpaconfiguration persistenceunit="persistenceUnit"/>
+                        <hbm2ddl create="true" export="true" update="true" drop="true" outputfilename="configuration.sql" format="true"/>
                     </hibernatetool>
                 </configuration>
 
