@@ -22,16 +22,12 @@
                     }
 
                     //social login
-                    if (localStorage.getItem("social") != "") {
+                    if (localStorage.getItem("social")) {
                         $('#userName').prop('readonly', true);
                         $('#oldPass').prop('readonly', true);
                         $('#mypass').prop('readonly', true);
                         $('#repeatPass').prop('readonly', true);
                         var avatar = $("#principalUserAvatar");
-                        if (avatar.size() != 0)
-                            $('#settingsButtonPanel')
-                                    .append(
-                                            "<span class='lead ' style='float: left; color: #628FB8;'>Information acquired from social login</span>");
                     }
                     $('#userName').prop('readonly', true);
 
@@ -52,7 +48,8 @@
                         console.log("captured");
                         $("#statusPanel").addClass("problems");
                         $("#statusPanel span").addClass("glyphicon-remove");
-                        // 			$("#statusPanel").append('<spring:message code="researcher.settings.problems" />');
+                        //$("#statusPanel").append('<spring:message code="researcher.settings.problems" />');
+                        //
                         // Check repeated email
                         var repeatedEmail = "${repeatedEmail}";
                         if (repeatedEmail == "true") {
@@ -77,13 +74,19 @@
                     var urlHash = window.location.hash;
 
                     var form1Changes = false;
-                    // 		var form2Changes = false;
+                    var form2Changes = false;
 
-                    $("#settingsSubmitChanges").prop('disabled', true);
+                    $("#settings1SubmitChanges").prop('disabled', true);
+                    $("#settings2SubmitChanges").prop('disabled', true);
 
                     $('#settingsForm1 input').on("change paste keyup", function () {
                         form1Changes = true;
-                        $("#settingsSubmitChanges").prop('disabled', false);
+                        $("#settings1SubmitChanges").prop('disabled', false);
+                    });
+
+                    $('#settingsForm2 input').on("change paste keyup", function () {
+                        form2Changes = true;
+                        $("#settings2SubmitChanges").prop('disabled', false);
                     });
 
 
@@ -91,18 +94,9 @@
                         $('#accountTab').tab('show');
                     } else if (urlHash == "#social") {
                         $('#socialTab').tab('show');
-                        $('#settingsButtonPanel').hide();
                     } else {
                         $('#profileTab').tab('show');
-                        $('#settingsButtonPanel').show();
                     }
-
-                    $("#socialTab").click(function () {
-                        $('#settingsButtonPanel').hide();
-                    });
-                    $("#profileTab").click(function () {
-                        $('#settingsButtonPanel').show();
-                    });
 
                     $('#settingTabs a').click(function (e) {
                         window.location.hash = '#' + $(this).attr('id').replace("Tab", "");
@@ -114,42 +108,36 @@
                         $(this).tab('show');
                     });
 
-                    $("#settingsSubmitChanges").click(function () {
-                        if ($("#oldPass").val() != "" || $("#mypass").val() != "" || $("#repeatPass").val() != "") { //trying to change password
-                            if ($("#oldPass").val() != "" && $("#mypass").val() != "" && $("#repeatPass").val() != "") {
-                                if (form1Changes) {
-                                    $('#settingsForm1').submit();
-                                }
-                            } else {
-                                var message = "";
-                                if ($("#oldPass").val() == "") {
-                                    console.log("missing oldPass value");
-                                    message += '"Old password" field is missing.';
-                                }
-                                if ($("#mypass").val() == "") {
-                                    console.log("missing mypass value");
-                                    message += '<br>"Password" field is missing.';
-                                }
-                                if ($("#repeatPass").val() == "") {
-                                    console.log("missing repeatPass value");
-                                    message += '<br>"Repeat password" field is missing.';
-                                }
-                                if ($("#repeatPass").val() != $("#mypass").val()) {
-                                    console.log("passwords not matching");
-                                    message += '<br>Passwords do not match.';
-                                }
-                                console.log(message);
-                                if (message.indexOf("<br>") >= 0) {
-                                    $("#pagesContent #settingsButtonPanel").css("padding", "1em 1em 4em 1em");
-                                }
-                                $("#statusPanel").removeClass("success").addClass("problems").html("").append('<span class="glyphicon glyphicon-ok glyphicon-remove"></span>' + message + '</span>');
+                    $("#settings1SubmitChanges").click(function () {
+                        $('#settingsForm1').submit();
+                    });
 
+                    $("#settings2SubmitChanges").click(function () {
+                        var message = "";
+                        if ($("#oldPass").val() == "") {
+                            console.log("missing oldPass value");
+                            message += '"Old password" field is missing.';
+                        }
+                        if ($("#mypass").val() == "") {
+                            console.log("missing mypass value");
+                            message += '<br>"Password" field is missing.';
+                        }
+                        if ($("#repeatPass").val() == "") {
+                            console.log("missing repeatPass value");
+                            message += '<br>"Repeat password" field is missing.';
+                        }
+                        if ($("#repeatPass").val() != $("#mypass").val()) {
+                            console.log("passwords not matching");
+                            message += '<br>Passwords do not match.';
+                        }
+                        console.log(message);
+                        if (message) {
+                            if (message.indexOf("<br>") >= 0) {
+                                $("#pagesContent #settingsButtonPanel").css("padding", "1em 1em 4em 1em");
                             }
-
+                            $("#statusPanel").removeClass("success").addClass("problems").html("").append('<span class="glyphicon glyphicon-ok glyphicon-remove"></span>' + message + '</span>');
                         } else {
-                            if (form1Changes) {
-                                $('#settingsForm1').submit();
-                            }
+                            $('#settingsForm2').submit();
                         }
                     });
 
@@ -237,83 +225,107 @@
                 <security:authorize access="isAuthenticated()">
                 <li><a href="#accountTabContent" data-toggle="tab"
                        id="accountTab"><spring:message code="userAccount.editHeader" /></a></li>
-                <!--			<li><a href="#socialTabContent" data-toggle="tab" id="socialTab"><spring:message
-                    code="socialnetwork.editHeader" /></a></li>-->
-            </security:authorize>
+                <li><a href="#socialTabContent" data-toggle="tab" id="socialTab"><spring:message
+                            code="socialnetwork.editHeader" /></a></li>
+                    </security:authorize>
         </ul>
-
-        <form:form id="settingsForm1" modelAttribute="researcher"
-                   action="settings/user">
-
-            <!-- PERSONAL INFORMATION -->
+        <!-- PERSONAL INFORMATION -->
+        <security:authorize access="isAuthenticated()">
 
             <div class="tab-content">
+
                 <div class="tab-pane fade" id="profileTabContent">
                     <div id="Personal Data">
+                        <form:form id="settingsForm1" modelAttribute="researcher"
+                                   action="settings/user">
+                            <form:hidden path="id" />
+                            <form:hidden path="version" />
+                            <form:hidden path="userAccount"/>
+                            <form:hidden path="userAccount.username" />
+                            <form:hidden path="userAccount.password" />
+                            <jstl:forEach items="${researcher.userAccount.authorities}"
+                                        var="authority" varStatus="status">
+                                <form:hidden path="userAccount.authorities[${status.index}]" />
+                            </jstl:forEach>
+                            <input type="hidden" name="oldPass">
+                            <input type="hidden" name="repeatPass">
 
-
-                        <form:hidden path="id" />
-                        <form:hidden path="version" />
-                        <form:hidden path="userAccount"/>
-                        <div>
-                            <div class="control-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> <spring:message
-                                            code="researcher.name" />
-                                    </span>
-                                    <form:input path="name" placeholder="Name Surname" type="text"
-                                                class="form-control" />
+                            <div>
+                                <div class="control-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"> <spring:message
+                                                code="researcher.name" />
+                                        </span>
+                                        <form:input path="name" placeholder="Name Surname" type="text"
+                                                    class="form-control" />
+                                    </div>
+                                    <span class="label label-danger"><form:errors path="name" /></span>
                                 </div>
-                                <span class="label label-danger"><form:errors path="name" /></span>
+
+                                <div class="control-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"> <spring:message
+                                                code="researcher.email" />
+                                        </span>
+                                        <form:input path="email" placeholder="myname@domain.com"
+                                                    type="email" class="form-control" maxlength="50" />
+                                    </div>
+                                    <span class="label label-danger"><form:errors path="email" /></span>
+                                </div>
+
+                                <div class="control-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"> <spring:message
+                                                code="researcher.phone" />
+                                        </span>
+                                        <form:input path="phone" placeholder="" type="text"
+                                                    class="form-control" maxlength="9" />
+                                    </div>
+                                    <span class="label label-danger"><form:errors path="phone" /></span>
+                                </div>
+
+                                <div class="control-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"> <spring:message
+                                                code="researcher.address" />
+                                        </span>
+                                        <form:input path="address" placeholder="" type="text"
+                                                    class="form-control" maxlength="50" />
+                                    </div>
+                                    <span class="label label-danger"><form:errors
+                                            path="address" /></span>
+                                </div>
                             </div>
 
-                            <div class="control-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> <spring:message
-                                            code="researcher.email" />
-                                    </span>
-                                    <form:input path="email" placeholder="myname@domain.com"
-                                                type="email" class="form-control" maxlength="50" />
-                                </div>
-                                <span class="label label-danger"><form:errors path="email" /></span>
+                            <div id="settingsButtonPanel">
+                                <span id="statusPanel"> <span class="glyphicon glyphicon-ok"></span>
+                                </span>
+                                <button type="button" id="settings1RevertChanges"
+                                        class="btn btn-default">
+                                    <spring:message code="app.settings.revert" />
+                                </button>
+                                <button type="button" id="settings1SubmitChanges"
+                                        class="btn btn-primary">
+                                    <spring:message code="app.settings.savechanges" />
+                                </button>
                             </div>
 
-                            <div class="control-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> <spring:message
-                                            code="researcher.phone" />
-                                    </span>
-                                    <form:input path="phone" placeholder="" type="text"
-                                                class="form-control" maxlength="9" />
-                                </div>
-                                <span class="label label-danger"><form:errors path="phone" /></span>
-                            </div>
-
-                            <div class="control-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"> <spring:message
-                                            code="researcher.address" />
-                                    </span>
-                                    <form:input path="address" placeholder="" type="text"
-                                                class="form-control" maxlength="50" />
-                                </div>
-                                <span class="label label-danger"><form:errors
-                                        path="address" /></span>
-                            </div>
-                        </div>
-
-
-                        <%-- 				</form:form> --%>
+                        </form:form>
                     </div>
                 </div>
 
 
                 <!-- ACCOUNT -->
-
-
-                <security:authorize access="isAuthenticated()">
-
-                    <div class="tab-pane fade active" id="accountTabContent">
+                <div class="tab-pane fade active" id="accountTabContent">
+                    <form:form id="settingsForm2" modelAttribute="researcher"
+                               action="settings/user">
+                        <form:hidden path="id" />
+                        <form:hidden path="version" />
+                        <form:hidden path="userAccount"/>
+                        <form:hidden path="name" />
+                        <form:hidden path="email" />
+                        <form:hidden path="phone" />
+                        <form:hidden path="address" />
 
                         <div id="Authorities">
                             <jstl:forEach items="${researcher.userAccount.authorities}"
@@ -350,8 +362,6 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><spring:message
                                         code="security.newpassword" /></span>
-                                <!-- 							<input type="password" id="mypass" name="mypass" class="form-control" > -->
-                                <!-- 							<input type="password" id="mypass" name="mypass" class="form-control" > -->
                                 <form:password id="mypass" name="mypass" class="form-control"
                                                path="userAccount.password" />
                             </div>
@@ -364,104 +374,81 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><spring:message
                                         code="security.repeatpassword" /></span>
-                                    <%-- 						<form:password id="repeatPass" name="repeatPass" class="form-control" path="userAccount.repeatPassword" /> --%>
                                 <input type="password" id="repeatPass" name="repeatPass"
                                        class="form-control">
                             </div>
                             <span id="repeatPassError"
                                   class="label label-danger hide alert-error"><spring:message
                                     code="security.differentpasswords.error" /></span>
-                                <%-- 							<span class="label label-danger"><form:errors path="userAccount.repeatPassword" /></span> --%>
                         </div>
 
-                        <%-- 				</form:form> --%>
-                    </div>
-                    <script src="js/vendor/passfield.min.js"></script>
-                    <script>
-                                // 					$("#mypass").passField({ /*options*/});
+                        <div id="settingsButtonPanel">
+                            <span id="statusPanel"> <span class="glyphicon glyphicon-ok"></span>
+                            </span>
+                            <button type="button" id="settings2RevertChanges"
+                                    class="btn btn-default">
+                                <spring:message code="app.settings.revert" />
+                            </button>
+                            <button type="button" id="settings2SubmitChanges"
+                                    class="btn btn-primary">
+                                <spring:message code="app.settings.savechanges" />
+                            </button>
+                        </div>
 
-                                $("#password-repeat-errors").hide();
+                    </form:form>
+                </div>
+                <script>
+                    $("#password-repeat-errors").hide();
 
-                                jQuery(function () {
-                                    $("#submit").click(function () {
-                                        $("#password-repeat-errors").hide();
-                                        var hasError = false;
-                                        var passwordVal = $("#mypass").val();
-                                        var checkVal = $("#repeatPass").val();
-                                        if (passwordVal != checkVal) {
-                                            $("#password-repeat-errors").show();
-                                            hasError = true;
-                                        }
-                                        if (hasError == true) {
-                                            return false;
-                                        }
-                                    });
-                                });
-                    </script>
+                    jQuery(function () {
+                        $("#submit").click(function () {
+                            $("#password-repeat-errors").hide();
+                            var hasError = false;
+                            var passwordVal = $("#mypass").val();
+                            var checkVal = $("#repeatPass").val();
+                            if (passwordVal != checkVal) {
+                                $("#password-repeat-errors").show();
+                                hasError = true;
+                            }
+                            if (hasError == true) {
+                                return false;
+                            }
+                        });
+                    });
+                </script>
 
-                    <!-- SOCIAL -->
+                <!-- SOCIAL -->
 
-                    <!--				<div class="tab-pane fade active" id="socialTabContent">
-                                                            <div>
+                <div class="tab-pane fade active" id="socialTabContent">
+                    <jstl:if test="${missingServices.size() > 0}">
+                        <h4><spring:message code="researcher.settings.not_connected_services" /></h4>
+                    </jstl:if>
                     <jstl:forEach items="${missingServices}" var="snetwork">
-                            <div id="${snetwork}-connections">
-                                    <div id="connect-${snetwork}"
-                                            class="btn btn-primary ${snetwork}-icon connection"
-                                            onclick='location.href="connect/${snetwork}"'>Connect to
-                        ${snetwork}</div>
-                <hr>
-        </div>
+                        <form action="connect/${snetwork}" method="POST" class="form-horizontal">
+                            <jstl:if test="${snetwork == 'google'}">
+                                <input type="hidden" name="scope" value="email profile openid" />
+                            </jstl:if>               
+                            <button type="submit" class="btn btn-social btn-xs btn-${snetwork}">
+                                <i class="fa fa-${snetwork}"></i> <spring:message code="researcher.settings.connect_to" /> ${snetwork}
+                            </button>
+                        </form>
                     </jstl:forEach>
-                    <jstl:forEach var="sconfig " items="${servicesConfigs}">
-                            <div id="">
-                                    <div id="${sconfig.service}-configuration">
-                        <spring:url value="socialnetwork/edit"
-                                    var="${serviceConfigurationURL}">
-                            <spring:param name="service"
-                                          value="${serviceConfiguration.service}" />
-                        </spring:url>
-                        <a href="${serviceConfigurationURL}"> ${sconfig.service} -
-                        <spring:message code="action.edit" /> Config.
-                </a>
-        </div>
-</div>
+
+                    <jstl:if test="${servicesConfigs.size() > 0}">
+                        <h4><spring:message code="researcher.settings.connected_services" /></h4>
+                    </jstl:if>
+                    <jstl:forEach items="${servicesConfigs}" var="service">
+                        <form action="connect/${service}" method="POST" class="form-horizontal">      
+                            <input type="hidden" name="_method" value="delete" />                                  
+                            <button type="submit" class="btn btn-social btn-xs btn-${service}">
+                                <i class="fa fa-${service}"></i> <spring:message code="researcher.settings.disconnect_from" /> ${service}
+                            </button>
+                        </form>
                     </jstl:forEach>
-            </div>
-    </div>-->
-                    <%-- 		</jstl:if> --%>
-                </security:authorize>
-
-
-                <div id="settingsButtonPanel">
-                    <span id="statusPanel"> <span class="glyphicon glyphicon-ok"></span>
-                    </span>
-                    <button type="button" id="settingsRevertChanges"
-                            class="btn btn-default">
-                        <spring:message code="app.settings.revert" />
-                    </button>
-                    <button type="button" id="settingsSubmitChanges"
-                            class="btn btn-primary">
-                        <spring:message code="app.settings.savechanges" />
-                    </button>
                 </div>
             </div>
-        </form:form>
+        </security:authorize>
     </div>
 
     <div class="shadowCurvedBottom1"></div>
-
-    <%--<security:authorize access="isAnonymous()">
-            <div id="socialAccountCreation">
-                    <form id="tw_signin" action="/signin/twitter" method="POST">
-                            <button type="submit">
-                                    <img src="/img/Facebook.png" />
-                            </button>
-                    </form>
-                    <form id="fb_signin" action="/signin/facebook" method="POST">
-                            <button type="submit">
-                                    <img src="/img/sign-in-with-facebook.png" />
-                            </button>
-                    </form>
-            </div>
-    </security:authorize>--%>
 </ideas:pages-template>

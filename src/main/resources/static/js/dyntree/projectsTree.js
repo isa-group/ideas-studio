@@ -23,8 +23,8 @@ function getNodeByFileUri(fileUri) {
 function getFileUriByNode(node) {
     if (node) {
         var workspaceName = WorkspaceManager.getSelectedWorkspace(),
-                parent = node.getParent(),
-                fileUri = "";
+            parent = node.getParent(),
+            fileUri = "";
         while (parent.data.title) {
             fileUri = parent.data.title + "/" + fileUri;
             parent = parent.getParent();
@@ -82,7 +82,7 @@ function copyPaste(action, node) {
             pasteMode = null;
             break;
         default:
-//		CommandApi.echo("<p style='color:red'>Project Tree: Unhandled clipboard action '"+ action +"'</p>");
+        //		CommandApi.echo("<p style='color:red'>Project Tree: Unhandled clipboard action '"+ action +"'</p>");
     }
 }
 ;
@@ -134,7 +134,7 @@ function bindContextMenu(span) {
             switch (itemKey) {
                 case "edit":
                     var prevTitle = node.data.title,
-                            tree = node.tree;
+                        tree = node.tree;
                     //get extension if it is not a folder
                     var extension = !node.data.isFolder ? "." + node.data.title.split(".")[node.data.title.split(".").length - 1] : "";
                     console.log(extension);
@@ -178,7 +178,7 @@ function bindContextMenu(span) {
                         if (title.split(".").length < 2) {
                             title = title + extension;
                         }
-                        CommandApi.renameNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, title, function (result) {});
+                        CommandApi.renameNode(WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath, title, function (result) { });
                         // Re-enable mouse and keyboard handlling
                         tree.$widget.bind();
                         node.focus();
@@ -198,35 +198,38 @@ function bindContextMenu(span) {
 
                     var nodeUri = (node.data.keyPath !== "undefined") ? WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath : WorkspaceManager.getSelectedWorkspace() + "/" + node.data.title;
 
-
                     $.get("/files/description/" + nodeUri + "?fileType=" + fileType,
-                            function (content) {
-                                showModal("Please, edit the description of '" + node.data.keyPath + "'", "<label>Description:</label><textarea id='description' name='description' cols='30' rows='3'>" + content + "</textarea>", "Save",
-                                        function () {
+                        function (content) {
+                            showContentAsModal("app/modalWindows/editFileDescription",
+                                function () {
 
-                                            $.post("/files/description/" + nodeUri + "?content=" + encodeURI($('#description').val() + "&fileType=" + fileType),
-                                                    function (result) {
-                                                        FileApi.loadWorkspace(WorkspaceManager.getSelectedWorkspace(), function (ts) {
-                                                            hideModal();
-                                                        });
-                                                    }
-                                            );
-                                        },
-                                        function () {
-                                            hideModal();
-                                        },
-                                        function () {
-                                            hideModal();
+                                    $.post("/files/description/" + nodeUri + "?content=" + encodeURI($('#description').val() + "&fileType=" + fileType),
+                                        function (result) {
+                                            FileApi.loadWorkspace(WorkspaceManager.getSelectedWorkspace(), function (ts) {
+                                                hideModal();
+                                            });
                                         }
-                                );
-                            }
+                                    );
+                                },
+                                function () {
+                                    hideModal();
+                                },
+                                function () {
+                                    hideModal();
+                                },
+                                {
+                                    fileName: node.data.keyPath,
+                                    description: content
+                                }
+                            );
+                        }
                     );
                     //}else
                     //    window.alert("You can´t set a description to a file, descriptions are only supported for directories.")
                     break;
                 case "delete":
                     var nodeUri = (node.data.keyPath !== "undefined") ? WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath : WorkspaceManager.getSelectedWorkspace() + "/" + node.data.title;
-                    showModal("Please, confirm your decision", "<strong>Are you sure you want to delete \"" + nodeUri + "\"?</strong>", "Delete", function () {
+                    showContentAsModal("app/modalWindows/confirmDeletion", function () {
                         CommandApi.deleteNode(nodeUri, function (result) {
                             hideModal();
                         });
@@ -234,6 +237,8 @@ function bindContextMenu(span) {
                         hideModal();
                     }, function () {
                         hideModal();
+                    },{
+                        fileName: nodeUri
                     });
                     break;
                 case "cut":
@@ -489,12 +494,12 @@ $(function () {
         persist: true,
         selectMode: 3,
         minExpandLevel: 1,
-//        rootVisible: false,
+        //        rootVisible: false,
         persist: true,
-//        onActivate : function(node) {
-//            $("#echoActivated").text(
-//                    node.data.title + ", key=" + node.data.key);
-//        },
+        //        onActivate : function(node) {
+        //            $("#echoActivated").text(
+        //                    node.data.title + ", key=" + node.data.key);
+        //        },
         onClick: function (node, event) {
             // Close menu on click
             if ($(".contextMenu:visible").length > 0) {
@@ -548,87 +553,87 @@ $(function () {
             });
         },
         // Drag'n'drop support
-//        dnd: {
-//            // Make tree nodes draggable:
-//            onDragStart: function (node) {
-//                console.log("Activated node: " + node);
-//                currentSelectedNode = node;
-//                var result = true;
-//                if (node.lastsib == "dynatree-lastsib" || node.getLevel() === 1) {
-//                    result = false;
-//                }
-//                return result;
-//            }, // Callback(sourceNode), return true, to enable
-//            // dnd
-//            onDragStop: null, // Callback(sourceNode)
-//            // Make tree nodes accept draggables
-//            autoExpandMS: 500, // Expand nodes after n
-//            // milliseconds of hovering.
-//            preventVoidMoves: true, // Prevent dropping
-//            // nodes 'before self',
-//            // etc.
-//            //revert : true, // true: slide helper back to source
-//            // if drop is rejected
-//            onDragEnter: function (node, sourceNode) {
-//                var result = true;
-//                if (node.isDescendantOf(sourceNode) || !node.data.isFolder || node.lastsib == "dynatree-lastsib") {
-//                    result = false;
-//                }
-//                return result;
-//            }, // Callback(targetNode, sourceNode, ui,
-//            // draggable)
-//            onDragOver: function (node, sourceNode, hitMode) {
-//                // Deactivating to drag and drop between projects
-//                var Porigin = sourceNode.data.keyPath.substring(0, sourceNode.data.keyPath.indexOf("/"));
-//                var Pdest = node.data.keyPath.substring(0, node.data.keyPath.indexOf("/"));
-//                if (node.isDescendantOf(sourceNode) || !node.data.isFolder || Porigin !== Pdest) {
-//                    return false;
-//                }
-//                if (!node.data.isFolder && hitMode === "over") {
-//                    return "after";
-//                }
-//            }, // Callback(targetNode,
-//            // sourceNode, hitMode)
-//            onDrop: function (node, sourceNode, hitMode, ui, draggable) {
-//                var Porigin = sourceNode.data.keyPath.substring(0, sourceNode.data.keyPath.indexOf("/"));
-//                var Pdest = node.data.keyPath.substring(0, node.data.keyPath.indexOf("/"));
-//                if (Pdest == "") {
-//                    Pdest = node.data.keyPath;
-//                }
-//                if (Porigin == Pdest) {
-//                    //si esta dentro del proyecto --> move
-//                    CommandApi.move(WorkspaceManager.getSelectedWorkspace() + "/" + sourceNode.data.keyPath,
-//                        WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath + "/" + sourceNode.data.title);
-//                } else {
-//                    //en otro proyecto --> copia
-//                    CommandApi.copy(WorkspaceManager.getSelectedWorkspace() + "/" + sourceNode.data.keyPath,
-//                        WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath + "/" + sourceNode.data.title);
-//                }
-//            }, // Callback(targetNode, sourceNode, hitMode, ui,
-//            // draggable)
-//            onDragLeave: function (node, sourceNode) {
-//                /**
-//                 * Always called if onDragEnter was called.
-//                 */
-////								logMsg("tree.onDragLeave(%o, %o)", node,
-////										sourceNode);
-//            } // Callback(targetNode, sourceNode)
-//        },
+        //        dnd: {
+        //            // Make tree nodes draggable:
+        //            onDragStart: function (node) {
+        //                console.log("Activated node: " + node);
+        //                currentSelectedNode = node;
+        //                var result = true;
+        //                if (node.lastsib == "dynatree-lastsib" || node.getLevel() === 1) {
+        //                    result = false;
+        //                }
+        //                return result;
+        //            }, // Callback(sourceNode), return true, to enable
+        //            // dnd
+        //            onDragStop: null, // Callback(sourceNode)
+        //            // Make tree nodes accept draggables
+        //            autoExpandMS: 500, // Expand nodes after n
+        //            // milliseconds of hovering.
+        //            preventVoidMoves: true, // Prevent dropping
+        //            // nodes 'before self',
+        //            // etc.
+        //            //revert : true, // true: slide helper back to source
+        //            // if drop is rejected
+        //            onDragEnter: function (node, sourceNode) {
+        //                var result = true;
+        //                if (node.isDescendantOf(sourceNode) || !node.data.isFolder || node.lastsib == "dynatree-lastsib") {
+        //                    result = false;
+        //                }
+        //                return result;
+        //            }, // Callback(targetNode, sourceNode, ui,
+        //            // draggable)
+        //            onDragOver: function (node, sourceNode, hitMode) {
+        //                // Deactivating to drag and drop between projects
+        //                var Porigin = sourceNode.data.keyPath.substring(0, sourceNode.data.keyPath.indexOf("/"));
+        //                var Pdest = node.data.keyPath.substring(0, node.data.keyPath.indexOf("/"));
+        //                if (node.isDescendantOf(sourceNode) || !node.data.isFolder || Porigin !== Pdest) {
+        //                    return false;
+        //                }
+        //                if (!node.data.isFolder && hitMode === "over") {
+        //                    return "after";
+        //                }
+        //            }, // Callback(targetNode,
+        //            // sourceNode, hitMode)
+        //            onDrop: function (node, sourceNode, hitMode, ui, draggable) {
+        //                var Porigin = sourceNode.data.keyPath.substring(0, sourceNode.data.keyPath.indexOf("/"));
+        //                var Pdest = node.data.keyPath.substring(0, node.data.keyPath.indexOf("/"));
+        //                if (Pdest == "") {
+        //                    Pdest = node.data.keyPath;
+        //                }
+        //                if (Porigin == Pdest) {
+        //                    //si esta dentro del proyecto --> move
+        //                    CommandApi.move(WorkspaceManager.getSelectedWorkspace() + "/" + sourceNode.data.keyPath,
+        //                        WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath + "/" + sourceNode.data.title);
+        //                } else {
+        //                    //en otro proyecto --> copia
+        //                    CommandApi.copy(WorkspaceManager.getSelectedWorkspace() + "/" + sourceNode.data.keyPath,
+        //                        WorkspaceManager.getSelectedWorkspace() + "/" + node.data.keyPath + "/" + sourceNode.data.title);
+        //                }
+        //            }, // Callback(targetNode, sourceNode, hitMode, ui,
+        //            // draggable)
+        //            onDragLeave: function (node, sourceNode) {
+        //                /**
+        //                 * Always called if onDragEnter was called.
+        //                 */
+        ////								logMsg("tree.onDragLeave(%o, %o)", node,
+        ////										sourceNode);
+        //            } // Callback(targetNode, sourceNode)
+        //        },
         persist: true,
         children: []
 
     });
 
     $("#projectsTree").attr("checked", true) // set state, to prevent caching
-            .click(function () {
-                var f = $(this).attr("checked");
-                if (f) {
-                    $("#projectsTree").dynatree("option", "fx", {
-                        height: "toggle",
-                        duration: 25
-                    });
-                } else {
-                    $("#projectsTree").dynatree("option", "fx", null);
-                }
-            });
+        .click(function () {
+            var f = $(this).attr("checked");
+            if (f) {
+                $("#projectsTree").dynatree("option", "fx", {
+                    height: "toggle",
+                    duration: 25
+                });
+            } else {
+                $("#projectsTree").dynatree("option", "fx", null);
+            }
+        });
 });

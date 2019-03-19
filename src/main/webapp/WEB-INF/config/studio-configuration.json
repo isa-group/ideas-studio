@@ -3,17 +3,17 @@
    "images": {
                 "logo": "exemplar/appLogoBig.png",
                 "search": "exemplar/ExperimentsSearch.png"
-   },
+   },  
    "modules": {
-            "sedl-language": "/ideas-sedl-language",
-            "ideas-plaintext-language": "/ideas-plaintext-language",
-            "ideas-csv-language": "/ideas-csv-language",
-            "R-language": "/ideas-R-language",         
-            "ideas-html-language": "/ideas-html-language",            
-            "ideas-json-language": "/ideas-json-language",
-            "ideas-yaml-language": "/ideas-yaml-language",
-            "ideas-language-angular": "/ideas-language-angular",
-            "ideas-language-angular-controller": "/ideas-language-angular-controller",
+            "sedl-language": "https://sedl.modules.ideas.services.governify.io",
+            "ideas-plaintext-language": "https://plaintext.modules.ideas.services.governify.io/ideas-plaintext-language",
+            "ideas-csv-language": "https://csv.modules.ideas.services.governify.io",
+            "R-language": "https://r.modules.ideas.services.governify.io",         
+            "ideas-html-language": "https://html.modules.designer.governify.io/ideas-html-language",            
+            "ideas-json-language": "https://json.modules.ideas.services.governify.io/ideas-json-language",
+            "ideas-yaml-language": "https://yaml.modules.ideas.services.governify.io/ideas-yaml-language",
+            "ideas-language-angular": "https://angular.modules.ideas.services.governify.io/ideas-language-angular",
+            "ideas-language-angular-controller": "https://angular-controller.modules.ideas.services.governify.io/ideas-language-angular-controller",
             "ideas-latex-language": "/ideas-latex-language"
 	},
         "configurationFiles":{

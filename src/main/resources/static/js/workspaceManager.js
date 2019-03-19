@@ -234,10 +234,12 @@ var WorkspaceManager = {
             });
             hideModal();
             if (studioConfiguration.advancedMode === true) {
-                showModal("Confirm demos delete",
-                    "Your demos for <b>'" + workspaceName + "'</b> will be erased too.<BR/><BR/>\n\
-                      <b>Do you want to delete your existing demos?</b><BR/></i>",
-                    "Continue", deleteDemosHandler);
+                showContentAsModal("app/modalWindows/confirmDemoDeletion",
+                    deleteDemosHandler, function() {}, function() {},
+                    {
+                        workspaceName: workspaceName
+                    }
+                );
             }
         };
 
@@ -253,9 +255,8 @@ var WorkspaceManager = {
             hideModal();
             $(location).attr('href', "app/wsm");
         };
-        showModal("Confirm workspace delete", "The workspace <b>'" + workspaceName + "'</b> will be erased and all data will be lost.<BR/><BR/><b>Do you want to delete the existing workspace?</b><BR/></i>",
-                "Continue", continueHandler,
-                function () {}, function () {});
+        showContentAsModal("app/modalWindows/confirmWorkspaceDeletion", continueHandler,
+                function () {}, function () {}, { workspaceName: workspaceName });
 
 
     },
@@ -294,9 +295,9 @@ var WorkspaceManager = {
             });
             hideModal();
         };
-        showModal("Confirm workspace delete", "The workspace <b>'" + workspaceName + "'</b> will be erased and all data will be lost.<BR/><BR/><b>Do you want to delete the existing workspace?</b><BR/></i>",
-                "Continue", continueHandler,
-                function () {}, function () {});
+
+        showContentAsModal("app/modalWindows/confirmWorkspaceDeletion", continueHandler,
+                function () {}, function () {}, { workspaceName: workspaceName });
 
     },
     downloadAsZip: function (workspaceName, callback) {
@@ -320,12 +321,11 @@ var WorkspaceManager = {
         
         var fullDemoURL = $("base").attr('href').valueOf() + "demo/" + workspaceName;
         
-        showModal("Confirm publication as demo", "A demo for the workspace <b>'" + workspaceName + "'</b> will be published. \n\
-                    <BR/> All data will be accessible from:\n\
-                    <BR/><BR/><span id=\"demoURL\">" + fullDemoURL + "</span>\n\
-                    <BR/><BR/><b>Do you want to create a demo for the existing workspace?</b><BR/></i>",
-                "Continue", continueHandler,
-                function () {}, function () {});
+        showContentAsModal("app/modalWindows/confirmPublicationAsDemo", continueHandler,
+                function () {}, function () {}, {
+                    workspaceName: workspaceName,
+                    fullDemoURL: fullDemoURL
+                });
     },
     updateDemoWorkspace: function (workspaceName, callback) {
         var continueHandler = function () {
@@ -333,11 +333,12 @@ var WorkspaceManager = {
             hideModal();
             $(location).attr('href', "app/wsm");
         };
-        showModal("Confirm demo update", "The demo for the workspace <b>'" + workspaceName + "'</b> will be overwritten and new data will be accessible from:\n\
-                    <BR/><BR/><span id=\"demoURL\">" + $("base").attr('href').valueOf() + "demo/" + workspaceName + "</span>\n\
-                    <BR/><BR/><b>Do you want to update the demo for the existing workspace?</b><BR/></i>",
-                "Continue", continueHandler,
-                function () {}, function () {});
+        showContentAsModal("app/modalWindows/confirmDemoUpdate", continueHandler,
+                function () {}, function () {},
+                {
+                    workspaceName: workspaceName,
+                    url: $("base").attr('href').valueOf()
+                });
     },
     importNewDemoWorkspace: function (workspaceName, callback) {
         var continueHandler = function () {
@@ -346,11 +347,11 @@ var WorkspaceManager = {
             hideModal();
             $(location).attr('href', "app/editor");
         };
-        showModal("Confirm clone", "A clone for the demo workspace <b>'" + workspaceName + "'</b> will be created in your workspaces\n\
-                    You will be redirected to the editor after the clone action\n\
-                    <BR/><BR/><b>Do you want to clone the public demo ?</b><BR/></i>",
-                "Continue", continueHandler,
-                function () {}, function () {});
+        showContentAsModal("app/modalWindows/confirmClone", continueHandler,
+                function () {}, function () {},
+                {
+                    workspaceName: workspaceName
+                });
     }
 };
 

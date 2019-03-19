@@ -8,9 +8,14 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +29,7 @@ import es.us.isa.ideas.app.services.ConfirmationService;
 import es.us.isa.ideas.app.services.ResearcherService;
 import es.us.isa.ideas.app.services.SocialNetworkConfigurationService;
 import es.us.isa.ideas.app.social.SocialNetwork;
+import es.us.isa.ideas.app.util.SocialUtils;
 
 @Controller
 @RequestMapping("/settings")
@@ -45,6 +51,9 @@ public class SettingsController extends AbstractController {
     @Autowired
     UserAccountController userAccountController;
 
+    @Autowired
+    UsersConnectionRepository usersConnectionRepository;
+
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ModelAndView edit() {
         ModelAndView mv;
@@ -63,7 +72,8 @@ public class SettingsController extends AbstractController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ModelAndView save(@Valid Researcher researcher, BindingResult binding, String oldPass, String repeatPass) throws Throwable {
+    public ModelAndView save(@Valid @ModelAttribute("researcher") Researcher researcher, BindingResult binding,
+            String oldPass, String repeatPass) throws Throwable {
         String mypass;
         boolean diffPasswords = false;
         boolean changingPass = false;
@@ -80,11 +90,14 @@ public class SettingsController extends AbstractController {
         if (null == oldPass) {
             oldPass = "";
         }
-        
-        boolean isSocialLogin = null != researcher.getUserAccount() && null == researcher.getUserAccount().getPassword();
-        boolean notEmptyPassValidation = binding.hasFieldErrors("userAccount.password") && binding.getErrorCount() == binding.getFieldErrorCount("userAccount.password") && oldPass.length() <= 0;
+
+        boolean isSocialLogin = null != researcher.getUserAccount()
+                && null == researcher.getUserAccount().getPassword();
+        boolean notEmptyPassValidation = binding.hasFieldErrors("userAccount.password")
+                && binding.getErrorCount() == binding.getFieldErrorCount("userAccount.password")
+                && oldPass.length() <= 0;
         boolean isPasswordUpdate = !oldPass.equals("") || !repeatPass.equals("");
-        if ((!isSocialLogin && binding.hasErrors() && !notEmptyPassValidation) || diffPasswords || isPasswordUpdate) {
+        if ((!isSocialLogin && binding.hasErrors() && !notEmptyPassValidation) || diffPasswords) {
             mv = createModelAndView(researcher, "researcher.commit.error");
             mv.addObject("url", "settings/user");
 
@@ -103,7 +116,8 @@ public class SettingsController extends AbstractController {
         } else {
 
             if (!newAccount) {
-                UserAccount principalUser = userAccountService.findByUsername(LoginService.getPrincipal().getUsername());
+                UserAccount principalUser = userAccountService
+                        .findByUsername(LoginService.getPrincipal().getUsername());
                 Researcher principalResearcher = researcherService.findByUserAccount(principalUser);
                 researcher = updateResearcher(principalResearcher.getId(), researcher, changingPass);
 
@@ -162,11 +176,13 @@ public class SettingsController extends AbstractController {
     }
 
     @RequestMapping(value = "/detail", method = RequestMethod.POST)
-    public ModelAndView savedetail(HttpServletRequest request, @Valid Researcher researcher, BindingResult binding) throws Throwable {
+    public ModelAndView savedetail(HttpServletRequest request, @Valid Researcher researcher, BindingResult binding)
+            throws Throwable {
         ModelAndView mv = null;
         String userId = request.getParameter("userId");
         boolean changingPass = researcher.getUserAccount().getPassword().length() > 1;
-        boolean notEmptyPassValidation = binding.hasFieldErrors("userAccount.password") && binding.getErrorCount() == binding.getFieldErrorCount("userAccount.password") && !changingPass;
+        boolean notEmptyPassValidation = binding.hasFieldErrors("userAccount.password")
+                && binding.getErrorCount() == binding.getFieldErrorCount("userAccount.password") && !changingPass;
 
         if ((binding.hasErrors() && !notEmptyPassValidation)) {
             mv = createModelAndView(researcher, "researcher.commit.error");
@@ -230,19 +246,25 @@ public class SettingsController extends AbstractController {
     // }
     private ModelAndView createModelAndView(Researcher researcher, String message) {
         ModelAndView result = createModelAndView();
+
+        ConnectionRepository researcherCRepository = usersConnectionRepository
+                .createConnectionRepository(researcher.getUserAccount().getUsername());
+
+        MultiValueMap<String, Connection<?>> allResearcherConnections = researcherCRepository.findAllConnections();
+
         result.addObject("researcher", researcher);
         result.addObject("userAccount", researcher.getUserAccount());
-        result.addObject("missingServices", socialNetworkConfigurationService.missingServices(researcher.getId()));
-        result.addObject("servicesConfigs", socialNetworkConfigurationService.getSocialNetworConfigurations(researcher.getId()));
+        result.addObject("missingServices", SocialUtils.getMissingServices(allResearcherConnections));
+        result.addObject("servicesConfigs", SocialUtils.getConnectedServices(allResearcherConnections));
         /*
-		 * result.addObject("message", message);
-		 * result.addObject("message_Type","message.error");
+         * result.addObject("message", message);
+         * result.addObject("message_Type","message.error");
          */
         return result;
     }
 
     private ModelAndView createModelAndView() {
-        ModelAndView result = new ModelAndView("settings/user");
+        ModelAndView result = new ModelAndView("researcher/edit");
         result.addObject("services", Arrays.asList(SocialNetwork.values()));
         result.addObject("url", "settings/user");
         // result.addObject("savePersonalInformationUrl",

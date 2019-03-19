@@ -256,14 +256,15 @@ var showModal = function (title, content, primaryText, primaryHandler,
 };
 
 var showContentAsModal = function (url, primaryHandler, cancelHandler,
-        closeHandler) {
+        closeHandler, data) {
     if ($("#appGenericModal"))
         $("#appGenericModal").remove();
     $.ajax({
         "url": url,
+        "data": data || "",
         success: function (result, textStatus, request) {
             $("body").append(result);
-            $('#appGenericModal .close').click(cancelHandler);
+            $('#appGenericModal .close').click(closeHandler);
             $('#appGenericModal .dismiss').click(cancelHandler);
             $('#appGenericModal .continue').click(primaryHandler);
             $('#appGenericModal').modal({

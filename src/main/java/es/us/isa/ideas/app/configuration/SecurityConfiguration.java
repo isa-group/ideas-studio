@@ -5,10 +5,9 @@
  */
 package es.us.isa.ideas.app.configuration;
 
-import es.us.isa.ideas.app.security.LoginService;
 import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,8 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
-import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
+
+import es.us.isa.ideas.app.security.LoginService;
 /**
  *
  * @author japarejo
@@ -239,6 +238,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .formLogin()
                     .loginPage("/security/login")
                     .loginProcessingUrl("/security/login")
+                    .defaultSuccessUrl("/connect")
                     /*.passwordParameter("password")
                     .usernameParameter("username")
                     .failureUrl("/security/loginFailure")

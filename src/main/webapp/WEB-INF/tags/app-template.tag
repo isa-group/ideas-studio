@@ -78,8 +78,8 @@
         <script type="text/javascript" src="js/vendor/mustache.min.js"></script>
 
         <script type="text/javascript" src="js/vendor/js-yaml.min.js"></script> <!-- yaml parser -->
+
         <script type="text/javascript" src="js/vendor/angular.min.js"></script>
-        <script type="text/javascript" src="js/vendor/angular-sanitize.min.js"></script>
 
         <!-- angular-chart -->
         <script src="js/vendor/Chart.min.js"></script>
@@ -88,17 +88,25 @@
         <script src="js/vendor/chartjs-plugin-draggable.min.js"></script>
         <script src="js/vendor/gaussian.js"></script>
 
+        <!-- angular dependencies -->
+        <script src='js/vendor/angular-ui-router.min.js' type="text/javascript"></script>
+        <script type="text/javascript" src="js/vendor/angular-sanitize.min.js"></script>
+        <script src='js/vendor/datetimepicker.js' type="text/javascript"></script>
+        <script src='js/vendor/datetimepicker.templates.js' type="text/javascript"></script>
+        <script src='js/vendor/dateTimeInput.js' type="text/javascript"></script>
+        <script src='js/vendor/ng-google-chart.min.js' type="text/javascript"></script>
+
+        <!-- TexAngular editor -->
+        <script src='js/vendor/textAngular-rangy.min.js'></script>    
+        <script src='js/vendor/textAngular-sanitize.min.js'></script>    
+        <script src='js/vendor/textAngular.min.js'></script>
+
         <!-- angular app -->
         <script type="text/javascript" src="js/angular/app.js"></script>
         <script type="text/javascript" src="js/angular/directives/ppinotDirective.js"></script>
         <script type="text/javascript" src="js/angular/directives/existingfileDirective.js"></script>
         <script type="text/javascript" src="js/angular/directives/gravatarDirective.js"></script>
         <script type="text/javascript" src="js/angular/filters/unquoteFilter.js"></script>
-
-        <!-- TexAngular editor -->
-        <script src='js/vendor/textAngular-rangy.min.js'></script>    
-        <script src='js/vendor/textAngular-sanitize.min.js'></script>    
-        <script src='js/vendor/textAngular.min.js'></script>
 
         <!-- HighCharts -->
         <script src="js/vendor/highcharts/highcharts.js"></script>

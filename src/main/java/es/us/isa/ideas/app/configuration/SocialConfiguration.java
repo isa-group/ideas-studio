@@ -5,9 +5,10 @@
  */
 package es.us.isa.ideas.app.configuration;
 
-
 import es.us.isa.ideas.app.social.SocialConnectionSignup;
 import es.us.isa.ideas.app.social.SocialSignInAdapter;
+
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +42,9 @@ public class SocialConfiguration implements SocialConfigurer {
     
     @Autowired 
     private SocialConnectionSignup socialConnectionSignup;
+
+    @Resource
+    public Environment env;
    
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {        
@@ -82,7 +86,10 @@ public class SocialConfiguration implements SocialConfigurer {
     public ConnectController connectController(
                 ConnectionFactoryLocator connectionFactoryLocator,
                 ConnectionRepository connectionRepository) {
-        return new ConnectController(connectionFactoryLocator, connectionRepository);
+        ConnectController controller =  new ConnectController(connectionFactoryLocator, connectionRepository);
+        controller.setApplicationUrl(env.getProperty("application.url"));
+
+        return controller;
     }
     
     @Bean

@@ -211,8 +211,12 @@ var CommandApi = {
                         switchToDemoWorkspace(demoWorkspaceName, targetWorkspaceName, callback);
                         hideModal();
                     };
-                    showModal("Confirm workspace overwriting", "The name for the workspace <b>'" + targetWorkspaceName + "'</b> already exists.<BR/><BR/><b>Do you want to overwrite the existing workspace?</b><BR/>If you want to regenerate without overwriting, try the command <BR/><i>generateDemoWorkspaceWithDestination</i>.",
-                            "Continue", continueHandler,
+
+                    // showContentAsModal('app/modalWindows/generalModal', primaryActionText, primaryHandlerWrapper,
+                    //                      cancelHandler, cancelHandler, 
+                    //                        {'titleForModal': titleForModal, 'modalContent': $modalContent});
+                    
+                    showContentAsModal('app/modalWindows/importDemoWorkspace', continueHandler,
                             function () {}, function () {});
                 }
             } else {

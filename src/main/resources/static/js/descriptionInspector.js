@@ -126,7 +126,7 @@ var DescriptionInspector = {
 
         if (_this.existCurrentDescriptionFile()) {
             _this.setInspectorDescriptionContent(inspectorLoader, _this
-                    .getDescriptionFileContent());
+                .getDescriptionFileContent());
             _this.loaders.bindings(inspectorLoader);
             _this.loaders.allowSelection(inspectorLoader);
             _this.loaders.expandableMenu(inspectorLoader);
@@ -144,7 +144,7 @@ var DescriptionInspector = {
             // _this.loaders.customEvents();
 
             _this.showDescriptionTab(); //TODO: activate first available tab
-//			_this.preventBackspaceKeyPress();
+            //			_this.preventBackspaceKeyPress();
 
         } else {
             // nothing
@@ -152,10 +152,10 @@ var DescriptionInspector = {
 
         if (_this.existCurrentAngularFile()) {
             _this.setInspectorModelContent(
-                    $(DescriptionInspector.vars.selectors.inspectorModelContent),
-                    function () {
-                        DescriptionInspector.tabs.angularCompileModelInspector();
-                    }
+                $(DescriptionInspector.vars.selectors.inspectorModelContent),
+                function () {
+                    DescriptionInspector.tabs.angularCompileModelInspector();
+                }
             );
             _this.loaders.angularFormatView();
 
@@ -212,7 +212,7 @@ var DescriptionInspector = {
         var inspectorReloadBtn = expandableMenu.find(".inspectorButtonReload");
         if (inspectorReloadBtn.length == 0) {
             expandableMenu
-                    .append($('\
+                .append($('\
 				<div id="" class="inspectorButton inspectorButtonReload" style="background:rgba(0,0,0,0.02);"> \
 					<div class="btn-group"> \
 					  <div class="btn btn-primary dropdown-toggle" \
@@ -231,15 +231,15 @@ var DescriptionInspector = {
         // Da funcionalidad al botón de recarga
         var _this = DescriptionInspector;
         expandableMenu.find(".inspectorButtonReload").unbind("click").click(
-                function () {
-                    // Reload inspectorContent
-                    var content = _this.getDescriptionFileContent();
-                    try {
-                        $("#inspectorContent").html(content);
-                    } catch (err) {
-                        console.error(err);
-                    }
-                });
+            function () {
+                // Reload inspectorContent
+                var content = _this.getDescriptionFileContent();
+                try {
+                    $("#inspectorContent").html(content);
+                } catch (err) {
+                    console.error(err);
+                }
+            });
 
         expandableMenu.find(".inspectorButtonReload").click();
 
@@ -314,7 +314,7 @@ var DescriptionInspector = {
             // Session content
             if (fileUri in EditorManager.sessionsMap)
                 EditorManager.sessionsMap[fileUri].getBaseSession().setValue(
-                        content);
+                    content);
 
             //console.log("Content saved on description file.");
         } else {
@@ -383,7 +383,7 @@ var DescriptionInspector = {
      */
     getDescriptionFileContent: function () {
         var urlReq = 'files/content?fileUri='
-                + this.getCurrentDescriptionFileUri(), descriptionData = "";
+            + this.getCurrentDescriptionFileUri(), descriptionData = "";
 
         $.ajax({
             url: urlReq,
@@ -425,8 +425,8 @@ var DescriptionInspector = {
          */
         height: function () {
             var inspectorHeight = $("#editorInspector").height(),
-                    tabHeight = $("#editorHeader").height(),
-                    expandMenuHeight = $("#expandableMenu").css("display") === "none" ? 0 : $("#expandableMenu").height();
+                tabHeight = $("#editorHeader").height(),
+                expandMenuHeight = $("#expandableMenu").css("display") === "none" ? 0 : $("#expandableMenu").height();
 
             return inspectorHeight - tabHeight - expandMenuHeight;
         },
@@ -449,7 +449,7 @@ var DescriptionInspector = {
          */
         resize: function () {
             var _this = DescriptionInspector.inspectorContent, $inspector = _this
-                    .getSelector(), zoom = 1 / $inspector.css("zoom"), width = _this
+                .getSelector(), zoom = 1 / $inspector.css("zoom"), width = _this
                     .width(), height = _this.height();
 
             if (zoom > 0 && width > 0 && height > 0) {
@@ -469,7 +469,7 @@ var DescriptionInspector = {
          */
         saveCurrentLocalData: function () {
             DescriptionInspector.vars.inspectorContent = this.getSelector()
-                    .html();
+                .html();
         },
         /**
          * Carga sobre el contenedor el valor guardado en "saveCurrentLocalData"
@@ -479,7 +479,7 @@ var DescriptionInspector = {
         loadLocalContent: function () {
             if (DescriptionInspector.vars.progressBar.step3 !== null)
                 this.getSelector().html(
-                        DescriptionInspector.vars.progressBar.step3);
+                    DescriptionInspector.vars.progressBar.step3);
         }
 
     },
@@ -489,7 +489,7 @@ var DescriptionInspector = {
         var expandButton = $("#expandConsole");
         if (menu == 'first') {
 
-            editor.animate({height: "65%"}, function () {
+            editor.animate({ height: "65%" }, function () {
 
                 expandButton.off('click').click(function () {
                     DescriptionInspector.expandConsole('second');
@@ -497,7 +497,7 @@ var DescriptionInspector = {
                 fitEditor();
             });
         } else if (menu == 'second') {
-            editor.animate({height: "18%"}, function () {
+            editor.animate({ height: "18%" }, function () {
                 expandButton.children('span').toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
                 //expandButton.children('span').toggleClass("glyphicon-triangle-bottom");
                 expandButton.off('click').click(function () {
@@ -506,7 +506,7 @@ var DescriptionInspector = {
                 fitEditor();
             });
         } else if (menu == 'contract') {
-            editor.animate({height: "65%"}, function () {
+            editor.animate({ height: "65%" }, function () {
                 expandButton.off('click').click(function () {
                     DescriptionInspector.expandConsole('hide');
                 });
@@ -516,8 +516,10 @@ var DescriptionInspector = {
                 }
             });
         } else if (menu == 'hide') {
-            editor.animate({height: ($(window).height() - $("#appHeader").height()
-                        - $("#appFooter").height() - 52) / $("#editorMainPanel").height() * 100 + "%"}, function () {
+            editor.animate({
+                height: ($(window).height() - $("#appHeader").height()
+                    - $("#appFooter").height() - 52) / $("#editorMainPanel").height() * 100 + "%"
+            }, function () {
                 expandButton.children('span').toggleClass("glyphicon-chevron-up glyphicon-chevron-down");
                 //expandButton.children('span').toggleClass("glyphicon-triangle-bottom");
                 expandButton.off('click').click(function () {
@@ -549,7 +551,7 @@ var DescriptionInspector = {
         var expandableMenu = $("#expandableMenu"), contentObjToExpand = null;
 
         menu === "remove" ? contentObjToExpand = $("#descriptionInspectorHeaderRemove")
-                : contentObjToExpand = $("#descriptionInspectorHeaderAdd");
+            : contentObjToExpand = $("#descriptionInspectorHeaderAdd");
 
         $(".inspectorButton").fadeOut(100);
         expandableMenu.animate({
@@ -675,15 +677,15 @@ var DescriptionInspector = {
         var inspectorSelector = $("#editorInspectorLoader");
 
         inspectorSelector
-                .attr("tabindex", "-1")
-                .unbind("focus")
-                .focus(function () {
-                    $(this).unbind("keydown").keydown(function (e) {
-                        if (e.keyCode == 8) {
-                            e.preventDefault();
-                        }
-                    });
+            .attr("tabindex", "-1")
+            .unbind("focus")
+            .focus(function () {
+                $(this).unbind("keydown").keydown(function (e) {
+                    if (e.keyCode == 8) {
+                        e.preventDefault();
+                    }
                 });
+            });
 
     },
     /**
@@ -728,16 +730,16 @@ var DescriptionInspector = {
                 FileApi.loadFileContents(fileUriCtl, function (content) {
                     if (content !== "") {
                         htmlObj.append(
-                                '<script>' +
-                                '  var $scope = angular.element(document.getElementById("editorWrapper")).scope();' +
-                                '  $scope.$apply(function () {' + content + '});' +
-                                '</script>');
+                            '<script>' +
+                            '  var $scope = angular.element(document.getElementById("editorWrapper")).scope();' +
+                            '  $scope.$apply(function () {' + content + '});' +
+                            '</script>');
                     }
                     if (callback)
                         callback();
                 });
 
-            }else
+            } else
                 if (callback)
                     callback();
 
@@ -863,7 +865,7 @@ var DescriptionInspector = {
         buildDescriptionTab: function () {
 
             var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
-                    title = "DESCRIPTION";
+                title = "DESCRIPTION";
 
             if (DescriptionInspector.existCurrentDescriptionFile()) {
                 inspectorTabs.append('\
@@ -877,27 +879,27 @@ var DescriptionInspector = {
                     // Hide others tabs content
                     $(".moduleInspectorContent").hide();
                     $(".moduleInspectorTab")
-                            .removeClass("active")
-                            .find("a")
-                            .css({
-                                "background": "#fff",
-                                "border-bottom": "none"
-                            });
+                        .removeClass("active")
+                        .find("a")
+                        .css({
+                            "background": "#fff",
+                            "border-bottom": "none"
+                        });
 
                     $(".modelInspectorContent").hide();
                     $(".modelInspectorTab")
-                            .removeClass("active")
-                            .find("a")
-                            .css({
-                                "background": "#fff",
-                                "border-bottom": "none"
-                            });
+                        .removeClass("active")
+                        .find("a")
+                        .css({
+                            "background": "#fff",
+                            "border-bottom": "none"
+                        });
 
                     $(".descriptionInspectorContent").show();
                     $(".descriptionInspectorTab")
-                            .addClass("active")
-                            .find("a")
-                            .css("background", "rgba(0,0,0,0.02)");
+                        .addClass("active")
+                        .find("a")
+                        .css("background", "rgba(0,0,0,0.02)");
 
                 });
             }
@@ -912,12 +914,12 @@ var DescriptionInspector = {
         buildFormTab: function () {
 
             var formatsSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions(),
-                    currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
+                currentFormat = EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat();
 
             if ("json" in formatsSessions || "yaml" in formatsSessions) {
 
                 var inspectorTabs = $(DescriptionInspector.vars.selectors.inspectorTabs),
-                        title = "FORM";
+                    title = "FORM";
 
                 // Tab structure
                 inspectorTabs.append('\
@@ -930,37 +932,37 @@ var DescriptionInspector = {
                     // Hide others tabs content
                     $(".moduleInspectorContent").hide();
                     $(".moduleInspectorTab")
-                            .removeClass("active")
-                            .find("a")
-                            .css({
-                                "background": "#fff",
-                                "border-bottom": "none"
-                            });
+                        .removeClass("active")
+                        .find("a")
+                        .css({
+                            "background": "#fff",
+                            "border-bottom": "none"
+                        });
 
                     $(".descriptionInspectorContent").hide();
                     $(".descriptionInspectorTab")
-                            .removeClass("active")
-                            .find("a")
-                            .css({
-                                "background": "#fff",
-                                "border-bottom": "none"
-                            });
+                        .removeClass("active")
+                        .find("a")
+                        .css({
+                            "background": "#fff",
+                            "border-bottom": "none"
+                        });
 
                     $(".modelInspectorContent").show();
                     $("#inspectorModelContent").show().height(
-                            $("#editorInspectorLoader").height() - $("#appFooter").height() - $("ul#editorTabs.inspectorTabs").height() - 12
-                            );
+                        $("#editorInspectorLoader").height() - $("#appFooter").height() - $("ul#editorTabs.inspectorTabs").height() - 12
+                    );
                     $(".modelInspectorTab")
-                            .addClass("active")
-                            .find("a")
-                            .css("background", "rgba(0,0,0,0.02)");
+                        .addClass("active")
+                        .find("a")
+                        .css("background", "rgba(0,0,0,0.02)");
 
                 });
 
                 // Default structure for tab content container
                 if (DescriptionInspector.existCurrentAngularFile()) {
                     $("#editorInspectorLoader .modelInspectorContent")
-                            .html('<article id="inspectorModelContent" style="display:none;" />');
+                        .html('<article id="inspectorModelContent" style="display:none;" />');
                 }
 
                 return this;
@@ -971,7 +973,7 @@ var DescriptionInspector = {
 
             // Activate description tab by default
             var descriptionTab = $(DescriptionInspector.vars.selectors.inspectorDescriptionTab),
-                    formInspectorTab = $(DescriptionInspector.vars.selectors.inspectorModelTab);
+                formInspectorTab = $(DescriptionInspector.vars.selectors.inspectorModelTab);
 
             // Wait for tab build
             setTimeout(function () {
@@ -1050,11 +1052,11 @@ var DescriptionInspector = {
     editorContentToModel: function () {
 
         var session = EditorManager.sessionsMap[EditorManager.currentUri],
-                formatsSessions = session.getFormatsSessions(),
-                currentFormat = session.getCurrentFormat();
+            formatsSessions = session.getFormatsSessions(),
+            currentFormat = session.getCurrentFormat();
 
         if (!EditorManager.currentDocumentHasProblems() &&
-                document.editor && ("json" in formatsSessions || "yaml" in formatsSessions)) {
+            document.editor && ("json" in formatsSessions || "yaml" in formatsSessions)) {
 
             // Update modelString model value
             var angScope = angular.element(document.getElementById("editorWrapper")).scope();
@@ -1119,7 +1121,7 @@ var DescriptionInspector = {
          */
         setDescription: function (text) {
             return this.getSelector().find(".contentWrapper > p").first().html(
-                    text);
+                text);
         }
     },
     // ------------------------------------------------
@@ -1183,7 +1185,7 @@ var DescriptionInspector = {
          */
         setTitle: function (textHTML) {
             return $("#descriptionInspectorHeaderAdd .expanded header h3")
-                    .html(textHTML);
+                .html(textHTML);
         },
         /**
          * Modifica la descripción del porgressBar por un valor pasado por
@@ -1207,32 +1209,32 @@ var DescriptionInspector = {
          */
         appendSelectedFragment: function (fragmentText) {
             var $progressContent = $("#descriptionInspectorHeaderAdd .contentWrapper p.progressContent"), prevContent = $progressContent
-                    .html(), labelName = ($progressContent.find("label").length > 0) ? "Desc.: "
+                .html(), labelName = ($progressContent.find("label").length > 0) ? "Desc.: "
                     : "Code: ", escFragText = fragmentText.replace(/"/g,
-                            "&quot;").replace(/\t/g, " ");
+                        "&quot;").replace(/\t/g, " ");
             var actualContent = prevContent
-                    + '<div class="container-fluid"><div class="row" style="margin-bottom:5px;">'
-                    + '<div class="col-xs-2"><label class="selectedFragment" for="">'
-                    + labelName
-                    + '</label></div>'
-                    + '<div class="col-xs-10"><div class="dropdown" style="float:right;">'
-                    + '<button style="height: 21px;line-height: 0;padding-bottom: 13px;margin-left: 4px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">'
-                    + '<span>...</span>'
-                    + '</button>'
-                    + '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="overflow-x: auto;width:'
-                    + $("#descriptionInspectorHeaderAdd .progressContent")
+                + '<div class="container-fluid"><div class="row" style="margin-bottom:5px;">'
+                + '<div class="col-xs-2"><label class="selectedFragment" for="">'
+                + labelName
+                + '</label></div>'
+                + '<div class="col-xs-10"><div class="dropdown" style="float:right;">'
+                + '<button style="height: 21px;line-height: 0;padding-bottom: 13px;margin-left: 4px;" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">'
+                + '<span>...</span>'
+                + '</button>'
+                + '<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="overflow-x: auto;width:'
+                + $("#descriptionInspectorHeaderAdd .progressContent")
                     .width()
-                    + 'px;padding: 5px;">'
-                    + '<li role="presentation"><pre role="menuitem" tabindex="-1" style="pointer-events: none; cursor: default;border:0;background-color:white;color:#6C6C6C;/*word-break: normal;*/word-wrap: normal;font-size:11px;width:100%;">'
-                    + fragmentText
-                    + '</pre></li>'
-                    + '</ul>'
-                    + '</div>'
-                    + '<input class="selectedFragment" type="text" '
-                    + 'value="'
-                    + escFragText
-                    + '" style="pointer-events: none; cursor: default;" disabled /></div>'
-                    + '</div></div>';
+                + 'px;padding: 5px;">'
+                + '<li role="presentation"><pre role="menuitem" tabindex="-1" style="pointer-events: none; cursor: default;border:0;background-color:white;color:#6C6C6C;/*word-break: normal;*/word-wrap: normal;font-size:11px;width:100%;">'
+                + fragmentText
+                + '</pre></li>'
+                + '</ul>'
+                + '</div>'
+                + '<input class="selectedFragment" type="text" '
+                + 'value="'
+                + escFragText
+                + '" style="pointer-events: none; cursor: default;" disabled /></div>'
+                + '</div></div>';
 
             this.setDescription(actualContent);
 
@@ -1246,19 +1248,19 @@ var DescriptionInspector = {
         compressFragmentTexts: function () {
 
             $("input.selectedFragment")
-                    .each(
-                            function () {
-                                var fragText = $(this).val(), fragSize = fragText.length, inputSize = $(
-                                        this).width() / 8, exceedsView = fragSize > inputSize;
+                .each(
+                    function () {
+                        var fragText = $(this).val(), fragSize = fragText.length, inputSize = $(
+                            this).width() / 8, exceedsView = fragSize > inputSize;
 
-                                if (exceedsView) {
-                                    $(this).val(
-                                            fragText.substr(0, inputSize)
-                                            + "...");
-                                    $(this).addClass("compressed").attr(
-                                            "maxlength", inputSize);
-                                }
-                            });
+                        if (exceedsView) {
+                            $(this).val(
+                                fragText.substr(0, inputSize)
+                                + "...");
+                            $(this).addClass("compressed").attr(
+                                "maxlength", inputSize);
+                        }
+                    });
         },
         /**
          * Redimensiona el tamaño de los visualizadores de fragmento.
@@ -1275,17 +1277,17 @@ var DescriptionInspector = {
          */
         setDefaultContent: function () {
             var progress = DescriptionInspector.progressBar,
-                    ace = DescriptionInspector.ace,
-                    editorInspector = $("#editorInspector");
+                ace = DescriptionInspector.ace,
+                editorInspector = $("#editorInspector");
 
             $(document).unbind("keyup");
             $(".ace_content").unbind("click");
             $("#inspectorContent").unbind("click");
 
             editorInspector.find(".expanded footer .btn-primary").addClass(
-                    "inactive");
+                "inactive");
             editorInspector.find(".highlighted-fragment").removeClass(
-                    "highlighted-fragment");
+                "highlighted-fragment");
 
             progress.unWrapBindings();
             progress.getProgressStep("1").setStepDefaultContent();
@@ -1398,7 +1400,7 @@ var DescriptionInspector = {
              */
             _isActive: function () {
                 return ($(".progress-number.active").length == 1
-                        && $(".one.active").length == 1 ? true : false);
+                    && $(".one.active").length == 1 ? true : false);
             },
             /**
              * Almacena contenido relevante al step 1. En este caso sólo se
@@ -1412,21 +1414,21 @@ var DescriptionInspector = {
                 DescriptionInspector.ace.getEditor().exitMultiSelectMode();
 
                 var $editor = DescriptionInspector.ace.getEditor(), currentSelectionRange = $editor
-                        .getSelection().getRange();
+                    .getSelection().getRange();
 
                 DescriptionInspector.vars.progressBar.step1 = new Binding(
-                        $bindingMap.calculateNewId(),
-                        $editor.getSelectedText(),
-                        currentSelectionRange.start.row,
-                        currentSelectionRange.end.row,
-                        currentSelectionRange.start.column,
-                        currentSelectionRange.end.column);
+                    $bindingMap.calculateNewId(),
+                    $editor.getSelectedText(),
+                    currentSelectionRange.start.row,
+                    currentSelectionRange.end.row,
+                    currentSelectionRange.start.column,
+                    currentSelectionRange.end.column);
 
                 // Show selected fragment
                 var progress = DescriptionInspector.progressBar;
                 progress.setDescription("");
                 progress
-                        .appendSelectedFragment(DescriptionInspector.vars.progressBar.step1.textNote);
+                    .appendSelectedFragment(DescriptionInspector.vars.progressBar.step1.textNote);
                 progress.compressFragmentTexts();
 
             },
@@ -1438,7 +1440,7 @@ var DescriptionInspector = {
              */
             isValid: function () {
                 return this._isActive()
-                        && DescriptionInspector.ace.getEditor()
+                    && DescriptionInspector.ace.getEditor()
                         .getSelectedText().replace(/\s+/g, "") != "";
             },
             /**
@@ -1450,23 +1452,23 @@ var DescriptionInspector = {
             setStepDefaultContent: function () {
                 // Estilo del menú
                 $(
-                        "#editorInspector .expanded #descriptionInspectorHeader .progress-bar")
-                        .css("width", "0");
+                    "#editorInspector .expanded #descriptionInspectorHeader .progress-bar")
+                    .css("width", "0");
 
                 $("#editorInspector .expanded .one") // Desactiva numero de
-                        // progreso step 1 y
-                        // márcalo como exitoso
-                        .addClass("active").removeClass("no-color").html(
+                    // progreso step 1 y
+                    // márcalo como exitoso
+                    .addClass("active").removeClass("no-color").html(
                         '<span style="color:#F5F5F5;">1</span>');
 
                 $("#editorInspector .expanded .two").addClass("no-color")
-                        .removeClass("active").html('2');
+                    .removeClass("active").html('2');
 
                 $("#editorInspector .expanded .three").addClass("no-color")
-                        .removeClass("active").html('3');
+                    .removeClass("active").html('3');
 
                 DescriptionInspector.progressBar.disableStepFowardBtn().text(
-                        "Next");
+                    "Next");
 
                 // Contenido de Texto
                 this.setDefaultHeaderText();
@@ -1480,7 +1482,7 @@ var DescriptionInspector = {
                 // DescriptionInspector.progressBar.setTitle("Description
                 // select");
                 DescriptionInspector.progressBar
-                        .setDescription("Please select code fragment in the editor on the left and press next");
+                    .setDescription("Please select code fragment in the editor on the left and press next");
             },
             /**
              * Cancela el progressBar estando en el step 1.
@@ -1515,10 +1517,10 @@ var DescriptionInspector = {
                 this._saveSelectedContent();
 
                 $("#editorInspector .expanded footer .btn-primary").unbind(
-                        "click").click(
+                    "click").click(
                         function () {
                             var targetStep = DescriptionInspector.progressBar
-                                    .getProgressStep('2');
+                                .getProgressStep('2');
 
                             targetStep.setStepDefaultContent();
                             targetStep.run();
@@ -1528,7 +1530,7 @@ var DescriptionInspector = {
                             $(document).unbind("keyup");
 
                             DescriptionInspector.progressBar
-                                    .disableStepFowardBtn();
+                                .disableStepFowardBtn();
                         });
             }
 
@@ -1564,7 +1566,7 @@ var DescriptionInspector = {
              */
             _isActive: function () {
                 return ($(".progress-number.active").length == 1
-                        && $(".two.active").length == 1 ? true : false)
+                    && $(".two.active").length == 1 ? true : false)
             },
             /**
              * Almacena contenido relavante al step 2. En este caso sólo se
@@ -1579,7 +1581,7 @@ var DescriptionInspector = {
 
                     progress.setDescription("");
                     progress
-                            .appendSelectedFragment(DescriptionInspector.vars.progressBar.step1.textNote);
+                        .appendSelectedFragment(DescriptionInspector.vars.progressBar.step1.textNote);
 
                     $(".selectedFragment").addClass("prevFragment");
 
@@ -1606,7 +1608,7 @@ var DescriptionInspector = {
              */
             getSelectedText: function () {
                 return window.getSelection ? window.getSelection().toString()
-                        : "";
+                    : "";
             },
             /**
              * Comprueba si el step 2 es válido para seguir al siguiente step.
@@ -1616,7 +1618,7 @@ var DescriptionInspector = {
              */
             isValid: function () {
                 return DescriptionInspector.vars.progressBar.step1
-                        && this._isActive();
+                    && this._isActive();
             },
             /**
              * Establece el contenido por defecto del step 2. Siempre que se
@@ -1633,33 +1635,33 @@ var DescriptionInspector = {
 
                 // Style
                 expandedMenu.find("#descriptionInspectorHeader .progress-bar") // Modifica
-                        // barra
-                        // de
-                        // progreso
-                        // a
-                        // step
-                        // 2
-                        .css("width", "51%");
+                    // barra
+                    // de
+                    // progreso
+                    // a
+                    // step
+                    // 2
+                    .css("width", "51%");
 
                 expandedMenu
-                        .find(".one")
-                        // Desactiva numero de progreso step 1 y márcalo como
-                        // exitoso
-                        .removeClass("active")
-                        .html(
-                                '<span class="glyphicon glyphicon-ok" style="color:#F5F5F5;margin-left:-4px;"></span>');
+                    .find(".one")
+                    // Desactiva numero de progreso step 1 y márcalo como
+                    // exitoso
+                    .removeClass("active")
+                    .html(
+                        '<span class="glyphicon glyphicon-ok" style="color:#F5F5F5;margin-left:-4px;"></span>');
 
                 expandedMenu.find(".two") // Activa el numero de progreso step
-                        // 2
-                        .removeClass("no-color").addClass("active").html(
+                    // 2
+                    .removeClass("no-color").addClass("active").html(
                         '<span style="color:#F5F5F5;">2</span>');
 
                 expandedMenu.find(".three") // Asegura que step 3 está
-                        // desactivado
-                        .removeClass("active").html('3');
+                    // desactivado
+                    .removeClass("active").html('3');
 
                 DescriptionInspector.progressBar.disableStepFowardBtn().text(
-                        "Next");
+                    "Next");
 
                 // Functionality
                 this.setDefaultHeaderText();
@@ -1676,11 +1678,11 @@ var DescriptionInspector = {
 
                 progress.setDescription("");
                 progress
-                        .appendSelectedFragment(DescriptionInspector.vars.progressBar.step1.textNote);
+                    .appendSelectedFragment(DescriptionInspector.vars.progressBar.step1.textNote);
                 progress
-                        .setDescription(progress.getDescriptionSelector()
-                                .html()
-                                + "Please select the description fragment on the text below and press next");
+                    .setDescription(progress.getDescriptionSelector()
+                        .html()
+                        + "Please select the description fragment on the text below and press next");
                 progress.compressFragmentTexts();
 
                 $(".selectedFragment").addClass("prevFragment");
@@ -1713,19 +1715,19 @@ var DescriptionInspector = {
                         DescriptionInspector.progressBar.enableStepFowardBtn();
 
                         $("#editorInspector .expanded footer .btn-primary")
-                                .unbind("click")
-                                .click(
-                                        function () {
-                                            var step3 = DescriptionInspector.progressBar
-                                                    .getProgressStep(3);
-                                            step3.setStepDefaultContent();
-                                            step3.run();
+                            .unbind("click")
+                            .click(
+                                function () {
+                                    var step3 = DescriptionInspector.progressBar
+                                        .getProgressStep(3);
+                                    step3.setStepDefaultContent();
+                                    step3.run();
 
-                                            $("#inspectorContent").unbind(
-                                                    "click");
-                                            $(document).unbind("keyup");
+                                    $("#inspectorContent").unbind(
+                                        "click");
+                                    $(document).unbind("keyup");
 
-                                        });
+                                });
                     } else {
                         // console.log("no text select");
                     }
@@ -1757,11 +1759,11 @@ var DescriptionInspector = {
                 var $this = this;
 
                 $("#editorInspector .expanded footer .btn-primary").unbind(
-                        "click").click(function () {
-                    if ($this.isValid()) {
-                        $this.stepForwardManager();
-                    }
-                });
+                    "click").click(function () {
+                        if ($this.isValid()) {
+                            $this.stepForwardManager();
+                        }
+                    });
 
                 this.onCancel();
             },
@@ -1773,7 +1775,7 @@ var DescriptionInspector = {
              */
             _isActive: function () {
                 return ($(".progress-number.active").length == 1
-                        && $(".three.active").length == 1 ? true : false);
+                    && $(".three.active").length == 1 ? true : false);
             },
             /**
              * Devuelve el html del texto seleccionado en el inspector.
@@ -1783,7 +1785,7 @@ var DescriptionInspector = {
              */
             getSelectedHtml: function (range) {
                 var content = range.cloneContents(), span = document
-                        .createElement('span');
+                    .createElement('span');
 
                 span.appendChild(content);
 
@@ -1797,8 +1799,8 @@ var DescriptionInspector = {
              */
             isValid: function () {
                 return DescriptionInspector.vars.progressBar.step1
-                        && DescriptionInspector.vars.progressBar.step2
-                        && this._isActive();
+                    && DescriptionInspector.vars.progressBar.step2
+                    && this._isActive();
             },
             /**
              * Cancela el progressBar estando en el step 3
@@ -1824,47 +1826,47 @@ var DescriptionInspector = {
 
                 // Style
                 $(
-                        "#editorInspector .expanded #descriptionInspectorHeader .progress-bar")
-                        .css("width", "100%");
+                    "#editorInspector .expanded #descriptionInspectorHeader .progress-bar")
+                    .css("width", "100%");
 
                 $("#editorInspector .expanded .one")
-                        .removeClass("active")
-                        .html(
-                                '<span class="glyphicon glyphicon-ok" style="color:#F5F5F5;margin-left:-4px;"></span>');
+                    .removeClass("active")
+                    .html(
+                        '<span class="glyphicon glyphicon-ok" style="color:#F5F5F5;margin-left:-4px;"></span>');
 
                 $("#editorInspector .expanded .two")
-                        .removeClass("active")
-                        .html(
-                                '<span class="glyphicon glyphicon-ok" style="color:#F5F5F5;margin-left:-4px;"></span>');
+                    .removeClass("active")
+                    .html(
+                        '<span class="glyphicon glyphicon-ok" style="color:#F5F5F5;margin-left:-4px;"></span>');
 
                 $("#editorInspector .expanded .three").removeClass("no-color")
-                        .addClass("active").html(
+                    .addClass("active").html(
                         '<span style="color:#F5F5F5;">3</span>');
 
                 $("#editorInspector .selectedFragment")
-                        .addClass("prevFragment");
+                    .addClass("prevFragment");
 
                 $("#editorInspector .expanded footer .btn-primary").addClass(
-                        "inactive").text("Done")
+                    "inactive").text("Done")
 
                 // Functionality
                 var progressBar = DescriptionInspector.progressBar, descContent = progressBar
-                        .getDescriptionSelector().html();
+                    .getDescriptionSelector().html();
 
                 progressBar.disableStepFowardBtn();
 
                 descContent += '<hr style="'
-                        + 'margin: 15px 0;'
-                        + '">'
-                        +
-                        // RDFa yes/no
-                        '<div style="margin-bottom:5px;" id="rdfa-property"><label for="selectBindingRDFa">RDFa:</label><div style="float: right;"><input type="radio" name="rdfa" id="rdfaYes" style="margin: 0 5px 0 15px;" checked=""><label for="rdfaYes" style="margin-right: 6px;">yes</label><input type="radio" name="rdfa" id="rdfaNo" style="margin: 0 5px 0 15px;"><label for="rdfaNo" style="margin-right: 31px;">no</label></div></div>'
-                        +
-                        // Element
-                        '<div class="rdfaContent" style="margin-bottom: 5px; position: relative; display: block;" id="element-property"><label for="selectBindingElement">Element:</label><div style="/* float: right; */position: absolute;right: 0;top: 0;"><input type="radio" name="rdfaElement" id="newElement" style="margin: 0 5px 0 15px;" checked=""><label for="newElement">new</label><input type="radio" name="rdfaElement" id="currentElement" style="margin: 0 5px 0 15px;"><label for="currentElement">current</label></div></div>'
-                        +
-                        // Type
-                        '<div style="margin-left: 25px;margin-bottom: 10px;position: relative;"><label for="selectBindingType" style="/* float: left; */ font-size: 12px;">Type:</label><div style="margin-left: 25px;position: absolute;right: 0;top: 0;"><select id="selectBindingType" class="selectedFragment" style="float: right;"><option value="span">span</option><option value="div">div</option><option value="a">a</option><option value="button">button</option></select></div></div>';
+                    + 'margin: 15px 0;'
+                    + '">'
+                    +
+                    // RDFa yes/no
+                    '<div style="margin-bottom:5px;" id="rdfa-property"><label for="selectBindingRDFa">RDFa:</label><div style="float: right;"><input type="radio" name="rdfa" id="rdfaYes" style="margin: 0 5px 0 15px;" checked=""><label for="rdfaYes" style="margin-right: 6px;">yes</label><input type="radio" name="rdfa" id="rdfaNo" style="margin: 0 5px 0 15px;"><label for="rdfaNo" style="margin-right: 31px;">no</label></div></div>'
+                    +
+                    // Element
+                    '<div class="rdfaContent" style="margin-bottom: 5px; position: relative; display: block;" id="element-property"><label for="selectBindingElement">Element:</label><div style="/* float: right; */position: absolute;right: 0;top: 0;"><input type="radio" name="rdfaElement" id="newElement" style="margin: 0 5px 0 15px;" checked=""><label for="newElement">new</label><input type="radio" name="rdfaElement" id="currentElement" style="margin: 0 5px 0 15px;"><label for="currentElement">current</label></div></div>'
+                    +
+                    // Type
+                    '<div style="margin-left: 25px;margin-bottom: 10px;position: relative;"><label for="selectBindingType" style="/* float: left; */ font-size: 12px;">Type:</label><div style="margin-left: 25px;position: absolute;right: 0;top: 0;"><select id="selectBindingType" class="selectedFragment" style="float: right;"><option value="span">span</option><option value="div">div</option><option value="a">a</option><option value="button">button</option></select></div></div>';
 
                 // Attribute
                 descContent += '<div class="rdfaContent" style="position: relative; margin-bottom: 15px; margin-left: 25px; display: block;" id="attribute-property"> <label for="selectBindingAttributeType" style="font-size:12px;float: left;position: relative;">Attribute:</label> <div style="position: relative;right: 0;"> <select id="selectBindingAttributeType" class="selectedFragment" style="margin-bottom: 5px;"> <option value="vocab">vocab</option> <option value="typeof">typeof</option> <option value="property">property</option> <option value="prefix">prefix</option> <option value="resource">resource</option> </select> <input id="attributeTypeValue" style="font-size: 12px;width: 100%;position: relative;" type="text" value=""> </div> </div>';
@@ -1889,7 +1891,7 @@ var DescriptionInspector = {
                     if (this.isRDFa()) {
                         // is attribute value set?
                         ret = ret || $("#attributeTypeValue").val() != "" ? true
-                                : false;
+                            : false;
                     } else {
                         ret = true;
                     }
@@ -2046,8 +2048,8 @@ var DescriptionInspector = {
             getStep2AncestorBinding: function () {
 
                 var binding = DescriptionInspector.vars.progressBar.step2,
-                        ancestorElement = binding.commonAncestorContainer.parentElement,
-                        ret = null;
+                    ancestorElement = binding.commonAncestorContainer.parentElement,
+                    ret = null;
 
                 if (ancestorElement != null) {
                     var $ancestor = $(ancestorElement);
@@ -2067,7 +2069,7 @@ var DescriptionInspector = {
             },
             isRDFaNewElement: function () {
                 return this.isRDFa()
-                        && $("input:radio[name=rdfaElement]:checked")
+                    && $("input:radio[name=rdfaElement]:checked")
                         .attr("id") === "newElement";
             },
             /**
@@ -2078,10 +2080,10 @@ var DescriptionInspector = {
             stepForwardManager: function () {
 
                 var binding = DescriptionInspector.vars.progressBar.step1,
-                        contentToBind = this.getSelectedHtml(DescriptionInspector.vars.progressBar.step2),
-                        regex = /(<([^>]+)>)/ig,
-                        typeOfBinding = $("#selectBindingType").val(),
-                        textNote = $("#bindingNote").val();
+                    contentToBind = this.getSelectedHtml(DescriptionInspector.vars.progressBar.step2),
+                    regex = /(<([^>]+)>)/ig,
+                    typeOfBinding = $("#selectBindingType").val(),
+                    textNote = $("#bindingNote").val();
 
                 if (typeOfBinding != "span" && typeOfBinding != "a" && typeOfBinding != "div" && typeOfBinding != "button") {
                     typeOfBinding = "span";
@@ -2106,9 +2108,9 @@ var DescriptionInspector = {
                 // RDFa properties
                 if (this.isRDFa()) {
                     var rdfaElementType = $("#selectBindingType"),
-                            rdfaElementValue = $("#typeValue"),
-                            rdfaAttributeType = $("#selectBindingAttributeType"),
-                            rdfaAttributeValue = $("#attributeTypeValue");
+                        rdfaElementValue = $("#typeValue"),
+                        rdfaAttributeType = $("#selectBindingAttributeType"),
+                        rdfaAttributeValue = $("#attributeTypeValue");
 
                     if (rdfaAttributeType.val() === "vocab") {
                         $(el).addClass("ideas-binding-vocab");
@@ -2120,7 +2122,7 @@ var DescriptionInspector = {
                         // Create a new binding
                         if (rdfaAttributeValue.val() != "") {
                             $(el).attr(rdfaAttributeType.val(),
-                                    rdfaAttributeValue.val());
+                                rdfaAttributeValue.val());
                         }
                         var frag = document.createDocumentFragment(), node, lastNode;
                         $(el).wrap("<div/>");
@@ -2130,16 +2132,16 @@ var DescriptionInspector = {
                         }
 
                         DescriptionInspector.vars.progressBar.step2
-                                .deleteContents();
+                            .deleteContents();
                         DescriptionInspector.vars.progressBar.step2
-                                .insertNode(frag);
+                            .insertNode(frag);
 
                     } else {
                         // Updated RDFa current binding
                         var $ancestor = this.getStep2AncestorBinding();
                         if (rdfaAttributeValue.val() != "") {
                             $ancestor.attr(rdfaAttributeType.val(),
-                                    rdfaAttributeValue.val());
+                                rdfaAttributeValue.val());
                         }
                         if (textNote != "")
                             $ancestor.attr("data-text", textNote);
@@ -2149,16 +2151,16 @@ var DescriptionInspector = {
                     // create simple binding
                     var frag = document.createDocumentFragment(), node, lastNode;
                     $(el).addClass("ideas-binding highlighted-fragment")
-                            .wrap("<div/>");
+                        .wrap("<div/>");
                     $(el).html($(el).parent().html());
                     while ((node = el.firstChild)) {
                         lastNode = frag.appendChild(node);
                     }
 
                     DescriptionInspector.vars.progressBar.step2
-                            .deleteContents();
+                        .deleteContents();
                     DescriptionInspector.vars.progressBar.step2
-                            .insertNode(frag);
+                        .insertNode(frag);
 
                 }
 
@@ -2201,12 +2203,12 @@ var DescriptionInspector = {
             DescriptionInspector.highlightAllBindings();
 
             $("#inspectorContent .ideas-binding")
-                    .addClass("to-remove highlighted-fragment")
-                    .removeClass("ideas-binding");
+                .addClass("to-remove highlighted-fragment")
+                .removeClass("ideas-binding");
 
             // rdfa vocab binding
             $("#inspectorContent .ideas-binding-vocab")
-                    .addClass("to-remove");
+                .addClass("to-remove");
 
             if (typeof callback == "function")
                 callback();
@@ -2218,13 +2220,13 @@ var DescriptionInspector = {
          */
         _unhighlightBindingsToRemove: function (callback) {
             $("#inspectorContent .to-remove").not(".ideas-binding-vocab")
-                    .addClass("ideas-binding")
-                    .removeClass("to-remove highlighted-fragment")
-                    .unbind("click");
+                .addClass("ideas-binding")
+                .removeClass("to-remove highlighted-fragment")
+                .unbind("click");
 
             // rdfa vocab binding
             $("#inspectorContent .to-remove.ideas-binding-vocab")
-                    .removeClass("to-remove highlighted-fragment");
+                .removeClass("to-remove highlighted-fragment");
 
             DescriptionInspector.loaders.bindings();
 
@@ -2251,14 +2253,11 @@ var DescriptionInspector = {
         _showModalRemoveBinding: function ($obj) {
 
             var bind = Binding.getBinding($obj),
-                    rowAux = parseInt(bind.startRows[0]) + 1,
-                    content = "<label>Source:</label> <span>" + bind.textNote + "</span> <br/> " +
-                    "<label>Target:</label> <span>" + bind.getTargetText() + "</span> <br/> " +
-                    "<label>Line:</label> <span>" + rowAux + "</span>",
-                    ace = DescriptionInspector.ace,
-                    _this = this;
+                rowAux = parseInt(bind.startRows[0]) + 1,
+                ace = DescriptionInspector.ace,
+                _this = this;
 
-            showModal("Delete bindings", content, "OK", function () {
+            showContentAsModal("app/modalWindows/removeBinding", function () {
                 _this.unwrap($obj.unbind("click"));
 
                 DescriptionInspector.removeBinding($obj);
@@ -2274,13 +2273,17 @@ var DescriptionInspector = {
                 DescriptionInspector.scrollToFirstBinding();
                 DescriptionInspector.highlightAllBindings();
             }, // primary
-                    function () {
-                        hideModal();
-                    }, // cancel
-                    function () {
-                        hideModal();
-                    } // close
-            );
+                function () {
+                    hideModal();
+                }, // cancel
+                function () {
+                    hideModal();
+                }, // close
+                {
+                    textNote: bind.textNote,
+                    targetText: bind.getTargetText(),
+                    rowAux: rowAux
+                });
 
             DescriptionInspector.onEnterPressSubmitModalForm();
         },
@@ -2293,44 +2296,20 @@ var DescriptionInspector = {
         _showModalBulkRemoveBindings: function () {
 
             var $listContainer = $("<div>"),
-                    _this = this;
+                _this = this;
 
             // List of bindings to remove
             $("#inspectorContent .to-remove").each(function (index) {
                 var bindObj = Binding.getBinding($(this));
                 var textNote = $(this).hasClass("ideas-binding-vocab") ? $(this).attr("vocab") : bindObj.textNote;
                 $listContainer.append(
-                        "<div title='" + bindObj.startRows[0] + ": " + bindObj.getTargetText() + "'>" +
-                        "  <input id='bulkremove" + index + "' class='to-bulkremove' name='checkboxBulkRemover' data-id-remover='" + index + "' type='checkbox' />" +
-                        "  <label for='bulkremove" + index + "'>" + textNote + "</label>" +
-                        "</div>");
+                    "<div title='" + bindObj.startRows[0] + ": " + bindObj.getTargetText() + "'>" +
+                    "  <input id='bulkremove" + index + "' class='to-bulkremove' name='checkboxBulkRemover' data-id-remover='" + index + "' type='checkbox' />" +
+                    "  <label for='bulkremove" + index + "'>" + textNote + "</label>" +
+                    "</div>");
             });
 
-            // Modal content
-            var title = "Delete bindings",
-                    primaryText = "OK",
-                    content = "";
-
-            if ($listContainer.find("div").length > 0) {
-                content = '' +
-                        '<div class="bulkRemover">' + $listContainer.html() +
-                        '  <div style="float:right;"><a class="bulkSelectAll">All</a> | <a class="bulkSelectNone">None</a></div>' +
-                        '</div>' +
-                        '<script>' +
-                        '  $(document).ready(function () {$(".bulkRemover a.bulkSelectAll").unbind("click").on("click", function (e) {' +
-                        '    e.preventDefault();' +
-                        '    $(".bulkRemover input").prop("checked", true);' + '});' +
-                        '    $(".bulkRemover a.bulkSelectNone").unbind("click").on("click", function (e) {' +
-                        '      e.preventDefault();' +
-                        '      $(".bulkRemover input").prop("checked", false);' +
-                        '    });' +
-                        '  });' +
-                        '</script>';
-            } else {
-                content = '<span>No binds to delete</span>';
-            }
-
-            showModal(title, content, primaryText, function () {
+            showContenAsModal('app/modalWindows/bulkRemoveBinding', function () {
 
                 $(".modal input.to-bulkremove:checked").each(function () {
                     var $this = this, hasBindingToRemove = true;
@@ -2344,7 +2323,7 @@ var DescriptionInspector = {
                 });
 
                 _this.unwrap($("#inspectorContent .to-bulkremove").unbind(
-                        "click"));
+                    "click"));
 
                 DescriptionInspector.ace.getSession().clearAnnotations();
                 DescriptionInspector.ace.getSelection().clearSelection();
@@ -2354,7 +2333,7 @@ var DescriptionInspector = {
 
                 if ($(".modal input.to-bulkremove:checked").length > 0) {
                     DescriptionInspector
-                            .saveInspectorContentToDescriptionFile();
+                        .saveInspectorContentToDescriptionFile();
                     _this.loadAvailableBindingsToRemoveMessage();
                     DescriptionInspector.scrollToFirstBinding();
                     DescriptionInspector.highlightAllBindings();
@@ -2362,13 +2341,16 @@ var DescriptionInspector = {
                     console.log("No binding selected to remove.");
                 }
             }, // primary
-                    function () {
-                        hideModal();
-                    }, // cancel
-                    function () {
-                        hideModal();
-                    } // close
-            );
+                function () {
+                    hideModal();
+                }, // cancel
+                function () {
+                    hideModal();
+                }, // close
+                {
+                    hasBindingToRemove: $listContainer.find("div").length > 0,
+                    listContainer: $listContainer.html()
+                });
 
             DescriptionInspector.onEnterPressSubmitModalForm();
         },
@@ -2392,10 +2374,10 @@ var DescriptionInspector = {
             });
 
             $("#descriptionInspectorHeaderRemove .proceedAction").removeClass(
-                    "inactive").empty().append("Bulk delete").unbind("click")
-                    .click(function () {
-                        removeBindingInspector._showModalBulkRemoveBindings();
-                    });
+                "inactive").empty().append("Bulk delete").unbind("click")
+                .click(function () {
+                    removeBindingInspector._showModalBulkRemoveBindings();
+                });
 
             this.loadAvailableBindingsToRemoveMessage();
             DescriptionInspector.ace.getSelection().clearSelection();
@@ -2411,10 +2393,10 @@ var DescriptionInspector = {
 
             if (DescriptionInspector.existBinding()) {
                 DescriptionInspector.expandableMenu
-                        .setDescription('Please select a binding on the text below or press "<u>Bulk delete</u>" to remove more than one binding at one time.');
+                    .setDescription('Please select a binding on the text below or press "<u>Bulk delete</u>" to remove more than one binding at one time.');
             } else {
                 DescriptionInspector.expandableMenu
-                        .setDescription('There is no binding to remove on the text below.');
+                    .setDescription('There is no binding to remove on the text below.');
             }
         },
         /**
@@ -2468,10 +2450,10 @@ var DescriptionInspector = {
             // TODO: comprueba que existe un fichero descriptor relacionado.
             var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri);
             return this.getHtmlObj().length === 0
-                    && DescriptionInspector.angularFormatView.getHtmlObj() === 0
-                    && currentExt !== "ang" && currentExt !== "html"
-                    && DescriptionInspector.existCurrentDescriptionFile()
-                    && DescriptionInspector.isEditorMode();
+                && DescriptionInspector.angularFormatView.getHtmlObj() === 0
+                && currentExt !== "ang" && currentExt !== "html"
+                && DescriptionInspector.existCurrentDescriptionFile()
+                && DescriptionInspector.isEditorMode();
         },
         build: function () {
             this.setDefaultStructure();
@@ -2490,8 +2472,8 @@ var DescriptionInspector = {
         setDefaultStructure: function () {
             if (this.getHtmlObj().length === 0) {
                 $("#editorWrapper")
-                        .append(
-                                '<div id="ideasBinding-descriptionBoardContent"></div>');
+                    .append(
+                        '<div id="ideasBinding-descriptionBoardContent"></div>');
             }
         },
         /**
@@ -2502,7 +2484,7 @@ var DescriptionInspector = {
             if (content) {
                 content = content.replace(/(middle-highlighted-fragment)/g, "");
                 content = content.replace(/(ideas-binding)/g,
-                        "ideas-binding highlighted-fragment");
+                    "ideas-binding highlighted-fragment");
 
                 return this.getHtmlObj().html(content);
             }
@@ -2515,7 +2497,7 @@ var DescriptionInspector = {
          */
         mayShow: function () {
             return this.getHtmlObj().length === 1
-                    && this.formatTab.getHtmlObj().length === 1;
+                && this.formatTab.getHtmlObj().length === 1;
         },
         /**
          * Activa el descriptionFormatView
@@ -2529,8 +2511,8 @@ var DescriptionInspector = {
                 if (this.mayShow()) {
                     setTimeout(function () {
                         EditorManager.changeFormat(EditorManager.currentUri, $(
-                                "#editorFormats li.formatTab").first().text()
-                                .toLowerCase());
+                            "#editorFormats li.formatTab").first().text()
+                            .toLowerCase());
                     }, 1);
 
                     setTimeout(function () {
@@ -2550,7 +2532,7 @@ var DescriptionInspector = {
 
             } else {
                 CommandApi
-                        .echo('<span style="color:red;">Can not show desc main view while errors exist.</span>');
+                    .echo('<span style="color:red;">Can not show desc main view while errors exist.</span>');
             }
 
         },
@@ -2567,7 +2549,7 @@ var DescriptionInspector = {
                 _this.getHtmlObj().remove();
 
                 if ($("#editorFormats .formatTab.active").text()
-                        .toLowerCase() === "desc") {
+                    .toLowerCase() === "desc") {
                     $("#editorFormats .formatTab").first().click();
                     DescriptionInspector.highlightAllBindings();
                 }
@@ -2629,20 +2611,9 @@ var DescriptionInspector = {
 
                     window.getSelection().removeAllRanges();
 
-                    var content = '<div class="container-fluid">'
-                            + '<div class="row"><div class="col-xs-3"><label style="color: #aaa;">Original value:</label></div><div class="col-xs-9"><span id="ideasBindingOriginalBindingToModify" style="color: #aaa;">'
-                            + binding.getTargetText()
-                            + '</span></div></div>'
-                            + '<br/><div class="row"><div class="col-xs-3"><label>New value:</label></div> '
-                            + '<div class="col-xs-9"><input type="text" id="ideasBindingValueToModify" value="'
-                            + $(this).text()
-                            + '"'
-                            + 'title="Please specify a new value to bind"'
-                            + 'style="width:100%;" /></div></div>'
-                            + '<!-- Use it to show any validation message --><div type="ideasBindingValidation"></div>'
-                            + '</div>', _this = this;
+                    var _this = this;
 
-                    showModal("Please specify a new value to bind", content, "OK", function () {
+                    showContentAsModal("app/modalWindows/bindValue", function () {
                         var value = $("#ideasBindingValueToModify").val();
 
                         DescriptionInspector.modifyBindings($(_this), value.toString());
@@ -2653,7 +2624,7 @@ var DescriptionInspector = {
                         if (preparedContent !== null) {
                             DescriptionInspector.saveContentToDescriptionFile(preparedContent);
                             $("#inspectorContent")
-                                    .html(preparedContent);
+                                .html(preparedContent);
                             DescriptionInspector.loaders.bindings();
                             CommandApi.echo("New content saved.");
                         }
@@ -2669,8 +2640,11 @@ var DescriptionInspector = {
                     }, function () {
                         // cancel
                         hideModal();
-                    } // close
-                    );
+                    }, // close,
+                        {
+                            bindingText: binding.getTargetText(),
+                            valueToModifyText: $(this).text()
+                        });
 
                     $("#ideasBindingValueToModify").focus();
                     DescriptionInspector.onEnterPressSubmitModalForm();
@@ -2723,14 +2697,14 @@ var DescriptionInspector = {
             onClick: function () {
 
                 var descView = DescriptionInspector.descriptionFormatView,
-                        angView = DescriptionInspector.angularFormatView;
+                    angView = DescriptionInspector.angularFormatView;
 
                 this.getHtmlObj().unbind("click").click(function () {
-//					if (!$(this).hasClass("active")) {
+                    //					if (!$(this).hasClass("active")) {
                     angView.hide();
-//                        descView.formatTab.activate();
+                    //                        descView.formatTab.activate();
                     descView.init();
-//					}
+                    //					}
                 });
 
                 this.getOthersHtmlObj().click(function () {
@@ -2754,7 +2728,7 @@ var DescriptionInspector = {
         init: function () {
 
             var angularFormatView = this,
-                    tabs = DescriptionInspector.tabs;
+                tabs = DescriptionInspector.tabs;
 
             setTimeout(function () {
 
@@ -2762,12 +2736,12 @@ var DescriptionInspector = {
                     angularFormatView.build();
 
                     DescriptionInspector.setInspectorModelContent(
-                            $("#modelBoardContent"),
-                            function () {
-                                tabs.angularCompileModelInspectorFormatView();
-                                angularFormatView.formatTab.build();
-                                angularFormatView.show();
-                            }
+                        $("#modelBoardContent"),
+                        function () {
+                            tabs.angularCompileModelInspectorFormatView();
+                            angularFormatView.formatTab.build();
+                            angularFormatView.show();
+                        }
                     );
                 }
             }, 250);
@@ -2777,11 +2751,11 @@ var DescriptionInspector = {
          */
         mayBuild: function () {
             var currentExt = ModeManager.calculateExtFromFileUri(EditorManager.currentUri),
-                    formatSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions();
+                formatSessions = EditorManager.sessionsMap[EditorManager.currentUri].getFormatsSessions();
 
             return currentExt !== "ang" && currentExt !== "html"
-                    && DescriptionInspector.existCurrentAngularFile()
-                    && "json" in formatSessions || "yaml" in formatSessions;
+                && DescriptionInspector.existCurrentAngularFile()
+                && "json" in formatSessions || "yaml" in formatSessions;
         },
         /**
          * @memberof DescriptionInspector.angularFormatView
@@ -2808,7 +2782,7 @@ var DescriptionInspector = {
          */
         mayShow: function () {
             return this.getHtmlObj().length === 1
-                    && this.formatTab.getHtmlObj().length === 1;
+                && this.formatTab.getHtmlObj().length === 1;
         },
         /**
          * @memberof DescriptionInspector.angularFormatView
@@ -2827,7 +2801,7 @@ var DescriptionInspector = {
                 this.formatTab.activate();
 
             } else {
-//				CommandApi.echo('<span style="color:red;">Cannot show form view while editor contains syntax errors.</span>');
+                //				CommandApi.echo('<span style="color:red;">Cannot show form view while editor contains syntax errors.</span>');
                 this.hide();
             }
 
@@ -2843,7 +2817,7 @@ var DescriptionInspector = {
          */
         destroy: function () {
             this.getHtmlObj().remove();
-            this.formatTab.getHtmlObj().remove();            
+            this.formatTab.getHtmlObj().remove();
         },
         /**
          * @namespace DescriptionInspector.angularFormatView.formatTab
@@ -2890,7 +2864,7 @@ var DescriptionInspector = {
             onClick: function () {
 
                 var descView = DescriptionInspector.descriptionFormatView,
-                        formatTab = this;
+                    formatTab = this;
 
                 this.getHtmlObj().unbind("click").click(function () {
                     if (!EditorManager.currentDocumentHasProblems()) {
@@ -2899,13 +2873,13 @@ var DescriptionInspector = {
                         if (!$("#editorInspector").hasClass("hdd")) {
                             $("#editorToggleInspector").click();
                         }
-//                        descView.hide();
+                        //                        descView.hide();
                     } else {
                         CommandApi.echo(
-                                '<span style="color:red;">' +
-                                '   Can not show form view while errors exist.' +
-                                '</span>'
-                                );
+                            '<span style="color:red;">' +
+                            '   Can not show form view while errors exist.' +
+                            '</span>'
+                        );
                     }
                 });
 
@@ -2927,24 +2901,24 @@ var DescriptionInspector = {
             var inspector = $("#editorInspector");
 
             inspector.bind("inspectorChangeState",
-                    function (e, open) {
-                        if (open) {
-                            if (document.editor) {
-                                DescriptionInspector.highlightAllBindings();
-                            }
-                            if (DescriptionInspector.angularFormatView.getHtmlObj().is(":visible")) {
-//								DescriptionInspector.descriptionFormatView.hide();
-                                DescriptionInspector.angularFormatView.hide();
-                                var baseFormat = EditorManager.sessionsMap[EditorManager.currentUri].getBaseFormat();
-                                $("#editorFormats li:contains('" + baseFormat.toUpperCase() + "')").click();
-                            }
-
-                        } else {
-                            if (document.editor) {
-                                DescriptionInspector.unHighlightAllBidings();
-                            }
+                function (e, open) {
+                    if (open) {
+                        if (document.editor) {
+                            DescriptionInspector.highlightAllBindings();
                         }
-                    });
+                        if (DescriptionInspector.angularFormatView.getHtmlObj().is(":visible")) {
+                            //								DescriptionInspector.descriptionFormatView.hide();
+                            DescriptionInspector.angularFormatView.hide();
+                            var baseFormat = EditorManager.sessionsMap[EditorManager.currentUri].getBaseFormat();
+                            $("#editorFormats li:contains('" + baseFormat.toUpperCase() + "')").click();
+                        }
+
+                    } else {
+                        if (document.editor) {
+                            DescriptionInspector.unHighlightAllBidings();
+                        }
+                    }
+                });
 
         },
         /**
@@ -3006,143 +2980,143 @@ var DescriptionInspector = {
         onEditorChangeBindingValue: function () {
 
             DescriptionInspector.ace
-                    .getEditor()
-                    .on(
-                            "change",
-                            function (e) {
+                .getEditor()
+                .on(
+                    "change",
+                    function (e) {
 
-                                if (DescriptionInspector.existCurrentDescriptionFile() &&
-                                        DescriptionInspector.vars.mode === "editor" &&
-                                        DescriptionInspector.isFirstEditorFormatSelected() &&
-                                        DescriptionInspector.vars.modificationFlag === 0) {
+                        if (DescriptionInspector.existCurrentDescriptionFile() &&
+                            DescriptionInspector.vars.mode === "editor" &&
+                            DescriptionInspector.isFirstEditorFormatSelected() &&
+                            DescriptionInspector.vars.modificationFlag === 0) {
 
-                                    if (!$("#appGenericModal").is(":visible")) { // TODO:
-                                        // check
-                                        // if
-                                        // the
-                                        // change
-                                        // comes
-                                        // from
-                                        // a
-                                        // modal
-                                        // window.
+                            if (!$("#appGenericModal").is(":visible")) { // TODO:
+                                // check
+                                // if
+                                // the
+                                // change
+                                // comes
+                                // from
+                                // a
+                                // modal
+                                // window.
 
-                                        var value = e.data.text,
-                                                range = e.data.range,
-                                                actionType = e.data.action,
-                                                objHtmlBindingRange = DescriptionInspector.getHtmlBindingFromRange(range),
-                                                colIndex = 0;
+                                var value = e.data.text,
+                                    range = e.data.range,
+                                    actionType = e.data.action,
+                                    objHtmlBindingRange = DescriptionInspector.getHtmlBindingFromRange(range),
+                                    colIndex = 0;
 
-                                        if (objHtmlBindingRange
-                                                && value !== ""
-                                                && value.replace(/\s+/i, " ") !== " "
-                                                && value !== ";" && value !== ":"
-                                                && value !== "," && value !== "="
-                                                && value !== ")" && value !== "("
-                                                && value !== "<" && value !== ">") { // FIXME:
-                                            // regexp
-                                            // it!!
+                                if (objHtmlBindingRange
+                                    && value !== ""
+                                    && value.replace(/\s+/i, " ") !== " "
+                                    && value !== ";" && value !== ":"
+                                    && value !== "," && value !== "="
+                                    && value !== ")" && value !== "("
+                                    && value !== "<" && value !== ">") { // FIXME:
+                                    // regexp
+                                    // it!!
 
-                                            // Modification will change a
-                                            // Binding fragment value
+                                    // Modification will change a
+                                    // Binding fragment value
 
-                                            if (actionType === "insertText"
-                                                    && range.start.column <= objHtmlBindingRange.range.end.column) {
-                                                colIndex = value.length;
-                                            } else if (actionType === "removeText"
-                                                    && range.start.column < objHtmlBindingRange.range.end.column) {
-                                                colIndex = -value.length;
-                                            }
-
-                                            objHtmlBindingRange.range.end.column += colIndex;
-
-                                            if (objHtmlBindingRange.range.end.column < objHtmlBindingRange.range.start.column) {
-                                                objHtmlBindingRange.range.end.column = objHtmlBindingRange.range.start.column;
-                                            }
-
-                                            var endCols = objHtmlBindingRange.htmlBinding
-                                                    .attr("data-end-column")
-                                                    .split(",")
-                                            endCols[objHtmlBindingRange.rangeIndex] = objHtmlBindingRange.range.end.column
-
-                                            objHtmlBindingRange.htmlBinding
-                                                    .attr("data-end-column",
-                                                            endCols.toString());
-                                            objHtmlBindingRange.htmlBinding
-                                                    .text(document.editor.session
-                                                            .getTextRange(objHtmlBindingRange.range));
-
-                                            DescriptionInspector
-                                                    .middleHighlightBindingExcept(objHtmlBindingRange.htmlBinding);
-                                            DescriptionInspector
-                                                    .scrollInspectorToBinding(
-                                                            objHtmlBindingRange.htmlBinding,
-                                                            false);
-                                            Binding
-                                                    .getBinding(
-                                                            objHtmlBindingRange.htmlBinding)
-                                                    .displaceRange(
-                                                            objHtmlBindingRange.range.start.row,
-                                                            objHtmlBindingRange.range.end.column,
-                                                            colIndex);
-
-                                            DescriptionInspector
-                                                    .modifyBindings(
-                                                            objHtmlBindingRange.htmlBinding,
-                                                            document.editor.session
-                                                            .getTextRange(objHtmlBindingRange.range));
-
-                                            var binding = Binding
-                                                    .getBinding(objHtmlBindingRange.htmlBinding);
-
-                                            setTimeout(
-                                                    function () {
-                                                        DescriptionInspector
-                                                                .setEditorAnnotation(binding
-                                                                        .getAnnotations());
-                                                    }, 1200); // After
-                                            // checking
-                                            // syntax.
-
-                                        } else if (actionType !== "removeLines"
-                                                && actionType !== "insertLines") {
-                                            // Modification wont change a
-                                            // Binding fragment value
-                                            if (actionType === "insertText") {
-                                                colIndex = value.length;
-                                            } else if (actionType === "removeText") {
-                                                colIndex = -value.length;
-                                            }
-                                            DescriptionInspector
-                                                    .displaceBindingRanges(
-                                                            range.start.row,
-                                                            range.end.column
-                                                            - (value.length + 1),
-                                                            colIndex);
-                                        }
-
-                                        // Save description file content
-                                        if (descriptionCheckerTimer
-                                                && clearTimeout)
-                                            clearTimeout(descriptionCheckerTimer);
-
-                                        descriptionCheckerTimer = setTimeout(
-                                                function () {
-                                                    DescriptionInspector
-                                                            .saveInspectorContentToDescriptionFile();
-                                                }, 800);
-
-                                    } else {
-                                        // Modification comes from a modal
-                                        // window
-                                        setTimeout(function () {
-                                            DescriptionInspector
-                                                    .highlightAllBindings();
-                                        }, 1200);
+                                    if (actionType === "insertText"
+                                        && range.start.column <= objHtmlBindingRange.range.end.column) {
+                                        colIndex = value.length;
+                                    } else if (actionType === "removeText"
+                                        && range.start.column < objHtmlBindingRange.range.end.column) {
+                                        colIndex = -value.length;
                                     }
 
+                                    objHtmlBindingRange.range.end.column += colIndex;
+
+                                    if (objHtmlBindingRange.range.end.column < objHtmlBindingRange.range.start.column) {
+                                        objHtmlBindingRange.range.end.column = objHtmlBindingRange.range.start.column;
+                                    }
+
+                                    var endCols = objHtmlBindingRange.htmlBinding
+                                        .attr("data-end-column")
+                                        .split(",")
+                                    endCols[objHtmlBindingRange.rangeIndex] = objHtmlBindingRange.range.end.column
+
+                                    objHtmlBindingRange.htmlBinding
+                                        .attr("data-end-column",
+                                            endCols.toString());
+                                    objHtmlBindingRange.htmlBinding
+                                        .text(document.editor.session
+                                            .getTextRange(objHtmlBindingRange.range));
+
+                                    DescriptionInspector
+                                        .middleHighlightBindingExcept(objHtmlBindingRange.htmlBinding);
+                                    DescriptionInspector
+                                        .scrollInspectorToBinding(
+                                            objHtmlBindingRange.htmlBinding,
+                                            false);
+                                    Binding
+                                        .getBinding(
+                                            objHtmlBindingRange.htmlBinding)
+                                        .displaceRange(
+                                            objHtmlBindingRange.range.start.row,
+                                            objHtmlBindingRange.range.end.column,
+                                            colIndex);
+
+                                    DescriptionInspector
+                                        .modifyBindings(
+                                            objHtmlBindingRange.htmlBinding,
+                                            document.editor.session
+                                                .getTextRange(objHtmlBindingRange.range));
+
+                                    var binding = Binding
+                                        .getBinding(objHtmlBindingRange.htmlBinding);
+
+                                    setTimeout(
+                                        function () {
+                                            DescriptionInspector
+                                                .setEditorAnnotation(binding
+                                                    .getAnnotations());
+                                        }, 1200); // After
+                                    // checking
+                                    // syntax.
+
+                                } else if (actionType !== "removeLines"
+                                    && actionType !== "insertLines") {
+                                    // Modification wont change a
+                                    // Binding fragment value
+                                    if (actionType === "insertText") {
+                                        colIndex = value.length;
+                                    } else if (actionType === "removeText") {
+                                        colIndex = -value.length;
+                                    }
+                                    DescriptionInspector
+                                        .displaceBindingRanges(
+                                            range.start.row,
+                                            range.end.column
+                                            - (value.length + 1),
+                                            colIndex);
                                 }
-                            });
+
+                                // Save description file content
+                                if (descriptionCheckerTimer
+                                    && clearTimeout)
+                                    clearTimeout(descriptionCheckerTimer);
+
+                                descriptionCheckerTimer = setTimeout(
+                                    function () {
+                                        DescriptionInspector
+                                            .saveInspectorContentToDescriptionFile();
+                                    }, 800);
+
+                            } else {
+                                // Modification comes from a modal
+                                // window
+                                setTimeout(function () {
+                                    DescriptionInspector
+                                        .highlightAllBindings();
+                                }, 1200);
+                            }
+
+                        }
+                    });
 
         },
         /**
@@ -3154,17 +3128,17 @@ var DescriptionInspector = {
 
             // html content
             $(DescriptionInspector.vars.selectors.inspectorLoader).append('' +
-                    // Inspector tabs
-                    '<div id="editorHeader" style="position:relative">' +
-                    '  <div id="editorTabsContainer">' +
-                    '    <ul id="editorTabs" class="nav nav-tabs inspectorTabs" style="width:100%;display:inline-block;">' +
-                    '    </ul>' +
-                    '  </div>' +
-                    '</div>' +
-                    // Content container
-                    '<div class="descriptionInspectorContent"></div>' +
-                    '<div class="modelInspectorContent"></div>' +
-                    '<div class="moduleInspectorContent"></div>');
+                // Inspector tabs
+                '<div id="editorHeader" style="position:relative">' +
+                '  <div id="editorTabsContainer">' +
+                '    <ul id="editorTabs" class="nav nav-tabs inspectorTabs" style="width:100%;display:inline-block;">' +
+                '    </ul>' +
+                '  </div>' +
+                '</div>' +
+                // Content container
+                '<div class="descriptionInspectorContent"></div>' +
+                '<div class="modelInspectorContent"></div>' +
+                '<div class="moduleInspectorContent"></div>');
 
             DescriptionInspector.tabs.buildDescriptionTab();
             DescriptionInspector.tabs.buildFormTab();
@@ -3178,13 +3152,13 @@ var DescriptionInspector = {
          */
         onEditorAnnotationChange: function () {
             DescriptionInspector.ace.getSession()
-                    .on(
-                            "changeAnnotation",
-                            function () {
-                                // console.log("Annotation changed");
-                                DescriptionInspector.loaders
-                                        .onEditorBindingLineClick();
-                            });
+                .on(
+                    "changeAnnotation",
+                    function () {
+                        // console.log("Annotation changed");
+                        DescriptionInspector.loaders
+                            .onEditorBindingLineClick();
+                    });
         },
         /**
          * Muestra los cursores del editor si se selecciona el editor y se
@@ -3194,14 +3168,14 @@ var DescriptionInspector = {
          */
         onEditorSelectionShowCursors: function () {
             DescriptionInspector.ace.getSelection()
-                    .on(
-                            "changeCursor",
-                            function () {
-                                if (!DescriptionInspector.ace.getEditor()
-                                        .getReadOnly()) {
-                                    DescriptionInspector.showEditorCursors();
-                                }
-                            });
+                .on(
+                    "changeCursor",
+                    function () {
+                        if (!DescriptionInspector.ace.getEditor()
+                            .getReadOnly()) {
+                            DescriptionInspector.showEditorCursors();
+                        }
+                    });
 
             $("div.ace_gutter-cell").click(function () {
                 DescriptionInspector.showEditorCursors();
@@ -3219,63 +3193,63 @@ var DescriptionInspector = {
 
                 $(".ace_gutter-cell").not(".ace_ideas_binding").unbind("click");
                 $(".ace_ideas_binding")
-                        .unbind("click")
-                        .click(
-                                function () {
-                                    console
-                                            .log("Activating Binding from row...");
+                    .unbind("click")
+                    .click(
+                        function () {
+                            console
+                                .log("Activating Binding from row...");
 
-                                    // TODO: activate binding lines from a row.
+                            // TODO: activate binding lines from a row.
 
-                                    var row = parseInt($(this).text()) - 1, bindingHTMLs = $bindingMap
-                                            .getHTMLBindingsFromRow(row);
+                            var row = parseInt($(this).text()) - 1, bindingHTMLs = $bindingMap
+                                .getHTMLBindingsFromRow(row);
 
-                                    if (bindingHTMLs && bindingHTMLs.length > 0) {
+                            if (bindingHTMLs && bindingHTMLs.length > 0) {
 
-                                        // DescriptionInspector.hideEditorCursors();
-                                        var ranges = [], annotations = [];
+                                // DescriptionInspector.hideEditorCursors();
+                                var ranges = [], annotations = [];
 
-                                        DescriptionInspector
-                                                .unHighlightAllBidings();
+                                DescriptionInspector
+                                    .unHighlightAllBidings();
 
-                                        for (var i = 0; i < bindingHTMLs.length; i++) {
-                                            var binding = Binding
-                                                    .getBinding(bindingHTMLs[i]);
-                                            if (binding.isValid()) {
-                                                ranges = ranges.concat(binding
-                                                        .getRanges());
-                                                annotations = annotations
-                                                        .concat(binding
-                                                                .getAnnotations());
+                                for (var i = 0; i < bindingHTMLs.length; i++) {
+                                    var binding = Binding
+                                        .getBinding(bindingHTMLs[i]);
+                                    if (binding.isValid()) {
+                                        ranges = ranges.concat(binding
+                                            .getRanges());
+                                        annotations = annotations
+                                            .concat(binding
+                                                .getAnnotations());
 
-                                                if (i == 0) {
-                                                    DescriptionInspector
-                                                            .middleHighlightBindingExcept(bindingHTMLs[i]);
-                                                } else {
-                                                    DescriptionInspector
-                                                            .highlightBinding(bindingHTMLs[i]);
-                                                }
-                                            }
-                                        }
-
-                                        if (ranges.length > 0) {
+                                        if (i == 0) {
                                             DescriptionInspector
-                                                    .addRangesToEditor(ranges,
-                                                            annotations);
-                                            DescriptionInspector
-                                                    .scrollInspectorToBinding(bindingHTMLs[0]);
+                                                .middleHighlightBindingExcept(bindingHTMLs[i]);
                                         } else {
-                                            console
-                                                    .log(
-                                                            "No binding found to activate from line",
-                                                            row - 1);
+                                            DescriptionInspector
+                                                .highlightBinding(bindingHTMLs[i]);
                                         }
                                     }
+                                }
 
-                                    document.editor.blur();
-                                    DescriptionInspector.hideEditorCursors();
+                                if (ranges.length > 0) {
+                                    DescriptionInspector
+                                        .addRangesToEditor(ranges,
+                                            annotations);
+                                    DescriptionInspector
+                                        .scrollInspectorToBinding(bindingHTMLs[0]);
+                                } else {
+                                    console
+                                        .log(
+                                            "No binding found to activate from line",
+                                            row - 1);
+                                }
+                            }
 
-                                });
+                            document.editor.blur();
+                            DescriptionInspector.hideEditorCursors();
+
+                        });
             }
 
             setTimeout(function () {
@@ -3284,11 +3258,11 @@ var DescriptionInspector = {
 
             // FIXME: identify which event specifically wants "unbind".
             $(document.editor).unbind("mousewheel").on("mousewheel",
-                    function () {
-                        setTimeout(function () {
-                            activateBindingFromLine();
-                        }, 150);
-                    });
+                function () {
+                    setTimeout(function () {
+                        activateBindingFromLine();
+                    }, 150);
+                });
         },
         /**
          * Da funcionalidad a todos los botones del menú contextual del
@@ -3390,22 +3364,22 @@ var DescriptionInspector = {
             var $inspector = $("#inspectorContent"), wrapText = "Wrap word", unWrapText = "Unwrap word";
 
             $("#contextMenu .toggleWrapWord")
-                    .unbind("click")
-                    .click(
-                            function (e) {
-                                e.preventDefault();
+                .unbind("click")
+                .click(
+                    function (e) {
+                        e.preventDefault();
 
-                                var isWrapped = $inspector.css("white-space") == "normal"
-                                        || $inspector.css("white-space") == "initial";
+                        var isWrapped = $inspector.css("white-space") == "normal"
+                            || $inspector.css("white-space") == "initial";
 
-                                if (isWrapped) {
-                                    $(this).find("a").text(wrapText);
-                                    $inspector.css("white-space", "nowrap");
-                                } else {
-                                    $(this).find("a").text(unWrapText);
-                                    $inspector.css("white-space", "normal");
-                                }
-                            });
+                        if (isWrapped) {
+                            $(this).find("a").text(wrapText);
+                            $inspector.css("white-space", "nowrap");
+                        } else {
+                            $(this).find("a").text(unWrapText);
+                            $inspector.css("white-space", "normal");
+                        }
+                    });
         },
         /*
          * Crea un MultiBinding a partir de otro Binding activo @memberof
@@ -3414,48 +3388,48 @@ var DescriptionInspector = {
         _multiBinding: function () {
 
             $("#contextMenu .multiBinding")
-                    .unbind("click")
-                    .click(
-                            function (e) {
+                .unbind("click")
+                .click(
+                    function (e) {
 
-                                e.preventDefault();
+                        e.preventDefault();
 
-                                if (DescriptionInspector
-                                        .isMultiBindingEnabled()) {
-                                    var activeBindingHtmlObj = $(
-                                            ".ideas-binding, highlighted-fragment")
-                                            .not(".middle-highlighted-fragment"), range = document.editor
-                                            .getSelectionRange().clone();
+                        if (DescriptionInspector
+                            .isMultiBindingEnabled()) {
+                            var activeBindingHtmlObj = $(
+                                ".ideas-binding, highlighted-fragment")
+                                .not(".middle-highlighted-fragment"), range = document.editor
+                                    .getSelectionRange().clone();
 
-                                    if (activeBindingHtmlObj.length == 1
-                                            && !range.isEmpty()) {
+                            if (activeBindingHtmlObj.length == 1
+                                && !range.isEmpty()) {
 
-                                        Binding.addRange(activeBindingHtmlObj,
-                                                range);
+                                Binding.addRange(activeBindingHtmlObj,
+                                    range);
 
-                                        console
-                                                .log("New range added to the selected binding.");
+                                console
+                                    .log("New range added to the selected binding.");
 
-                                        DescriptionInspector
-                                                .saveInspectorContentToDescriptionFile();
+                                DescriptionInspector
+                                    .saveInspectorContentToDescriptionFile();
 
-                                        DescriptionInspector.loaders.bindings();
-                                        activeBindingHtmlObj.click();
+                                DescriptionInspector.loaders.bindings();
+                                activeBindingHtmlObj.click();
 
-                                        var binding = Binding
-                                                .getBinding(activeBindingHtmlObj);
-                                        $bindingMap.addBinding(binding);
+                                var binding = Binding
+                                    .getBinding(activeBindingHtmlObj);
+                                $bindingMap.addBinding(binding);
 
-                                    } else {
-                                        console
-                                                .log("Please, activate one binding for multiBinding.");
-                                    }
-                                } else {
-                                    console
-                                            .log("MultiBinding is disabled. Please activate a Binding.");
-                                }
+                            } else {
+                                console
+                                    .log("Please, activate one binding for multiBinding.");
+                            }
+                        } else {
+                            console
+                                .log("MultiBinding is disabled. Please activate a Binding.");
+                        }
 
-                            });
+                    });
         },
         /**
          * Crea el menú contextual del inspector.
@@ -3472,34 +3446,34 @@ var DescriptionInspector = {
             $("#contextMenu").css("cursor", "pointer");
 
             $("#inspectorContent").unbind("contextmenu").bind("contextmenu",
-                    function (e) {
-                        $("#contextMenu").css("position", "fixed"); // changing
-                        // value to
-                        // be able
-                        // to view
-                        // the
-                        // contextmenu
+                function (e) {
+                    $("#contextMenu").css("position", "fixed"); // changing
+                    // value to
+                    // be able
+                    // to view
+                    // the
+                    // contextmenu
 
-                        e.preventDefault();
+                    e.preventDefault();
 
-                        if (DescriptionInspector.mayEnableMultiBinding()) {
-                            DescriptionInspector.enableMultiBinding();
-                        } else {
-                            DescriptionInspector.disableMultiBinding();
+                    if (DescriptionInspector.mayEnableMultiBinding()) {
+                        DescriptionInspector.enableMultiBinding();
+                    } else {
+                        DescriptionInspector.disableMultiBinding();
+                    }
+
+                    ContextAction.show(e, e.target);
+
+                    _this._contextActions(inspectorLoader);
+
+                    $(document).click(function (e) {
+                        if (e.button != 2) {
+                            hideMenu();
+                            $("#contextMenu").css("position", "absolute"); // default
+                            // value
                         }
-
-                        ContextAction.show(e, e.target);
-
-                        _this._contextActions(inspectorLoader);
-
-                        $(document).click(function (e) {
-                            if (e.button != 2) {
-                                hideMenu();
-                                $("#contextMenu").css("position", "absolute"); // default
-                                // value
-                            }
-                        });
                     });
+                });
 
         },
         /**
@@ -3544,143 +3518,133 @@ var DescriptionInspector = {
         modifyBinding: function (inspectorLoader) {
 
             inspectorLoader
-                    .find(".ideas-binding")
-                    .unbind("dblclick")
-                    .dblclick(
+                .find(".ideas-binding")
+                .unbind("dblclick")
+                .dblclick(
+                    function () {
+                        var binding = Binding.getBinding($(this));
+
+                        console
+                            .log("Showing Binding Modifier modal window");
+
+                        window.getSelection().removeAllRanges();
+
+                        var _this = this;
+
+                        showContentAsModal("app/modalWindows/bindValue",
                             function () {
-                                var binding = Binding.getBinding($(this));
+                                var value = $(
+                                    "#ideasBindingValueToModify")
+                                    .val();
 
-                                console
-                                        .log("Showing Binding Modifier modal window");
-
-                                window.getSelection().removeAllRanges();
-
-                                var content = '<div class="container-fluid">'
-                                        + '<div class="row"><div class="col-xs-3"><label style="color: #aaa;">Original value:</label></div><div class="col-xs-9"><span id="ideasBindingOriginalBindingToModify" style="color: #aaa;">'
-                                        + binding.getTargetText()
-                                        + '</span></div></div>'
-                                        + '<br/><div class="row"><div class="col-xs-3"><label>New value:</label></div> '
-                                        + '<div class="col-xs-9"><input type="text" id="ideasBindingValueToModify" value="'
-                                        + $(this).text()
-                                        + '"'
-                                        + 'title="Please specify a new value to bind"'
-                                        + 'style="width:100%;" /></div></div>'
-                                        + '<!-- Use it to show any validation message --><div type="ideasBindingValidation"></div>'
-                                        + '</div>', _this = this;
-
-                                showModal(
-                                        "Please specify a new value to bind",
-                                        content,
-                                        "OK",
-                                        function () {
-                                            var value = $(
-                                                    "#ideasBindingValueToModify")
-                                                    .val();
-
-                                            DescriptionInspector
-                                                    .modifyBindings($(_this),
-                                                            value.toString());
-
-                                            DescriptionInspector
-                                                    .saveInspectorContentToDescriptionFile();
-
-                                            DescriptionInspector
-                                                    .unHighlightAllBidings();
-                                            DescriptionInspector
-                                                    .highlightAllBindings();
-                                            hideModal();
-
-                                            // $(_this).click();
-
-                                        }, // primary
-                                        function () {
-                                            hideModal();
-                                        }, // cancel
-                                        function () {
-                                            hideModal();
-                                        } // close
-                                );
-
-                                $("#ideasBindingValueToModify").focus();
                                 DescriptionInspector
-                                        .onEnterPressSubmitModalForm();
+                                    .modifyBindings($(_this),
+                                        value.toString());
 
-                            });
+                                DescriptionInspector
+                                    .saveInspectorContentToDescriptionFile();
+
+                                DescriptionInspector
+                                    .unHighlightAllBidings();
+                                DescriptionInspector
+                                    .highlightAllBindings();
+                                hideModal();
+
+                                // $(_this).click();
+
+                            }, // primary
+                            function () {
+                                hideModal();
+                            }, // cancel
+                            function () {
+                                hideModal();
+                            }, // close
+                            {
+                                bindingText: binding.getTargetText(),
+                                valueToModifyText: $(this).text()
+                            }
+                        );
+
+                        $("#ideasBindingValueToModify").focus();
+                        DescriptionInspector
+                            .onEnterPressSubmitModalForm();
+
+                    });
         },
         buildExampleFormCreator: function () {
             // Config button
             var selectorId = "inspectorModelContent",
-                    buttonClass = "buildExampleFormCreator",
-                    buttonText = "Create a form file";
+                buttonClass = "buildExampleFormCreator",
+                buttonText = "Create a form file";
 
             // html content
             $("#editorInspector .modelInspectorContent")
-                    .append(
-                            '<article id="' + selectorId + '">' +
-                            '  <a class="btn ' + buttonClass + ' emptyMsg" style="color: #428bca;">' + buttonText + '</a>' +
-                            '</article>'
-                            );
+                .append(
+                    '<article id="' + selectorId + '">' +
+                    '  <a class="btn ' + buttonClass + ' emptyMsg" style="color: #428bca;">' + buttonText + '</a>' +
+                    '</article>'
+                );
 
             var buttonElement = $("#editorInspector a." + buttonClass);
             buttonElement
-                    .css({
-                        // Centering button
-                        "margin-left": "-".concat((buttonElement.width() / 2).toString()),
-                        "margin-top": "-".concat((buttonElement.height() / 2).toString())
-                    }).click(function () {
-                // Config form
-                var modelFileUri = DescriptionInspector.getCurrentModelFileUri(),
+                .css({
+                    // Centering button
+                    "margin-left": "-".concat((buttonElement.width() / 2).toString()),
+                    "margin-top": "-".concat((buttonElement.height() / 2).toString())
+                }).click(function () {
+                    // Config form
+                    var modelFileUri = DescriptionInspector.getCurrentModelFileUri(),
                         fileName = modelFileUri.replace(/\.[^/.]+$/, "").split("/").pop(),
                         content = '' +
-                        '<span style="display: block;font-size: 16px;font-family: serif, Arial;">\n' +
-                        '    This is a sample content for a <strong>FORM</strong> file.\n' +
-                        '    You can make angular references based on your <strong>JSON</strong> description.\n' +
-                        '    All references hang from <strong>$scope.model</strong>.\n' +
-                        '    Assuming your <strong>JSON</strong> content is:\n' +
-                        '</span>\n' +
-                        '<xmp style="background: rgb(254, 254, 254);padding: 20px;border: 1px solid rgb(247, 247, 247);overflow-x: auto;">{\n' +
-                        '  "creationConstraints": {\n' +
-                        '    "C3": {\n' +
-                        '      "slo": {\n' +
-                        '        "expression": {"_type": "ParenthesisExpression",\n' +
-                        '          "properties": {\n' +
-                        '            "exp": {\n' +
-                        '              "_type": "LogicalExpression",\n' +
-                        '                "properties": {\n' +
-                        '                  ...\n' +
-                        '                }\n' +
-                        '      ...\n' +
-                        '}</xmp>\n' +
-                        '<span style="display: block;font-size: 16px;font-family: serif, Arial;">Here is a <strong>FORM</strong> example:</span>\n' +
-                        '<xmp style="background: rgb(254, 254, 254);padding: 20px;border: 1px solid rgb(247, 247, 247);overflow-x: auto;"><div ng-repeat="key in model.creationConstraints" class="ag-template">\n' +
-                        '  <ul>\n' +
-                        '    <li>\n' +
-                        '      <h4>\n' +
-                        '        <input ng-bind="key.slo.expression.properties.exp.properties.exp2.properties.exp2.properties.value" \n' +
-                        '               ng-model="key.slo.expression.properties.exp.properties.exp2.properties.exp2.properties.value" /> € / mo\n' +
-                        '      </h4>\n' +
-                        '    </li>\n' +
-                        '    <li>\n' +
-                        '      <input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp1.properties.exp2.properties.value" /> requests allowed\n' +
-                        '    </li>\n' +
-                        '    <li>\n' +
-                        '      <input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp2.properties.exp2.properties.value" /> ms guaranteed response time\n' +
-                        '    </li>\n' +
-                        '    <li>\n' +
-                        '      <a ng-click="removeModel(key.id, $event)">&times;</a>\n' +
-                        '    </li>\n' +
-                        '  </ul>\n' +
-                        '</div></xmp>';
+                            '<span style="display: block;font-size: 16px;font-family: serif, Arial;">\n' +
+                            '    This is a sample content for a <strong>FORM</strong> file.\n' +
+                            '    You can make angular references based on your <strong>JSON</strong> description.\n' +
+                            '    All references hang from <strong>$scope.model</strong>.\n' +
+                            '    Assuming your <strong>JSON</strong> content is:\n' +
+                            '</span>\n' +
+                            '<xmp style="background: rgb(254, 254, 254);padding: 20px;border: 1px solid rgb(247, 247, 247);overflow-x: auto;">{\n' +
+                            '  "creationConstraints": {\n' +
+                            '    "C3": {\n' +
+                            '      "slo": {\n' +
+                            '        "expression": {"_type": "ParenthesisExpression",\n' +
+                            '          "properties": {\n' +
+                            '            "exp": {\n' +
+                            '              "_type": "LogicalExpression",\n' +
+                            '                "properties": {\n' +
+                            '                  ...\n' +
+                            '                }\n' +
+                            '      ...\n' +
+                            '}</xmp>\n' +
+                            '<span style="display: block;font-size: 16px;font-family: serif, Arial;">Here is a <strong>FORM</strong> example:</span>\n' +
+                            '<xmp style="background: rgb(254, 254, 254);padding: 20px;border: 1px solid rgb(247, 247, 247);overflow-x: auto;"><div ng-repeat="key in model.creationConstraints" class="ag-template">\n' +
+                            '  <ul>\n' +
+                            '    <li>\n' +
+                            '      <h4>\n' +
+                            '        <input ng-bind="key.slo.expression.properties.exp.properties.exp2.properties.exp2.properties.value" \n' +
+                            '               ng-model="key.slo.expression.properties.exp.properties.exp2.properties.exp2.properties.value" /> € / mo\n' +
+                            '      </h4>\n' +
+                            '    </li>\n' +
+                            '    <li>\n' +
+                            '      <input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp1.properties.exp2.properties.value" /> requests allowed\n' +
+                            '    </li>\n' +
+                            '    <li>\n' +
+                            '      <input ng-model="key.slo.expression.properties.exp.properties.exp1.properties.exp2.properties.exp2.properties.value" /> ms guaranteed response time\n' +
+                            '    </li>\n' +
+                            '    <li>\n' +
+                            '      <a ng-click="removeModel(key.id, $event)">&times;</a>\n' +
+                            '    </li>\n' +
+                            '  </ul>\n' +
+                            '</div></xmp>';
 
-                // Create new file
-                EditorManager.createNode(modelFileUri, fileName, ".ang", function () {
-                    FileApi.saveFileContents(modelFileUri, content, function () {
-                        currentSelectedNode.getParent().sortChildren();
-                        CommandApi.openFile(modelFileUri, function () {});
+                    // Create new file
+                    EditorManager.createNode(modelFileUri, fileName, ".ang", function () {
+                        FileApi.saveFileContents(modelFileUri, content, function () {
+                            currentSelectedNode.getParent().sortChildren();
+                            CommandApi.openFile(modelFileUri, function () { });
+                        });
                     });
-                });
-            }
-            );
+                }
+                );
         },
         /**
          * Da funcionalidad a los botones de para accionar los menúes de "Add" y
@@ -3697,9 +3661,9 @@ var DescriptionInspector = {
             });
 
             inspectorLoader.find(".inspectorButtonRemove").click(
-                    function (event) {
-                        DescriptionInspector.expandInspectorMenu("remove");
-                    });
+                function (event) {
+                    DescriptionInspector.expandInspectorMenu("remove");
+                });
         },
         /**
          * Da funcionalidad a los bindings para que cuando se le haga clic
@@ -3712,58 +3676,58 @@ var DescriptionInspector = {
         bindings: function (inspectorLoader) {
 
             $("#editorInspector .ideas-binding")
-                    .unbind("click")
-                    .click(
-                            function () {
+                .unbind("click")
+                .click(
+                    function () {
 
-                                if ($(this).find(".ideas-binding").length == 0
-                                        && DescriptionInspector.vars.mode == "editor"
-                                        && DescriptionInspector
-                                        .isFirstEditorFormatSelected()) {
+                        if ($(this).find(".ideas-binding").length == 0
+                            && DescriptionInspector.vars.mode == "editor"
+                            && DescriptionInspector
+                                .isFirstEditorFormatSelected()) {
 
-                                    var binding = Binding.getBinding($(this)), annotations = [], ranges = [], ace = DescriptionInspector.ace;
+                            var binding = Binding.getBinding($(this)), annotations = [], ranges = [], ace = DescriptionInspector.ace;
 
-                                    if (binding.isValid()) {
-                                        annotations = binding.getAnnotations();
-                                        ranges = binding.getRanges();
+                            if (binding.isValid()) {
+                                annotations = binding.getAnnotations();
+                                ranges = binding.getRanges();
 
-                                        DescriptionInspector
-                                                .clearAllEditorMarkers();
-                                        DescriptionInspector.ace.getEditor()
-                                                .navigateTo(ranges[0], -1); // new
-                                        // make
-                                        // new
-                                        // mark
-                                        // always
-                                        // visible.
-                                        for (var i = 0; i < ranges.length; i++) {
-                                            DescriptionInspector.ace
-                                                    .getEditor().multiSelect
-                                                    .addRange(ranges[i], false);
-                                        }
-
-                                        DescriptionInspector
-                                                .middleHighlightBindingExcept($(this));
-
-                                        ace.getSession().clearAnnotations();
-                                        DescriptionInspector
-                                                .setEditorAnnotation(annotations);
-                                        ace.getSelection().clearSelection();
-
-                                        DescriptionInspector
-                                                .scrollEditorToRange(ranges[0]);
-
-                                        DescriptionInspector
-                                                .hideEditorCursors();
-
-                                    } else {
-                                        console
-                                                .log(
-                                                        "Couldn\'t highlight a invalid Binding",
-                                                        $(this))
-                                    }
+                                DescriptionInspector
+                                    .clearAllEditorMarkers();
+                                DescriptionInspector.ace.getEditor()
+                                    .navigateTo(ranges[0], -1); // new
+                                // make
+                                // new
+                                // mark
+                                // always
+                                // visible.
+                                for (var i = 0; i < ranges.length; i++) {
+                                    DescriptionInspector.ace
+                                        .getEditor().multiSelect
+                                        .addRange(ranges[i], false);
                                 }
-                            });
+
+                                DescriptionInspector
+                                    .middleHighlightBindingExcept($(this));
+
+                                ace.getSession().clearAnnotations();
+                                DescriptionInspector
+                                    .setEditorAnnotation(annotations);
+                                ace.getSelection().clearSelection();
+
+                                DescriptionInspector
+                                    .scrollEditorToRange(ranges[0]);
+
+                                DescriptionInspector
+                                    .hideEditorCursors();
+
+                            } else {
+                                console
+                                    .log(
+                                        "Couldn\'t highlight a invalid Binding",
+                                        $(this))
+                            }
+                        }
+                    });
         }
     },
     // --------------------------------------------------------
@@ -3807,7 +3771,7 @@ var DescriptionInspector = {
             ret = true;
         } else {
             console
-                    .log("Couldn\'t set annotations because there is an systax error.");
+                .log("Couldn\'t set annotations because there is an systax error.");
         }
 
         return ret;
@@ -3830,10 +3794,10 @@ var DescriptionInspector = {
 
             for (var i = 0; i < bindingIds.length; i++) {
                 var bindingId = bindingIds[i], bindingHtmlObj = DescriptionInspector
-                        .getHTMLBinding(bindingId), startColumns = bindingHtmlObj
+                    .getHTMLBinding(bindingId), startColumns = bindingHtmlObj
                         .attr("data-start-column").split(","), endColumns = bindingHtmlObj
-                        .attr("data-end-column").split(","), binding = Binding
-                        .getBinding(bindingHtmlObj);
+                            .attr("data-end-column").split(","), binding = Binding
+                                .getBinding(bindingHtmlObj);
 
                 // Find out which positions to update
                 var occurrencePositions = [], pos = 0;
@@ -3842,8 +3806,8 @@ var DescriptionInspector = {
                     var index = binding.startRows.indexOf(row);
 
                     if (index !== -1
-                            && occurrencePositions.indexOf(index) === -1
-                            && parseInt(binding.startColumns[index]) > parseInt(fromColumn)) {
+                        && occurrencePositions.indexOf(index) === -1
+                        && parseInt(binding.startColumns[index]) > parseInt(fromColumn)) {
 
                         occurrencePositions.push(index);
 
@@ -3856,23 +3820,23 @@ var DescriptionInspector = {
                 // Displace horizontal positions (columns)
                 for (var pos = 0; pos < occurrencePositions.length; pos++) {
                     var startColumns = bindingHtmlObj.attr("data-start-column")
-                            .split(","), endColumns = bindingHtmlObj.attr(
+                        .split(","), endColumns = bindingHtmlObj.attr(
                             "data-end-column").split(","), occurrencePos = occurrencePositions[pos];
 
                     startColumns[occurrencePos] = parseInt(startColumns[occurrencePos])
-                            + parseInt(n);
+                        + parseInt(n);
                     endColumns[occurrencePos] = parseInt(endColumns[occurrencePos])
-                            + parseInt(n);
+                        + parseInt(n);
 
                     bindingHtmlObj.attr("data-start-column", startColumns
-                            .toString());
+                        .toString());
                     bindingHtmlObj.attr("data-end-column", endColumns
-                            .toString());
+                        .toString());
 
                 }
             }
         } else {
-//			console.log("No binding found to displace.");
+            //			console.log("No binding found to displace.");
         }
     },
     /**
@@ -3889,15 +3853,15 @@ var DescriptionInspector = {
 
             for (var i = 0; i < bindingIds.length; i++) {
                 var htmlBinding = DescriptionInspector
-                        .getHTMLBinding(bindingIds[i]), binding = Binding
+                    .getHTMLBinding(bindingIds[i]), binding = Binding
                         .getBinding(htmlBinding), ranges = binding.getRanges();
 
                 for (var r = 0; r < ranges.length; r++) {
                     var rangeR = ranges[r];
                     if (range.start.row === rangeR.start.row
-                            && range.end.row === rangeR.end.row &&
-                            range.start.column >= rangeR.start.column
-                            && range.start.column <= rangeR.end.column) {
+                        && range.end.row === rangeR.end.row &&
+                        range.start.column >= rangeR.start.column
+                        && range.start.column <= rangeR.end.column) {
 
                         ret = {
                             "htmlBinding": htmlBinding,
@@ -3910,7 +3874,7 @@ var DescriptionInspector = {
 
             }
         } else {
-//			console.log("Row not found on map", row);
+            //			console.log("Row not found on map", row);
         }
 
         return ret;
@@ -3936,7 +3900,7 @@ var DescriptionInspector = {
             if (document.editor.session.getTextRange(range) !== value) {
                 // updating binding column
                 var startCol = binding.startColumns[i], finalEndCol = parseInt(startCol)
-                        + value.length, diffEndCol = finalEndCol
+                    + value.length, diffEndCol = finalEndCol
                         - range.end.column;
 
                 // htmlObj.data("end-column", finalEndCol); // logical change
@@ -3949,13 +3913,13 @@ var DescriptionInspector = {
                 range.end.column = finalEndCol;
 
                 var rngTxt = DescriptionInspector.ace.getSession()
-                        .getTextRange(range);
+                    .getTextRange(range);
                 // console.log("rngTxt", rngTxt);
                 DescriptionInspector.ace.getSession().replace(range,
-                        value.concat(rngTxt));
+                    value.concat(rngTxt));
 
                 binding.displaceRange(binding.startRows[i],
-                        binding.endColumns[i], diffEndCol);
+                    binding.endColumns[i], diffEndCol);
 
             }
 
@@ -4000,7 +3964,7 @@ var DescriptionInspector = {
      */
     mayEnableMultiBinding: function () {
         return DescriptionInspector.vars.mode === "editor"
-                && DescriptionInspector.isOneBindingActivated();
+            && DescriptionInspector.isOneBindingActivated();
     },
     /**
      * Comprueba que existe un solo binding activado.
@@ -4009,7 +3973,7 @@ var DescriptionInspector = {
      */
     isOneBindingActivated: function () {
         return $("#editorInspector .highlighted-fragment").length === 1
-                && $("#editorInspector .to-remove").length === 0;
+            && $("#editorInspector .to-remove").length === 0;
     },
     /**
      * Deshabilitar menu contextual de MultiBinding
@@ -4040,7 +4004,7 @@ var DescriptionInspector = {
             for (var i = 0; i < ranges.length; i++) {
                 // console.log("adding range", ranges[i]);
                 DescriptionInspector.ace.getEditor().multiSelect.addRange(
-                        ranges[i], false);
+                    ranges[i], false);
             }
 
             // DescriptionInspector.middleHighlightBindingExcept($(this));
@@ -4108,7 +4072,7 @@ var DescriptionInspector = {
      */
     clearAllEditorMarkers: function () {
         var session = DescriptionInspector.ace.getSession(), markerIds = Object
-                .keys(session.getMarkers());
+            .keys(session.getMarkers());
         for (var i = 0; i < markerIds.length; i++) {
             session.removeMarker(markerIds[i]);
         }
@@ -4147,18 +4111,18 @@ var DescriptionInspector = {
      */
     middleHighlightBindingExcept: function ($binding) {
         $("#editorInspector .ideas-binding").each(
-                function () {
-                    if (!$(this).is($binding)) {
-                        // console.log(">>>>>>> middlehighlighting:", $(this),
-                        // $(this).is($binding));
+            function () {
+                if (!$(this).is($binding)) {
+                    // console.log(">>>>>>> middlehighlighting:", $(this),
+                    // $(this).is($binding));
 
-                        $(this).removeClass("highlighted-fragment").addClass(
-                                "middle-highlighted-fragment");
-                    } else {
-                        $(this).addClass("highlighted-fragment").removeClass(
-                                "middle-highlighted-fragment");
-                    }
-                });
+                    $(this).removeClass("highlighted-fragment").addClass(
+                        "middle-highlighted-fragment");
+                } else {
+                    $(this).addClass("highlighted-fragment").removeClass(
+                        "middle-highlighted-fragment");
+                }
+            });
     },
     /**
      * Realiza "submit" de un formulario ubicado en la ventana modal, desde la
@@ -4183,7 +4147,7 @@ var DescriptionInspector = {
      */
     scrollToFirstBinding: function () {
         DescriptionInspector
-                .scrollInspectorToBinding($(".highlighted-fragment").first());
+            .scrollInspectorToBinding($(".highlighted-fragment").first());
     },
     /**
      * Desplaza el scroll al primer binding del inspector.
@@ -4194,8 +4158,8 @@ var DescriptionInspector = {
         if (DescriptionInspector.existBinding()) {
             // isVisible
             var topView = $("#inspectorContent").scrollTop(),
-                    topElement = $htmlObj.position().top,
-                    value = topView + topElement - 50, time = Math.abs(1500 - value * 0.4);
+                topElement = $htmlObj.position().top,
+                value = topView + topElement - 50, time = Math.abs(1500 - value * 0.4);
 
             if (time > 2000) {
                 time = 1500;
@@ -4250,7 +4214,7 @@ var DescriptionInspector = {
      */
     highlightBinding: function ($obj) {
         $obj.addClass("highlighted-fragment").removeClass(
-                "middle-highlighted-fragment");
+            "middle-highlighted-fragment");
     },
     /**
      * Elimina el resaltado del objeto jQuery pasado por parámetro.
@@ -4275,7 +4239,7 @@ var DescriptionInspector = {
 
             DescriptionInspector.clearAllEditorMarkers();
             DescriptionInspector.ace.getEditor().navigateTo(
-                    document.editor.getSelectionRange().start.row, -1);
+                document.editor.getSelectionRange().start.row, -1);
 
             $("#editorInspector").find(".ideas-binding, .ideas-binding-vocab, .to-remove").each(function () {
 
@@ -4283,9 +4247,9 @@ var DescriptionInspector = {
 
                 if (binding.isValid()) {
                     annotations = (annotations.length == 0) ? binding
-                            .getAnnotations()
-                            : annotations.concat(binding
-                                    .getAnnotations());
+                        .getAnnotations()
+                        : annotations.concat(binding
+                            .getAnnotations());
 
                     if (!$(this).hasClass("ideas-binding-vocab")) {
                         DescriptionInspector.highlightBinding($(this));
@@ -4300,9 +4264,9 @@ var DescriptionInspector = {
 
                 } else {
                     console
-                            .log(
-                                    "Couldn\'t highlight a invalid Binding",
-                                    $(this))
+                        .log(
+                            "Couldn\'t highlight a invalid Binding",
+                            $(this))
                 }
             });
 
@@ -4398,13 +4362,13 @@ function Binding(id, textNote, startRows, endRows, startColumns, endColumns) {
     var types = ["number", "string"];
 
     this.startRows = (types.indexOf(typeof startRows) !== -1) ? [startRows]
-            : startRows;
+        : startRows;
     this.endRows = (types.indexOf(typeof endRows) !== -1) ? [endRows]
-            : endRows;
+        : endRows;
     this.startColumns = (types.indexOf(typeof startColumns) !== -1) ? [startColumns]
-            : startColumns;
+        : startColumns;
     this.endColumns = (types.indexOf(typeof endColumns) !== -1) ? [endColumns]
-            : endColumns;
+        : endColumns;
 
     // Transform all params to array of integer.
     for (var i = 0; i < this.startRows.length; i++) {
@@ -4437,9 +4401,9 @@ Binding.getBindingID = function (htmlObj) {
  */
 Binding.getBinding = function (htmlObj) {
     return new Binding(Binding.getBindingID(htmlObj), DescriptionInspector
-            .getBindingText(htmlObj), htmlObj.attr("data-start-row").toString()
+        .getBindingText(htmlObj), htmlObj.attr("data-start-row").toString()
             .split(","), htmlObj.attr("data-end-row").toString().split(","),
-            htmlObj.attr("data-start-column").toString().split(","), htmlObj
+        htmlObj.attr("data-start-column").toString().split(","), htmlObj
             .attr("data-end-column").toString().split(","));
 };
 
@@ -4451,14 +4415,14 @@ Binding.getBinding = function (htmlObj) {
  */
 Binding.prototype.isValid = function () {
     return typeof this.textNote != "undefined" && this.textNote != ""
-            && typeof this.startRows != "undefined"
-            && this.startRows.toString().split(",").length >= 0
-            && typeof this.endRows != "undefined"
-            && this.endRows.toString().split(",").length >= 0
-            && typeof this.startColumns != "undefined"
-            && this.startColumns.toString().split(",").length >= 0
-            && typeof this.endColumns != "undefined"
-            && this.endColumns.toString().split(",").length >= 0;
+        && typeof this.startRows != "undefined"
+        && this.startRows.toString().split(",").length >= 0
+        && typeof this.endRows != "undefined"
+        && this.endRows.toString().split(",").length >= 0
+        && typeof this.startColumns != "undefined"
+        && this.startColumns.toString().split(",").length >= 0
+        && typeof this.endColumns != "undefined"
+        && this.endColumns.toString().split(",").length >= 0;
 };
 
 /**
@@ -4538,7 +4502,7 @@ Binding.prototype.getRanges = function () {
         });
 
         ranges = (ranges.length === 0) ? [].concat(range) : ranges
-                .concat(range);
+            .concat(range);
     }
 
     return ranges;
@@ -4574,16 +4538,16 @@ Binding.prototype.getOmmitedRowRanges = function (row) {
     if (row in $bindingMap.rowBindingsMap) {
 
         var distinctBindingIds = $bindingMap.rowBindingsMap[row]
-                .filter(function (elto) {
-                    return elto != _thisId;
-                });
+            .filter(function (elto) {
+                return elto != _thisId;
+            });
 
         distinctBindingIds = $.unique(distinctBindingIds);
 
         for (var i = 0; i < distinctBindingIds.length; i++) {
             var bindingId = distinctBindingIds[i], binding = Binding
-                    .getBinding(DescriptionInspector
-                            .getHTMLBinding(bindingId));
+                .getBinding(DescriptionInspector
+                    .getHTMLBinding(bindingId));
 
             if (ranges.length > 0) {
                 ranges.concat(binding.getRowRanges(row));
@@ -4597,15 +4561,15 @@ Binding.prototype.getOmmitedRowRanges = function (row) {
 
     return ranges;
 },
-        /**
-         * Obtiene el fragmento de texto de Ace asociado al binding instanciado.
-         *
-         * @memberof Binding
-         */
-        Binding.prototype.getTargetText = function () {
-            return DescriptionInspector.ace.getSession().getTextRange(
-                    this.getRange());
-        };
+    /**
+     * Obtiene el fragmento de texto de Ace asociado al binding instanciado.
+     *
+     * @memberof Binding
+     */
+    Binding.prototype.getTargetText = function () {
+        return DescriptionInspector.ace.getSession().getTextRange(
+            this.getRange());
+    };
 
 /**
  * Comprueba si el rango del editor pertecene al Binding pasado por parámetro
@@ -4614,9 +4578,9 @@ Binding.prototype.getOmmitedRowRanges = function (row) {
  */
 Binding.prototype.hasRange = function (range) {
     return this.startRows.indexOf(range.start.row) >= 0
-            && this.endRows.indexOf(range.end.row) >= 0
-            && this.startColumns.indexOf(range.start.column) >= 0
-            && this.endColumns.indexOf(range.end.column) >= 0;
+        && this.endRows.indexOf(range.end.row) >= 0
+        && this.startColumns.indexOf(range.start.column) >= 0
+        && this.endColumns.indexOf(range.end.column) >= 0;
 };
 
 /**
@@ -4672,13 +4636,13 @@ Binding.addRange = function (bindingHtmlObj, range) {
 
             // Modifies original Binding
             bindingHtmlObj.attr("data-start-row", bindingHtmlObj.attr(
-                    "data-start-row").concat("," + newStartRow));
+                "data-start-row").concat("," + newStartRow));
             bindingHtmlObj.attr("data-end-row", bindingHtmlObj.attr(
-                    "data-end-row").concat("," + newEndRow));
+                "data-end-row").concat("," + newEndRow));
             bindingHtmlObj.attr("data-start-column", bindingHtmlObj.attr(
-                    "data-start-column").concat("," + newStartColumn));
+                "data-start-column").concat("," + newStartColumn));
             bindingHtmlObj.attr("data-end-column", bindingHtmlObj.attr(
-                    "data-end-column").concat("," + newEndColumn));
+                "data-end-column").concat("," + newEndColumn));
 
             bAdded = true;
 
@@ -4715,9 +4679,9 @@ Binding.prototype.displaceRange = function (row, thisEndColumn, n) {
     if (row in $bindingMap.rowBindingsMap) {
 
         var distinctBindingIds = $bindingMap.rowBindingsMap[row]
-                .filter(function (elto) {
-                    return elto != _thisId;
-                });
+            .filter(function (elto) {
+                return elto != _thisId;
+            });
 
         distinctBindingIds = $.unique($.unique(distinctBindingIds)); // FIXME:
         // double
@@ -4727,10 +4691,10 @@ Binding.prototype.displaceRange = function (row, thisEndColumn, n) {
 
         for (var i = 0; i < distinctBindingIds.length; i++) {
             var bindingId = distinctBindingIds[i], bindingHtmlObj = DescriptionInspector
-                    .getHTMLBinding(bindingId), startColumns = bindingHtmlObj
+                .getHTMLBinding(bindingId), startColumns = bindingHtmlObj
                     .attr("data-start-column").split(","), endColumns = bindingHtmlObj
-                    .attr("data-end-column").split(","), binding = Binding
-                    .getBinding(bindingHtmlObj);
+                        .attr("data-end-column").split(","), binding = Binding
+                            .getBinding(bindingHtmlObj);
 
             // Find out which positions to update
             var occurrencePositions = [], pos = 0;
@@ -4739,8 +4703,8 @@ Binding.prototype.displaceRange = function (row, thisEndColumn, n) {
                 var index = binding.startRows.indexOf(row);
 
                 if (index !== -1
-                        && occurrencePositions.indexOf(index) === -1
-                        && parseInt(binding.startColumns[index]) > parseInt(thisEndColumn)) {
+                    && occurrencePositions.indexOf(index) === -1
+                    && parseInt(binding.startColumns[index]) > parseInt(thisEndColumn)) {
 
                     occurrencePositions.push(index);
 
@@ -4753,16 +4717,16 @@ Binding.prototype.displaceRange = function (row, thisEndColumn, n) {
             // Displace horizontal positions (columns)
             for (var pos = 0; pos < occurrencePositions.length; pos++) {
                 var startColumns = bindingHtmlObj.attr("data-start-column")
-                        .split(","), endColumns = bindingHtmlObj.attr(
+                    .split(","), endColumns = bindingHtmlObj.attr(
                         "data-end-column").split(","), occurrencePos = occurrencePositions[pos];
 
                 startColumns[occurrencePos] = parseInt(startColumns[occurrencePos])
-                        + parseInt(n);
+                    + parseInt(n);
                 endColumns[occurrencePos] = parseInt(endColumns[occurrencePos])
-                        + parseInt(n);
+                    + parseInt(n);
 
                 bindingHtmlObj.attr("data-start-column", startColumns
-                        .toString());
+                    .toString());
                 bindingHtmlObj.attr("data-end-column", endColumns.toString());
 
             }
@@ -4865,24 +4829,24 @@ BindingMap.prototype.fetchBindings = function () {
         var b = false;
 
         $("#editorInspector").find(".ideas-binding, .to-remove").each(
-                function () {
-                    // TODO: si no se encuentra dentro del inicializado, cargalo
-                    // con el ID del objeto
-                    if (($(this).attr("id") && $(this).attr("id").search(
-                            /ideasBinding_/i) === -1)
-                            || typeof ($(this).attr("id")) === "undefined") {
-                        // Create an ID for Binding
-                        var newBindingId = $bindingMap.calculateNewId();
+            function () {
+                // TODO: si no se encuentra dentro del inicializado, cargalo
+                // con el ID del objeto
+                if (($(this).attr("id") && $(this).attr("id").search(
+                    /ideasBinding_/i) === -1)
+                    || typeof ($(this).attr("id")) === "undefined") {
+                    // Create an ID for Binding
+                    var newBindingId = $bindingMap.calculateNewId();
 
-                        $(this).attr("id", "ideasBinding_" + newBindingId);
+                    $(this).attr("id", "ideasBinding_" + newBindingId);
 
-                        b = true;
-                    }
+                    b = true;
+                }
 
-                    var binding = Binding.getBinding($(this));
-                    $bindingMap.addBinding(binding);
+                var binding = Binding.getBinding($(this));
+                $bindingMap.addBinding(binding);
 
-                });
+            });
 
         if (b) {
             DescriptionInspector.saveInspectorContentToDescriptionFile();
@@ -4904,7 +4868,7 @@ BindingMap.prototype.addBinding = function (bindingObj) {
     // Add to bindingRowsMap
     if (this.bindingRowsMap[bindingObj.id] === undefined) {
         this.bindingRowsMap[bindingObj.id] = BindingMap
-                .getBindingRowsStructure();
+            .getBindingRowsStructure();
     }
     this.bindingRowsMap[bindingObj.id]["filas"] = rows;
 
