@@ -2384,3 +2384,7 @@ span[contentEditable]:empty:not(:focus):before{
     vertical-align: middle !important;
     cursor: pointer;
 }
+
+span.capitalize {
+    text-transform: capitalize;
+}

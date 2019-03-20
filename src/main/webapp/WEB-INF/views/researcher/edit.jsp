@@ -425,25 +425,43 @@
                     </jstl:if>
                     <jstl:forEach items="${missingServices}" var="snetwork">
                         <form action="connect/${snetwork}" method="POST" class="form-horizontal">
-                            <jstl:if test="${snetwork == 'google'}">
-                                <input type="hidden" name="scope" value="email profile openid" />
-                            </jstl:if>               
-                            <button type="submit" class="btn btn-social btn-xs btn-${snetwork}">
-                                <i class="fa fa-${snetwork}"></i> <spring:message code="researcher.settings.connect_to" /> ${snetwork}
-                            </button>
+                            <jstl:choose>
+                                <jstl:when test="${snetwork == 'google'}">
+                                    <input type="hidden" name="scope" value="email profile openid" />
+                                    <button type="submit" class="btn btn-social btn-sm btn-${snetwork}-plus">
+                                        <i class="fab fa-${snetwork}"></i> <spring:message code="researcher.settings.connect_to" /> <span class="capitalize">${snetwork}</span>
+                                    </button>
+                                </jstl:when>
+                                <jstl:otherwise>
+                                    <button type="submit" class="btn btn-social btn-sm btn-${snetwork}">
+                                        <i class="fab fa-${snetwork}"></i> <spring:message code="researcher.settings.connect_to" /> <span class="capitalize">${snetwork}</span>
+                                    </button>
+                                </jstl:otherwise>
+                            </jstl:choose>
                         </form>
+                        <br />
                     </jstl:forEach>
 
                     <jstl:if test="${servicesConfigs.size() > 0}">
                         <h4><spring:message code="researcher.settings.connected_services" /></h4>
                     </jstl:if>
                     <jstl:forEach items="${servicesConfigs}" var="service">
-                        <form action="connect/${service}" method="POST" class="form-horizontal">      
-                            <input type="hidden" name="_method" value="delete" />                                  
-                            <button type="submit" class="btn btn-social btn-xs btn-${service}">
-                                <i class="fa fa-${service}"></i> <spring:message code="researcher.settings.disconnect_from" /> ${service}
-                            </button>
+                        <form action="connect/${service}" method="POST" class="form-horizontal">
+                            <input type="hidden" name="_method" value="delete" />
+                            <jstl:choose>
+                                <jstl:when test="${service == 'google'}">
+                                    <button type="submit" class="btn btn-social btn-sm btn-${service}-plus">
+                                        <i class="fab fa-${service}"></i> <spring:message code="researcher.settings.disconnect_from" /> <span class="capitalize">${service}</span>
+                                    </button>
+                                </jstl:when>
+                                <jstl:otherwise>
+                                    <button type="submit" class="btn btn-social btn-sm btn-${service}">
+                                        <i class="fab fa-${service}"></i> <spring:message code="researcher.settings.disconnect_from" /> <span class="capitalize">${service}</span>
+                                    </button>
+                                </jstl:otherwise>
+                            </jstl:choose>                            
                         </form>
+                        <br />
                     </jstl:forEach>
                 </div>
             </div>

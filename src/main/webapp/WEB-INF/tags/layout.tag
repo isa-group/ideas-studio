@@ -28,9 +28,9 @@
         <link rel="stylesheet" href="css/bootstrap.css">
         <!-- Other css styles of our components -->
         <link rel="stylesheet" href="css/jmenu.css" media="screen">
-        <link rel="stylesheet" href="css/passfield.min.css" type="text/css">        
-        <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/passfield.min.css" type="text/css">
         <link rel="stylesheet" href="css/social-buttons.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
         <!-- Custom css styles -->
         <link rel="stylesheet" href="css/e3.css">               
         <!-- Initialization scripts -->

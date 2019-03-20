@@ -93,35 +93,35 @@ function bindContextMenu(span) {
     var items = {
         "edit": {
             name: 'Edit',
-            icon: "fa-edit"
+            icon: "fas fa-edit"
         },
         "editDescription": {
             name: 'Edit Description',
-            icon: 'fa-edit'
+            icon: 'fas fa-edit'
         },
         "cut": {
             name: 'Cut',
-            icon: 'fa-cut'
+            icon: 'fas fa-cut'
         },
         "copy": {
             name: 'Copy',
-            icon: 'fa-copy'
+            icon: 'fas fa-copy'
         },
         "paste": {
             name: 'Paste',
-            icon: 'fa-paste'
+            icon: 'fas fa-paste'
         },
         "upload": {
             name: 'Upload',
-            icon: 'fa-cloud-upload'
+            icon: 'fas fa-cloud-upload-alt'
         },
         "download": {
             name: 'Download',
-            icon: 'fa-cloud-download'
+            icon: 'fas fa-cloud-download-alt'
         },
         "delete": {
             name: 'Delete',
-            icon: 'fa-trash-o'
+            icon: 'fas fa-trash-alt'
         }
     };
 

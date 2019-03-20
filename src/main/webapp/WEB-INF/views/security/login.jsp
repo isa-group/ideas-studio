@@ -70,7 +70,7 @@
         <form id="tw_signin" action="signin/twitter" method="POST"
               class="form-horizontal">                                        
             <button type="submit" class="btn btn-social btn-xs btn-twitter">
-                <i class="fa fa-twitter"></i> Twitter
+                <i class="fab fa-twitter"></i> Twitter
             </button>
         </form>
         <form id="go_signin" action="signin/google" method="POST"
@@ -78,7 +78,7 @@
             <input type="hidden" name="scope" value="https://www.googleapis.com/auth/userinfo.email">					
             <button type="submit" class="btn btn-social btn-xs btn-google-plus"
                     href="/signin/google">
-                <i class="fa fa-google-plus"></i> Google
+                <i class="fab fa-google"></i> Google
             </button>
         </form>
     </div>                
