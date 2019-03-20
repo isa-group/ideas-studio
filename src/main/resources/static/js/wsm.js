@@ -97,7 +97,7 @@ $(".publish-demo").click(function(e) {
 
 $(".delete-demo").click(function(e) {
     e.preventDefault();
-    var name = $(this).attr('href');     
+    var name = $(this).attr('href');
     WorkspaceManager.deleteDemoWorkspace(name,refreshPage);
 });
 

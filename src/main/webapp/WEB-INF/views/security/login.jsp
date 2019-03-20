@@ -59,7 +59,7 @@
     
 
     <div id="socialSigninButtons" class="form-inline">
-        <span>Or Sign in with:</span>
+        <span><spring:message code="security.login.alternative" />:</span>
         <!--<form id="fa_signin" action="signin/facebook" method="POST"
                 class="form-horizontal">
                 <input type="hidden" name="scope" value="email">

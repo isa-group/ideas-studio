@@ -1,7 +1,7 @@
 {
-        "workbenchName": "EXEMPLAR",
+        "workbenchName": "DESIGNER",
    "images": {
-                "logo": "exemplar/appLogoBig.png",
+                "logo": "designer/appLogoBig.png",
                 "search": "exemplar/ExperimentsSearch.png"
    },  
    "modules": {

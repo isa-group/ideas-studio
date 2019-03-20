@@ -10,7 +10,7 @@
     </div>
     <div class="modal-body">
         <spring:message code="editor.actions.modal.confirm_ws_deletion.msg_1" arguments="${workspaceName}" /><BR/><BR/>
-        <b><spring:message code="editor.actions.modal.confirm_ws_deletion.msg_2" />?</b><BR/>
+        <b><spring:message code="editor.actions.modal.confirm_ws_deletion.msg_2" /></b><BR/>
     </div>
     <div class="modal-footer">
         <a data-dismiss="modal" class="btn dismiss"><spring:message code="app.modal.close" /></a>

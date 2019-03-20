@@ -39,7 +39,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#home" class="smothscroll">Welcome</a></li>
-                <li><a href="#desc" class="smothscroll">Why Exemplar?</a></li>
+                <li><a href="#desc" class="smothscroll">Why DESIGNER?</a></li>
                 <li><a href="#showcase" class="smothScroll">Showcase</a></li>
                 <li><a href="app/editor" class="smothScroll">Use it NOW!</a></li>
                 <li><a href="http://www.isa.us.es/publications?lastname=All&title=EXEMPLAR&biblio_year=&tid=All&field_reseracharea_nid=All" class="smothScroll">How to cite</a></li>                
