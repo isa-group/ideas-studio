@@ -6,6 +6,8 @@
 package es.us.isa.ideas.app.configuration;
 
 import java.util.HashMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +20,7 @@ import org.springframework.web.context.support.ServletContextAttributeExporter;
 @Configuration
 public class StudioConfigurationInitializator {
 
+    @Autowired
     StudioConfiguration value;
     
     @Bean(name="studioConfiguration")
