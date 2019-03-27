@@ -36,10 +36,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.us.isa.ideas.app.configuration.StudioConfiguration;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.util.ResourceUtils;
 
 @Controller
 @RequestMapping("/js")
@@ -48,7 +53,7 @@ public class AceProxy extends AbstractController {
     private static final Logger LOGGER = Logger.getLogger(AceProxy.class
             .getName());
 
-    private final String PARENT_PATH = "/js/ace/";
+    private final String PARENT_PATH = "static/js/ace/";
     private final String ACE_LIB = "ace";
     private final String JS_EXT = ".js";
     private final String MODE_PREFIX = "mode-";
@@ -69,8 +74,8 @@ public class AceProxy extends AbstractController {
         response.setContentType("text/javascript");
         response.setCharacterEncoding("UTF-8");
 
-        if (file.equals(ACE_LIB)) {
-            return getAceFile(request.getSession().getServletContext());
+        if (file.equals(ACE_LIB + JS_EXT)) {
+            return getAceFile(response);
         } else if (file.startsWith(MODE_PREFIX)) {
             return getRemoteAceContent(request,file);
         } else if (file.startsWith(THEME_PREFIX)) {
@@ -88,18 +93,14 @@ public class AceProxy extends AbstractController {
         return "Mode cache was cleared successfully";
     }
 
-    private String getAceFile(ServletContext servletContext) {
+    private String getAceFile(HttpServletResponse response) {
         String content = "";
 
         try {
+            InputStream file = new ClassPathResource(PARENT_PATH + 
+                    ACE_LIB + JS_EXT).getInputStream();
 
-            InputStream input = servletContext.getResourceAsStream(PARENT_PATH
-                    + ACE_LIB + JS_EXT);
-
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(input, writer);
-
-            content = writer.toString();
+            org.apache.commons.io.IOUtils.copy(file, response.getOutputStream());
 
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());

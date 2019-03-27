@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UserProfile;
@@ -32,6 +31,9 @@ import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  *
@@ -87,23 +89,22 @@ public class UserAccountService extends BusinessService<UserAccount> {
     public UserAccount create(Integer id, String username, String password, String notificationEmail) {
 
         UserAccount uac_res = null;
-
+        PasswordEncoder encoder = new MessageDigestPasswordEncoder("MD5");
         if (id != null) {
             UserAccount uac = findById(id);
-            Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+
             uac.setUsername(username);
-            uac.setPassword(encoder.encodePassword(password, null));
+            uac.setPassword(encoder.encode(password));
             uac.addAuthority(DEFAULT_AUTHORITY);
             uac_res = userRepository.save(uac);
 
             if (notificationEmail != null && !notificationEmail.isEmpty()) {
-                sendWelcomeMail(notificationEmail, uac, password);
+                sendWelcomeMail(notificationEmail, uac_res, password);
             }
         } else {
             UserAccount uac = new UserAccount();
-            Md5PasswordEncoder encoder = new Md5PasswordEncoder();
             uac.setUsername(username);
-            uac.setPassword(encoder.encodePassword(password, null));
+            uac.setPassword(encoder.encode(password));
             uac.addAuthority(DEFAULT_AUTHORITY);
             uac_res = userRepository.save(uac);
         }
@@ -125,12 +126,11 @@ public class UserAccountService extends BusinessService<UserAccount> {
         }
         researcher.setAddress("Unknown address");
         researcher.setPhone("Unknown phone");
-        if (null == userProfile.getFirstName()) {
-            researcher.setName("Unknown");
-        }
-        if (null != userProfile.getLastName()) {
+        if (null == userProfile.getFirstName() || userProfile.getFirstName().isEmpty()) {
+            researcher.setName(userProfile.getUsername());
+        } else if (null != userProfile.getLastName()) {
             researcher.setName(userProfile.getFirstName() + " " + userProfile.getLastName());
-        }else{
+        } else {
             researcher.setName(userProfile.getFirstName());
         }
 
@@ -162,13 +162,25 @@ public class UserAccountService extends BusinessService<UserAccount> {
         Object[] templateCustomizers = {account};
         Map<String, String> finalCustomizations = mailer.extractCustomizations(templateCustomizers);
         finalCustomizations.put("$password", password);
-        mailer.sendMail(email, finalCustomizations, confirmationDoneTemplate);
+        mailer.sendMail(email, replaceNullValues(finalCustomizations, ""), confirmationDoneTemplate);
+    }
+
+    private <K, T> Map<K, T> replaceNullValues(Map<K, T> map, T defaultValue) {
+        map = map.entrySet().stream().map((entry) -> {
+            if (entry.getValue() == null) {
+                entry.setValue(defaultValue);
+            }
+
+            return entry;
+        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        return map;
     }
 
     public void resetPassword(UserAccount account, String notificationEmail) {
         String password = UUID.randomUUID().toString();
-        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-        account.setPassword(encoder.encodePassword(password, null));
+        PasswordEncoder encoder = new MessageDigestPasswordEncoder("MD5");
+        account.setPassword(encoder.encode(password));
         userRepository.save(account);
         if (notificationEmail != null && !notificationEmail.isEmpty()) {
             sendPasswordResetEmail(notificationEmail, account, password);
@@ -184,12 +196,12 @@ public class UserAccountService extends BusinessService<UserAccount> {
 
     public void modifyPassword(UserAccount userAccount, String oldPass, String newPass) {
 
-        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-        String passhash = encoder.encodePassword(oldPass, null);
-        String newpasshash = encoder.encodePassword(newPass, null);
+        PasswordEncoder encoder = new MessageDigestPasswordEncoder("MD5");
+        String passhash = encoder.encode(oldPass);
+        String newpasshash = encoder.encode(newPass);
         UserAccount oldUserAccount = userRepository.findByUsername(userAccount.getUsername());
 
-        if (passhash.equals(oldUserAccount.getPassword())) {
+        if (encoder.matches(oldPass, oldUserAccount.getPassword())) {
             userAccount.setPassword(newpasshash);
             // userRepository.save(userAccount); // Fallo con candado
         } else {

@@ -1,5 +1,7 @@
 package es.us.isa.ideas.app.social;
 
+import es.us.isa.ideas.app.security.UserAccount;
+import es.us.isa.ideas.app.security.UserAccountService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -9,9 +11,11 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.WebRequest;
 
 /**
  *
@@ -21,28 +25,38 @@ import org.springframework.web.context.request.NativeWebRequest;
 public class SocialSignInAdapter implements SignInAdapter {
 
     @Autowired
-    private RequestCache requestCache;
-
+    private UserAccountService userAccountService;	
+    
     @Autowired
     private SignInUtils signInUtils;        
+    
 
+    @Autowired
+    private ConnectionRepository connectionRepository;
+    
     @Override
     public String signIn(String localUserId, Connection<?> connection, NativeWebRequest request) {
-        signInUtils.signin(localUserId,connection.getKey().getProviderId());
-        return extractOriginalUrl(request);
+        String result="/app/editor";
+        UserAccount userAccount=signInUtils.signin(localUserId,connection.getKey().getProviderId());
+        if(userAccount==null){
+            if (connection != null) {
+                     result=createAccountAndSignIn(connection,request);
+		} else {                    
+                        result="redirect:/researcher/create";
+		}                
+	}
+        return result;
     }
 
-    private String extractOriginalUrl(NativeWebRequest request) {
-        HttpServletRequest nativeReq = request.getNativeRequest(HttpServletRequest.class);
-        HttpServletResponse nativeRes = request.getNativeResponse(HttpServletResponse.class);
-        SavedRequest saved = requestCache.getRequest(nativeReq, nativeRes);
-        if (saved == null) {
-            return null;
-        }
-        requestCache.removeRequest(nativeReq, nativeRes);
-        removeAutheticationAttributes(nativeReq.getSession(false));
-        return saved.getRedirectUrl();
+    private String createAccountAndSignIn(Connection<?> connection, WebRequest request) {
+        String result=null;        
+        UserAccount userAccount=userAccountService.create(connection);                
+        signInUtils.signin(userAccount.getUsername(), connection.getKey().getProviderId());
+        connectionRepository.addConnection(connection);                
+        return "redirect:/connect/\"+connection.getKey().getProviderId()";
+            
     }
+    
 
     private void removeAutheticationAttributes(HttpSession session) {
         if (session == null) {

@@ -22,17 +22,17 @@ public class WelcomeController extends AbstractController {
 		
 	// Index ------------------------------------------------------------------		
 
-        @RequestMapping(value = "/", method = RequestMethod.GET)
-        public ModelAndView home(){            
-            if(LoginService.isAuthenticated())
-                return new ModelAndView("app/editor");
-            else
-                return index();
-        }
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView index(){            
+        if(LoginService.isAuthenticated())
+            return new ModelAndView("app/editor");
+        else
+            return welcome();
+    }
         
         
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
-	public ModelAndView index() {
+	public ModelAndView welcome() {
 		ModelAndView result;
 		SimpleDateFormat formatter;
 		String moment;
@@ -40,9 +40,14 @@ public class WelcomeController extends AbstractController {
 		formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		moment = formatter.format(new Date());
 				
-		result = new ModelAndView("welcome");		
+		result = new ModelAndView("welcome/welcome");		
 //		result = new ModelAndView("redirect:/app/editor");	
 
 		return result;
 	}
+        
+    @RequestMapping(value = "/home")
+    public ModelAndView home() {
+        return new ModelAndView("home/home");
+    }
 }

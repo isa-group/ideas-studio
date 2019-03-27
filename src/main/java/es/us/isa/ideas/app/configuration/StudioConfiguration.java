@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 public class StudioConfiguration implements Serializable {
 

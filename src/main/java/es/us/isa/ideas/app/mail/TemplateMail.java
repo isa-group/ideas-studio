@@ -13,6 +13,16 @@ public class TemplateMail {
     private String content;
     private Set<String> attachments;
     
+    public TemplateMail(){
+        this("","");        
+    }
+    
+    public TemplateMail(String subject,String content){
+        this.subject=subject;
+        this.content=content;
+        attachments=new HashSet<>();
+    }
+    
     public String getCustomizedSubject(Map<String,String> customizations)
     {    
         return customize(customizations, getSubject());

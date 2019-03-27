@@ -17,7 +17,7 @@ import es.us.isa.ideas.repo.exception.AuthenticationException;
 import es.us.isa.ideas.repo.exception.BadUriException;
 import es.us.isa.ideas.repo.impl.fs.FSFacade;
 import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
-import es.us.isa.ideas.utilities.AppResponse;
+import es.us.isa.ideas.app.util.AppResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
