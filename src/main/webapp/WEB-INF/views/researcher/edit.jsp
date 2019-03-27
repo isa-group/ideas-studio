@@ -223,23 +223,28 @@
             <li><a href="#profileTabContent" data-toggle="tab"
                    id="profileTab"><spring:message code="userAccount.showHeader" /></a></li>
                 <security:authorize access="isAuthenticated()">
-                <li><a href="#accountTabContent" data-toggle="tab"
-                       id="accountTab"><spring:message code="userAccount.editHeader" /></a></li>
-                <li><a href="#socialTabContent" data-toggle="tab" id="socialTab"><spring:message
-                            code="socialnetwork.editHeader" /></a></li>
-                    </security:authorize>
+                    <li>
+                        <a href="#accountTabContent" data-toggle="tab" id="accountTab">
+                            <spring:message code="userAccount.editHeader" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#socialTabContent" data-toggle="tab" id="socialTab">
+                            <spring:message code="socialnetwork.editHeader" />
+                        </a>
+                    </li>
+                </security:authorize>                
         </ul>
         <!-- PERSONAL INFORMATION -->
-        <security:authorize access="isAuthenticated()">
+        <div class="tab-content">
 
-            <div class="tab-content">
-
-                <div class="tab-pane fade" id="profileTabContent">
-                    <div id="Personal Data">
-                        <form:form id="settingsForm1" modelAttribute="researcher"
-                                   action="settings/user">
-                            <form:hidden path="id" />
-                            <form:hidden path="version" />
+            <div class="tab-pane fade" id="profileTabContent">
+                <div id="Personal Data">
+                    <form:form id="settingsForm1" modelAttribute="researcher"
+                                action="settings/user">
+                        <form:hidden path="id" />
+                        <form:hidden path="version" />
+                        <security:authorize access="isAuthenticated()">
                             <form:hidden path="userAccount"/>
                             <form:hidden path="userAccount.username" />
                             <form:hidden path="userAccount.password" />
@@ -247,78 +252,80 @@
                                         var="authority" varStatus="status">
                                 <form:hidden path="userAccount.authorities[${status.index}]" />
                             </jstl:forEach>
-                            <input type="hidden" name="oldPass">
-                            <input type="hidden" name="repeatPass">
+                        </security:authorize>
+                        <input type="hidden" name="oldPass">
+                        <input type="hidden" name="repeatPass">
 
-                            <div>
-                                <div class="control-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"> <spring:message
-                                                code="researcher.name" />
-                                        </span>
-                                        <form:input path="name" placeholder="Name Surname" type="text"
-                                                    class="form-control" />
-                                    </div>
-                                    <span class="label label-danger"><form:errors path="name" /></span>
+                        <div>
+                            <div class="control-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"> <spring:message
+                                            code="researcher.name" />
+                                    </span>
+                                    <form:input path="name" placeholder="Name Surname" type="text"
+                                                class="form-control" />
                                 </div>
-
-                                <div class="control-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"> <spring:message
-                                                code="researcher.email" />
-                                        </span>
-                                        <form:input path="email" placeholder="myname@domain.com"
-                                                    type="email" class="form-control" maxlength="50" />
-                                    </div>
-                                    <span class="label label-danger"><form:errors path="email" /></span>
-                                </div>
-
-                                <div class="control-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"> <spring:message
-                                                code="researcher.phone" />
-                                        </span>
-                                        <form:input path="phone" placeholder="" type="text"
-                                                    class="form-control" maxlength="9" />
-                                    </div>
-                                    <span class="label label-danger"><form:errors path="phone" /></span>
-                                </div>
-
-                                <div class="control-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"> <spring:message
-                                                code="researcher.address" />
-                                        </span>
-                                        <form:input path="address" placeholder="" type="text"
-                                                    class="form-control" maxlength="50" />
-                                    </div>
-                                    <span class="label label-danger"><form:errors
-                                            path="address" /></span>
-                                </div>
+                                <span class="label label-danger"><form:errors path="name" /></span>
                             </div>
 
-                            <div id="settingsButtonPanel">
-                                <span id="statusPanel"> <span class="glyphicon glyphicon-ok"></span>
-                                </span>
-                                <button type="button" id="settings1RevertChanges"
-                                        class="btn btn-default">
-                                    <spring:message code="app.settings.revert" />
-                                </button>
-                                <button type="button" id="settings1SubmitChanges"
-                                        class="btn btn-primary">
-                                    <spring:message code="app.settings.savechanges" />
-                                </button>
+                            <div class="control-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"> <spring:message
+                                            code="researcher.email" />
+                                    </span>
+                                    <form:input path="email" placeholder="myname@domain.com"
+                                                type="email" class="form-control" maxlength="50" />
+                                </div>
+                                <span class="label label-danger"><form:errors path="email" /></span>
                             </div>
 
-                        </form:form>
-                    </div>
+                            <div class="control-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"> <spring:message
+                                            code="researcher.phone" />
+                                    </span>
+                                    <form:input path="phone" placeholder="" type="text"
+                                                class="form-control" maxlength="9" />
+                                </div>
+                                <span class="label label-danger"><form:errors path="phone" /></span>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"> <spring:message
+                                            code="researcher.address" />
+                                    </span>
+                                    <form:input path="address" placeholder="" type="text"
+                                                class="form-control" maxlength="50" />
+                                </div>
+                                <span class="label label-danger"><form:errors
+                                        path="address" /></span>
+                            </div>
+                        </div>
+
+                        <div id="settingsButtonPanel">
+                            <span id="statusPanel"> <span class="glyphicon glyphicon-ok"></span>
+                            </span>
+                            <button type="button" id="settings1RevertChanges"
+                                    class="btn btn-default">
+                                <spring:message code="app.settings.revert" />
+                            </button>
+                            <button type="button" id="settings1SubmitChanges"
+                                    class="btn btn-primary">
+                                <spring:message code="app.settings.savechanges" />
+                            </button>
+                        </div>
+
+                    </form:form>
                 </div>
+            </div>
 
-
+            
+            <security:authorize access="isAuthenticated()">
                 <!-- ACCOUNT -->
                 <div class="tab-pane fade active" id="accountTabContent">
                     <form:form id="settingsForm2" modelAttribute="researcher"
-                               action="settings/user">
+                                action="settings/user">
                         <form:hidden path="id" />
                         <form:hidden path="version" />
                         <form:hidden path="userAccount"/>
@@ -329,7 +336,7 @@
 
                         <div id="Authorities">
                             <jstl:forEach items="${researcher.userAccount.authorities}"
-                                          var="authority" varStatus="status">
+                                            var="authority" varStatus="status">
                                 <form:hidden path="userAccount.authorities[${status.index}]" />
                             </jstl:forEach>
                         </div>
@@ -350,10 +357,10 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><spring:message
                                         code="security.oldpassword" /></span> <input type="password"
-                                               id="oldPass" name="oldPass" class="form-control">
+                                                id="oldPass" name="oldPass" class="form-control">
                             </div>
                             <span id="badPassError"
-                                  class="label label-danger hide alert-error"><spring:message
+                                    class="label label-danger hide alert-error"><spring:message
                                     code="security.badpassword.error" /></span>
 
                         </div>
@@ -363,7 +370,7 @@
                                 <span class="input-group-addon"><spring:message
                                         code="security.newpassword" /></span>
                                 <form:password id="mypass" name="mypass" class="form-control"
-                                               path="userAccount.password" />
+                                                path="userAccount.password" />
                             </div>
                             <span class="label label-danger"><form:errors
                                     path="userAccount.password" /></span>
@@ -375,10 +382,10 @@
                                 <span class="input-group-addon"><spring:message
                                         code="security.repeatpassword" /></span>
                                 <input type="password" id="repeatPass" name="repeatPass"
-                                       class="form-control">
+                                        class="form-control">
                             </div>
                             <span id="repeatPassError"
-                                  class="label label-danger hide alert-error"><spring:message
+                                    class="label label-danger hide alert-error"><spring:message
                                     code="security.differentpasswords.error" /></span>
                         </div>
 
@@ -464,8 +471,8 @@
                         <br />
                     </jstl:forEach>
                 </div>
-            </div>
-        </security:authorize>
+            </security:authorize>
+        </div>
     </div>
 
     <div class="shadowCurvedBottom1"></div>

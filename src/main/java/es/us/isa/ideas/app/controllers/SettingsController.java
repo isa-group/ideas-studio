@@ -247,15 +247,21 @@ public class SettingsController extends AbstractController {
     private ModelAndView createModelAndView(Researcher researcher, String message) {
         ModelAndView result = createModelAndView();
 
-        ConnectionRepository researcherCRepository = usersConnectionRepository
-                .createConnectionRepository(researcher.getUserAccount().getUsername());
-
-        MultiValueMap<String, Connection<?>> allResearcherConnections = researcherCRepository.findAllConnections();
-
+        
         result.addObject("researcher", researcher);
         result.addObject("userAccount", researcher.getUserAccount());
-        result.addObject("missingServices", SocialUtils.getMissingServices(allResearcherConnections));
-        result.addObject("servicesConfigs", SocialUtils.getConnectedServices(allResearcherConnections));
+
+        if(researcher.getUserAccount().getUsername() != null) {
+            ConnectionRepository researcherCRepository = usersConnectionRepository
+            .createConnectionRepository(researcher.getUserAccount().getUsername());
+
+            MultiValueMap<String, Connection<?>> allResearcherConnections = researcherCRepository.findAllConnections();
+
+            
+            result.addObject("missingServices", SocialUtils.getMissingServices(allResearcherConnections));
+            result.addObject("servicesConfigs", SocialUtils.getConnectedServices(allResearcherConnections));
+        }
+
         /*
          * result.addObject("message", message);
          * result.addObject("message_Type","message.error");
