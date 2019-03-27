@@ -10,9 +10,9 @@
         <!-- lookup parent from repository -->
     </parent>
     <groupId>es.us.isa</groupId>
-    <artifactId>ideas-studio</artifactId>
+    <artifactId>ROOT</artifactId>
     <version>0.9.5</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>ideas-studio-boot</name>
     <description>The Integrated Development Environment for domain specic lAnguageS (IDEAS) is a web project developed in order to provide an IDE for formal modeling documents using language modules.</description>
     <properties>
