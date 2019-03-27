@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS `Workspace`;
 DROP TABLE IF EXISTS `UserAccount_authorities`;
 DROP TABLE IF EXISTS `Researcher`;
 DROP TABLE IF EXISTS `UserAccount` ;
+DROP TABLE IF EXISTS `UserConnection`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 
@@ -32,9 +33,26 @@ CREATE TABLE `hibernate_sequences` (
   `next_val` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+# UserConnection
+# ------------------------------------------------------------
+
+CREATE Table `UserConnection` (`userId` varchar(255) not null,
+    `providerId` varchar(255) not null,
+    `providerUserId` varchar(255),
+    `rank` int not null,
+    `displayName` varchar(255),
+    `profileUrl` varchar(512),
+    `imageUrl` varchar(512),
+    `accessToken` varchar(512) not null,
+    `secret` varchar(512),
+    `refreshToken` varchar(512),
+    `expireTime` bigint,
+    primary key (`userId`, `providerId`, `providerUserId`));
+
+CREATE UNIQUE INDEX `UserConnectionRank` on `UserConnection`(`userId`, `providerId`, `rank`);
+
 
 # UserAccount
-# ------------------------------------------------------------
 
 CREATE TABLE `UserAccount` (
   `id` int(11) NOT NULL,
