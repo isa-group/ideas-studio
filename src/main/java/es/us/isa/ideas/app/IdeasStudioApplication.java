@@ -21,16 +21,4 @@ public class IdeasStudioApplication extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(IdeasStudioApplication.class);
     }
-
-    /**
-     * Start internal H2 server so we can query the DB from IDE
-     *
-     * @return H2 Server instance
-     * @throws SQLException
-     *
-     * @Bean(initMethod = "start", destroyMethod = "stop") public Server
-     * h2Server() throws SQLException { return Server.createTcpServer("-tcp",
-     * "-tcpAllowOthers", "-tcpPort", "9092"); }      
-     *
-     */
 }
