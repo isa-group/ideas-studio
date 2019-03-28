@@ -40,7 +40,7 @@ public class WelcomeController extends AbstractController {
 		formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		moment = formatter.format(new Date());
 				
-		result = new ModelAndView("security/login");		
+		result = new ModelAndView("redirect:/security/login");		
 //		result = new ModelAndView("redirect:/app/editor");	
 
 		return result;
