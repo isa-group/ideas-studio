@@ -1,11 +1,21 @@
-DROP TABLE  hibernate_sequences IF EXISTS;
+
+DROP TABLE hibernate_sequences IF EXISTS;
+DROP TABLE UserAccount IF EXISTS;
+DROP TABLE SocialNetworkAccount IF EXISTS;
+DROP TABLE UserConnection IF EXISTS;
+DROP TABLE Researcher IF EXISTS;
+DROP TABLE Confirmation IF EXISTS;
+DROP TABLE Experiment IF EXISTS;
+DROP TABLE SocialNetworkConfiguration IF EXISTS;
+DROP TABLE Tag IF EXISTS;
+DROP TABLE UserAccount_authorities IF EXISTS;
+DROP TABLE Workspace IF EXISTS;
+DROP TABLE WorkspaceTags IF EXISTS ;
 
 CREATE TABLE hibernate_sequences (
   sequence_name VARCHAR(255) DEFAULT NULL,
   next_val INTEGER DEFAULT NULL
 );
-
-DROP TABLE UserAccount IF EXISTS;
 
 CREATE TABLE UserAccount (
   id INTEGER IDENTITY PRIMARY KEY,
@@ -14,26 +24,6 @@ CREATE TABLE UserAccount (
   username VARCHAR(255) DEFAULT NULL,
   UNIQUE KEY username (username)
 );
-
-# UserConnection
-# ------------------------------------------------------------
-
-CREATE Table UserConnection (userId varchar(255) not null,
-    providerId varchar(255) not null,
-    providerUserId varchar(255),
-    rank int not null,
-    displayName varchar(255),
-    profileUrl varchar(512),
-    imageUrl varchar(512),
-    accessToken varchar(512) not null,
-    secret varchar(512),
-    refreshToken varchar(512),
-    expireTime bigint,
-    primary key (userId, providerId, providerUserId));
-
-CREATE UNIQUE INDEX UserConnectionRank on UserConnection(userId, providerId, rank);
-
-DROP TABLE SocialNetworkAccount IF EXISTS;
 
 CREATE TABLE SocialNetworkAccount (
   id INTEGER IDENTITY PRIMARY KEY,
@@ -54,9 +44,9 @@ CREATE TABLE SocialNetworkAccount (
   UNIQUE KEY userId_2 (userId,providerId,providerUserId)
 );
 
-DROP TABLE UserConnection IF EXISTS;
+
 CREATE TABLE UserConnection (
-        userId VARCHAR(255) NOT NULL,
+  userId VARCHAR(255) NOT NULL,
 	providerId VARCHAR(255) NOT NULL,
 	providerUserId VARCHAR(255) NOT NULL,
 	rank INT NOT NULL,
@@ -67,13 +57,9 @@ CREATE TABLE UserConnection (
 	secret VARCHAR(512),
 	refreshToken VARCHAR(512),
 	expireTime BIGINT,
-        UNIQUE KEY userConnection_ordered(userId,providerId,rank),
-        PRIMARY KEY (userId,providerId,providerUserId) 
+  UNIQUE KEY userConnection_ordered(userId,providerId,rank),
+  PRIMARY KEY (userId,providerId,providerUserId) 
 );
-
-
-
-DROP TABLE Researcher IF EXISTS;
 
 CREATE TABLE Researcher (
   id INTEGER IDENTITY PRIMARY KEY,
@@ -85,8 +71,6 @@ CREATE TABLE Researcher (
   userAccount_id INTEGER DEFAULT NULL  
 );
 ALTER TABLE Researcher ADD CONSTRAINT IF NOT EXISTS fk_researcher_useraccount FOREIGN KEY (userAccount_id) REFERENCES UserAccount (id);
-
-DROP TABLE Confirmation IF EXISTS;
 CREATE TABLE Confirmation (
   id INTEGER IDENTITY PRIMARY KEY,
   version INTEGER NOT NULL,
@@ -100,8 +84,6 @@ ALTER TABLE Confirmation ADD CONSTRAINT IF NOT EXISTS fk_confirmation_resarcher 
 
 
 
-DROP TABLE Experiment IF EXISTS;
-
 CREATE TABLE Experiment (
   id INTEGER IDENTITY PRIMARY KEY,
   version INTEGER NOT NULL,
@@ -113,8 +95,6 @@ CREATE TABLE Experiment (
 );
 ALTER TABLE Experiment ADD CONSTRAINT IF NOT EXISTS fk_expeirment_researcher FOREIGN KEY (owner_id) REFERENCES Researcher (id);
 
-
-DROP TABLE SocialNetworkConfiguration IF EXISTS;
 
 CREATE TABLE SocialNetworkConfiguration (
   id INTEGER IDENTITY PRIMARY KEY,
@@ -132,8 +112,6 @@ ALTER TABLE Experiment ADD CONSTRAINT IF NOT EXISTS fk_expeirment_researcher FOR
 
 
 
-DROP TABLE Tag IF EXISTS;
-
 CREATE TABLE Tag (
   id INTEGER IDENTITY PRIMARY KEY,
   version INTEGER NOT NULL,
@@ -141,16 +119,12 @@ CREATE TABLE Tag (
 );
 
 
-DROP TABLE UserAccount_authorities IF EXISTS;
-
 CREATE TABLE UserAccount_authorities (
   UserAccount_id INTEGER NOT NULL,
   authority VARCHAR(255) DEFAULT NULL
 );
 
 ALTER TABLE UserAccount_authorities ADD CONSTRAINT IF NOT EXISTS fk_authorities_useraccount FOREIGN KEY (UserAccount_id) REFERENCES UserAccount (id);
-
-DROP TABLE Workspace IF EXISTS;
 
 CREATE TABLE Workspace (
   id INTEGER IDENTITY PRIMARY KEY,
@@ -168,8 +142,6 @@ CREATE TABLE Workspace (
 ALTER TABLE Workspace ADD CONSTRAINT IF NOT EXISTS fk_workspace_origin FOREIGN KEY (origin_id) REFERENCES Workspace (id);
 ALTER TABLE Workspace ADD CONSTRAINT IF NOT EXISTS fk_workspace_owner FOREIGN KEY (owner_id) REFERENCES Researcher (id);
 
-
-DROP TABLE WorkspaceTags IF EXISTS ;
 
 CREATE TABLE WorkspaceTags (
   id_ws INTEGER NOT NULL,
