@@ -42,10 +42,10 @@ public class DemoController extends AbstractController {
     @Autowired
     WorkspaceService workspaceService;
 
-    @Value("demos.limit.time")
+    @Value("#{ new Long('${demos.limit.time}') }")
     private Long timeLimit;
 
-    @Value("demos.limit.quantity")
+    @Value("#{ new Long('${demos.limit.quantity}') }")
     private Long demosLimit;
     
     private static final Logger logger = Logger.getLogger(DemoController.class.getName());
