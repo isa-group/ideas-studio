@@ -1,0 +1,2390 @@
+html,body {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", Helvetica,
+        Arial, sans-serif;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: auto;
+}
+
+h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
+    font-family: "HelveticaNeue-Thin", "Helvetica Neue Thin", Helvetica,
+        Arial, sans-serif;
+}
+
+/* Pages */
+#pagesTemplate {
+    background: #F8F8F8;
+    /* 	height: 100%; */
+    overflow: auto;
+}
+
+#pagesHeader {
+    position: relative;
+    width: 900px;
+    height: 85px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 0 auto 0 auto;
+}
+
+#pagesHeaderLogo {
+    background: left no-repeat;
+    height: 90px;
+    width: 800px;
+    position: relative;
+    margin: 0 auto 0 auto;
+    background-size: 200px;
+    opacity: 0.8;
+}
+
+#pagesHeaderUserTab {
+    height: 50px;
+    width: 50%;
+    min-width: 70px;
+    float: right;
+    top: 25px;
+    position: relative;
+}
+
+#pagesHeaderUserTab .userInfo {
+    height: 100%;
+    position: absolute;
+    right: 59px;
+    font-size: 12px;
+    margin-top: 6px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+#pagesHeaderUserTab span {
+    float: right;
+}
+
+#pagesHeaderUserTab .userAuths {
+    color: #628FB8;
+    font-size: 11px;
+}
+
+#pagesHeaderUserTab .userAvatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 22px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-size: 100%;
+}
+
+#pagesContent {
+    position: relative;
+    width: 100%;
+    /* 	text-align: center; */
+}
+
+#pagesContent .page-header {
+    margin-top: 10px;
+}
+
+#pagesTemplate #pagesContainer {
+    height: 100%;
+}
+
+#pagesContent #settingsContainer {
+    margin: 25px auto 50px auto;
+    width: 800px;
+}
+
+#pagesContent .tab-content {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-top: 0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+}
+
+#pagesContent .tab-pane {
+    padding: 15px 24px;
+    padding-top: 30px;
+}
+
+#pagesContent .tab-pane .label {
+    position: absolute;
+    left: 785px;
+    margin-top: -39px;
+    padding: 6px 14px;
+    width: 230px;
+}
+
+#pagesContent #statusPanel {
+    float: left;
+    visibility: hidden;
+    margin-top: 3px;
+    font-size: 14px;
+}
+
+#pagesContent #statusPanel span {
+    margin-right: 10px;
+    top: 4px;
+    position: relative;
+    font-size: 20px;
+}
+
+#pagesContent #statusPanel.success {
+    color: #52A704;
+    visibility: visible;
+}
+
+#pagesContent #statusPanel.problems {
+    color: #d9534f;
+    visibility: visible;
+}
+
+#pagesContent #settingsButtonPanel {
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    text-align: right;
+    padding: 16px 24px;
+}
+
+#pagesContent .tab-content .input-group-addon {
+    min-width: 140px;
+}
+
+#pagesContent .tab-content .input-group {
+    margin-bottom: 10px;
+    width: 500px;
+}
+
+#pagesContent .shadowCurvedBottom1 {
+    width: 800px;
+    margin: -1px auto 0 auto;
+    bottom: -7px;
+    position: relative;
+    margin-top: -58px;
+}
+
+#pagesContainer #settingsPageHeader {
+    width: 800px;
+    margin: 0 auto 0 auto;
+    margin-top: 20px;
+}
+
+#pagesContainer #settingsPageHeader h2 {
+    color: #777777;
+    display: inline-block;
+}
+
+#pagesContainer #settingsPageHeader .goHome {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    font-size: 22px;
+    color: rgba(110, 163, 209, 0.9);
+    padding: 5px;
+    height: 32px;
+    padding-right: 15px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#pagesContainer #settingsPageHeader .goHome:HOVER {
+    color: rgba(50, 118, 177, 0.8);
+}
+
+#pagesTemplate .footerContainer {
+
+}
+
+#pagesFooter {
+    width: 900px;
+    position: relative;
+    padding: 14px 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.4);
+    margin: 0 auto 0 auto;
+    margin-top: 50px;
+}
+
+/* Admin */
+#adminContent {
+    position: absolute;
+    top: 50px;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+}
+
+#adminWrapper {
+    position: relative;
+    margin: 25px auto 50px auto;
+    width: 800px;
+    height: 100%;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+}
+
+#adminWrapper #adminUserList {
+    width: 220px;
+    position: absolute;
+    top: 0px;
+    bottom: 67px;
+    left: 0;
+    background: rgba(206, 206, 206, 0.07);
+    border-right: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+#adminWrapper #adminUserLoaderWrapper {
+    position: absolute;
+    top: 0px;
+    bottom: 67px;
+    right: 0;
+    left: 220px;
+    overflow-y: auto;
+}
+
+#adminWrapper #adminUserLoader {
+    padding: 25px;
+}
+
+#adminWrapper #adminUserLoader .control-group {
+    margin-bottom: 10px;
+}
+
+#adminWrapper #adminUserLoader .input-group {
+    width: 370px;
+}
+
+#adminWrapper #adminUserLoader .input-group-addon {
+    min-width: 90px;
+}
+
+#adminWrapper #adminUserLoader .control-group .label {
+    float: right;
+    position: relative;
+    top: -24px;
+    width: 140px;
+}
+
+#adminWrapper #adminUserLoaderWrapper .shadowCurvedBottom1 {
+    position: absolute;
+    bottom: -8px;
+    right: 0;
+    width: 800px;
+}
+
+#adminUserList a span:LAST-CHILD {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.4);
+    font-style: italic;
+}
+
+#adminWrapper #settingsButtonPanel {
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    text-align: right;
+    padding: 16px 24px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+}
+
+/* Login */
+#loginView {
+    background: #F8F8F8;
+}
+
+#loginLogo {
+    background: left no-repeat;
+    height: 6em;
+    width: 18em;
+    position: relative;
+    top: 12%;
+    margin: 0 auto 0 auto;
+    background-size: 100%;
+    opacity: 0.8;
+}
+
+#lcWrapper {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#loginContent {
+    position: relative;
+    top: 15%;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+    height: 300px;
+    width: 410px;
+    margin: 0 auto 0 auto;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+    padding: 25px;
+}
+
+#socialTemplateContent {
+    position: relative;
+    top: 15%;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+    width: 30%;
+    margin: 0 auto 0 auto;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+    padding: 2em;
+}
+
+#completeYourProfile {
+    color: white;
+    background-color: rgba(48, 123, 189, 0.9);
+    padding: 7px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+#loginContent .input-group-addon {
+    min-width: 120px;
+}
+
+#loginContent .input-group:FIRST-CHILD {
+    margin-bottom: 15px;
+}
+
+#loginButtons .btn {
+    position: absolute;
+    bottom: 20px;
+    right: 25px;
+}
+
+#loginContent.loginError .input-group-addon {
+    color: rgb(216, 35, 0);
+    background: rgb(255, 237, 237);
+}
+
+#loginButtons {
+    position: absolute;
+    bottom: 110px;
+    left: 0;
+    right: 0;
+    height: 74px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+#loginButtons .btn .glyphicon {
+    margin-left: 5px;
+}
+
+#dontRememberLogin {
+    position: absolute;
+    bottom: 132px;
+    right: 126px;
+    z-index: 1;
+    font-size: 12px;
+    text-align: right;
+}
+
+#loginShadow {
+    position: relative;
+    top: 15%;
+    background: url('../img/ideas/shadow_curved_bottom_1.png') top
+        no-repeat;
+    background-size: 100% 14px;
+    width: 410px;
+    height: 12px;
+    margin: 0 auto 0 auto;
+    opacity: 0.6;
+    margin-top: -1px;
+}
+
+#loginCopyright {
+    position: absolute;
+    bottom: 20px;
+    left: 24px;
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 12px;
+}
+
+#loginView #socialSigninButtons {
+    text-align: center;
+    position: absolute;
+    bottom: 24px;
+    left: 20px;
+    right: 20px;
+}
+
+#loginView #socialSigninButtons span {
+    display: block;
+    margin-bottom: 16px;
+}
+
+#loginView #socialSigninButtons form {
+    display: inline-block;
+    margin-right: 8px;
+    margin-left: 8px;
+}
+
+#loginView #socialSigninButtons button {
+    font-size: 16px;
+    padding: 4px 13px;
+    background-image: none;
+}
+
+/* Context Menu */
+#contextMenu {
+    position: absolute;
+}
+
+#contextMenu .dropdown-menu {
+    position: relative;
+}
+#myMenu {
+    z-index: 1;
+}
+
+/* App */
+#appWrapper {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-transition: opacity 700ms
+        cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -moz-transition: opacity 700ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -o-transition: opacity 700mscubic-bezier(0.390, 0.575, 0.565, 1.000);
+    transition: opacity 700ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    /* easeOutSine */
+    -webkit-transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -moz-transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -o-transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    /* easeOutSine */
+}
+
+#appLoaderBlocker { /*for full app*/
+    opacity: 0.8;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: white url('../img/ideas/loading1_big_lgbg.gif') center
+        no-repeat;
+    background-size: 40px;
+    z-index: 10000;
+    -webkit-transition: all 500ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -moz-transition: all 500ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -o-transition: all 500ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    transition: all 500ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    /* easeOutSine */
+    -webkit-transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -moz-transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -o-transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    /* easeOutSine */
+}
+
+#appBodyBlocker { /*for aync load*/
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 2px;
+    width: 100%;
+    background: white url('../img/ideas/loading1_big_lgbg.gif') center
+        no-repeat;
+    background-size: 40px;
+    z-index: 6;
+    -webkit-transition: all 200ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -moz-transition: all 200ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -o-transition: all 200ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    transition: all 200ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    /* easeOutSine */
+    -webkit-transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -moz-transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    -o-transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    transition-timing-function: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    /* easeOutSine */
+}
+
+#appLogo {
+    background: left no-repeat;
+    height: 51px;
+    width: 110px;
+    position: absolute;
+    top: 4px;
+    left: 80px;
+    bottom: 4px;
+    background-size: 100%;
+    opacity: 0.9;
+    /* Maximization transition*/
+    -webkit-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#appMainContent.maximizedEditor #appLogo {
+    margin-left: -59px;
+    height: 27px;
+    width: 75px;
+    top: 2px;
+}
+
+#sectionText {
+    color: #aaaaaa;
+    font-size: 18px;
+    position: absolute;
+    top: 10px;
+    left: 300px;
+    bottom: 10px;
+    width: 100px;
+}
+
+#userTab {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 0px 24px 0px 60px;
+    text-align: right;
+    cursor: pointer;
+    z-index: 12;
+    max-width: 100%;
+    /* Maximization transition*/
+    -webkit-transition: padding 300ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000), max-width 300ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: padding 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000),
+        max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: padding 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000),
+        max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: padding 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000),
+        max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#appHeader.open #userTab {
+    background: white;
+    bottom: -1px;
+}
+
+#appHeader #principalUserInfo {
+    float: right;
+    margin-right: 15px;
+    padding-top: 13px;
+    color: rgba(0, 0, 0, 0.81);
+    text-align: right;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    right: 60px;
+    overflow: hidden;
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    /* Maximization transition*/
+    -webkit-transition: padding 300ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000), margin 300ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000), width 300ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: padding 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000),
+        margin 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000), width 300ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: padding 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000),
+        margin 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000), width 300ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: padding 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000),
+        margin 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000), width 300ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000); /* easeOutQuint */
+}
+
+#appHeader.open #principalUserInfo {
+    background: white;
+}
+
+#principalUserAuths {
+    float: right;
+    color: #6B95B4;
+    font-size: 11px;
+    /* Maximization transition*/
+    -webkit-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#appHeader #principalUserInfo span {
+    float: right;
+    text-align: right;
+    margin-top: -2px;
+    font-size: 12px;
+    cursor: pointer;
+    /* Maximization transition*/
+    -webkit-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#appHeader #principalUserAvatar {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(95, 95, 95, 0.5);
+    margin-top: 9px;
+    border-radius: 20px;
+    background-size: 100%;
+    position: absolute;
+    right: 47px;
+    cursor: pointer;
+    /* Maximization transition*/
+    -webkit-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#userCornerMenu {
+    color: rgba(0, 0, 0, 0.25);
+    font-size: 12px;
+    position: absolute;
+    right: 24px;
+    top: 23px;
+    cursor: pointer;
+    /* Maximization transition*/
+    -webkit-transition: top 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: top 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: top 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: top 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#userTabHandler {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    left: -14px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#appHeader .dropdown-menu {
+    width: 280px;
+    margin-top: 0px;
+    background: white;
+    text-align: left;
+    z-index: 11;
+}
+
+#appHeader .dropdown-menu a {
+    cursor: pointer;
+}
+
+#userTab:HOVER #userCornerMenu {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+#appMainContent.maximizedEditor #userCornerMenu {
+    top: 12px;
+}
+
+#appMainContent.maximizedEditor #userTab {
+    padding: 0px 24px 0px 0px;
+    max-width: 90px;
+}
+
+#appMainContent.maximizedEditor #principalUserInfo {
+    width: 0%;
+    margin-right: 0;
+    padding: 0;
+    padding-left: 5px;
+}
+
+#appMainContent.maximizedEditor #principalUserAvatar {
+    width: 23px;
+    height: 23px;
+    margin-top: 5px;
+    border-radius: 11px;
+}
+
+#appMainContent.maximizedEditor #principalUserInfo span {
+    color: rgba(255, 255, 255, 0);
+}
+
+#appTemplateFullBody {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#appMainContent {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#appMainContentBlocker,#appMainContentBlocker.visible {
+    background-color: rgba(175, 175, 175, 0.24);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    visibility: visible;
+    z-index: 100;
+}
+
+#appMainContentBlocker.hidden {
+    visibility: hidden;
+}
+
+#appHeader {
+    background: #fdfdfd;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 60px;
+    height: 60px;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    z-index: 12;
+    /* Maximization transition*/
+    -webkit-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#appMainContent.maximizedEditor #appHeader {
+    bottom: 34px;
+    height: 34px;
+}
+
+#appBody .emptyMsg {
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+    margin: 0 auto 0 auto;
+    top: 45%;
+    position: relative;
+    text-align: center;
+    display: block;
+}
+
+#appBody {
+    background: white;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 28px;
+    width: 100%;
+    /* Maximization transition*/
+    -webkit-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#appBodyLoader {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    background: white;
+}
+
+#appMainContent.maximizedEditor #appBody {
+    top: 34px;
+    bottom: -2px;
+}
+
+#appFooter {
+    background: #ededed url('../img/ideas/shadow_curved_bottom_1.png')
+        top no-repeat;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    height: 30px;
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    background-size: 100% 5px;
+    z-index: 10;
+    /* Maximization transition*/
+    -webkit-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#appMainContent.maximizedEditor #appFooter {
+    height: 0;
+}
+
+#appFooterCopyright {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 12px;
+    margin-left: 24px;
+    margin-top: 6px;
+    display: block;
+}
+
+#appLeftMenu {
+    display: inline-block;
+    background-color: #4c4c4c;
+    position: relative;
+    float: left;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    overflow-x: hidden;
+    z-index: 2;
+    -webkit-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+    -webkit-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#appLeftMenuContentShadow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* 	bottom: 0; */
+    width: 19px;
+    background: url('../img/ideas/shadow_normal_side_left.png') right
+        repeat-y;
+    z-index: 1;
+}
+
+#appLeftMenuContentHeader {
+    position: relative;
+    width: 100%;
+    height: 54px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 25px;
+    vertical-align: middle;
+    display: block;
+    position: relative;
+
+}
+
+#appLeftMenuContentHeader span {
+    padding: 6px;
+}
+
+#appLeftMenuContentHeader a {
+    padding: 6px;
+}
+
+#appLeftMenuContentHeader .btn {
+    width: 52px;
+    height: 52px;
+    color: white;
+    background-color: #3276b1;
+    display: inherit;
+    font-size: 35px;
+    float: right;
+    border-radius: 0;
+    border: 1px solid #444444 ;
+    border-right: 1px solid #444444 ;
+    padding: 0px;
+
+}
+
+#appNavigator {
+
+}
+
+#appNavigatorInnerWrapper {
+    position: absolute;
+    top: 60px;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    width: 300px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+#appNavigator .glyphicon {
+    color: rgba(255, 255, 255, 0.8);
+    float: right;
+    margin-right: 15px;
+    opacity: 0;
+}
+
+#appNavigator .nav-pills>li>a {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 16px;
+    padding-left: 30px;
+    z-index: 1;
+}
+
+#appNavigator .nav>li>a:hover,#appNavigator .nav>li>a:focus {
+    background-color: rgba(238, 238, 238, 0.07);
+}
+
+#appNavigator .nav-pills>li.active>a,#appNavigator .nav-pills>li.active>a:hover,#appNavigator .nav-pills>li.active>a:focus
+{
+    color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(66, 139, 202, 0.69);
+}
+
+#appNavigator .nav-pills>li>a.indented {
+    padding-left: 60px;
+}
+
+#appNavigator #appNavigatorWorkspacesAnchor {
+    color: rgba(170, 170, 170, 0.68);
+    font-size: 14px;
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    padding-left: 30px;
+    margin-top: 25px;
+}
+
+#workspacesNavContainer {
+
+}
+
+#workspacesNavContainerWrapper {
+    max-height: 50%;
+    overflow-x: visible;
+    overflow-y: auto;
+}
+
+#appNavigatorInnerWrapper .shadowCurvedBottom1,#appNavigatorInnerWrapper .shadowCurvedTop1
+{
+    position: relative;
+    width: 150%;
+    margin-left: -25%;
+    opacity: 0;
+}
+
+#appNavigatorInnerWrapper .shadowCurvedBottom1 {
+    /* 	margin-bottom: -8px; */
+
+}
+
+#appNavigatorInnerWrapper .shadowCurvedTop1 {
+    /* 	margin-top: -8px; */
+
+}
+
+#appNavigator .glyphicon {
+    color: rgba(255, 255, 255, 0.8);
+    float: right;
+    margin-right: 15px;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    padding: 14px 15px;
+}
+
+#appNavigator li:hover .glyphicon,#appNavigator li.active .glyphicon {
+    opacity: 1;
+}
+
+#appNavigatorWorkspacesTools {
+    width: 100%;
+    height: 40px;
+}
+
+#appNavigatorWorkspacesTools .addWorkspace {
+    color: rgba(255, 255, 255, 0.29);
+    cursor: pointer;
+    text-align: left;
+    font-size: 13px;
+    padding: 7px 11px;
+    border-radius: 1px;
+    padding-left: 60px;
+    position: relative;
+    display: block;
+}
+
+#appNavigatorWorkspacesTools .addWorkspace:HOVER {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#appNavigator #leftMenuHelp {
+    position: absolute;
+    bottom: 73px;
+    left: 0;
+    right: 0;
+    height: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+}
+
+#appNavigator #leftMenuLogout {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#appNavigator #leftMenuLogout .glyphicon {
+    opacity: 1;
+    position: absolute;
+    left: 15px;
+    top: 5px;
+    color: rgb(255, 95, 65);
+    font-size: 21px;
+}
+
+#appNavigator #leftMenuLogout li {
+    height: 100%;
+}
+
+#appNavigator #leftMenuLogout li a:HOVER {
+    background-color: rgba(255, 153, 128, 0.27);
+    /* 	color: rgba(255, 95, 65, 0.78); */
+    cursor: pointer;
+}
+
+#appNavigator #leftMenuLogout li a {
+    height: 100%;
+    padding-top: 18px;
+    padding-left: 60px;
+}
+
+#appLeftMenu.menuOpen {
+    width: 300px;
+}
+
+#appLeftMenu.menuClose {
+    width: 0px;
+}
+
+#appLeftMenuContent {
+    width: 300px;
+    height: 100%;
+}
+
+#editorSidePanel {
+    background-color: #f7f7f7;
+    border-right: 1px solid #D1D1D1;
+    position: relative;
+    display: inline-block;
+    width: 250px;
+    float: left;
+    height: 100%;
+    margin: -1px;
+    z-index: 5;
+    box-shadow: 1px 0 1px rgba(0, 0, 0, 0.07);
+    max-width: 100%;
+    /* overflow: hidden; */
+    /* Maximization transition*/
+    -webkit-transition: max-width 700ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: max-width 700ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: max-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: max-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#appMainContent.maximizedEditor #editorSidePanel {
+    margin-left: -2px;
+    box-shadow: 1px 0 1px rgba(0, 0, 0, 0.0);
+}
+
+#editorSidePanelHeader {
+    position: relative;
+    width: 100%;
+    height: 3.3rem;
+    background: rgba(0, 0, 0, 0.02);
+    border-bottom: 1px solid #DBDBDB;
+    white-space: nowrap;
+    overflow: visible;
+}
+
+#editorSidePanelHeaderWorkspaceInfo {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    text-align: left;
+    margin-left: 24px;
+    height: 33px;
+    position: absolute;
+    top: 6px;
+}
+
+#editorSidePanelHeaderAddProject {
+    overflow: visible;
+    position: relative;
+    width: 33px;
+    height: 33px;
+    /* 	font-size: 28px; */
+    /* 	text-align: center; */
+    float: right;
+    border-left: 1px solid rgba(71, 71, 71, 0.02);
+    cursor: pointer;
+    background: rgba(214, 214, 214, 1);
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1;
+    z-index: 2;
+    -webkit-transition: all 50ms cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    -moz-transition: all 50ms cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    -o-transition: all 50ms cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    transition: all 50ms cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    /* easeInOutQuad */
+    -webkit-transition-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    -moz-transition-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    -o-transition-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    transition-timing-function: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+    /* easeInOutQuad */
+}
+
+.dropdown-menu {
+    left: auto;
+    right: 0;
+}
+
+/* #editorSidePanelHeaderAddProject:HOVER { */
+/* 	background: #4280b2; */
+/* } */
+#editorSidePanelHeaderAddProject .btn-group {
+    width: 33px;
+    height: 33px;
+}
+
+#editorSidePanelHeaderAddProject .btn.btn-primary.dropdown-toggle {
+    width: 32px;
+    height: 33px;
+    border-radius: 0;
+    font-size: 28px;
+    padding: 0px;
+    margin: 0;
+    line-height: 1;
+    border: 0;
+}
+
+#editorInspector {
+    background-color: #fefefe;
+    border-left: 1px solid #D1D1D1;
+    position: relative;
+    display: inline-block;
+    width: 25%;
+    min-width: 300px;
+    float: right;
+    height: 100%;
+    margin: -1px;
+    z-index: 5;
+    box-shadow: -1px 0 1px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    max-width: 100%;
+
+    /* 	 Toggle transition*/
+
+    /* 	-webkit-transition: max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);   */
+    /*    -moz-transition: max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);  */
+    /*      -o-transition: max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);  */
+    /*         transition: max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);   easeOutQuint */
+}
+
+#editorInspector.hdd {
+    max-width: 0px;
+    min-width: 0px;
+    box-shadow: none;
+    border: 0;
+}
+
+#editorInspector #editorInspectorLoader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+
+#editorMainPanel {
+    width: 400px;
+    height: 100%;
+    display: inline-block;
+    min-width: 0px;
+    position: absolute;
+    right: 0;
+    min-width: 0%;
+    max-width: none;
+    /* Maximization transition */
+    -webkit-transition: min-width 700ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: min-width 700ms
+        cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: min-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: min-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+
+    /* 	 Maximization transition */
+
+    /* 	-webkit-transition: min-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000), max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);   */
+    /*    -moz-transition: min-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000), max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);  */
+    /*      -o-transition: min-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000), max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);   */
+    /*         transition: min-width 700ms cubic-bezier(0.420, 0.000, 0.580, 1.000), max-width 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);  easeOutQuint */
+}
+
+#appMainContent.maximizedEditor #editorMainPanel {
+
+}
+
+#editorItself {
+    position: relative;
+    width: 100%;
+    height: 70%;
+}
+
+#editorHeader {
+    height: 33px;
+    width: 100%;
+    background: #fefefe;
+    /* 	border-bottom: 1px solid #eeeeee; */
+}
+
+/* #editorHeaderCenterInfo { */
+/* 	position: relative; */
+/* 	display: block; */
+/* 	margin: 0 auto 0 auto; */
+/* 	text-align: center; */
+/* 	font-size: 11px; */
+/* 	color: #777777; */
+/* 	font-style: italic; */
+/* 	padding-top: 6px; */
+/* } */
+#editorTabsContainer {
+    position: absolute;
+    top: 0;
+    left: 0px;
+    right: 0px;
+    height: 32px;
+}
+
+#editorTabsContainer #editorTabs li {
+    overflow: hidden;
+    bottom: 0px;
+    -webkit-transition: all 200ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    -moz-transition: all 200ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    -o-transition: all 200ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    transition: all 200ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    /* easeInOutSine */
+}
+
+#editorTabsContainer #editorTabs li:FIRST-CHILD {
+    margin-left: 5px;
+}
+
+#editorHeader .nav-tabs {
+    border-bottom: 1px solid #DBDBDB;
+    position: absolute;
+    height: 33px;
+    left: 0px;
+    right: 0px;
+    top: 0;
+}
+
+#editorHeader .editorTab {
+    padding: 4px 25px;
+    padding-right: 27px;
+    border: 1px solid #ECECEC;
+    border-bottom: none;
+    margin-top: 6px;
+    position: relative;
+    margin-left: 0px;
+    cursor: pointer;
+    border-radius: 2px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    color: #8B8B8B;
+    font-size: 12px;
+}
+
+#editorHeader .editorTab:HOVER {
+    background: none;
+}
+
+#editorHeader .active .editorTab {
+    color: #2888DB;
+    border-color: #C7C7C7;
+    border-bottom: 1px solid #F8F8F8;
+    cursor: default;
+}
+
+#editorTabs li .glyphicon {
+    opacity: 0;
+    position: absolute;
+    top: 10px;
+    right: 4px;
+    font-size: 11px;
+    padding: 4px;
+    width: 21px;
+    cursor: pointer;
+}
+
+#editorTabs li:HOVER .glyphicon {
+    opacity: 0.2;
+}
+
+#editorTabs li:HOVER .glyphicon:HOVER {
+    opacity: 0.8;
+}
+
+#editorHeaderRightButtonsPanel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 32px;
+}
+
+#editorOutLink,#editorMaximize,#editorSocial,#editorToggleInspector {
+    width: 27px;
+    height: 32px;
+    float: right;
+    position: relative;
+    cursor: pointer;
+    opacity: 0.25;
+}
+
+#editorOutLink:HOVER,#editorMaximize:HOVER,#editorSocial:HOVER,#editorToggleInspector:HOVER
+{
+    opacity: 0.8;
+}
+
+#editorToggleInspector:HOVER {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+#editorOutLink {
+    background: url('../img/ideas/outLink.png') center no-repeat;
+    background-size: 27px;
+}
+
+#editorMaximize {
+    background: url('../img/ideas/maximize.png') center no-repeat;
+    background-size: 27px;
+}
+
+#editorMaximize.minimize {
+    background: url('../img/ideas/demaximize.png') center no-repeat;
+    background-size: 27px;
+}
+
+#editorSocial {
+    background: url('../img/ideas/socialIcon.png') center no-repeat;
+    background-size: 27px;
+}
+
+#editorToggleInspector {
+    background: url('../img/ideas/showInspector.png') center no-repeat;
+    background-size: 27px;
+    border-left: 1px solid #ddd;
+    margin-left: 5px;
+    width: 35px;
+    background-position-x: 1px;
+}
+
+#editorToggleInspector.hdd {
+    background: url('../img/ideas/hideInspector.png') center no-repeat;
+    opacity: 0.6;
+    background-size: 27px;
+    background-position-x: 1px;
+}
+
+#editorWrapper {
+    position: absolute;
+    top: 33px;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    background: #F8F8F8;
+    z-index: 1;
+}
+
+#editorItself.multiformat #editorWrapper {
+    bottom: 28px;
+}
+
+#editorTopShadow {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    opacity: 0;
+    z-index: 6;
+    background: url('../img/ideas/shadow_curved_bottom_1.png') center
+        no-repeat;
+    background-size: 200% 100%;
+}
+
+#editor {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    height: 100%;
+    font-family: 'monaco';
+}
+
+/* ace searchbox */
+.ace_search {
+    background-color: #f7f7f7 !important;
+}
+
+@font-face {
+    font-family: 'monaco';
+    src: url(../fonts/Monaco.ttf) format("truetype");
+}
+
+#editorBottomPanel {
+    position: relative;
+    height: 30%;
+    width: 100%;
+    border-top: 1px solid #dfdfdf;
+    z-index: 10;
+}
+
+#editorActions {
+    width: 100%;
+    height: 100%;
+    /* 	padding-left: 10px; */
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    /* 	padding-right: 24px; */
+    padding-top: 0.5rem;
+    min-height: 49px;
+}
+
+#editorActions .opButton {
+    margin: 0em 0.25rem 1rem 0.25rem;
+    float: right;
+}
+
+#editorActions .opButton:FIRST-CHILD {
+    float: left;
+}
+
+#selectOperationDiv {
+    width: 100%;
+    margin-bottom: 0 !important;
+}
+
+#editorBottomPanelSwitcher {
+    position: relative;
+    background: #fafafa;
+    width: 100%;
+    height: auto;
+}
+
+#editorBottomPanelContentLoader {
+    position: relative;
+    width: 100%;
+    border-top: 1px solid #dfdfdf;
+}
+
+#editorItself #editorFooter {
+    visibility: hidden;
+}
+
+#editorItself.multiformat #editorFooter {
+    visibility: visible;
+    position: absolute;
+    background: #FCFCFC;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 29px;
+    z-index: 10;
+}
+
+#editorFooter span {
+    color: #444;
+}
+
+#editorFormats {
+    padding: 0px 25px 4px 5px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: none;
+    background: #FCFCFC url('../img/ideas/shadow_curved_bottom_1.png')
+        right no-repeat;
+    background-position-x: 200%;
+    background-position-y: -1px;
+    background-size: 75% 5px;
+}
+
+#editorFormats .formatTab {
+    float: right;
+}
+
+#editorFormats .formatTab a {
+    padding: 3px 15px;
+    padding-top: 1px;
+    border-radius: 0px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    font-size: 12px;
+    cursor: pointer;
+    position: relative;
+    top: -1px;
+    width: 80px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.4);
+    background: none;
+    border: 0;
+    box-shadow: none;
+    border-top: 3px solid rgba(40, 136, 223, 0.0);
+}
+
+#editorFormats .formatTab.active a {
+    border-top: 3px solid rgba(50, 118, 177, 0.79);
+    color: rgba(50, 118, 177, 1);
+}
+
+#menuToggler {
+    background: url('../img/ideas/menu_icon.gif') no-repeat center;
+    cursor: pointer;
+    height: 60px;
+    width: 60px;
+    background-size: 33%;
+    opacity: 0.6;
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    /* Maximization transition*/
+    -webkit-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#menuToggler:HOVER {
+    opacity: 0.7lab;
+    background-color: rgba(0, 0, 0, 0.01);
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+#appMainContent.maximizedEditor #menuToggler {
+    height: 34px;
+    width: 34px;
+    margin-left: -35px;
+}
+
+#projectsTreeContainer {
+    position: absolute;
+    top: 3.3rem;
+    bottom: 5rem;
+    left: 0;
+    right: 0;
+    /* overflow: hidden; */
+}
+
+#projectsTree {
+    height: 100%;
+}
+
+.shadowCurvedBottom1 {
+    background: url('../img/ideas/shadow_curved_bottom_1.png') center
+        no-repeat;
+    background-size: 100% 8px;
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    z-index: 10;
+}
+
+.shadowCurvedTop1 {
+    background: url('../img/ideas/shadow_curved_top_1.png') center
+        no-repeat;
+    background-size: 100% 8px;
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    z-index: 10;
+}
+
+.appTabbedView {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #F8F8F8;
+}
+
+.appTabbedView .nav-tabs {
+    border: none;
+}
+
+.tabsPanelWrapper {
+    width: 100%;
+    height: 82px;
+    background: url('../img/ideas/shadow_curved_top_1.png') bottom
+        no-repeat;
+    background-size: 170% 2px;
+}
+
+.appTabbedView .tabsPanel {
+    position: relative;
+    top: 40px;
+    height: 42px;
+    width: 800px;
+    margin: 0 auto 0 auto;
+    z-index: 2;
+}
+
+.appTabbedView .tabsPanel li:FIRST-CHILD {
+
+}
+
+.appTabbedView .tab-contentWrapper {
+    background: #FFFFFF;
+    position: absolute;
+    top: 82px;
+    bottom: 61px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    overflow: auto;
+}
+
+.appTabbedView .tab-contentWrapper .tab-content {
+    width: 800px;
+    margin: 0 auto 0 auto;
+    padding-top: 20px;
+}
+
+.appTabbedView .tab-contentWrapper .tab-content .formError {
+    color: red;
+}
+
+.appTabbedView .buttonPanelWrapper {
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    background: #FCFCFC;
+}
+
+.appTabbedView .buttonPanel {
+    position: relative;
+    width: 800px;
+    height: 60px;
+    margin: 0 auto 0 auto;
+    text-align: right;
+    padding-top: 11px;
+    /* 	border-right: 1px solid rgba(0,0,0,0.07); */
+    /* 	border-left: 1px solid rgba(0,0,0,0.07); */
+}
+
+.appTabbedView .buttonPanel .btn {
+
+}
+
+/* Bootstrap extension */
+.btn {
+    border-radius: 2px;
+}
+
+.dropdown-menu {
+    margin: 0;
+    border-radius: 0px;
+    margin-top: -1px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.07), 0 2px 1px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.scrollable-op-menu {
+    height: auto;
+    max-height: 20ex;
+    overflow-x: hidden;
+}
+
+.scrollable-op-result {
+    height: auto;
+    max-height: 40ex;
+    overflow-x: hidden;
+}
+
+.dropdown-menu>li>a:hover,.dropdown-menu>li>a:focus {
+    color: rgba(255, 255, 255, 0.95);
+    text-decoration: none;
+    background-color: #3276b1;
+}
+
+.modal-content {
+    border-radius: 2px;
+    box-shadow: 0 7px 50px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    border-color: rgba(0, 0, 0, 0.1);
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+}
+
+.modal-dialog {
+    /*width: 600px;
+    height: 100%;
+    margin: 10% auto;*/
+    white-space: normal;
+}
+
+.modal-backdrop {
+    background-color: #E0E0E0;
+}
+
+.modal-backdrop.in {
+    opacity: 0.6;
+    filter: alpha(opacity = 60);
+}
+
+.modal-footer {
+    padding: 10px 10px 10px;
+    margin-top: 15px;
+    text-align: right;
+    border-top: 1px solid #F0F0F0;
+}
+
+.modal-header {
+    min-height: 16.428571429px;
+    padding: 14px;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.form-control:focus {
+    border-color: #357ebd;
+    outline: 0;
+    box-shadow: 0 0 2px rgba(53, 126, 189, 0.78), 0 0 3px
+        rgba(53, 126, 189, 0.14);
+}
+
+.input-group-addon {
+    border-radius: 2px;
+    background-color: #FAFAFA;
+    border: 1px solid #E0E0E0;
+}
+
+.form-control {
+    border-radius: 2px;
+}
+
+.nav.nav-pills.nav-stacked a {
+    cursor: pointer;
+}
+
+.nav-pills>li>a {
+    border-radius: 0px;
+}
+
+.nav-tabs>li.active>a,.nav-tabs>li.active>a:hover,.nav-tabs>li.active>a:focus
+{
+    border-radius: 2px;
+    color: #2888DB;
+    outline: none;
+}
+
+.nav>li>a:hover,.nav>li>a:focus {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: transparent;
+    border-radius: 2px;
+}
+
+.nav-tabs>li.active>a,.nav-tabs>li.active>a:hover,.nav-tabs>li.active>a:focus
+{
+    color: #2888DF;
+}
+
+.nav-tabs a {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.nav-tabs a.hasErrors,.nav-tabs>li.active>a.hasErrors,.nav-tabs>li.active>a.hasErrors:hover,.nav-tabs>li.active>a.hasErrors:focus
+{
+    color: red;
+}
+
+.nav-pills>li.active>a,.nav-pills>li.active>a:hover,.nav-pills>li.active>a:focus
+{
+    border-radius: 0;
+    background: url()
+}
+
+/*  ACE */
+.ace_scroller.ace_scroll-left {
+    box-shadow: none;
+    /* 	background: url('../img/ideas/shadow_curved_right_1.png') center no-repeat; */
+    background-size: 8px 100%;
+
+}
+
+
+#isaLogoSmall {
+    position: absolute;
+    right: 24px;
+    bottom: 2px;
+    height: 24px;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+#isaLogoSmall:HOVER {
+    opacity: 1;
+}
+
+#isaLogoSmall img {
+    height: 24px;
+}
+
+/*
+#returnToLogin {
+        color:white;
+        background-color: rgba(48, 123, 189, 0.9);
+        
+        padding: 7px;
+        margin-bottom: 10px;
+        margin-left: 40%;
+}
+*/
+/*
+#loginOKPanel, #loginFailPanel {
+        text-align: center;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        width: 500px;
+        background-color:white;	
+        -webkit-box-shadow: 2px 2px 5px #999;
+        -moz-box-shadow: 2px 2px 5px #999;
+        box-shadow: 2px 2px 5px #999;  	
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+}
+*/
+#textContent {
+    padding: 10px;
+}
+/*
+#message {
+        background-color: white;
+        border: 2px solid #000000;
+        
+        height: 200px;
+        width: 75%;
+        -webkit-border-radius: 30px;
+        -moz-border-radius: 30px;
+        -webkit-box-shadow: 0px 0px 50px #614727;
+        -moz-box-shadow: 0px 0px 50px #614727;
+        
+        margin-top: -100px;
+        top: 50%;
+        position: absolute;
+        margin-left: -250px; 
+        left: 10%;
+        text-align: center;
+}
+*/
+#version {
+    float: left;
+    color: rgba(0, 0, 0, 0.5);
+    margin-top: 6px;
+    margin-right: 5px;
+    cursor: pointer;
+    padding-left: 10px;
+    font-size: 12px;
+}
+#versions {
+    z-index: 15;
+    position: absolute;
+    height: 500px;
+    width: 600px;
+    margin-left: -300px;
+    left: 50%;
+    background-color: white;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", Helvetica,
+        Arial, sans-serif;
+    -webkit-box-shadow: 0px 0px 10px #614727;
+    -moz-box-shadow: 0px 0px 10px #614727;
+    margin-top: -250px;
+    top: 50%;
+    padding: 10px;
+}
+#vClose {
+    float: right;
+    cursor:pointer;
+}
+#lostSessionPanel {
+    z-index: 1051;
+    background-color: white;
+    position: absolute;
+    height: 250px;
+    width: 500px;
+    margin-top: -175px;
+    top: 50%;
+    right: 50%;
+    margin-right: -250px;
+    text-align: center;
+    -webkit-box-shadow: 0px 0px 50px #614727;
+    -moz-box-shadow: 2px 2px 5px #746952;
+    padding-top: 75px;
+}
+#goToLogin {
+    background-color: #3276b1;
+    color: white;
+}
+#goToApp {
+    color:white;
+    background-color: rgba(48, 123, 189, 0.9);
+
+    padding: 7px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+#connectedWith {
+    position: absolute;
+    right: 15%;
+    z-index: 3;
+    top: 35%;
+}
+#help {
+    height: 100%;
+}
+#iframeHelp {
+    width: 100%;
+    height: 100%;
+}
+#shareDocument {
+    background: url("../img/ideas/share.png") center no-repeat;
+    width: 27px;
+    height: 32px;
+    float: right;
+    position: relative;
+    cursor: pointer;
+    opacity: 0.25;
+    background-size: 20px;
+    margin-right: 10px;
+}
+#shareDocumentModal {
+    display: none;
+    z-index: 10000;
+    height: 500px;
+    width: 500px;
+    background-color: white;
+    position: relative;
+    top: 50%;
+    margin-top: -250px;
+    left: 50%;
+    margin-left: -250px;
+    -webkit-box-shadow: 4px 4px 20px #999;
+    -moz-box-shadow: 4px 4px 20px #999;
+}
+.input-share {
+    margin: 10px;
+    width: 480px;
+}
+#mailContent {
+    height: 275px;
+    position: absolute;
+    resize: none;
+}
+.spn {
+    margin-left: 15px;
+}
+#footer {
+    bottom: 0;
+    position: absolute;
+    right: 0;
+    margin: 15px;
+}
+#operitonsTypes, #operationsResult {
+    margin-top: 10px;
+}
+.line {
+    margin: 5px;
+    white-space: normal;
+}
+.op-result {
+    font-style: oblique;
+}
+.op-name {
+    font-size: 14px;
+    font-style: oblique;
+    font-weight: bold;
+}
+.box-select {
+    margin: 5px;
+}
+#vers-info{
+    display: block;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    margin-top: 30px;
+    margin-left: 20px;
+}
+
+#downloadAsZip{
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    display:block;
+    position:absolute;
+    bottom:30px;    
+    width:100%;
+}
+
+
+#wsmWrapper {
+    position: absolute;
+    top: 33px;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    background: #F8F8F8;
+    z-index: 1;
+}
+
+#wsmMain {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    height: 100%;
+    background-color: #f8f8f8;
+    overflow: auto;
+}
+
+.wsm-icon{
+    margin-left: 12px;
+}
+
+
+.white, .white a {
+    color: #fff;
+}
+
+#addWorkspace {
+    cursor: pointer;
+    height: 60px;
+    width: 60px;
+    background-size: 33%;
+    opacity: 0.6;
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    /* Maximization transition*/
+    -webkit-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -moz-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    -o-transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    transition: all 300ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+    /* easeOutQuint */
+}
+
+#addWorkspace:HOVER {
+    opacity: 0.7lab;
+    background-color: rgba(0, 0, 0, 0.01);
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+
+
+
+#wsactions {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    display:block;
+    padding: 1rem 0px 1rem 0px;
+    position: absolute;
+    bottom:0px;    
+    width:100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#wsactions a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+#wsactions a:hover .material-icons {
+    color: #333333;
+}
+
+#wsactions .material-icons {
+    color: #666666;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+
+.apl_wsm{
+    color: #3078B3;
+    background: transparent;
+    display: inline-block;
+    margin: 4px;
+    padding: 0px;
+    text-decoration: none;
+    text-transform: capitalize;
+}
+.apl_wsm:hover{
+    background: #3078B3 !important;
+    color: #fff !important
+}
+
+.blue{
+    color:#3078B3;
+}
+
+#expandConsole , #clearConsole{
+    background:none; 
+    opacity:0.35;
+}
+
+
+.input-group-addon {
+    padding: 0.3em 1em;
+    max-width: 10em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+input.modalCreationField.form-control {
+    height: 4em;
+}
+
+#panicView{
+    overflow: auto;
+}
+
+#moreDetails{
+    cursor:pointer;
+}
+
+#panicTemplateContent {
+    position: relative;
+    top: 15%;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+    width: 66%;
+    margin: 0 auto 0 auto;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+    padding: 2em;
+}
+
+#loginCopyright2 {
+    position: relative;
+    left: 0%;
+    bottom: -15%;
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 12px;
+    padding-left: 1em;
+}
+
+.goToApp {
+    color: white;
+    background-color: rgba(48, 123, 189, 0.9);
+    padding: 7px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+.ideasButton{
+    color: white;
+    background-color: rgba(48, 123, 189, 0.9);
+    padding: 7px;
+}
+
+#resetButtons .btn {
+    position: absolute;
+    bottom: 20px;
+    right: 25px;
+}
+
+div#resetLoader {
+    height: 5em;
+}
+
+@media all {
+    .only-printable { display: none; }
+}
+
+span[contenteditable] {
+    display: inline-block;
+    min-width: 1em;
+}
+
+span[contenteditable].ng-empty {
+    border: 1px dotted #ff3d3d !important;
+}
+
+span[contentEditable]:empty:not(:focus):before{
+  content:attr(place-text);
+  color:grey;
+}
+
+
+/*  */
+.ball-clip-rotate {
+    position: absolute;
+    z-index: 10;
+    bottom: 1em;
+    right: 1em;
+    display: none;
+}
+.ball-clip-rotate.editor-checker-board p {
+    padding: 0.5em;
+    margin: 0;
+}
+.ball-clip-rotate.editor-checker-board {
+    position: absolute;
+    line-height: 1.2em;
+    white-space: initial;
+    margin-right: 3.7em;
+    width: auto;
+    max-width: 53%;
+    min-width: 20em;
+    right: 1.5em;
+    bottom: 3.5em;
+    border: 1px solid #ffd4d1;
+    font-family: monospace;
+    background: rgba(255, 232, 232, 0.89);
+    color: #e75146;
+    opacity: 1;
+}
+.ball-clip-rotate .editor-checker-loading {
+    border-radius: 100%;
+    border: 2px solid #fff;
+    border-bottom-color: transparent;
+    height: 26px;
+    width: 26px;
+    background: none;
+    display: inline-block;
+    -webkit-animation: rotate .75s 0s linear infinite;
+    animation: rotate .75s 0s linear infinite;
+
+    /*Circle color*/ 
+    border-top-color: #28b473;
+    border-right-color: #28b473;
+    border-left-color: #28b473;
+}
+
+.ball-clip-rotate .editor-checker-icon {
+    display: block;
+    width: 26px;
+    height: 26px;
+    border-radius: 50px;
+    font-size: 1em;
+    line-height: 27px;
+    text-align: center;
+}
+.ball-clip-rotate .editor-checker-icon-ok {
+    background: #28b473;
+    color: #fff;
+    padding-right: 1px;
+    padding-top: 1px;
+}
+.ball-clip-rotate .editor-checker-icon-error {
+    background: rgb(231, 81, 70);
+    color: #fff;
+    cursor: pointer;
+    font-family: monospace;
+}
+
+
+/* Blurring */
+
+@-webkit-keyframes appMainContent_blur {
+    0% { 
+        -webkit-filter: blur(0px);
+    }
+    100% { 
+        -webkit-filter: blur(0.75px);
+        background: #e4e4e4;
+    }
+}
+
+@-webkit-keyframes appMainContent_focus {
+    0% { 
+        -webkit-filter: blur(0.75px);
+    }
+    100% { 
+        -webkit-filter: blur(0px);
+        background: white;
+    }
+}
+
+/* Binding manager panel */ 
+#bindingManagerPanel {
+    width: 10em;
+    height: 22px;
+    float: right;
+    position: relative;
+    cursor: pointer;
+    opacity: 0.25;
+    background-size: 20px;
+    margin-top: 0.45em;
+    margin-right: 10px;
+    font-size: 11px;
+    vertical-align: middle !important;
+    cursor: pointer;
+}
+
+span.capitalize {
+    text-transform: capitalize;
+}

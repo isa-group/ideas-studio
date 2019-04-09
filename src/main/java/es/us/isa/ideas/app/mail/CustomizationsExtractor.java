@@ -3,12 +3,14 @@ package es.us.isa.ideas.app.mail;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author japarejo
  */
-class CustomizationsExtractor {
+
+public class CustomizationsExtractor {
 	@SuppressWarnings("rawtypes")
 	Collection<SpecificCustomizationExtractor> extractors;
 

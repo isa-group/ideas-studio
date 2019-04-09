@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import es.us.isa.ideas.app.entities.SocialNetworkConfiguration;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -15,6 +16,6 @@ import es.us.isa.ideas.app.entities.SocialNetworkConfiguration;
  */
 @Repository
 public interface SocialNetworkConfigurationRepository  extends JpaRepository<SocialNetworkConfiguration, Integer> {
-    @Query("SELECT snc FROM SocialNetworkConfiguration snc WHERE snc.actor.id=?")
-    Collection<SocialNetworkConfiguration> findByActorId(int researcherId);
+    @Query("SELECT snc FROM SocialNetworkConfiguration snc WHERE snc.actor.id=:id")
+    Collection<SocialNetworkConfiguration> findByActorId(@Param("id")int researcherId);
 }

@@ -264,8 +264,8 @@ public class WorkspaceService extends BusinessService<Workspace> {
             Researcher rese = researcherRepository.findByUserAccountId(ua.getId());
             ws.setOwner(rese);
             if(origin!=null){
-                ws.setOrigin(workspaceRepository.findById(Integer.valueOf(origin)));
-                ws.setDescription(workspaceRepository.findById(Integer.valueOf(origin)).getDescription());
+                ws.setOrigin(workspaceRepository.findById(Integer.valueOf(origin)).get());
+                ws.setDescription(workspaceRepository.findById(Integer.valueOf(origin)).get().getDescription());
                 
                 if(username.startsWith("demo"))
                     updateLaunches(workspaceName,DEMO_MASTER);
@@ -332,8 +332,8 @@ public class WorkspaceService extends BusinessService<Workspace> {
             
             for(String a:array){
                 if(a.length()>1){
-                    if(tagRepository.findByName(a)!=null)
-                        wsTags.add(tagRepository.findByName(a));
+                    if(tagRepository.findByName(a).isPresent())
+                        wsTags.add(tagRepository.findByName(a).get());
                     else{
                         Tag newTag = new Tag();
                         newTag.setName(a);

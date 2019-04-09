@@ -47,8 +47,7 @@ public class UserAccount extends DomainEntity implements UserDetails, Cloneable 
 	
 	private Collection<Authority> authorities;
 
-	@NotBlank
-	@Size(min = 1, max = 32)
+	@Size(min = 1)
 	@Column(unique = true)
 	@Override
 	public String getUsername() {
@@ -59,8 +58,7 @@ public class UserAccount extends DomainEntity implements UserDetails, Cloneable 
 		this.username = username;
 	}
 
-	@NotBlank
-	@Size(min = 5, max = 32)
+	@Size(min = 5, max = 80)
 	@Override
 	public String getPassword() {
 		return password;
@@ -79,7 +77,6 @@ public class UserAccount extends DomainEntity implements UserDetails, Cloneable 
 //		this.repeatPassword = repeatPassword;
 //	}
 
-	@NotEmpty
 	@Valid
 	@ElementCollection
 	@Cascade(value = { CascadeType.ALL })

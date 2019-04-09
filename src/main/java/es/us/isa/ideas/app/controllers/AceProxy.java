@@ -36,29 +36,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.us.isa.ideas.app.configuration.StudioConfiguration;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.util.ResourceUtils;
 
 @Controller
 @RequestMapping("/js")
 public class AceProxy extends AbstractController {
-
+	
     private static final Logger LOGGER = Logger.getLogger(AceProxy.class
             .getName());
 
-    private final String PARENT_PATH = "/js/ace/";
+    private final String PARENT_PATH = "static/js/ace/";
     private final String ACE_LIB = "ace";
     private final String JS_EXT = ".js";
     private final String MODE_PREFIX = "mode-";
     private final String THEME_PREFIX = "theme-";
     private final String DEPRECATED_MANIFEST_ENDPOINT = "/language";
     private final String DEPRECATED_FORMAT_ENDPOINT = "/format";
-    private final String SYNTAX_ENDPOINT = "/syntaxes";
-
-    @Autowired
-    private ServletContext servletContext;
+    private final String SYNTAX_ENDPOINT = "/syntaxes";		
 
     @Autowired
     private StudioConfiguration studioConfiguration;
@@ -67,18 +69,17 @@ public class AceProxy extends AbstractController {
 
     @RequestMapping(value = "/ace/{file}", method = RequestMethod.GET)
     @ResponseBody
-    public String getAceproxyContent(@PathVariable String file,
-            HttpServletRequest request, HttpServletResponse response) {
+    public String getAceproxyContent(@PathVariable String file,HttpServletRequest request, HttpServletResponse response) {
 
         response.setContentType("text/javascript");
         response.setCharacterEncoding("UTF-8");
 
-        if (file.equals(ACE_LIB)) {
-            return getAceFile();
+        if (file.equals(ACE_LIB + JS_EXT)) {
+            return getAceFile(response);
         } else if (file.startsWith(MODE_PREFIX)) {
-            return getRemoteAceContent(file);
+            return getRemoteAceContent(request,file);
         } else if (file.startsWith(THEME_PREFIX)) {
-            return getRemoteAceContent(file);
+            return getRemoteAceContent(request,file);
         } else {
             return "Unexpected file: " + file;
         }
@@ -92,18 +93,14 @@ public class AceProxy extends AbstractController {
         return "Mode cache was cleared successfully";
     }
 
-    private String getAceFile() {
+    private String getAceFile(HttpServletResponse response) {
         String content = "";
 
         try {
+            InputStream file = new ClassPathResource(PARENT_PATH + 
+                    ACE_LIB + JS_EXT).getInputStream();
 
-            InputStream input = servletContext.getResourceAsStream(PARENT_PATH
-                    + ACE_LIB + JS_EXT);
-
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(input, writer);
-
-            content = writer.toString();
+            org.apache.commons.io.IOUtils.copy(file, response.getOutputStream());
 
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
@@ -150,7 +147,6 @@ public class AceProxy extends AbstractController {
                 }
             });
             LOGGER.log(Level.INFO, "Getting content from: " + url);
-            conn.connect();
 
             try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
                 String inputLine;
@@ -174,7 +170,7 @@ public class AceProxy extends AbstractController {
         return result;
     }
 
-    private String getRemoteAceContent(String fileName) {
+    private String getRemoteAceContent(HttpServletRequest request,String fileName) {
 
         String result = "";
 
@@ -185,6 +181,8 @@ public class AceProxy extends AbstractController {
 
             for (String moduleEndpoint : studioConfiguration.getModules().values()) {
                 String languageModuleUri = moduleEndpoint;
+                if(moduleEndpoint.startsWith("/"))
+                    languageModuleUri=request.getRequestURL().toString().replace(request.getRequestURI(), "")+moduleEndpoint;
                 String languageString = requestContent(languageModuleUri + DEPRECATED_MANIFEST_ENDPOINT);
 
                 if (languageString.isEmpty()) {

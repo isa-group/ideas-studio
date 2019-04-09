@@ -3,8 +3,12 @@ package es.us.isa.ideas.app.controllers;
 import static es.us.isa.ideas.app.controllers.FileController.initRepoLab;
 import es.us.isa.ideas.app.entities.Workspace;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,7 +22,7 @@ import es.us.isa.ideas.repo.IdeasRepo;
 import es.us.isa.ideas.repo.exception.AuthenticationException;
 import es.us.isa.ideas.repo.impl.fs.FSFacade;
 import es.us.isa.ideas.repo.impl.fs.FSWorkspace;
-import es.us.isa.ideas.utilities.AppResponse;
+import es.us.isa.ideas.app.util.AppResponse;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -37,13 +41,24 @@ public class DemoController extends AbstractController {
     ResearcherService researcherService;
     @Autowired
     WorkspaceService workspaceService;
+
+    @Value("#{ new Long('${demos.limit.time}') }")
+    private Long timeLimit;
+
+    @Value("#{ new Long('${demos.limit.quantity}') }")
+    private Long demosLimit;
     
     private static final Logger logger = Logger.getLogger(DemoController.class.getName());
     
     private static final String DEMO_MASTER="DemoMaster";
 
+    private Map<String, Long> demoMapping;
+
    
     public DemoController() {
+        demoMapping = new HashMap<String, Long>();
+        
+        this.initializeDemoMapping();
     }
 
     @RequestMapping("/*/wizard")
@@ -53,6 +68,26 @@ public class DemoController extends AbstractController {
 
     @RequestMapping("/*")
     public ModelAndView generateDemoUser(HttpServletRequest request) {
+
+        Long elapsedTime = System.currentTimeMillis() - this.demoMapping.get("timestamp");
+
+        if(elapsedTime > this.timeLimit) {
+            this.initializeDemoMapping();
+        } else {
+            String clientIP = this.getClientIP(request);
+
+            if(this.demoMapping.containsKey(clientIP)) {
+                Long currentDemos = this.demoMapping.get(clientIP);
+
+                if(currentDemos < this.demosLimit) {
+                    this.demoMapping.put(clientIP, ++currentDemos);
+                } else {
+                    return new ModelAndView("redirect:/app/editor");
+                }
+            } else {
+                this.demoMapping.put(clientIP, 1L);
+            }
+        }
 
         Collection<UserAccount> allUsers;
         Integer actual = 0;
@@ -267,5 +302,19 @@ public class DemoController extends AbstractController {
             workspaceService.delete(demoWorkspaceName, DEMO_MASTER);
         }
         return success;
+    }
+
+    private String getClientIP(HttpServletRequest request) {
+        final String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null) {
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0];
+    }
+
+    private void initializeDemoMapping() {
+        this.demoMapping.put("timestamp", System.currentTimeMillis());
+        this.demoMapping.put("timeLimit", 300000L);
+        this.demoMapping.put("demosLimit", 5L);
     }
 }

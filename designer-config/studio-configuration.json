@@ -13,7 +13,7 @@
     "helpURI": "https://designer.governify.io/IDEAS-help/",
     "helpMode": "none",
     "googleAnalyticsID": "UA-68297022-1",
-    "advancedMode": false,
+    "advancedMode": true,
     "extensionsFilter": [
         "ang",
         "ctl",
