@@ -740,7 +740,7 @@ var EditorManager = {
                     // Inspector
                     EditorManager.loadInspector(ModeManager.calculateModelIdFromExt(ModeManager.calculateExtFromFileUri(fileUri)),
                             EditorManager.sessionsMap[EditorManager.currentUri].getCurrentFormat());
-
+                    
                     // Load Binding content
                     if (DescriptionInspector) {
                         if (!DescriptionInspector.existBinding())

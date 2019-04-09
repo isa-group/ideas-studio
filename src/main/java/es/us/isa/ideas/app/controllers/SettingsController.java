@@ -3,10 +3,12 @@ package es.us.isa.ideas.app.controllers;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import es.us.isa.ideas.app.captcha.CaptchaService;
+import es.us.isa.ideas.app.captcha.ReCaptchaInvalidException;
+import es.us.isa.ideas.app.captcha.ReCaptchaUnavailableException;
 import es.us.isa.ideas.app.entities.Researcher;
 import es.us.isa.ideas.app.security.LoginService;
 import es.us.isa.ideas.app.security.UserAccount;
@@ -45,6 +50,11 @@ public class SettingsController extends AbstractController {
     SocialNetworkConfigurationService socialNetworkConfigurationService;
     @Autowired
     LoginService loginService;
+    @Autowired
+    private CaptchaService captchaService;
+
+    @Value("${google.recaptcha.key.site}")
+    private String captchaSiteKey;
 
     @Autowired
     ResearcherController researcherController;
@@ -64,6 +74,7 @@ public class SettingsController extends AbstractController {
 
             mv = createModelAndView(clonedResearcher, "researcher.commit.error");
             mv.setViewName("researcher/edit");
+            mv.addObject("captchaKey", captchaSiteKey);
             mv.addObject("url", "settings/user");
         } else {
             mv = new ModelAndView("redirect:/app/editor");
@@ -72,12 +83,14 @@ public class SettingsController extends AbstractController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ModelAndView save(@Valid @ModelAttribute("researcher") Researcher researcher, BindingResult binding,
-            String oldPass, String repeatPass) throws Throwable {
+    public ModelAndView save(@Valid @ModelAttribute("researcher") Researcher researcher, BindingResult binding, 
+        HttpServletRequest request, String oldPass, String repeatPass) throws Throwable {
         String mypass;
         boolean diffPasswords = false;
         boolean changingPass = false;
         boolean newAccount = researcher.getUserAccount() == null;
+        String response = request.getParameter("g-recaptcha-response");
+
         ModelAndView mv = null;
         if (!newAccount) {
             mypass = researcher.getUserAccount().getPassword();
@@ -136,6 +149,7 @@ public class SettingsController extends AbstractController {
             // Save Researcher
             if (newAccount) {
                 try {
+                    captchaService.processResponse(response);
                     researcher.setUserAccount(new UserAccount());
                     researcherController.saveNew(researcher);
                     mv = edit();
@@ -143,7 +157,11 @@ public class SettingsController extends AbstractController {
                 } catch (Throwable oops) {
                     mv = edit();
                     mv.addObject("success", false);
-                    mv.addObject("repeatedEmail", true);
+                    if(oops instanceof ReCaptchaInvalidException || oops instanceof ReCaptchaUnavailableException) {
+                        mv.addObject("captchaInvalid", true);
+                    } else {
+                        mv.addObject("repeatedEmail", true);
+                    }
                 }
             } else {
                 researcherController.save(researcher);

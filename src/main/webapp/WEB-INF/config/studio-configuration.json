@@ -5,7 +5,7 @@
                 "search": "exemplar/ExperimentsSearch.png"
    },  
    "modules": {
-            "sedl-language": "https://sedl.modules.ideas.services.governify.io",
+            "sedl-language": "https://exemplar.us.es/ideas-sedl-language",
             "ideas-plaintext-language": "https://plaintext.modules.ideas.services.governify.io/ideas-plaintext-language",
             "ideas-csv-language": "https://csv.modules.ideas.services.governify.io",
             "R-language": "https://r.modules.ideas.services.governify.io",         
