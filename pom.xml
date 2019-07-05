@@ -392,7 +392,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.21</version>
+            <version>8.0.13</version>
         </dependency>
 
         <!-- Javax -->
@@ -784,12 +784,11 @@
                     </components>
                     <hibernatetool>
                         <classpath>
-                            <path location="${project.build.directory}/classes" />
-                            <path location="${project.basedir}/src/main/resources/META-INF/" />
+                            <path location="${project.build.directory}/classes"/>
+                            <path location="${project.basedir}/src/main/resources/META-INF/"/>
                         </classpath>
-                        <jpaconfiguration persistenceunit="persistenceUnit" />
-                        <hbm2ddl create="true" export="true" update="true" drop="true"
-                                 outputfilename="configuration.sql" format="true" />
+                        <jpaconfiguration persistenceunit="persistenceUnit"/>
+                        <hbm2ddl create="true" export="true" update="true" drop="true" outputfilename="configuration.sql" format="true"/>
                     </hibernatetool>
                 </configuration>
 
