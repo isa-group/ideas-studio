@@ -57,13 +57,13 @@
 
         <!--- VERSIONING -->
         <java.version>1.7</java.version>
-        <spring.version>4.0.1.RELEASE</spring.version>
-        <spring.security.version>3.2.0.RELEASE</spring.security.version>
-        <spring.data.version>1.4.3.RELEASE</spring.data.version>
-        <spring.data.solr.version>1.1.0.RELEASE</spring.data.solr.version>
-        <spring.social.version>1.1.0.M4</spring.social.version>
+        <spring.version>4.0.5.RELEASE</spring.version>
+        <spring.security.version>4.0.0.RELEASE</spring.security.version>
+        <spring.data.version>1.5.0.RELEASE</spring.data.version>
+        <spring.data.solr.version>1.3.0.RELEASE</spring.data.solr.version>
+        <spring.social.version>1.1.2.RELEASE</spring.social.version>
         <org.socialsignin.spring.security.version>1.1.0-SNAPSHOT</org.socialsignin.spring.security.version>
-        <spring.social.facebook.version>1.1.0.M4</spring.social.facebook.version>
+        <spring.social.facebook.version>2.0.3.RELEASE</spring.social.facebook.version>
         <spring.social.twitter.version>1.1.0.M4</spring.social.twitter.version>
         <spring.social.github.version>1.1.0.M4</spring.social.github.version>
         <spring.social.linkedin.version>1.0.0.RC3</spring.social.linkedin.version>
@@ -165,7 +165,7 @@
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-security</artifactId>
-            <version>1.1.0.RELEASE</version>
+            <version>1.1.2.RELEASE</version>
         </dependency>
 
         <!-- Small dependency patch to avoid error with JUnit -->
@@ -784,12 +784,11 @@
                     </components>
                     <hibernatetool>
                         <classpath>
-                            <path location="${project.build.directory}/classes" />
-                            <path location="${project.basedir}/src/main/resources/META-INF/" />
+                            <path location="${project.build.directory}/classes"/>
+                            <path location="${project.basedir}/src/main/resources/META-INF/"/>
                         </classpath>
-                        <jpaconfiguration persistenceunit="persistenceUnit" />
-                        <hbm2ddl create="true" export="true" update="true" drop="true"
-                                 outputfilename="configuration.sql" format="true" />
+                        <jpaconfiguration persistenceunit="persistenceUnit"/>
+                        <hbm2ddl create="true" export="true" update="true" drop="true" outputfilename="configuration.sql" format="true"/>
                     </hibernatetool>
                 </configuration>
 
