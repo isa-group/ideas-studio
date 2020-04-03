@@ -458,7 +458,7 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.8</version>
+            <version>1.13</version>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
@@ -784,12 +784,11 @@
                     </components>
                     <hibernatetool>
                         <classpath>
-                            <path location="${project.build.directory}/classes" />
-                            <path location="${project.basedir}/src/main/resources/META-INF/" />
+                            <path location="${project.build.directory}/classes"/>
+                            <path location="${project.basedir}/src/main/resources/META-INF/"/>
                         </classpath>
-                        <jpaconfiguration persistenceunit="persistenceUnit" />
-                        <hbm2ddl create="true" export="true" update="true" drop="true"
-                                 outputfilename="configuration.sql" format="true" />
+                        <jpaconfiguration persistenceunit="persistenceUnit"/>
+                        <hbm2ddl create="true" export="true" update="true" drop="true" outputfilename="configuration.sql" format="true"/>
                     </hibernatetool>
                 </configuration>
 
