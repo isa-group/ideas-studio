@@ -602,7 +602,7 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.9</version>
+            <version>4.0.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-codec</artifactId>
@@ -784,12 +784,11 @@
                     </components>
                     <hibernatetool>
                         <classpath>
-                            <path location="${project.build.directory}/classes" />
-                            <path location="${project.basedir}/src/main/resources/META-INF/" />
+                            <path location="${project.build.directory}/classes"/>
+                            <path location="${project.basedir}/src/main/resources/META-INF/"/>
                         </classpath>
-                        <jpaconfiguration persistenceunit="persistenceUnit" />
-                        <hbm2ddl create="true" export="true" update="true" drop="true"
-                                 outputfilename="configuration.sql" format="true" />
+                        <jpaconfiguration persistenceunit="persistenceUnit"/>
+                        <hbm2ddl create="true" export="true" update="true" drop="true" outputfilename="configuration.sql" format="true"/>
                     </hibernatetool>
                 </configuration>
 
