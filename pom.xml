@@ -61,7 +61,7 @@
         <spring.security.version>3.2.0.RELEASE</spring.security.version>
         <spring.data.version>1.4.3.RELEASE</spring.data.version>
         <spring.data.solr.version>1.1.0.RELEASE</spring.data.solr.version>
-        <spring.social.version>1.1.0.M4</spring.social.version>
+        <spring.social.version>2.0.0.M1</spring.social.version>
         <org.socialsignin.spring.security.version>1.1.0-SNAPSHOT</org.socialsignin.spring.security.version>
         <spring.social.facebook.version>1.1.0.M4</spring.social.facebook.version>
         <spring.social.twitter.version>1.1.0.M4</spring.social.twitter.version>
